@@ -1,0 +1,19 @@
+<h1>Listing result</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @result.each do |result| %>
+      <tr>
+        <td><%= result.ayah_key %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
