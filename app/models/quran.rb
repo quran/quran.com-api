@@ -1,5 +1,4 @@
 module Quran
-  def table_name
-    'quran.'+ super
-  end
+  include Schema
+  @@schema_name = 'quran'
 end

@@ -9,9 +9,17 @@
 
   <tbody>
     <% @result.each do |result| %>
-      <tr>
-        <td><%= result.ayah_key %></td>
-      </tr>
+    <tr>
+        <td>
+            <h1><%= result.ayah_key %></h1>
+            <% result.roots.each do |root| %>
+                <h2>root <%= root.text %></h2>
+                <% root.terms.each do |term| %>
+                <h3>term <%= term.text %></h3>
+                <% end %>
+            <% end %>
+        </td>
+    </tr>
     <% end %>
   </tbody>
 </table>
