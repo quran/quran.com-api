@@ -1,4 +1,14 @@
 Rails.application.routes.draw do
+
+  resources :options do
+    collection do 
+      get :default
+      get :language
+      get :quran
+      get :content
+      get :audio
+    end
+  end
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
