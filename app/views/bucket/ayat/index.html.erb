@@ -1,4 +1,4 @@
-<h1>Listing result</h1>
+<h1>activerecord model test</h1>
 
 <table>
   <thead>
@@ -11,13 +11,27 @@
     <% @result.each do |result| %>
     <tr>
         <td>
-            <h1><%= result.ayah_key %></h1>
-            <% result.roots.each do |root| %>
-                <h2>root <%= root.text %></h2>
-                <% root.terms.each do |term| %>
-                <h3>term <%= term.text %></h3>
-                <% end %>
-            <% end %>
+            <ul>
+                <li>
+                    <h1>ayah <%= result.ayah_key %></h1>
+                    <ul>
+                        <% result.words.each do |word| %>
+                        <% word.stems.each do |stem| %>
+                        <li>
+                            <h2>token <%= word.token.value %> stem <%= stem.value %></h2>
+                            <ul>
+                            <% stem.lemmas.each do |lemma| %>
+                                <li>
+                                    <h3>lemma <%= lemma.value %></h3>
+                                </li>
+                            <% end %>
+                            </ul>
+                        </li>
+                        <% end %>
+                        <% end %>
+                    </ul>
+                </li>
+            </ul>
         </td>
     </tr>
     <% end %>
