@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
 
+  namespace :info do
+    resources :surahs
+  end
+
   resources :options do
     collection do 
       get :default
