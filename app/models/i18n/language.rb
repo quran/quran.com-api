@@ -1,5 +1,5 @@
-class I18N::Language < ActiveRecord::Base
-    extend I18N
+class I18n::Language < ActiveRecord::Base
+    extend I18n
 
     self.table_name = 'language'
     self.primary_key = 'language_code'

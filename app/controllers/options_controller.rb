@@ -3,20 +3,15 @@ class OptionsController < ApplicationController
     end
 
     def language
-        sql = "select l.language_code id, l.unicode name_unicode
-        , l.english name_english
-        , l.direction
-        from content.resource r
-        join content.resource_api_version v using ( resource_id )
-        join i18n.language l using ( language_code )
-        where v.v2_is_enabled
-        and r.is_available
-        group by l.language_code, l.unicode, l.english, l.direction
-        order by l.language_code"
-        results = ActiveRecord::Base.connection.execute(sql)
-        @results = results.to_a
-
         
+        @results = Content::Resource
+        .joins(:language, :_resource_api_version)
+        .select("i18n.language.language_code,i18n.language.unicode, i18n.language.english, i18n.language.direction")
+        .where("content.resource_api_version.v2_is_enabled = 't' AND content.resource.is_available = 't'")
+        .group("i18n.language.language_code, i18n.language.unicode, i18n.language.english, i18n.language.direction")
+        .order("i18n.language.language_code")
+
+        # Content::Resource.joins(:language, :_resource_api_version).select(i18n: {language: :language_code})
     end
 
     def quran
@@ -51,21 +46,27 @@ class OptionsController < ApplicationController
 
     def content
 
-        sql = 'select r.resource_id id
-                 , r.sub_type "type"
-                 , r.cardinality_type cardinality
-                 , r.language_code "language"
-                 , r.slug
-                 , r.is_available
-                 , r.description
-                 , r.name
-              from content.resource r
-              join content.resource_api_version v using ( resource_id )
-             where r.type =' +  "'content'
-               and v.v2_is_enabled"
+        # sql = 'select r.resource_id id
+        #          , r.sub_type "type"
+        #          , r.cardinality_type cardinality
+        #          , r.language_code "language"
+        #          , r.slug
+        #          , r.is_available
+        #          , r.description
+        #          , r.name
+        #       from content.resource r
+        #       join content.resource_api_version v using ( resource_id )
+        #      where r.type =' +  "'content'
+        #        and v.v2_is_enabled"
 
-        results = ActiveRecord::Base.connection.execute(sql)
-        @results = results.to_a
+        # results = ActiveRecord::Base.connection.execute(sql)
+        # @results = results.to_a
+
+        @results = Content::Resource
+        .joins(:_resource_api_version)
+        .select([:resource_id, :sub_type, :cardinality_type, :language_code, :slug, :is_available, :description, :name].map{ |term| "content.resource.#{term}" }.join(', '))
+        .where("content.resource_api_version.v2_is_enabled = 't' AND content.resource.type = 'content'")
+        
 
         
     end

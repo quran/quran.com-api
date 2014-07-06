@@ -6,7 +6,7 @@ class Content::Resource < ActiveRecord::Base
 
     belongs_to :author, class_name: 'Content::Author'
     belongs_to :source, class_name: 'Content::Source'
-    belongs_to :language, class_name: 'I18N::Language'
+    belongs_to :language, class_name: 'I18n::Language', foreign_key: 'language_code'
 
     # maybe make the block below a polymorphic class, accessible via 'content' or something
     # dunno wth polymorphic relationships really are, so maybe not -- fancy crap not worth a brain cell
