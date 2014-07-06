@@ -17,4 +17,15 @@ class Content::Resource < ActiveRecord::Base
     has_many :_translation, class_name: 'Content::Translation', foreign_key: 'resource_id'
     has_many :_transliteration, class_name: 'Content::Transliteration', foreign_key: 'resource_id'
     has_one  :_resource_api_version, class_name: 'Content::ResourceAPIVersion', foreign_key: 'resource_id'
+
+
+    def self.get_cardinality(params_quran)
+        @results = self
+        .joins(:_resource_api_version)
+        .select([:resource_id, :sub_type, :cardinality_type, :language_code, :slug, :is_available, :description, :name].map{ |term| "content.resource.#{term}" }.join(', '))
+        .where("content.resource.is_available = 't' AND content.resource.type = 'quran'")
+        .where("content.resource_api_version.v2_is_enabled = 't' ")
+        .where("content.resource.resource_id = ?", params_quran)
+        return @results
+    end
 end
