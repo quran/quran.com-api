@@ -40,3 +40,4 @@ gem 'spring',        group: :development
 
 gem 'rb-readline'
 gem 'composite_primary_keys'
+gem 'awesome_print'
