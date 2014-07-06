@@ -73,21 +73,27 @@ class OptionsController < ApplicationController
 
     def audio
 
-        sql = "select t.recitation_id id
-                 , t.reciter_id
-                 , t.style_id
-                 , r.slug reciter_slug
-                 , s.slug style_slug
-                 , concat_ws( ' ', r.english, case when ( s.english is not null ) then concat( '(', s.english, ')' ) end ) name_english
-                 , concat_ws( ' ', r.arabic, case when ( s.arabic is not null ) then concat( '(', s.arabic, ')' ) end ) name_arabic
-              from audio.recitation t
-              join audio.reciter r using ( reciter_id )
-              left join audio.style s using ( style_id )
-             where t.is_enabled
-             order by r.english, s.english, t.recitation_id"
+        # sql = "select t.recitation_id id
+        #          , t.reciter_id
+        #          , t.style_id
+        #          , r.slug reciter_slug
+        #          , s.slug style_slug
+        #          , concat_ws( ' ', r.english, case when ( s.english is not null ) then concat( '(', s.english, ')' ) end ) name_english
+        #          , concat_ws( ' ', r.arabic, case when ( s.arabic is not null ) then concat( '(', s.arabic, ')' ) end ) name_arabic
+        #       from audio.recitation t
+        #       join audio.reciter r using ( reciter_id )
+        #       left join audio.style s using ( style_id )
+        #      where t.is_enabled
+        #      order by r.english, s.english, t.recitation_id"
 
-        results = ActiveRecord::Base.connection.execute(sql)
-        @results = results.to_a
+        # results = ActiveRecord::Base.connection.execute(sql)
+        # @results = results.to_a
+
+        @results = Audio::Recitation
+        .joins(:reciter).joins("LEFT JOIN audio.style using ( style_id )")
+        .select([:recitation_id, :reciter_id, :style_id].map{ |term| "audio.recitation.#{term}" }.join(', ') + ", audio.style.slug AS style_slug, audio.reciter.slug AS reciter_slug, concat_ws( ' ', audio.reciter.english, case when ( audio.style.english is not null ) then concat( '(', audio.style.english, ')' ) end ) name_english, concat_ws( ' ', audio.reciter.arabic, case when ( audio.style.arabic is not null ) then concat( '(', audio.style.arabic, ')' ) end ) name_arabic")
+        .where("audio.recitation.is_enabled = 't'")
+        .order("audio.reciter.english, audio.style.english, audio.recitation.recitation_id")
 
         
     end
