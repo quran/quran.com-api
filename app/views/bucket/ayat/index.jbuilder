@@ -1,5 +1,4 @@
-json.result @results
+json.results @results
 
-json.resulting @resulting
 
-json.check @keys
+

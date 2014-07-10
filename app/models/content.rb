@@ -1,4 +1,5 @@
 module Content
+
   include Schema
-  @@schema_name = 'content'
+  Schema.schema_name = 'content'
 end

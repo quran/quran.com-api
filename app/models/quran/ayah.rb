@@ -3,7 +3,7 @@ class Quran::Ayah < ActiveRecord::Base
 
     self.table_name = 'ayah'
     self.primary_key = 'ayah_key'
-
+    # Rails.logger.ap self.table_name
     belongs_to :surah, class_name: 'Quran::Surah'
 
     has_many :words, class_name: 'Quran::Word', foreign_key: 'ayah_key'
@@ -22,4 +22,11 @@ class Quran::Ayah < ActiveRecord::Base
     has_many :tafsirs, class_name: 'Content::Tafsir', through: :_tafsir_ayah
     has_many :translations, class_name: 'Content::Translation', foreign_key: 'ayah_key'
     has_many :transliterations, class_name: 'Content::Transliteration', foreign_key: 'ayah_key'
+
+
+    def self.fetch_ayahs(surah_id, from, to)
+        self
+        .where("quran.ayah.surah_id = ? AND quran.ayah.ayah_num >= ? AND quran.ayah.ayah_num <= ?", surah_id, from, to)
+        .order("quran.ayah.surah_id, quran.ayah.ayah_num")
+    end
 end

@@ -18,8 +18,8 @@ default: &default
   adapter: postgresql
   encoding: unicode
   database: quran_dev
-  username: quran
-  password: quran
+  # username: quran
+  # password: quran
   # For details on connection pooling, see rails configuration guide
   # http://guides.rubyonrails.org/configuring.html#database-pooling
   pool: 5
@@ -27,9 +27,9 @@ default: &default
 
 development:
   <<: *default
-  host: dev.quran.com
+  # host: dev.quran.com
   username: quran_dev
-  password: dev_quran
+  password: mohamed1211
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
