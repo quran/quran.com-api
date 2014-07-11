@@ -56,58 +56,96 @@ class Content::Resource < ActiveRecord::Base
 
         
     end
+# select c.*
+#                           from content.resource r $join
+#                           join quran.ayah a using ( ayah_key )
+#                          where r.resource_id = ?
+#                            and a.ayah_key in ( |.( join ', ', map { '?' } @keys ).qq| )
+#                          order by a.surah_id, a.ayah_num
+#                     |, $row->{resource_id}, @keys )->hashes;
+    def bucket_result_quran(params, keys)
+        cut = Hash.new
 
-    def self.bucket_result(params_quran, keys, cut_select)
-        self
-        .joins("JOIN quran.word_font using (resource_id)")
-        .joins("JOIN quran.ayah using (ayah_key) ")
-        .joins("JOIN quran.char_type ct on ct.char_type_id = quran.word_font.char_type_id")
-        .joins("left join quran.word w on w.word_id = quran.word_font.word_id")
-        .joins("left join quran.word_translation wt on w.word_id = wt.word_id and wt.language_code = 'en'")
-        .joins("left join quran.token t on w.token_id = t.token_id")
-        .joins("left join quran.word_stem ws on w.word_id = ws.word_id")
-        .joins("left join quran.word_lemma wl on w.word_id = wl.word_id")
-        .joins("left join quran.word_root wr on w.word_id = wr.word_id")
-        .joins("left join quran.stem s on ws.stem_id = s.stem_id")
-        .joins("left join quran.stem s on ws.stem_id = s.stem_id")
-        .joins("left join quran.lemma l on wl.lemma_id = l.lemma_id")
-        .joins("left join quran.root qr on wr.root_id = qr.root_id")
-        .where("content.resource.resource_id = ? ", params_quran)
-        .where("quran.ayah.ayah_key IN (?)", keys)
-        .select("content.resource.resource_id")
-        .select("quran.word_font.*")
-        .select(cut_select)
-        .select("wt.value word_translation
-             , t.value word_arabic
-             , l.value word_lemma
-             , qr.value word_root
-             , s.value word_stem")
-        .order("quran.ayah.surah_id, quran.ayah.ayah_num, quran.word_font.position")
-        .map do |word|
-            {
-                ayah_key: word.ayah_key,
-                word: {
-                    stem: word.word_stem,
-                    arabic: word.word_arabic,
-                    lemma: word.word_lemma,
-                    id: word.word_id,
-                    root: word.word_root,
-                    translation: word.word_translation
-                },
-                char: {
-                    page: word.page_num,
-                    font: word.char_font,
-                    code_hex: word.code_hex,
-                    type_id: word.char_type_id,
-                    type: word.char_type,
-                    code_dec: word.code_dec,
-                    line: word.line_num,
-                    code: word.char_code
+        if self.cardinality_type == "1_ayah"
+            
+            join = "join quran.text c using ( resource_id )";
 
+            Content::Resource
+            .joins(join)
+            .joins("JOIN quran.ayah using ( ayah_key )")
+            .select("c.*")
+            .where("content.resource.resource_id = ?", params[:quran])
+            .where("quran.ayah.ayah_key IN (?)", keys)
+            .order("quran.ayah.surah_id, quran.ayah.ayah_num")
+
+        elsif self.cardinality_type == "1_word"
+            
+            join = "join quran.word_font c using ( resource_id )";
+            
+            if  self.slug == 'word_font' 
+                cut[:select] = "
+                              concat( 'p', c.page_num ) char_font
+                             , concat( '&#x', c.code_hex, ';' ) char_code
+                             , ct.name char_type
+                        "
+                cut[:join] = "join quran.char_type ct on ct.char_type_id = c.char_type_id"
+            end
+
+            Content::Resource
+            .joins(join)
+            .joins("JOIN quran.ayah using (ayah_key) ")
+            .joins(cut[:join])
+            .joins("left join quran.word w on w.word_id = c.word_id")
+            .joins("left join quran.word_translation wt on w.word_id = wt.word_id and wt.language_code = 'en'")
+            .joins("left join quran.token t on w.token_id = t.token_id")
+            .joins("left join quran.word_stem ws on w.word_id = ws.word_id")
+            .joins("left join quran.word_lemma wl on w.word_id = wl.word_id")
+            .joins("left join quran.word_root wr on w.word_id = wr.word_id")
+            .joins("left join quran.stem s on ws.stem_id = s.stem_id")
+            .joins("left join quran.stem s on ws.stem_id = s.stem_id")
+            .joins("left join quran.lemma l on wl.lemma_id = l.lemma_id")
+            .joins("left join quran.root qr on wr.root_id = qr.root_id")
+            .where("content.resource.resource_id = ? ", params[:quran])
+            .where("quran.ayah.ayah_key IN (?)", keys)
+            .select("content.resource.resource_id")
+            .select("c.*")
+            .select(cut[:select])
+            .select("wt.value word_translation
+                 , t.value word_arabic
+                 , l.value word_lemma
+                 , qr.value word_root
+                 , s.value word_stem")
+            .order("quran.ayah.surah_id, quran.ayah.ayah_num, c.position")
+            .map do |word|
+                {
+                    ayah_key: word.ayah_key,
+                    word: {
+                        stem: word.word_stem,
+                        arabic: word.word_arabic,
+                        lemma: word.word_lemma,
+                        id: word.word_id,
+                        root: word.word_root,
+                        translation: word.word_translation
+                    },
+                    char: {
+                        page: word.page_num,
+                        font: word.char_font,
+                        code_hex: word.code_hex,
+                        type_id: word.char_type_id,
+                        type: word.char_type,
+                        code_dec: word.code_dec,
+                        line: word.line_num,
+                        code: word.char_code
+
+                    }
                 }
-            }
+            end
+            .group_by{|a| a[:ayah_key]}.values
+                        
         end
-        # .group_by{|a| a[:ayah_key]}
+
+
+        
         
     end
 end

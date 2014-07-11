@@ -27,30 +27,22 @@ class Bucket::AyatController < ApplicationController
         # cardinalities will be used to determine the kind of rendering to fetch
         @cardinalities = Content::Resource.fetch_cardinalities(params)
         
-
-        if @cardinalities[:quran].cardinality_type == "1_ayah"
-            @check = "1_ayah"
-            join = "join quran.text c using ( resource_id )";
-        else
-            @check = "1_word"
-            join = "join quran.word_font c using ( resource_id )";
-            
-            if  @cardinalities[:quran].slug == 'word_font' 
-                cut[:select] = "
-                              concat( 'p', quran.word_font.page_num ) char_font
-                             , concat( '&#x', quran.word_font.code_hex, ';' ) char_code
-                             , ct.name char_type
-                        "
-                cut[:join] = "join quran.char_type ct on ct.char_type_id = quran.word_font.char_type_id"
-            end
-                        
-        end
-
-
-        @result[:quran] = Content::Resource.bucket_result(params[:quran], keys, cut[:select])
+        @cardinalities[:quran].bucket_result_quran(params, keys)
         .each do |ayah|
-            @results["#{ayah[:ayah_key]}".to_sym][:quran] << ayah
+            if ayah.kind_of?(Array)
+                @results["#{ayah.first[:ayah_key]}".to_sym][:quran] = ayah
+            else
+                @results["#{ayah[:ayah_key]}".to_sym][:quran] = ayah
+            end
         end
+        # @quran = @cardinalities[:quran].bucket_result_quran(params, keys)
+        
+
+
+        # @result[:quran] = Content::Resource.bucket_result(params[:quran], keys, cut[:select])
+        # .each do |ayah|
+        #     @results["#{ayah[:ayah_key]}".to_sym][:quran] << ayah
+        # end
 
         
         
