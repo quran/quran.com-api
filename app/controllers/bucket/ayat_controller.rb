@@ -13,7 +13,9 @@ class Bucket::AyatController < ApplicationController
         @results = Hash.new
         # generate the keys for the given surah and range
 
+        # keys for the ayahs
         keys = Quran::Ayah.fetch_ayahs(params[:surah], range.first, range.last).map{|k| k.ayah_key}
+        
 
         keys.each do |ayah_key|
             @results["#{ayah_key}".to_sym] = Hash.new
@@ -27,23 +29,13 @@ class Bucket::AyatController < ApplicationController
         # cardinalities will be used to determine the kind of rendering to fetch
         @cardinalities = Content::Resource.fetch_cardinalities(params)
         
-        @cardinalities[:quran].bucket_result_quran(params, keys)
-        .each do |ayah|
+        @cardinalities[:quran].bucket_results_quran(params, keys).each do |ayah|
             if ayah.kind_of?(Array)
                 @results["#{ayah.first[:ayah_key]}".to_sym][:quran] = ayah
             else
                 @results["#{ayah[:ayah_key]}".to_sym][:quran] = ayah
             end
         end
-        # @quran = @cardinalities[:quran].bucket_result_quran(params, keys)
-        
-
-
-        # @result[:quran] = Content::Resource.bucket_result(params[:quran], keys, cut[:select])
-        # .each do |ayah|
-        #     @results["#{ayah[:ayah_key]}".to_sym][:quran] << ayah
-        # end
-
         
         
         
@@ -80,8 +72,7 @@ class Bucket::AyatController < ApplicationController
             end
         end
 
-        
-        
+             
         Audio::File.fetch_audio_files(params, keys).each do |ayah|
             @results["#{ayah.ayah_key}".to_sym][:audio] = {
                 ogg: 

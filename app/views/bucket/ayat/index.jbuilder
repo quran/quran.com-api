@@ -1,5 +1,5 @@
-json.quran @quran
-json.results @results
+
+json.array! @results
 
 
 

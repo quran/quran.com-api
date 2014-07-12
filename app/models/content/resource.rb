@@ -56,14 +56,8 @@ class Content::Resource < ActiveRecord::Base
 
         
     end
-# select c.*
-#                           from content.resource r $join
-#                           join quran.ayah a using ( ayah_key )
-#                          where r.resource_id = ?
-#                            and a.ayah_key in ( |.( join ', ', map { '?' } @keys ).qq| )
-#                          order by a.surah_id, a.ayah_num
-#                     |, $row->{resource_id}, @keys )->hashes;
-    def bucket_result_quran(params, keys)
+
+    def bucket_results_quran(params, keys)
         cut = Hash.new
 
         if self.cardinality_type == "1_ayah"
@@ -143,9 +137,34 @@ class Content::Resource < ActiveRecord::Base
             .group_by{|a| a[:ayah_key]}.values
                         
         end
-
-
-        
-        
+                
     end
+
+    # def self.bucket_results_content(keys)
+        
+    #     all.each do |row|
+    #         if row.cardinality_type == 'n_ayah'
+    #             join = "JOIN #{row.type}.#{row.sub_type} c using ( resource_id ) JOIN #{rowtype}.#{row.sub_type}_ayah n using ( #{row.sub_type}_id )";
+    #         elsif row.cardinality_type == '1_ayah'
+    #             join = "JOIN #{row.type}.#{row.sub_type} c using ( resource_id )";
+    #         end
+    #         if row.cardinality_type == 'n_ayah'
+    #             Content::Resource
+    #             .joins(join)
+    #             .joins("JOIN quran.ayah using ( ayah_key )")
+    #             .select("c.resource_id, quran.ayah.ayah_key, concat( '/', concat_ws( '/', r.type, r.sub_type, c.#{row.sub_type}_id ) ) url, content.resource.name")
+    #             .where("content.resource.resource_id = ?", row.resource_id)
+    #             .where("quran.ayah.ayah_key IN (?)", keys)
+    #             .order("quran.ayah.surah_id , quran.ayah.ayah_num")
+    #         elsif row.cardinality_type == '1_ayah'
+    #             Content::Resource
+    #             .joins(join)
+    #             .joins("join quran.ayah using ( ayah_key )")
+    #             .select("c.*, content.resource.name")
+    #             .where("content.resource.resource_id = ?", row.resource_id)
+    #             .where("quran.ayah.ayah_key IN (?)", keys)
+    #             .order("quran.ayah.surah_id , quran.ayah.ayah_num")
+    #         end
+    #     end
+    # end
 end
