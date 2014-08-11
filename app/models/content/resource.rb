@@ -110,6 +110,8 @@ class Content::Resource < ActiveRecord::Base
                  , qr.value word_root
                  , s.value word_stem")
             .order("quran.ayah.surah_id, quran.ayah.ayah_num, c.position")
+            .to_a # Must make it into an array to use the .uniq function otherwise will trigger ActiveResource
+            .uniq{|word| word.word_lemma && word.position} # Unique by the word_lemma & position. The reason for why lemma because that's where the word is from and position is in ayah
             .map do |word|
                 {
                     ayah_key: word.ayah_key,

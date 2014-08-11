@@ -1,22 +1,30 @@
 class Bucket::AyatController < ApplicationController
     def index
         
-        @cardinalities, cut = Hash.new, Hash.new
+        # Set the variables
+        @cardinalities, cut, @results = Hash.new, Hash.new, Hash.new
 
 
+        # The range of which the ayahs to search
         range = params[:range].split("-")
 
+        # Raise error whenever the range is more than 50
+        # The database would take too long to process
+        # It is suggested to do 10 ayah blocks though
         if (range.last.to_i - range.first.to_i) > 50
             raise APIValidation, "Range not set or invalid, use a string or an array (maximum 50 ayat per request), e.g. '1-3' or [ 1, 3 ]"
         end
 
-        @results = Hash.new
-        # generate the keys for the given surah and range
+         
 
-        # keys for the ayahs
+        # Generate the keys for the given surah and range
+        # keys = Quran::Ayah.fetch_ayahs(params[:surah], range.first, range.last)
+
+        # Keys for the ayahs
         keys = Quran::Ayah.fetch_ayahs(params[:surah], range.first, range.last).map{|k| k.ayah_key}
         
 
+        # For each key, need to setup the hash
         keys.each do |ayah_key|
             @results["#{ayah_key}".to_sym] = Hash.new
             @results["#{ayah_key}".to_sym][:ayah] = ayah_key.split(":").last.to_i
@@ -29,6 +37,7 @@ class Bucket::AyatController < ApplicationController
         # cardinalities will be used to determine the kind of rendering to fetch
         @cardinalities = Content::Resource.fetch_cardinalities(params)
         
+        # The cardinalities for the quran
         @cardinalities[:quran].bucket_results_quran(params, keys).each do |ayah|
             if ayah.kind_of?(Array)
                 @results["#{ayah.first[:ayah_key]}".to_sym][:quran] = ayah
