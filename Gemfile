@@ -42,3 +42,17 @@ gem 'spring',        group: :development
 gem 'rb-readline'
 gem 'composite_primary_keys'
 gem 'awesome_print'
+
+
+
+# For deploying
+gem 'capistrano', group: :development
+gem 'capistrano-rails', group: :development
+gem 'capistrano-bundler', group: :development
+gem 'capistrano-rvm', group: :development
+gem 'capistrano-touch-linked-files', group: :development
+
+# This is for env variables
+gem 'dotenv-rails'
+gem 'dotenv-deployment'
+

@@ -27,10 +27,12 @@ default: &default
 
 development:
   <<: *default
-  host: dev.quran.com
+  # host: dev.quran.com
+  # password: dev_quran
   username: quran_dev
-  database: quran_dev
-  password: dev_quran
+  password: quran_dev
+
+
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
   # When left blank, postgres will use the default role. This is
