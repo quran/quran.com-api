@@ -1,8 +1,10 @@
 Rails.application.routes.draw do
 
   namespace :content do
-  get 'tafsir/:id', to: "tafsir#show"
+    get 'tafsir/:id', to: "tafsir#show"
   end
+
+  get "search", to: 'search#query'
 
   namespace :info do
     resources :surahs
