@@ -56,3 +56,7 @@ gem 'capistrano-touch-linked-files', group: :development
 gem 'dotenv-rails'
 gem 'dotenv-deployment'
 
+gem 'elasticsearch-model' 
+gem 'elasticsearch-rails'
+# To launch elastic search
+# elasticsearch --config=/usr/local/opt/elasticsearch/config/elasticsearch.yml
