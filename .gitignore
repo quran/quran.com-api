@@ -16,3 +16,5 @@
 /tmp
 .*.sw*
 .tmp/
+
+config/deploy.rb
