@@ -9,16 +9,11 @@ class Content::Translation < ActiveRecord::Base
     belongs_to :resource, class_name: 'Content::Resource'
     belongs_to :ayah, class_name: 'Quran::Ayah'
 
-
-
-    mapping :_parent => { :type => 'ayah' } do
+    mapping :_parent => { :type => 'ayah' }, :_routing => { :path => 'ayah_key', :required => true } do
       indexes :resource_id, type: "integer"
       indexes :ayah_key
       indexes :text
     end
-
-    
-
 
     def self.searching
         query = {

@@ -30,12 +30,12 @@ class Quran::Ayah < ActiveRecord::Base
         .order("quran.ayah.surah_id, quran.ayah.ayah_num")
     end
 
-    # This function affects the indexed JSON for 
+    # This function affects the indexed JSON for
     # Quran::Ayah.import
     # def as_indexed_json(options={})
     #   self.as_json(
-    #     include: { 
-    #         translations: { 
+    #     include: {
+    #         translations: {
     #             only: [:resource_id, :ayah_key, :text],
     #             # methods: [:resource_info]
     #             # include: {
@@ -44,14 +44,14 @@ class Quran::Ayah < ActiveRecord::Base
     #             #     }
     #             # }
     #         }
-                   
+
     #     })
     # end
 
     # Get all the mappings!
     # curl -XGET 'http://localhost:9200/_all/_mapping'
     # curl -XGET 'http://localhost:9200/_mapping'
-    # 
+    #
     # Example: https://gist.github.com/karmi/3200212
     mapping  do
       indexes :ayah_index, type: 'integer'
@@ -64,33 +64,33 @@ class Quran::Ayah < ActiveRecord::Base
       indexes :text, type: 'string'
       indexes :ayah_key, type: 'string'
 
-      indexes :translations, type: :nested do 
-        indexes :text
-        indexes :ayah_key
-      end
+#      indexes :translations, type: :nested do
+#        indexes :text
+#        indexes :ayah_key
+#      end
 
     end
 
     def self.searching
         # query = {
-        #     query: { 
+        #     query: {
         #         "filtered" => {
         #             query: {
         #                 match: {
         #                     "translations.text" => "Allah"
-        #                 }   
+        #                 }
         #             },
         #             filter: {
         #                 term: {
         #                     "text" => "Allah"
         #                 }
-        #             } 
-                        
+        #             }
+
         #         }
-              
+
         #     }
         # }
-        # 
+        #
          config_query = {
             bool:  {
                 must:  [
@@ -127,28 +127,22 @@ class Quran::Ayah < ActiveRecord::Base
             }
         }
         # self.search(matched_children)
-        # 
+        #
         # # match: {
                 #     "translations.text" => {
                 #         query: "Allah",
                 #         type: "phrase"
                 #     }
-                # }   
+                # }
         query = {
-            
-                query: {
-                    has_child: {
-                        type: 'translation',
-                        query: {
-                            match: {text: "Allah"}
-                        }
+            query: {
+                has_child: {
+                    type: 'translation',
+                    query: {
+                        match: {text: "armikut"}
                     }
                 }
-            
-            
-    
-          
-        
+            }
         }
 
         self.search(query)

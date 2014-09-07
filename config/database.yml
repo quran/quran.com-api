@@ -27,10 +27,10 @@ default: &default
 
 development:
   <<: *default
-  # host: dev.quran.com
+  host: dev.quran.com
   # password: dev_quran
   username: quran_dev
-  password: quran_dev
+  password: dev_quran
 
 
   # The specified database role being used to connect to postgres.
