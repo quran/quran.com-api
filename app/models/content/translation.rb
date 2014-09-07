@@ -15,22 +15,13 @@ class Content::Translation < ActiveRecord::Base
       indexes :text
     end
 
-    def self.searching
-        query = {
-            query: {
-                has_parent: {
-                    parent_type: "ayah",
-                    query: {
-                        match: {
-                            ayah_index: 6147
-                        }    
-                    }
-                    
-                }
-               
-            }
-        }
-        self.search(query)
+    
+    def self.importing (options = {})
+        transform = lambda do |a|
+            {index: {_id: "#{a.resource_id},#{a.ayah_key}", _parent: a.ayah_key, data: a.__elasticsearch__.as_indexed_json}} 
+        end
+        options = {transform: transform}.merge(options)
+        self.import options 
     end
 
 

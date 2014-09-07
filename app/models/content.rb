@@ -11,6 +11,7 @@ module Content
             end
         end
         mod.index_name 'quran2'
+
     end
 
     Schema.schema_name = 'content'
