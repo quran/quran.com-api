@@ -139,7 +139,13 @@ class Quran::Ayah < ActiveRecord::Base
                 has_child: {
                     type: 'translation',
                     query: {
-                        match: {text: "armikut"}
+                        match: {
+                            text: {
+                                query: "armikut",
+                                operator: 'or',
+                                minimum_should_match: '3<62%'
+                            }
+                        }
                     }
                 }
             }
