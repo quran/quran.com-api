@@ -29,4 +29,130 @@ class Quran::Ayah < ActiveRecord::Base
         .where("quran.ayah.surah_id = ? AND quran.ayah.ayah_num >= ? AND quran.ayah.ayah_num <= ?", surah_id, from, to)
         .order("quran.ayah.surah_id, quran.ayah.ayah_num")
     end
+
+    # This function affects the indexed JSON for 
+    # Quran::Ayah.import
+    # def as_indexed_json(options={})
+    #   self.as_json(
+    #     include: { 
+    #         translations: { 
+    #             only: [:resource_id, :ayah_key, :text],
+    #             # methods: [:resource_info]
+    #             # include: {
+    #             #     resource: {
+    #             #         only: [:slug, :name, :type]
+    #             #     }
+    #             # }
+    #         }
+                   
+    #     })
+    # end
+
+    # Get all the mappings!
+    # curl -XGET 'http://localhost:9200/_all/_mapping'
+    # curl -XGET 'http://localhost:9200/_mapping'
+    # 
+    # Example: https://gist.github.com/karmi/3200212
+    mapping  do
+      indexes :ayah_index, type: 'integer'
+      indexes :surah_id, type: 'integer'
+      indexes :ayah_num, type: 'integer'
+      indexes :page_num, type: 'integer'
+      indexes :juz_num, type: 'integer'
+      indexes :hizb_num, type: 'integer'
+      indexes :rub_num, type: 'integer'
+      indexes :text, type: 'string'
+      indexes :ayah_key, type: 'string'
+
+      indexes :translations, type: :nested do 
+        indexes :text
+        indexes :ayah_key
+      end
+
+    end
+
+    def self.searching
+        # query = {
+        #     query: { 
+        #         "filtered" => {
+        #             query: {
+        #                 match: {
+        #                     "translations.text" => "Allah"
+        #                 }   
+        #             },
+        #             filter: {
+        #                 term: {
+        #                     "text" => "Allah"
+        #                 }
+        #             } 
+                        
+        #         }
+              
+        #     }
+        # }
+        # 
+         config_query = {
+            bool:  {
+                must:  [
+                {
+                    match:  {
+                        text:  {
+                            query:  "Allah",
+                            operator:  'or',
+                            minimum_should_match:  '3<62%'
+                        }
+                    }
+                } ]
+            }
+        }
+
+
+        matched_children = {
+            query: {
+                function_score: {
+                    query: {
+                        bool: {
+                            must: [ {
+                                term: {
+                                    _parent: {
+                                        value: "",
+                                         boost: 0
+                                    }
+                                }
+                            }, config_query ]
+                        }
+                    }
+
+                }
+            }
+        }
+        # self.search(matched_children)
+        # 
+        # # match: {
+                #     "translations.text" => {
+                #         query: "Allah",
+                #         type: "phrase"
+                #     }
+                # }   
+        query = {
+            
+                query: {
+                    has_child: {
+                        type: 'translation',
+                        query: {
+                            match: {text: "Allah"}
+                        }
+                    }
+                }
+            
+            
+    
+          
+        
+        }
+
+        self.search(query)
+
+    end
+
 end

@@ -29,6 +29,7 @@ GEM
       tzinfo (~> 1.1)
     arel (5.0.1.20140414130214)
     awesome_print (1.2.0)
+    batchelor (1.0.0)
     builder (3.2.2)
     capistrano (3.2.1)
       i18n
@@ -168,6 +169,7 @@ PLATFORMS
 
 DEPENDENCIES
   awesome_print
+  batchelor
   capistrano
   capistrano-bundler
   capistrano-rails

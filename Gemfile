@@ -60,3 +60,10 @@ gem 'elasticsearch-model'
 gem 'elasticsearch-rails'
 # To launch elastic search
 # elasticsearch --config=/usr/local/opt/elasticsearch/config/elasticsearch.yml
+
+
+gem 'batchelor' # This is for batching the Content::Translation
+
+
+
+

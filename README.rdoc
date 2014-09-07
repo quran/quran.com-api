@@ -1,28 +1,13 @@
 == README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Elasticsearch
+It's painful. But this will help a lot:
 
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
-
-
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+* Web portal: sudo plugin -install mobz/elasticsearch-head
+		* Git: https://github.com/mobz/elasticsearch-head
+		* `open http://localhost:9200/_plugin/head/`
+* To view all indices
+		* http://localhost:9200/_cat/indices?v
+* Problems with indices or routing? (RoutingMissingException)
+		* Delete the index
+		* http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/indices-delete-index.html
