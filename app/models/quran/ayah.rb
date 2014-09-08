@@ -64,76 +64,9 @@ class Quran::Ayah < ActiveRecord::Base
       indexes :text, type: 'string'
       indexes :ayah_key, type: 'string'
 
-#      indexes :translations, type: :nested do
-#        indexes :text
-#        indexes :ayah_key
-#      end
-
     end
 
     def self.searching
-        # query = {
-        #     query: {
-        #         "filtered" => {
-        #             query: {
-        #                 match: {
-        #                     "translations.text" => "Allah"
-        #                 }
-        #             },
-        #             filter: {
-        #                 term: {
-        #                     "text" => "Allah"
-        #                 }
-        #             }
-
-        #         }
-
-        #     }
-        # }
-        #
-         config_query = {
-            bool:  {
-                must:  [
-                {
-                    match:  {
-                        text:  {
-                            query:  "Allah",
-                            operator:  'or',
-                            minimum_should_match:  '3<62%'
-                        }
-                    }
-                } ]
-            }
-        }
-
-
-        matched_children = {
-            query: {
-                function_score: {
-                    query: {
-                        bool: {
-                            must: [ {
-                                term: {
-                                    _parent: {
-                                        value: "",
-                                         boost: 0
-                                    }
-                                }
-                            }, config_query ]
-                        }
-                    }
-
-                }
-            }
-        }
-        # self.search(matched_children)
-        #
-        # # match: {
-                #     "translations.text" => {
-                #         query: "Allah",
-                #         type: "phrase"
-                #     }
-                # }
         query = {
             query: {
                 has_child: {
