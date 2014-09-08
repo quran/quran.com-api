@@ -19,25 +19,21 @@ module Schema
     end
 
 
-    def include_elasticsearch(mod)
-        Rails.logger.info mod
-        
-        # mod = Object.const_get("#{mod}")
-        mod.include(Elasticsearch::Model)
-        mod.include(Elasticsearch::Model::Callbacks)
-        mod.settings index: { number_of_shards: 1 } do
-            mappings dynamic: 'false' do
-            end
-        end
-        mod.index_name 'quran2'
-
-    end
-
+    # When this module is included, callback this function
     def self.included(mod)
         Rails.logger.info mod
+        # Then add a callback function `self.extended` to the module that
+        # includes schema module
         mod.instance_eval do 
+            # Create method `self.extended` on the child module
             def extended(mod)
-                mod.send :include_elasticsearch, mod
+                # Include the elasticsearch concern
+                mod.include(Searchable)
+
+                # This is commented out but you can, if you wish, invoke a function
+                # this function would be in the Schema.rb file and would be an instance
+                # function to the child module
+                # mod.send :include_elasticsearch, mod
             end
         end
     end
