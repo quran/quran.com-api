@@ -64,6 +64,8 @@ gem 'elasticsearch-rails'
 
 gem 'batchelor' # This is for batching the Content::Translation
 
-
+# Paging the results
+# gem 'will_paginate'
+gem 'kaminari'
 
 
