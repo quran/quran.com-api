@@ -1,4 +1,3 @@
----
 number_of_shards: 1
 analysis:
     char_filter:
