@@ -4,15 +4,16 @@ module Searchable
   # Setup the index mappings
   def self.setup_index_mappings
     models = [Content::Translation, Content::Transliteration, Quran::Ayah]
-    mappings = Hash.new
+    settings = YAML.load( File.read( File.expand_path( "#{Rails.root}/config/elasticsearch/settings.yml", __FILE__ ) ) )
+    mappings = YAML.load( File.read( File.expand_path( "#{Rails.root}/config/elasticsearch/mappings.yml", __FILE__ ) ) )
 
-    models.each do |model|
-      mappings = mappings.merge(model.mappings.to_hash)
-    end
+#    models.each do |model|
+#      mappings = mappings.merge(model.mappings.to_hash)
+#    end
     
       models.first.__elasticsearch__.client.indices.create \
         index: "quran",
-        body: { settings: models.first.settings.to_hash, mappings: mappings }
+        body: { settings: settings, mappings: mappings }
     # end
   end 
 
@@ -31,10 +32,12 @@ module Searchable
         alias_method :searching, :search
     end
 
-    self.settings index: { number_of_shards: 1 } do
-        mappings dynamic: 'strict' do
-        end
-    end
+    # YAML.load(File.read(File.expand_path("#{Rails.root}/config/elasticsearch/mappings.yml", __FILE__)))
+
+#    self.settings es_settings do
+#        mappings dynamic: 'strict' do
+#        end
+#    end
     
     self.index_name 'quran'
     

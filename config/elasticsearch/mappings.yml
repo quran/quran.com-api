@@ -1,27 +1,28 @@
-mapping:
-    ayah:
-        _source: { enabled: true }
-        properties:
-            index:  { type: integer, index: not_analyzed }
-            surah:  { type: integer, index: not_analyzed }
-            ayah:   { type: integer, index: not_analyzed }
-            page:   { type: integer, index: not_analyzed }
-            juz:    { type: integer, index: not_analyzed }
-            hizb:   { type: integer, index: not_analyzed }
-            rub:    { type: integer, index: not_analyzed }
-            sajdah: { type: string,  index: not_analyzed }
-            key:    { type: string,  index: not_analyzed }
-    quran.text:
-        _parent: { type: ayah }
-        _routing: { required: true, path: key }
-        properties:
-            text: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index  }
-    quran.token:
-        _parent: { type: ayah }
-        _routing: { required: true, path: key }
-        properties:
-            text: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index }
-            clean: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index  }
+---
+ayah:
+    _source: { enabled: true }
+    properties:
+        ayah_index: { type: integer, index: not_analyzed }
+        surah_id:   { type: integer, index: not_analyzed }
+        ayah_num:   { type: integer, index: not_analyzed }
+        page_num:   { type: integer, index: not_analyzed }
+        juz_num:    { type: integer, index: not_analyzed }
+        hizb_num:   { type: integer, index: not_analyzed }
+        rub_num:    { type: integer, index: not_analyzed }
+        sajdah:     { type: string,  index: not_analyzed }
+        text:       { type: string,  index: not_analyzed }
+        ayah_key:   { type: string,  index: not_analyzed }
+text:
+    _parent: { type: ayah }
+    _routing: { required: true, path: ayah_key }
+    properties:
+        text: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index  }
+token:
+    _parent: { type: ayah }
+    _routing: { required: true, path: ayah_key }
+    properties:
+        text: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index }
+        clean: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index  }
 #                    text:
 #                        type: string
 #                        term_vector: with_positions_offsets_payloads
@@ -39,35 +40,35 @@ mapping:
 #                                index: analyzed
 #                                index_analyzer:  arabic_facet_index
 #                                search_analyzer: arabic_facet_query
-    quran.stem:
-        _parent: { type: ayah }
-        _routing: { required: true, path: key }
-        properties:
-            text: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index  }
-            clean: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index  }
-    quran.lemma:
-        _parent: { type: ayah }
-        _routing: { required: true, path: key }
-        properties:
-            text: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index  }
-            clean: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index  }
-    quran.root:
-        _parent: { type: ayah }
-        _routing: { required: true, path: key }
-        properties:
-            text: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index  }
-    content.translation:
-        _parent: { type: ayah }
-        _routing: { required: true, path: key }
-        properties:
-            text: { type: string, term_vector: with_positions_offsets_payloads }
-    content.transliteration:
-        _parent: { type: ayah }
-        _routing: { required: true, path: key }
-        properties:
-            text: { type: string, term_vector: with_positions_offsets_payloads }
-    content.tafsir:
-        _parent: { type: ayah }
-        _routing: { required: true, path: key }
-        properties:
-            text: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index  }
+stem:
+    _parent: { type: ayah }
+    _routing: { required: true, path: ayah_key }
+    properties:
+        text: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index  }
+        clean: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index  }
+lemma:
+    _parent: { type: ayah }
+    _routing: { required: true, path: ayah_key }
+    properties:
+        text: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index  }
+        clean: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index  }
+root:
+    _parent: { type: ayah }
+    _routing: { required: true, path: ayah_key }
+    properties:
+        text: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index  }
+translation:
+    _parent: { type: ayah }
+    _routing: { required: true, path: ayah_key }
+    properties:
+        text: { type: string, term_vector: with_positions_offsets_payloads }
+transliteration:
+    _parent: { type: ayah }
+    _routing: { required: true, path: ayah_key }
+    properties:
+        text: { type: string, term_vector: with_positions_offsets_payloads }
+tafsir:
+    _parent: { type: ayah }
+    _routing: { required: true, path: ayah_key }
+    properties:
+        text: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index  }

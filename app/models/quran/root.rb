@@ -1,5 +1,6 @@
 class Quran::Root < ActiveRecord::Base
     extend Quran
+    extend Batchelor
 
     self.table_name = 'root'
     self.primary_key = 'root_id'
@@ -11,4 +12,14 @@ class Quran::Root < ActiveRecord::Base
     has_many :stems, class_name: 'Quran::Stem', through: :words
     has_many :lemmas, class_name: 'Quran::Lemma', through: :words
     has_many :ayahs, class_name: 'Quran::Ayah', through: :words
+
+#    def self.import(options = {})
+#        transform = lambda do |a|
+#            {index: {_id: "#{a.resource_id},#{a.ayah_key}", _parent: a.ayah_key, data: a.__elasticsearch__.as_indexed_json}} 
+#        end
+#        options = {transform: transform}.merge(options)
+#        self.importing options 
+#    end
+
+
 end
