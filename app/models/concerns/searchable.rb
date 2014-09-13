@@ -21,6 +21,8 @@ module Searchable
   included do
     include Elasticsearch::Model
     include Elasticsearch::Model::Callbacks
+
+    # Initial the paging gem, Kaminari
     Kaminari::Hooks.init
     Elasticsearch::Model::Response::Response.__send__ :include, Elasticsearch::Model::Response::Pagination::Kaminari
 
@@ -33,6 +35,7 @@ module Searchable
         mappings dynamic: 'strict' do
         end
     end
+    
     self.index_name 'quran'
     
     
@@ -44,12 +47,6 @@ module Searchable
     # YAML.load(File.read(File.expand_path("#{Rails.root}/config/elasticsearch/mappings.yml", __FILE__)))
     # 
     
-    # mapping do
-    #   # ...
-    # end
 
-    # def self.search(query)
-    #   # ...
-    # end
   end
 end
