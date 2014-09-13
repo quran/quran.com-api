@@ -70,38 +70,34 @@ class Quran::Ayah < ActiveRecord::Base
 
     end
 
-    def self.search(query, page = 1, size = 20)
+    def self.search(query, page = 1, size = 20, types)
+        types = types.map{|t| t.split(".").last}
+
+        should_array = Array.new
+
+        types.each do |type|
+            should_array.push({
+                has_child: {
+                    type: type,
+                    query: {
+                        match: {
+                            text: {
+                                query: query,
+                                operator: 'or',
+                                minimum_should_match: '3<62%'
+                            }
+                        }
+                    }
+                }
+            })
+        end
 
         # The query hash
         query_hash = {
             query: {
                 bool: {
-                    should: [
-                        has_child: {
-                            type: 'translation',
-                            query: {
-                                match: {
-                                    text: {
-                                        query: query,
-                                        operator: 'or',
-                                        minimum_should_match: '3<62%'
-                                    }
-                                }
-                            }
-                        },
-                        has_child: {
-                            type: 'transliteration',
-                            query: {
-                                match: {
-                                    text: {
-                                        query: query,
-                                        operator: 'or',
-                                        minimum_should_match: '3<62%'
-                                    }
-                                }
-                            }
-                        }
-                    ]
+                    should: should_array,
+                    minimum_number_should_match: 1
                 }
                 
             }
@@ -110,59 +106,58 @@ class Quran::Ayah < ActiveRecord::Base
         # Matched parent ayahs
         matched_parents = searching(query_hash).page(page).per(size)
 
-        # # Array of ayah keys to use to search for the child model
-        # array_of_ayah_keys = matched_parents.map{|r| r._source.ayah_key}
-        
-        # # Search child models
-        # matched_children = ( OpenStruct.new Content::Translation.matched_children(query, array_of_ayah_keys) ).responses
-        # # Rails.logger.ap matched_children
-        
-        # # Init results of matched parent and child array
-        # results = Array.new
+    end
 
 
-        # matched_parents.results.each_with_index do |ayah, index|
-        #     # Rails.logger.info ayah.to_hash
-        #     best = Array.new
+    def self.matched_children (query, ayat = [] )
+        msearch_body = []
+        ayat.each do |ayah_key|
+            ayah = {
+                search: {
+               highlight: {
+                   fields: {
+                       text: {
+                           type: 'fvh',
+                           number_of_fragments: 1,
+                           fragment_size: 1024
+                       }
+                   },
+                   tags_schema: 'styled'
+               },
+               # fields: [:ayah_key],
+               explain: true,
+               # fielddata_fields: ["ayah_key"], # this will split each of the words into an array
+                    query: {
+                        bool: {
+                            must: [ {
+                                term: {
+                                    _parent: {
+                                        value: ayah_key
+                                    }
+                                }
+                            }, {
+                                match: {
+                                    text: {
+                                        query: query,
+                                        operator: 'or',
+                                        minimum_should_match: '3<62%'
+                                    }
+                                }
+                            } ]
+                        }
+                    },
+                    size: 3
+                }
+            }
+            msearch_body.push(ayah)
+        end
 
-        #     matched_children[index]["hits"]["hits"].each do |hit|
-        #         best.push({
-        #             name: hit["_source"]["resource"]["name"], 
-        #             slug: hit["_source"]["resource"]["slug"], 
-        #             type: hit["_source"]["resource"]["type"], 
-        #             highlight: hit["highlight"]["text"].first, 
-        #             score: hit["_score"],
-        #             id: hit["_source"]["resource_id"],
-        #             text: hit["_source"]["text"]
-        #         })
-        #     end
-
-
-        #     ayah = {
-        #         key: ayah._source.ayah_key,
-        #         ayah: ayah._source.ayah_num,
-        #         surah: ayah._source.surah_id,
-        #         index: ayah._source.ayah_index,
-        #         score: ayah._score,
-        #         match: {
-        #             hits: matched_children[index]["hits"]["total"],
-        #             # testing: matched_children[index]["hits"]["hits"], #use this to test the output
-        #             best: best
-
-        #         },
-        #         bucket: {
-        #             surah: ayah._source.surah_id,
-        #             quran: {
-        #                 text: ayah._source.text
-        #             },
-        #             ayah: ayah._source.ayah_num
-
-        #         }
-        #     }
-        #     results.push(ayah)
-        # end
-
-        # return results
+        msearch_query = {
+            index: 'quran',
+            type: "translation,transliteration",
+            body: msearch_body
+        }
+        self.__elasticsearch__.client.msearch( msearch_query )
     end
 
 end

@@ -12,7 +12,7 @@ class Content::Translation < ActiveRecord::Base
     mapping :_parent => { :type => 'ayah' }, :_routing => { :path => 'ayah_key', :required => true } do
       indexes :resource_id, type: "integer"
       indexes :ayah_key
-      indexes :text
+      indexes :text, term_vector: "with_positions_offsets_payloads"
     end
 
 
@@ -25,59 +25,25 @@ class Content::Translation < ActiveRecord::Base
     end
 
 
-    def self.matched_children (query, ayat = [] )
-        msearch_body = []
-        ayat.each do |ayah_key|
-            ayah = {
-                search: {
-    #            highlight: {
-    #                fields: {
-    #                    text: {
-    #                        type: 'fvh',
-    #                        number_of_fragments: 1,
-    #                        fragment_size: 1024
-    #                    }
-    #                },
-    #                tags_schema => 'styled'
-    #            },
-                    query: {
-                        bool: {
-                            must: [ {
-                                term: {
-                                    _parent: {
-                                        value: ayah_key
-                                    }
-                                }
-                            }, {
-                                match: {
-                                    text: {
-                                        query: query,
-                                        operator: 'or',
-                                        minimum_should_match: '3<62%'
-                                    }
-                                }
-                            } ]
-                        }
-                    }
-                }
-            }
-            msearch_body.push(ayah)
-        end
+    # def as_indexed_json(options={})
+    #     self.as_json(
+        
+    #         # methods: [:resource_info],
+    #         include: {
+    #             resource: {
+    #                 only: [:slug, :name, :type]
+    #             }
+    #         }
 
-        msearch_query = {
-            index: 'quran2',
-            body: msearch_body
-        }
-        self.__elasticsearch__.client.msearch( msearch_query )
-    end
-
+    #     )
+    # end
 
 
 end
 # notes:
 # - provides a 'text' column
 # transform = lambda do |a|
-#              {index: {_id: a.id, _parent: a.author_id, data: a.__elasticsearch__.as_indexed_json}}
-#            end
+#    {index: {_id: a.id, _parent: a.author_id, data: a.__elasticsearch__.as_indexed_json}}
+# end
 
 
