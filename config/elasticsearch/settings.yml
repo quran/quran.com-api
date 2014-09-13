@@ -1,3 +1,4 @@
+
 number_of_shards: 1
 analysis:
     char_filter:
@@ -94,4 +95,3 @@ analysis:
                 - arabic_normalization
                 - arabic_keywords
                 - arabic_stemmer
-

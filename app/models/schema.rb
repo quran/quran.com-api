@@ -19,6 +19,7 @@ module Schema
     end
 
 
+
     # When this module is included, callback this function
     def self.included(mod)
         Rails.logger.info mod
@@ -35,6 +36,7 @@ module Schema
                 # function to the child module
                 # mod.send :include_elasticsearch, mod
             end
+
         end
     end
 end
