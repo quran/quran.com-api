@@ -1,8 +1,8 @@
 module Searchable
   extend ActiveSupport::Concern
 
-
-  def self.setup_index
+  # Setup the index mappings
+  def self.setup_index_mappings
     models = [Content::Translation, Content::Transliteration, Quran::Ayah]
     mappings = Hash.new
 
@@ -16,6 +16,8 @@ module Searchable
     # end
   end 
 
+
+  # When this module is included, this callback function is called
   included do
     include Elasticsearch::Model
     include Elasticsearch::Model::Callbacks
@@ -32,7 +34,7 @@ module Searchable
         end
     end
     self.index_name 'quran'
-    # self.document_type = self.name.split("::").first.downcase
+    
     
 
 
