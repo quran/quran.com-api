@@ -29,6 +29,7 @@ GEM
       tzinfo (~> 1.1)
     arel (5.0.1.20140414130214)
     awesome_print (1.2.0)
+    batchelor (1.0.0)
     builder (3.2.2)
     capistrano (3.2.1)
       i18n
@@ -87,6 +88,9 @@ GEM
       railties (>= 3.0, < 5.0)
       thor (>= 0.14, < 2.0)
     json (1.8.1)
+    kaminari (0.16.1)
+      actionpack (>= 3.0.0)
+      activesupport (>= 3.0.0)
     libv8 (3.16.14.3)
     mail (2.5.4)
       mime-types (~> 1.16)
@@ -168,6 +172,7 @@ PLATFORMS
 
 DEPENDENCIES
   awesome_print
+  batchelor
   capistrano
   capistrano-bundler
   capistrano-rails
@@ -182,6 +187,7 @@ DEPENDENCIES
   execjs
   jbuilder (~> 2.0)
   jquery-rails
+  kaminari
   pg
   rails (= 4.1.1)
   rb-readline

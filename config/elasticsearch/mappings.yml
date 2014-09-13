@@ -1,0 +1,73 @@
+mapping:
+    ayah:
+        _source: { enabled: true }
+        properties:
+            index:  { type: integer, index: not_analyzed }
+            surah:  { type: integer, index: not_analyzed }
+            ayah:   { type: integer, index: not_analyzed }
+            page:   { type: integer, index: not_analyzed }
+            juz:    { type: integer, index: not_analyzed }
+            hizb:   { type: integer, index: not_analyzed }
+            rub:    { type: integer, index: not_analyzed }
+            sajdah: { type: string,  index: not_analyzed }
+            key:    { type: string,  index: not_analyzed }
+    quran.text:
+        _parent: { type: ayah }
+        _routing: { required: true, path: key }
+        properties:
+            text: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index  }
+    quran.token:
+        _parent: { type: ayah }
+        _routing: { required: true, path: key }
+        properties:
+            text: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index }
+            clean: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index  }
+#                    text:
+#                        type: string
+#                        term_vector: with_positions_offsets_payloads
+#                        index: analyzed
+#                        fields:
+#                            ngram:
+#                                type: string
+#                                term_vector: with_positions_offsets_payloads
+#                                index: analyzed
+#                                index_analyzer:  arabic_ngram_index
+#                                search_analyzer: arabic_ngram_query
+#                            facet:
+#                                type: string
+#                                term_vector: with_positions_offsets_payloads
+#                                index: analyzed
+#                                index_analyzer:  arabic_facet_index
+#                                search_analyzer: arabic_facet_query
+    quran.stem:
+        _parent: { type: ayah }
+        _routing: { required: true, path: key }
+        properties:
+            text: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index  }
+            clean: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index  }
+    quran.lemma:
+        _parent: { type: ayah }
+        _routing: { required: true, path: key }
+        properties:
+            text: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index  }
+            clean: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index  }
+    quran.root:
+        _parent: { type: ayah }
+        _routing: { required: true, path: key }
+        properties:
+            text: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index  }
+    content.translation:
+        _parent: { type: ayah }
+        _routing: { required: true, path: key }
+        properties:
+            text: { type: string, term_vector: with_positions_offsets_payloads }
+    content.transliteration:
+        _parent: { type: ayah }
+        _routing: { required: true, path: key }
+        properties:
+            text: { type: string, term_vector: with_positions_offsets_payloads }
+    content.tafsir:
+        _parent: { type: ayah }
+        _routing: { required: true, path: key }
+        properties:
+            text: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index  }
