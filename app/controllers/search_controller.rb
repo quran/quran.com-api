@@ -8,12 +8,10 @@ class SearchController < ApplicationController
         query = params[:q]
 
         # Set the configs
-        config[:types] ||= [ "quran.text", "quran.token", "quran.stem", 
-                            "quran.lemma", "quran.root", "content.tafsir" ] if  query =~ /^(?:\s*[\p{Arabic}\p{Diacritic}]+\s*)+$/
+        config[:types] ||= [ "quran.text", "quran.text_token", "quran.text_stem",
+                             "quran.text_lemma", "quran.text_root", "content.tafsir" ] if  query =~ /^(?:\s*[\p{Arabic}\p{Diacritic}]+\s*)+$/
         config[:types] ||= [ "content.transliteration", "content.translation"] if query =~ /^(?:\s*\p{ASCII}+\s*)+$/
-        
 
-        
         matched_parents = Quran::Ayah.search(query, params[:page], params[:size], config[:types])
 
         # Array of ayah keys to use to search for the child model

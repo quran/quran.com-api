@@ -17,7 +17,7 @@ text:
     _routing: { required: true, path: ayah_key }
     properties:
         text: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index  }
-token:
+text_token:
     _parent: { type: ayah }
     _routing: { required: true, path: ayah_key }
     properties:
@@ -40,19 +40,19 @@ token:
 #                                index: analyzed
 #                                index_analyzer:  arabic_facet_index
 #                                search_analyzer: arabic_facet_query
-stem:
+text_stem:
     _parent: { type: ayah }
     _routing: { required: true, path: ayah_key }
     properties:
         text: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index  }
         clean: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index  }
-lemma:
+text_lemma:
     _parent: { type: ayah }
     _routing: { required: true, path: ayah_key }
     properties:
         text: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index  }
         clean: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index  }
-root:
+text_root:
     _parent: { type: ayah }
     _routing: { required: true, path: ayah_key }
     properties:
