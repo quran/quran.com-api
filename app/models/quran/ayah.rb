@@ -33,6 +33,7 @@ class Quran::Ayah < ActiveRecord::Base
         self
         .where("quran.ayah.surah_id = ? AND quran.ayah.ayah_num >= ? AND quran.ayah.ayah_num <= ?", surah_id, from, to)
         .order("quran.ayah.surah_id, quran.ayah.ayah_num")
+        
     end
 
 
