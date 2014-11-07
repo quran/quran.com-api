@@ -1,0 +1,632 @@
+
+---
+resource_api_version:
+  columns:
+  - resource_id
+  - v1_is_enabled
+  - v1_is_default
+  - v1_separator
+  - v1_label
+  - v1_order
+  - v1_id
+  - v1_name
+  - v2_is_enabled
+  - v2_is_default
+  - v2_weighted
+  records: 
+  - - '1'
+    - false
+    - false
+    - false
+    - false
+    - 
+    - 
+    - 
+    - true
+    - false
+    - '0.618'
+  - - '2'
+    - true
+    - true
+    - false
+    - false
+    - '1'
+    - '1'
+    - images
+    - true
+    - false
+    - '0.618'
+  - - '3'
+    - false
+    - false
+    - false
+    - false
+    - 
+    - 
+    - 
+    - true
+    - false
+    - '0.618'
+  - - '4'
+    - false
+    - false
+    - false
+    - false
+    - 
+    - 
+    - 
+    - true
+    - false
+    - '0.618'
+  - - '5'
+    - false
+    - false
+    - false
+    - false
+    - '999'
+    - 
+    - 
+    - false
+    - false
+    - '0.618'
+  - - '6'
+    - false
+    - false
+    - false
+    - false
+    - '999'
+    - 
+    - 
+    - false
+    - false
+    - '0.618'
+  - - '7'
+    - false
+    - false
+    - false
+    - false
+    - '999'
+    - 
+    - 
+    - false
+    - false
+    - '0.618'
+  - - '8'
+    - false
+    - false
+    - false
+    - false
+    - '999'
+    - 
+    - 
+    - false
+    - false
+    - '0.618'
+  - - '9'
+    - false
+    - false
+    - false
+    - false
+    - '999'
+    - 
+    - 
+    - false
+    - false
+    - '0.618'
+  - - '10'
+    - false
+    - false
+    - false
+    - false
+    - '999'
+    - 
+    - 
+    - false
+    - false
+    - '0.618'
+  - - '11'
+    - true
+    - false
+    - false
+    - false
+    - '3'
+    - '3'
+    - without tashkeel
+    - true
+    - false
+    - '0.618'
+  - - '12'
+    - true
+    - false
+    - false
+    - false
+    - '2'
+    - '2'
+    - with tashkeel
+    - true
+    - false
+    - '0.618'
+  - - '13'
+    - false
+    - false
+    - false
+    - false
+    - '999'
+    - 
+    - 
+    - true
+    - false
+    - '0.618'
+  - - '14'
+    - false
+    - false
+    - false
+    - false
+    - '999'
+    - 
+    - 
+    - false
+    - false
+    - '0.618'
+  - - '15'
+    - false
+    - false
+    - false
+    - false
+    - '999'
+    - 
+    - 
+    - false
+    - false
+    - '0.618'
+  - - '16'
+    - true
+    - false
+    - false
+    - true
+    - '11'
+    - '11'
+    - Dr. Ghali
+    - true
+    - false
+    - '0.618'
+  - - '17'
+    - true
+    - false
+    - false
+    - true
+    - '7'
+    - '7'
+    - Muhsin Khan
+    - true
+    - false
+    - '0.618'
+  - - '18'
+    - true
+    - false
+    - false
+    - true
+    - '8'
+    - '8'
+    - Pickthall
+    - true
+    - false
+    - '0.618'
+  - - '19'
+    - true
+    - true
+    - false
+    - true
+    - '6'
+    - '6'
+    - Sahih International
+    - true
+    - true
+    - '0.618'
+  - - '20'
+    - true
+    - false
+    - false
+    - true
+    - '10'
+    - '10'
+    - Shakir
+    - true
+    - false
+    - '0.618'
+  - - '21'
+    - true
+    - false
+    - false
+    - true
+    - '9'
+    - '9'
+    - Yusuf Ali
+    - true
+    - false
+    - '1'
+  - - '22'
+    - true
+    - false
+    - false
+    - true
+    - '13'
+    - '14'
+    - Azerbaijani
+    - true
+    - false
+    - '0.618'
+  - - '23'
+    - true
+    - false
+    - false
+    - true
+    - '14'
+    - '49'
+    - Bangla
+    - true
+    - false
+    - '0.618'
+  - - '24'
+    - true
+    - false
+    - false
+    - true
+    - '15'
+    - '15'
+    - Bosnian
+    - true
+    - false
+    - '0.618'
+  - - '25'
+    - true
+    - false
+    - false
+    - true
+    - '17'
+    - '17'
+    - Czech
+    - true
+    - false
+    - '0.618'
+  - - '26'
+    - true
+    - false
+    - false
+    - true
+    - '22'
+    - '22'
+    - German
+    - true
+    - false
+    - '0.618'
+  - - '27'
+    - true
+    - false
+    - false
+    - true
+    - '37'
+    - '37'
+    - Spanish
+    - true
+    - false
+    - '0.618'
+  - - '28'
+    - true
+    - false
+    - false
+    - true
+    - '19'
+    - '19'
+    - Farsi
+    - true
+    - false
+    - '0.618'
+  - - '29'
+    - true
+    - false
+    - false
+    - true
+    - '20'
+    - '20'
+    - Finnish
+    - true
+    - false
+    - '0.618'
+  - - '30'
+    - true
+    - false
+    - false
+    - true
+    - '21'
+    - '21'
+    - French
+    - true
+    - false
+    - '0.618'
+  - - '31'
+    - true
+    - false
+    - false
+    - true
+    - '23'
+    - '23'
+    - Hausa
+    - true
+    - false
+    - '0.618'
+  - - '32'
+    - true
+    - false
+    - false
+    - true
+    - '24'
+    - '24'
+    - Indonesian
+    - true
+    - false
+    - '0.618'
+  - - '33'
+    - true
+    - false
+    - false
+    - true
+    - '25'
+    - '25'
+    - Italian
+    - true
+    - false
+    - '0.618'
+  - - '34'
+    - true
+    - false
+    - false
+    - true
+    - '26'
+    - '26'
+    - Japanese
+    - true
+    - false
+    - '0.618'
+  - - '35'
+    - true
+    - false
+    - false
+    - true
+    - '27'
+    - '27'
+    - Korean
+    - true
+    - false
+    - '0.618'
+  - - '36'
+    - true
+    - false
+    - false
+    - true
+    - '29'
+    - '29'
+    - Malayalam
+    - true
+    - false
+    - '0.618'
+  - - '37'
+    - true
+    - false
+    - false
+    - true
+    - '30'
+    - '30'
+    - Maranao
+    - true
+    - false
+    - '0.618'
+  - - '38'
+    - true
+    - false
+    - false
+    - true
+    - '28'
+    - '28'
+    - Malay
+    - true
+    - false
+    - '0.618'
+  - - '39'
+    - true
+    - false
+    - false
+    - true
+    - '18'
+    - '18'
+    - Dutch
+    - true
+    - false
+    - '0.618'
+  - - '40'
+    - true
+    - false
+    - false
+    - true
+    - '31'
+    - '31'
+    - Norwegian
+    - true
+    - false
+    - '0.618'
+  - - '41'
+    - true
+    - false
+    - false
+    - true
+    - '32'
+    - '32'
+    - Polish
+    - true
+    - false
+    - '0.618'
+  - - '42'
+    - true
+    - false
+    - false
+    - true
+    - '33'
+    - '33'
+    - Portuguese
+    - true
+    - false
+    - '0.618'
+  - - '43'
+    - true
+    - false
+    - false
+    - true
+    - '34'
+    - '34'
+    - Romanian
+    - true
+    - false
+    - '0.618'
+  - - '44'
+    - true
+    - false
+    - false
+    - true
+    - '35'
+    - '35'
+    - Russian
+    - true
+    - false
+    - '0.618'
+  - - '45'
+    - true
+    - false
+    - false
+    - true
+    - '36'
+    - '36'
+    - Somali
+    - true
+    - false
+    - '0.618'
+  - - '46'
+    - true
+    - false
+    - false
+    - true
+    - '12'
+    - '13'
+    - Albanian
+    - true
+    - false
+    - '0.618'
+  - - '47'
+    - true
+    - false
+    - false
+    - true
+    - '39'
+    - '39'
+    - Swedish
+    - true
+    - false
+    - '0.618'
+  - - '48'
+    - true
+    - false
+    - false
+    - true
+    - '38'
+    - '38'
+    - Swahili
+    - true
+    - false
+    - '0.618'
+  - - '49'
+    - true
+    - false
+    - false
+    - true
+    - '40'
+    - '50'
+    - Tamil
+    - true
+    - false
+    - '0.618'
+  - - '50'
+    - true
+    - false
+    - false
+    - true
+    - '42'
+    - '41'
+    - Thai
+    - true
+    - false
+    - '0.618'
+  - - '51'
+    - true
+    - false
+    - false
+    - true
+    - '43'
+    - '42'
+    - Turkish
+    - true
+    - false
+    - '0.618'
+  - - '52'
+    - true
+    - false
+    - false
+    - true
+    - '41'
+    - '40'
+    - Tatar
+    - true
+    - false
+    - '0.618'
+  - - '53'
+    - true
+    - false
+    - false
+    - true
+    - '44'
+    - '43'
+    - Urdu
+    - true
+    - false
+    - '0.618'
+  - - '54'
+    - true
+    - false
+    - false
+    - true
+    - '45'
+    - '44'
+    - Uzbek
+    - true
+    - false
+    - '0.618'
+  - - '55'
+    - true
+    - false
+    - false
+    - true
+    - '16'
+    - '16'
+    - Chinese
+    - true
+    - false
+    - '0.618'
+  - - '56'
+    - true
+    - false
+    - false
+    - true
+    - '5'
+    - '5'
+    - "<b>Transliteration</b>"
+    - true
+    - false
+    - '0.618'

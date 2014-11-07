@@ -29,8 +29,8 @@ default: &default
 
 development:
   <<: *default
-  database: quran_dev_lite
-  host: dev.quran.com
+  #database: quran_dev_lite
+  #host: dev.quran.com
 
 #development_remote_readonly:
 #  <<: *default

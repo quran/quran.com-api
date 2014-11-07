@@ -1,0 +1,20 @@
+
+---
+style:
+  columns:
+  - style_id
+  - path
+  - slug
+  - english
+  - arabic
+  records: 
+  - - '1'
+    - Mujawwad
+    - mujawwad
+    - Mujawwad
+    - "مجود"
+  - - '2'
+    - Murattal
+    - murattal
+    - Murattal
+    - "مرتل"
