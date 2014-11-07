@@ -18,6 +18,8 @@ default: &default
   adapter: postgresql
   encoding: unicode
   database: quran_dev
+  username: quran_dev
+  password: dev_quran
   # username: quran
   # password: quran
   # For details on connection pooling, see rails configuration guide
@@ -27,10 +29,12 @@ default: &default
 
 development:
   <<: *default
-  host: dev.quran.com
-  # password: dev_quran
-  username: quran_dev
-  password: dev_quran
+  #database: quran_dev_lite
+  #host: dev.quran.com
+
+#development_remote_readonly:
+#  <<: *default
+#  host: dev.quran.com
 
 
   # The specified database role being used to connect to postgres.
@@ -63,9 +67,9 @@ development:
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
-test:
-  <<: *default
-  database: quran_test
+#test:
+#  <<: *default
+#  database: quran_test
 
 # As with config/secrets.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
@@ -86,9 +90,9 @@ test:
 #   production:
 #     url: <%= ENV['DATABASE_URL'] %>
 #
-production:
-  <<: *default
-  database: quran_production
-  username: quran
-  password: <%= ENV['QURAN_DATABASE_PASSWORD'] %>
-  dsn: dbi:Pg:dbname=quran
+#production:
+#  <<: *default
+#  database: quran_production
+#  username: quran
+#  password: <%= ENV['QURAN_DATABASE_PASSWORD'] %>
+#  dsn: dbi:Pg:dbname=quran

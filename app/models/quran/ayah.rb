@@ -119,19 +119,19 @@ class Quran::Ayah < ActiveRecord::Base
         ayat.each do |ayah_key|
             ayah = {
                 search: {
-               highlight: {
-                   fields: {
-                       text: {
-                           type: 'fvh',
-                           number_of_fragments: 1,
-                           fragment_size: 1024
-                       }
-                   },
-                   tags_schema: 'styled'
-               },
-               # fields: [:ayah_key],
-               explain: true,
-               # fielddata_fields: ["ayah_key"], # this will split each of the words into an array
+                    highlight: {
+                        fields: {
+                            text: {
+                                type: 'fvh',
+                                number_of_fragments: 1,
+                                fragment_size: 1024
+                            }
+                        },
+                        tags_schema: 'styled'
+                    },
+                    # fields: [:ayah_key],
+                    explain: true,
+                    # fielddata_fields: ["ayah_key"], # this will split each of the words into an array
                     query: {
                         bool: {
                             must: [ {
@@ -159,7 +159,7 @@ class Quran::Ayah < ActiveRecord::Base
 
         msearch_query = {
             index: 'quran',
-            type: "translation,transliteration",
+            type: [ 'text' ],
             body: msearch_body
         }
         self.__elasticsearch__.client.msearch( msearch_query )

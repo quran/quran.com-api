@@ -17,6 +17,12 @@ text:
     _routing: { required: true, path: ayah_key }
     properties:
         text: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index  }
+text_root:
+    _parent: { type: ayah }
+    _routing: { required: true, path: ayah_key }
+    properties:
+        text: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index  }
+
 text_token:
     _parent: { type: ayah }
     _routing: { required: true, path: ayah_key }
@@ -52,11 +58,6 @@ text_lemma:
     properties:
         text: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index  }
         clean: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index  }
-text_root:
-    _parent: { type: ayah }
-    _routing: { required: true, path: ayah_key }
-    properties:
-        text: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index  }
 translation:
     _parent: { type: ayah }
     _routing: { required: true, path: ayah_key }

@@ -1,13 +1,10 @@
 module Schema
     # mattr_accessor :schema_name
-
-
     @@schema_name = Hash.new
     def table_name
         @@schema_name[self.name.split("::").first.downcase] +'.'+ super
         # Rails.logger.ap self.name.split("::").first.downcase
         # Rails.logger.ap @@schema_name[self.name.split("::").first.downcase]
-        
     end
 
     def self.schema_name
@@ -18,14 +15,12 @@ module Schema
         @@schema_name["#{schema_name}"] = schema_name
     end
 
-
-
     # When this module is included, callback this function
     def self.included(mod)
         Rails.logger.info mod
         # Then add a callback function `self.extended` to the module that
         # includes schema module
-        mod.instance_eval do 
+        mod.instance_eval do
             # Create method `self.extended` on the child module
             def extended(mod)
                 # Include the elasticsearch concern
@@ -36,7 +31,6 @@ module Schema
                 # function to the child module
                 # mod.send :include_elasticsearch, mod
             end
-
         end
     end
 end
