@@ -36,13 +36,30 @@ It's painful. But this will help a lot:
 * View mappings:
     * http://localhost:9200/bookstore/_mapping
 
-- ElasticSearch client API:
+* ElasticSearch client API:
     - This should come in handy if the rails extension just isn't cutting it. You can get to it via the model class,
       e.g. Quran::Text.__elasticsearch__.client
     - http://www.rubydoc.info/gems/elasticsearch-api/Elasticsearch/API
     - https://github.com/elasticsearch/elasticsearch-ruby/tree/master/elasticsearch-api
 
-* TODO: Document how to forcefully delete and recreate the index from the rails console
-* TODO: Document how to delete only a single mapping from the rails console
-* TODO: Document how to import from the rails console
+* How to forcefully delete and recreate the index from the rails console:
+
+    client = Quran::Ayah.__elasticsearch__.client
+    client.indices.delete index: 'quran'
+    Searchable.setup_index_mappings
+
+    # then browse to http://127.0.0.1:9200/quran/_mapping to confirm correct
+
+* How to import from the rails console:
+
+    Quran::Ayah.import
+    Quran::Text.import
+    Content::Translation.import
+    # ...etc
+
+* How to delete and recreate only a single mapping from the rails console:
+
+    client = Quran::Ayah.__elasticsearch__.client
+    client.indices.delete_mapping index: 'quran', type: 'text'
+    client.indices.put_mapping index: 'quran', type: 'text', # ... TODO (figure this out and document it)
 
