@@ -1894,8 +1894,3 @@ ALTER TABLE ONLY word
 --
 
 SET search_path TO quran,"$user",content,audio,i18n,public;
-
-INSERT INTO schema_migrations (version) VALUES ('20141103170602');
-
-INSERT INTO schema_migrations (version) VALUES ('20141106120540');
-
