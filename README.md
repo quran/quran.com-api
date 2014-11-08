@@ -36,3 +36,13 @@ It's painful. But this will help a lot:
 * View mappings:
     * http://localhost:9200/bookstore/_mapping
 
+- ElasticSearch client API:
+    - This should come in handy if the rails extension just isn't cutting it. You can get to it via the model class,
+      e.g. Quran::Text.__elasticsearch__.client
+    - http://www.rubydoc.info/gems/elasticsearch-api/Elasticsearch/API
+    - https://github.com/elasticsearch/elasticsearch-ruby/tree/master/elasticsearch-api
+
+* TODO: Document how to forcefully delete and recreate the index from the rails console
+* TODO: Document how to delete only a single mapping from the rails console
+* TODO: Document how to import from the rails console
+

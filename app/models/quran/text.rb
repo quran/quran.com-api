@@ -12,7 +12,7 @@ class Quran::Text < ActiveRecord::Base
         transform = lambda do |a|
             {index: {_id: "#{a.resource_id},#{a.ayah_key}", _parent: a.ayah_key, data: a.__elasticsearch__.as_indexed_json}} 
         end
-        options = {transform: transform}.merge(options)
+        options = { transform: transform, batch_size: 6236 }.merge(options)
         self.importing options 
     end
 

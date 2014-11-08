@@ -76,3 +76,8 @@ gem 'kaminari'
 
 gem 'yaml_db', github: 'sharabash/yaml_db'
 gem 'sass-rails', github: 'rails/sass-rails' # '~> 4.0.3'
+
+group :development, :test do
+      gem 'jazz_hands', github: 'nixme/jazz_hands', branch: 'bring-your-own-debugger'
+      gem 'pry-byebug'
+end

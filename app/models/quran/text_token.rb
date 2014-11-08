@@ -1,8 +1,8 @@
-class Quran::TextRoot < ActiveRecord::Base
+class Quran::TextToken < ActiveRecord::Base
     extend Quran
     extend Batchelor
 
-    self.table_name = 'text_root'
+    self.table_name = 'text_token'
     self.primary_key = 'id'
 
     belongs_to :ayah, class_name: 'Quran::Ayah'

@@ -165,4 +165,8 @@ class Quran::Ayah < ActiveRecord::Base
         self.__elasticsearch__.client.msearch( msearch_query )
     end
 
+    def self.import(options = {})
+        options = { batch_size: 6236 }.merge(options)
+        self.importing options
+    end
 end
