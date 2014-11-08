@@ -50,7 +50,7 @@ class Bucket::AyatController < ApplicationController
         
         @cardinalities[:content].each do |row|
             if row.cardinality_type == 'n_ayah'
-                join = "JOIN #{row.type}.#{row.sub_type} c using ( resource_id ) JOIN #{rowtype}.#{row.sub_type}_ayah n using ( #{row.sub_type}_id )";
+                join = "JOIN #{row.type}.#{row.sub_type} c using ( resource_id ) JOIN #{row.type}.#{row.sub_type}_ayah n using ( #{row.sub_type}_id )";
             elsif row.cardinality_type == '1_ayah'
                 join = "JOIN #{row.type}.#{row.sub_type} c using ( resource_id )";
             end
@@ -58,13 +58,12 @@ class Bucket::AyatController < ApplicationController
                 Content::Resource
                 .joins(join)
                 .joins("JOIN quran.ayah using ( ayah_key )")
-                .select("c.resource_id, quran.ayah.ayah_key, concat( '/', concat_ws( '/', r.type, r.sub_type, c.#{row.sub_type}_id ) ) url, content.resource.name")
+                .select("c.resource_id, quran.ayah.ayah_key, concat( '/', concat_ws( '/', '#{row.type}', '#{row.sub_type}', c.#{row.sub_type}_id ) ) url, content.resource.name")
                 .where("content.resource.resource_id = ?", row.resource_id)
                 .where("quran.ayah.ayah_key IN (?)", keys)
                 .order("quran.ayah.surah_id , quran.ayah.ayah_num")
                 .each do |ayah|
-                    # @result[:content]["#{ayah.ayah_key}".to_sym] << {text: ayah.text, name: ayah.name}
-                    @results["#{ayah.ayah_key}".to_sym][:content] << {text: ayah.text, name: ayah.name}
+                    @results["#{ayah.ayah_key}".to_sym][:content] << {url: ayah.url, name: ayah.name}
                 end
             elsif row.cardinality_type == '1_ayah'
                 Content::Resource

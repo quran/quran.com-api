@@ -75,3 +75,4 @@ gem 'kaminari'
 
 
 gem 'yaml_db', github: 'sharabash/yaml_db'
+gem 'sass-rails', github: 'rails/sass-rails' # '~> 4.0.3'

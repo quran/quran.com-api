@@ -63,6 +63,16 @@ GIT
       thor (>= 0.18.1, < 2.0)
 
 GIT
+  remote: git://github.com/rails/sass-rails.git
+  revision: 80e15690b66131edc1b8ccb4ab7dbbd5bf567042
+  specs:
+    sass-rails (5.0.0.beta1)
+      railties (>= 4.0.0, < 5.0)
+      sass (~> 3.2, >= 3.2.2)
+      sprockets (~> 2.12)
+      sprockets-rails (>= 2.0, < 4.0)
+
+GIT
   remote: git://github.com/sharabash/yaml_db.git
   revision: 658a29fb97a67e3b2e017d2018eeeaefe0ed568b
   specs:
@@ -169,6 +179,7 @@ GEM
     rdoc (4.1.2)
       json (~> 1.4)
     ref (1.0.5)
+    sass (3.4.7)
     sdoc (0.4.1)
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
@@ -224,6 +235,7 @@ DEPENDENCIES
   pg
   rails!
   rb-readline
+  sass-rails!
   sdoc (~> 0.4.0)
   spring
   therubyracer
