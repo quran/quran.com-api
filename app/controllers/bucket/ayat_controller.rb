@@ -1,4 +1,6 @@
 class Bucket::AyatController < ApplicationController
+
+
     def index
         
         # Set the variables
@@ -47,37 +49,43 @@ class Bucket::AyatController < ApplicationController
         end
         
         
-        
+        # Fetch the content corresponding to the the ayah keys and the content requested.
         @cardinalities[:content].each do |row|
-            if row.cardinality_type == 'n_ayah'
-                join = "JOIN #{row.type}.#{row.sub_type} c using ( resource_id ) JOIN #{row.type}.#{row.sub_type}_ayah n using ( #{row.sub_type}_id )";
-            elsif row.cardinality_type == '1_ayah'
-                join = "JOIN #{row.type}.#{row.sub_type} c using ( resource_id )";
+#<<<<<<< HEAD
+#            if row.cardinality_type == 'n_ayah'
+#                join = "JOIN #{row.type}.#{row.sub_type} c using ( resource_id ) JOIN #{row.type}.#{row.sub_type}_ayah n using ( #{row.sub_type}_id )";
+#            elsif row.cardinality_type == '1_ayah'
+#                join = "JOIN #{row.type}.#{row.sub_type} c using ( resource_id )";
+#            end
+#            if row.cardinality_type == 'n_ayah'
+#                Content::Resource
+#                .joins(join)
+#                .joins("JOIN quran.ayah using ( ayah_key )")
+#                .select("c.resource_id, quran.ayah.ayah_key, concat( '/', concat_ws( '/', '#{row.type}', '#{row.sub_type}', c.#{row.sub_type}_id ) ) url, content.resource.name")
+#                .where("content.resource.resource_id = ?", row.resource_id)
+#                .where("quran.ayah.ayah_key IN (?)", keys)
+#                .order("quran.ayah.surah_id , quran.ayah.ayah_num")
+#                .each do |ayah|
+#                    @results["#{ayah.ayah_key}".to_sym][:content] << {url: ayah.url, name: ayah.name}
+#                end
+#            elsif row.cardinality_type == '1_ayah'
+#                Content::Resource
+#                .joins(join)
+#                .joins("join quran.ayah using ( ayah_key )")
+#                .select("c.*, content.resource.name")
+#                .where("content.resource.resource_id = ?", row.resource_id)
+#                .where("quran.ayah.ayah_key IN (?)", keys)
+#                .order("quran.ayah.surah_id , quran.ayah.ayah_num")
+#                .each do |ayah|
+#                    @results["#{ayah.ayah_key}".to_sym][:content] << {text: ayah.text, name: ayah.name}
+#                end
+#
+#=======
+            Content::Resource.bucket_results_content(row, keys).each do |ayah|
+                @results["#{ayah.ayah_key}".to_sym][:content] << {text: ayah.text, name: ayah.name}
+#>>>>>>> text_root-ES
             end
-            if row.cardinality_type == 'n_ayah'
-                Content::Resource
-                .joins(join)
-                .joins("JOIN quran.ayah using ( ayah_key )")
-                .select("c.resource_id, quran.ayah.ayah_key, concat( '/', concat_ws( '/', '#{row.type}', '#{row.sub_type}', c.#{row.sub_type}_id ) ) url, content.resource.name")
-                .where("content.resource.resource_id = ?", row.resource_id)
-                .where("quran.ayah.ayah_key IN (?)", keys)
-                .order("quran.ayah.surah_id , quran.ayah.ayah_num")
-                .each do |ayah|
-                    @results["#{ayah.ayah_key}".to_sym][:content] << {url: ayah.url, name: ayah.name}
-                end
-            elsif row.cardinality_type == '1_ayah'
-                Content::Resource
-                .joins(join)
-                .joins("join quran.ayah using ( ayah_key )")
-                .select("c.*, content.resource.name")
-                .where("content.resource.resource_id = ?", row.resource_id)
-                .where("quran.ayah.ayah_key IN (?)", keys)
-                .order("quran.ayah.surah_id , quran.ayah.ayah_num")
-                .each do |ayah|
-                    @results["#{ayah.ayah_key}".to_sym][:content] << {text: ayah.text, name: ayah.name}
-                end
-
-            end
+            
         end
 
              
@@ -102,9 +110,3 @@ class Bucket::AyatController < ApplicationController
 
     end
 end
-
-
-
-
-
-#                           left join quran.root qr on wr.root_id = qr.root_id
