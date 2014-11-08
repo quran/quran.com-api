@@ -54,8 +54,13 @@ It's painful. But this will help a lot:
 
     Quran::Ayah.import
     Quran::Text.import
+    Quran::TextRoot.import
+    Quran::TextStem.import
+    Quran::TextLemma.import
+    Quran::TextToken.import
     Content::Translation.import
-    # ...etc
+    Content::Transliteration.import
+    Content::TafsirAyah.import # ...maps to the 'tafsir' mapping
 
 * How to delete and recreate only a single mapping from the rails console:
 
