@@ -174,7 +174,7 @@ class Content::Resource < ActiveRecord::Base
             self
             .joins(join)
             .joins("JOIN quran.ayah using ( ayah_key )")
-            .select("c.resource_id, quran.ayah.ayah_key, concat( '/', concat_ws( '/', r.type, r.sub_type, c.#{row.sub_type}_id ) ) url, content.resource.name")
+            .select("c.resource_id, quran.ayah.ayah_key, concat( '/', concat_ws( '/', '#{row.type}', '#{row.sub_type}', c.#{row.sub_type}_id ) ) url, content.resource.name")
             .where("content.resource.resource_id = ?", row.resource_id)
             .where("quran.ayah.ayah_key IN (?)", keys)
             .order("quran.ayah.surah_id , quran.ayah.ayah_num")
@@ -187,7 +187,6 @@ class Content::Resource < ActiveRecord::Base
             .where("content.resource.resource_id = ?", row.resource_id)
             .where("quran.ayah.ayah_key IN (?)", keys)
             .order("quran.ayah.surah_id , quran.ayah.ayah_num")
-            
 
         end
     end

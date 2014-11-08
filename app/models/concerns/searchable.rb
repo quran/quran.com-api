@@ -3,7 +3,10 @@ module Searchable
 
   # Setup the index mappings
   def self.setup_index
-    models = [ Quran::Ayah, Content::Translation, Content::Transliteration, Quran::TextRoot]
+    models = [
+        Quran::Ayah, Quran::TextRoot, Quran::TextStem, Quran::TextLemma, Quran::TextToken,
+        Content::Translation, Content::Transliteration, Content::TafsirAyah
+    ]
     settings = YAML.load( File.read( File.expand_path( "#{Rails.root}/config/elasticsearch/settings.yml", __FILE__ ) ) )
     mappings = YAML.load( File.read( File.expand_path( "#{Rails.root}/config/elasticsearch/mappings.yml", __FILE__ ) ) )
 
@@ -11,8 +14,9 @@ module Searchable
       index: "quran",
       body: { settings: settings, mappings: mappings }
 
-    # TODO: loop through the models and import the indexes. This will take a while.
-    # This should also be moved into a rake file.
+    models.each do |m|
+        m.import
+    end
   end
 
   def self.delete_index
