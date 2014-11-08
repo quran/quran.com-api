@@ -11,19 +11,18 @@ class SearchController < ApplicationController
         config[:types] ||= [ "quran.text", "quran.text_token", "quran.text_stem",
                              "quran.text_lemma", "quran.text_root", "content.tafsir" ] if  query =~ /^(?:\s*[\p{Arabic}\p{Diacritic}]+\s*)+$/
         config[:types] ||= [ "content.transliteration", "content.translation"] if query =~ /^(?:\s*\p{ASCII}+\s*)+$/
+        config[:types] ||= [ "content.translation" ] # this is what happens when we encounter an umlaut, for example
 
         matched_parents = Quran::Ayah.search(query, params[:page], params[:size], config[:types])
+        logger.debug( "matched parents #{ matched_parents.inspect }" )
 
         # Array of ayah keys to use to search for the child model
         array_of_ayah_keys = matched_parents.map{|r| r._source.ayah_key}
 
 
-
-
-        
         # Search child models
         matched_children = ( OpenStruct.new Quran::Ayah.matched_children(query, array_of_ayah_keys) ).responses
-        
+        logger.debug( "matched children #{ matched_children.inspect }" )
 
         # # Rails.logger.ap matched_children
         

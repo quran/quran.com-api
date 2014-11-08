@@ -51,3 +51,13 @@ It's painful. But this will help a lot:
     client.indices.delete_mapping index: 'quran', type: 'text'
     client.indices.put_mapping index: 'quran', type: 'text', # ... TODO (figure this out and document it)
 
+* Figuring out whats wrong with a query
+  - Fire up a rails console:
+
+    r = Quran::Ayah.search( "allah light", 1, 20, [ 'content.transliteration', 'content.translation' ] )
+    debugme=r.instance_values['search'].instance_values['definition'][:body]
+    print debugme.to_json, "\n"
+
+    # {"query":{"bool":{"should":[{"has_child":{"type":"transliteration","query":{"match":{"text":{"query":"allah light","operator":"or","minimum_should_match":"3\u003c62%"}}}}},{"has_child":{"type":"translation","query":{"match":{"text":{"query":"allah light","operator":"or","minimum_should_match":"3\u003c62%"}}}}}],"minimum_number_should_match":1}}}
+
+  - Copy and paste that output into the 'Any Request' tab of http://127.0.0.1:9200/_plugin/head/

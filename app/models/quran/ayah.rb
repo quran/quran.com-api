@@ -105,13 +105,11 @@ class Quran::Ayah < ActiveRecord::Base
                     should: should_array,
                     minimum_number_should_match: 1
                 }
-                
             }
         }
 
         # Matched parent ayahs
         matched_parents = searching(query_hash).page(page).per(size)
-
     end
 
 
