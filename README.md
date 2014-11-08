@@ -42,27 +42,10 @@ It's painful. But this will help a lot:
     - http://www.rubydoc.info/gems/elasticsearch-api/Elasticsearch/API
     - https://github.com/elasticsearch/elasticsearch-ruby/tree/master/elasticsearch-api
 
-* How to forcefully delete and recreate the index from the rails console:
-
-    client = Quran::Ayah.__elasticsearch__.client
-    client.indices.delete index: 'quran'
-    Searchable.setup_index_mappings
-
-    # then browse to http://127.0.0.1:9200/quran/_mapping to confirm correct
-
-* How to import from the rails console:
-
-    Quran::Ayah.import
-    Quran::Text.import
-    Quran::TextRoot.import
-    Quran::TextStem.import
-    Quran::TextLemma.import
-    Quran::TextToken.import
-    Content::Translation.import
-    Content::Transliteration.import
-    Content::TafsirAyah.import # ...maps to the 'tafsir' mapping
-
-* How to delete and recreate only a single mapping from the rails console:
+* To create the ElasticSearch index: `rake es_tasks:setup_index`
+* To delete it, run `rake es_tasks:delete_index`
+* To check your mappings are registered correctly, browse to http://127.0.0.1:9200/quran/_mapping
+* To delete and recreate only a single mapping from the rails console:
 
     client = Quran::Ayah.__elasticsearch__.client
     client.indices.delete_mapping index: 'quran', type: 'text'

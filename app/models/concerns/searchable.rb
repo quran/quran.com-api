@@ -2,14 +2,25 @@ module Searchable
   extend ActiveSupport::Concern
 
   # Setup the index mappings
-  def self.setup_index_mappings
-    models = [Content::Translation, Content::Transliteration, Quran::Ayah]
+  def self.setup_index
+    models = [
+        Quran::Ayah, Quran::TextRoot, Quran::TextStem, Quran::TextLemma, Quran::TextToken,
+        Content::Translation, Content::Transliteration, Content::TafsirAyah
+    ]
     settings = YAML.load( File.read( File.expand_path( "#{Rails.root}/config/elasticsearch/settings.yml", __FILE__ ) ) )
     mappings = YAML.load( File.read( File.expand_path( "#{Rails.root}/config/elasticsearch/mappings.yml", __FILE__ ) ) )
 
     models.first.__elasticsearch__.client.indices.create \
       index: "quran",
       body: { settings: settings, mappings: mappings }
+
+    models.each do |m|
+        m.import
+    end
+  end
+
+  def self.delete_index
+    Quran::Ayah.__elasticsearch__.client.indices.delete index: Quran::Ayah.index_name rescue nil
   end
 
 
