@@ -7,25 +7,21 @@ class SearchController < ApplicationController
 
         query = params[:q]
 
-        # Set the configs
-        config[:types] ||= [ "quran.text", "quran.text_token", "quran.text_stem",
-                             "quran.text_lemma", "quran.text_root", "content.tafsir" ] if  query =~ /^(?:\s*[\p{Arabic}\p{Diacritic}]+\s*)+$/
-        config[:types] ||= [ "content.transliteration", "content.translation"] if query =~ /^(?:\s*\p{ASCII}+\s*)+$/
-        config[:types] ||= [ "content.translation" ] # this is what happens when we encounter an umlaut, for example
+        # if the query is pure Arabic, then we should only match against ayah text and tafsir types
+        config[:types] ||= [ "text", "text_token", "text_stem", "text_lemma", "text_root", "tafsir" ] if query =~ /^(?:\s*[\p{Arabic}\p{Diacritic}]+\s*)+$/
+        # if the query is pure ASCII, then it's either transliteration or a translation (probably english)
+        config[:types] ||= [ "transliteration", "translation"] if query =~ /^(?:\s*\p{ASCII}+\s*)+$/
+        # if the query is not pure ASCII and not Arabic, then it has to be a translation
+        config[:types] ||= [ "translation" ] # this is what happens when we encounter an umlaut, for example
 
-        matched_parents = Quran::Ayah.search(query, params[:page], params[:size], config[:types])
-        logger.debug( "matched parents #{ matched_parents.inspect }" )
+        matched_parents = Quran::Ayah.matched_parents( query, config[:types] )
 
         # Array of ayah keys to use to search for the child model
         array_of_ayah_keys = matched_parents.map{|r| r._source.ayah_key}
 
+        # Search child models, i.e. found what hit against the set of ayah_keys above^
+        matched_children = ( OpenStruct.new Quran::Ayah.matched_children( query, config[:types], array_of_ayah_keys ) ).responses
 
-        # Search child models
-        matched_children = ( OpenStruct.new Quran::Ayah.matched_children(query, array_of_ayah_keys) ).responses
-        logger.debug( "matched children #{ matched_children.inspect }" )
-
-        # # Rails.logger.ap matched_children
-        
         # # Init results of matched parent and child array
         results = Array.new
 

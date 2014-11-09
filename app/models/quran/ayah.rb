@@ -112,8 +112,43 @@ class Quran::Ayah < ActiveRecord::Base
         matched_parents = searching(query_hash).page(page).per(size)
     end
 
+    def self.matched_parents( query, types )
+        should_array = Array.new
 
-    def self.matched_children (query, ayat = [] )
+        types.each do |type|
+            should_array.push( {
+                has_child: {
+                    type: type,
+                    query: {
+                        match: {
+                            text: {
+                                query: query,
+                                operator: 'or',
+                                minimum_should_match: '3<62%'
+                            }
+                        }
+                    }
+                }
+            } )
+        end
+
+        # The query hash
+        query_hash = {
+            query: {
+                bool: {
+                    should: should_array,
+                    minimum_number_should_match: 1
+                }
+            }
+        }
+
+        # Matched parent ayahs
+        # NOTE: we need to get all possible ayahs because the result set is not yet sorted by relevance,
+        # which is apparently a limitation of 'has_child', so we'll set the pagination size to 6236 (the entire set of ayahs in the quran)
+        matched_parents = searching( query_hash ).page( 1 ).per( 6236 )
+    end
+
+    def self.matched_children( query, types, ayat = [] )
         msearch_body = []
         ayat.each do |ayah_key|
             ayah = {
@@ -150,15 +185,15 @@ class Quran::Ayah < ActiveRecord::Base
                             } ]
                         }
                     },
-                    size: 3
+                    size: 3 # limit number of child hits per ayah, i.e. bring back no more then 3 hits per ayah
                 }
             }
-            msearch_body.push(ayah)
+            msearch_body.push( ayah )
         end
 
         msearch_query = {
             index: 'quran',
-            type: [ 'text' ],
+            type: types,
             body: msearch_body
         }
         self.__elasticsearch__.client.msearch( msearch_query )
