@@ -48,8 +48,8 @@ It's painful. But this will help a lot:
 * To delete and recreate only a single mapping from the rails console:
 
     client = Quran::Ayah.__elasticsearch__.client
-    client.indices.delete_mapping index: 'quran', type: 'text'
-    client.indices.put_mapping index: 'quran', type: 'text', # ... TODO (figure this out and document it)
+    client.indices.delete_mapping index: 'quran', type: 'translation'
+    client.indices.put_mapping index: 'quran', type: 'translation', body: { translation: { _parent: { type: 'ayah' }, _routing: { required: true, path: 'ayah_key' }, properties: { text: { type: 'string', term_vector: 'with_positions_offsets_payloads' } } } }
 
 * Figuring out whats wrong with a query
   - Fire up a rails console:
@@ -77,3 +77,8 @@ ElasticSearch Optimization TODO NOTES
   - proximity to the beginning of the ayah, i.e. if 'allah light' matches a translation which is 'allah is the light of word word word word word word'
     then this should have a higher score then 'word word word word word word word allah word word word word light'
 - normalize arabic using techniques to-be-determined involving root, stem, lemma
+- improving relevance:
+    - this document: http://www.elasticsearch.org/guide/en/elasticsearch/guide/current/relevance-intro.html
+    - in combination with a rails console inspection of:
+
+    matched_children = ( OpenStruct.new Quran::Ayah.matched_children( query, config[:types], array_of_ayah_keys ) ).responses

@@ -76,43 +76,24 @@ class Quran::Ayah < ActiveRecord::Base
 
     end
 
-    def self.search(query, page = 1, size = 20, types)
-        types = types.map{|t| t.split(".").last}
-
-        should_array = Array.new
-
-        types.each do |type|
-            should_array.push({
-                has_child: {
-                    type: type,
-                    query: {
-                        match: {
-                            text: {
-                                query: query,
-                                operator: 'or',
-                                minimum_should_match: '3<62%'
-                            }
-                        }
-                    }
-                }
-            })
-        end
-
-        # The query hash
-        query_hash = {
-            query: {
-                bool: {
-                    should: should_array,
-                    minimum_number_should_match: 1
-                }
-            }
-        }
-
-        # Matched parent ayahs
-        matched_parents = searching(query_hash).page(page).per(size)
+    # NOTE I removed this function and refactored it into the matched_products and matched_children
+    # methods below, but I'm leaving the stub here so that perhaps we can encapsulate the independent
+    # searching of each set and subsequent merging of the two sets here instead of in SearchController.query
+    # later on
+    def self.search( query, page = 1, size = 20, types )
     end
 
+    # NOTE I split these functions into matched_parents and matched_blah_query so that I could properly
+    # debug them from the rails console
     def self.matched_parents( query, types )
+        query_hash = self.matched_parents_query( query, types )
+        # Matched parent ayahs
+        # NOTE: we need to get all possible ayahs because the result set is not yet sorted by relevance,
+        # which is apparently a limitation of 'has_child', so we'll set the pagination size to 6236 (the entire set of ayahs in the quran)
+        matched_parents = searching( query_hash ).page( 1 ).per( 6236 )
+    end
+
+    def self.matched_parents_query( query, types )
         should_array = Array.new
 
         types.each do |type|
@@ -123,7 +104,6 @@ class Quran::Ayah < ActiveRecord::Base
                         match: {
                             text: {
                                 query: query,
-                                operator: 'or',
                                 minimum_should_match: '3<62%'
                             }
                         }
@@ -141,14 +121,14 @@ class Quran::Ayah < ActiveRecord::Base
                 }
             }
         }
-
-        # Matched parent ayahs
-        # NOTE: we need to get all possible ayahs because the result set is not yet sorted by relevance,
-        # which is apparently a limitation of 'has_child', so we'll set the pagination size to 6236 (the entire set of ayahs in the quran)
-        matched_parents = searching( query_hash ).page( 1 ).per( 6236 )
     end
 
     def self.matched_children( query, types, ayat = [] )
+        msearch_query = self.matched_children_query( query, types, ayat )
+        self.__elasticsearch__.client.msearch( msearch_query )
+    end
+
+    def self.matched_children_query( query, types, ayat = [] )
         msearch_body = []
         ayat.each do |ayah_key|
             ayah = {
@@ -178,7 +158,6 @@ class Quran::Ayah < ActiveRecord::Base
                                 match: {
                                     text: {
                                         query: query,
-                                        operator: 'or',
                                         minimum_should_match: '3<62%'
                                     }
                                 }
@@ -196,7 +175,6 @@ class Quran::Ayah < ActiveRecord::Base
             type: types,
             body: msearch_body
         }
-        self.__elasticsearch__.client.msearch( msearch_query )
     end
 
     def self.import(options = {})
