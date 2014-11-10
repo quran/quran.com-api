@@ -6,35 +6,32 @@ class SearchController < ApplicationController
         config, @output = Hash.new, Hash.new
 
         query = params[:q]
+        page  = ( params[:page] || "1" ).to_i
+        size  = ( params[:size] || "20" ).to_i
 
-        # Set the configs
-        config[:types] ||= [ "quran.text", "quran.text_token", "quran.text_stem",
-                             "quran.text_lemma", "quran.text_root", "content.tafsir" ] if  query =~ /^(?:\s*[\p{Arabic}\p{Diacritic}]+\s*)+$/
-        config[:types] ||= [ "content.transliteration", "content.translation"] if query =~ /^(?:\s*\p{ASCII}+\s*)+$/
+        # if the query is pure Arabic, then we should only match against ayah text and tafsir types
+        config[:types] ||= [ "text", "text_token", "text_stem", "text_lemma", "text_root", "tafsir" ] if query =~ /^(?:\s*[\p{Arabic}\p{Diacritic}]+\s*)+$/
+        # if the query is pure ASCII, then it's either transliteration or a translation (probably english)
+        config[:types] ||= [ "transliteration", "translation"] if query =~ /^(?:\s*\p{ASCII}+\s*)+$/
+        # if the query is not pure ASCII and not Arabic, then it has to be a translation
+        config[:types] ||= [ "translation" ] # this is what happens when we encounter an umlaut, for example
 
-        matched_parents = Quran::Ayah.search(query, params[:page], params[:size], config[:types])
+        matched_parents = Quran::Ayah.matched_parents( query, config[:types] )
 
         # Array of ayah keys to use to search for the child model
         array_of_ayah_keys = matched_parents.map{|r| r._source.ayah_key}
 
+        # Search child models, i.e. found what hit against the set of ayah_keys above^
+        matched_children = ( OpenStruct.new Quran::Ayah.matched_children( query, config[:types], array_of_ayah_keys ) ).responses
 
-
-
-        
-        # Search child models
-        matched_children = ( OpenStruct.new Quran::Ayah.matched_children(query, array_of_ayah_keys) ).responses
-        
-
-        # # Rails.logger.ap matched_children
-        
-        # # Init results of matched parent and child array
+        # Init results of matched parent and child array
         results = Array.new
-
 
         matched_parents.results.each_with_index do |ayah, index|
             # Rails.logger.info ayah.to_hash
             best = Array.new
 
+            score = 0
             matched_children[index]["hits"]["hits"].each do |hit|
                 best.push({
                     # name: hit["_source"]["resource"]["name"], 
@@ -45,6 +42,7 @@ class SearchController < ApplicationController
                     id: hit["_source"]["resource_id"],
                     text: hit["_source"]["text"]
                 })
+                score = hit["_score"] if hit["_score"] > score
             end
 
 
@@ -53,7 +51,7 @@ class SearchController < ApplicationController
                 ayah: ayah._source.ayah_num,
                 surah: ayah._source.surah_id,
                 index: ayah._source.ayah_index,
-                score: ayah._score,
+                score: score, #ayah._score,
                 match: {
                     hits: matched_children[index]["hits"]["total"],
                     # testing: matched_children[index]["hits"]["hits"], #use this to test the output
@@ -72,11 +70,18 @@ class SearchController < ApplicationController
             results.push(ayah)
         end
 
+        # NOTE due to the technical complexities of searching both the 'parent' set then subsequent 'child' sets
+        # and merging the two result sets above, we manually do these two steps here:
+        # a) capture the entire set of parent ayahs (which may be more then the desired pagination size), and
+        # b) sort them by the highest scores of their child matches
+        results.sort! { |a,b| b[:score] <=> a[:score] }
+        results = results[ ( page - 1 ) * size, size ]
+
+        # NOTE we also had to disable field norms in the relevance scoring (see the NOTE in config/elasticsearch/mappings.yml).
+        # it was assigned a value of '1' to some results when it should have been much less than 1 (seems like a bug).
+        # discovering this issue took me all day :( but alhamdulelah :)
+
         render json: results
 
-        
-    	
-
-    	
     end
 end

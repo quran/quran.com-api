@@ -48,6 +48,37 @@ It's painful. But this will help a lot:
 * To delete and recreate only a single mapping from the rails console:
 
     client = Quran::Ayah.__elasticsearch__.client
-    client.indices.delete_mapping index: 'quran', type: 'text'
-    client.indices.put_mapping index: 'quran', type: 'text', # ... TODO (figure this out and document it)
+    client.indices.delete_mapping index: 'quran', type: 'translation'
+    client.indices.put_mapping index: 'quran', type: 'translation', body: { translation: { _parent: { type: 'ayah' }, _routing: { required: true, path: 'ayah_key' }, properties: { text: { type: 'string', term_vector: 'with_positions_offsets_payloads' } } } }
 
+* Figuring out whats wrong with a query
+  - Fire up a rails console:
+
+    r = Quran::Ayah.search( "allah light", 1, 20, [ 'content.transliteration', 'content.translation' ] )
+    debugme=r.instance_values['search'].instance_values['definition'][:body]
+    print debugme.to_json, "\n"
+
+    # {"query":{"bool":{"should":[{"has_child":{"type":"transliteration","query":{"match":{"text":{"query":"allah light","operator":"or","minimum_should_match":"3\u003c62%"}}}}},{"has_child":{"type":"translation","query":{"match":{"text":{"query":"allah light","operator":"or","minimum_should_match":"3\u003c62%"}}}}}],"minimum_number_should_match":1}}}
+
+  - Copy and paste that output into the 'Any Request' tab of http://127.0.0.1:9200/_plugin/head/
+
+ElasticSearch Optimization TODO NOTES
+-------------------------------------
+
+- normalize western languages (stemming, etc.)
+* factor in frequency, density, proximity to each other, and proximity to the beginning of the ayah (seems like it's not factored in)
+  - frequency, i.e. if 'allah light' matches 'allah' once, and 'light' twice in the same result, then that
+    result needs a higher score than matching only 'allah' once and 'light' once
+  - density, i.e. if 'allah light' matches an ayah which is only 5 tokens long, e.g. 'allah word_a light word_b word_c'
+    then this has a higher density then a match against a result which is 300 words long and should respectively
+    have a higher score
+  - proximity to each other, i.e. 'allah light' matching 'allah word light word word word' gets a better score then
+    a match against 'allah word word word word word word light'
+  - proximity to the beginning of the ayah, i.e. if 'allah light' matches a translation which is 'allah is the light of word word word word word word'
+    then this should have a higher score then 'word word word word word word word allah word word word word light'
+- normalize arabic using techniques to-be-determined involving root, stem, lemma
+- improving relevance:
+    - this document: http://www.elasticsearch.org/guide/en/elasticsearch/guide/current/relevance-intro.html
+    - in combination with a rails console inspection of:
+
+    matched_children = ( OpenStruct.new Quran::Ayah.matched_children( query, config[:types], array_of_ayah_keys ) ).responses

@@ -15,6 +15,4 @@ class Quran::Text < ActiveRecord::Base
         options = { transform: transform, batch_size: 6236 }.merge(options)
         self.importing options 
     end
-
-
 end
