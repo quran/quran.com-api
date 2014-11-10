@@ -4,8 +4,9 @@ module Searchable
   # Setup the index mappings
   def self.setup_index
     models = [
-        Quran::Ayah, Quran::Text, Quran::TextRoot, Quran::TextStem, Quran::TextLemma, Quran::TextToken,
-        Content::Translation, Content::Transliteration, Content::TafsirAyah
+        Quran::Ayah,
+        Content::Translation, Content::Transliteration, Content::TafsirAyah,
+        Quran::Text, Quran::TextRoot, Quran::TextStem, Quran::TextLemma, Quran::TextToken
     ]
     settings = YAML.load( File.read( File.expand_path( "#{Rails.root}/config/elasticsearch/settings.yml", __FILE__ ) ) )
     mappings = YAML.load( File.read( File.expand_path( "#{Rails.root}/config/elasticsearch/mappings.yml", __FILE__ ) ) )
