@@ -6,8 +6,8 @@ class SearchController < ApplicationController
         config, @output = Hash.new, Hash.new
 
         query = params[:q]
-        page  = params[:page] || 1
-        size  = params[:size] || 20
+        page  = ( params[:page] || "1" ).to_i
+        size  = ( params[:size] || "20" ).to_i
 
         # if the query is pure Arabic, then we should only match against ayah text and tafsir types
         config[:types] ||= [ "text", "text_token", "text_stem", "text_lemma", "text_root", "tafsir" ] if query =~ /^(?:\s*[\p{Arabic}\p{Diacritic}]+\s*)+$/
