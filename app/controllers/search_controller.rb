@@ -75,7 +75,7 @@ class SearchController < ApplicationController
         # a) capture the entire set of parent ayahs (which may be more then the desired pagination size), and
         # b) sort them by the highest scores of their child matches
         results.sort! { |a,b| b[:score] <=> a[:score] }
-        results = results[ page - 1, size ]
+        results = results[ ( page - 1 ) * size, size ]
 
         # NOTE we also had to disable field norms in the relevance scoring (see the NOTE in config/elasticsearch/mappings.yml).
         # it was assigned a value of '1' to some results when it should have been much less than 1 (seems like a bug).
