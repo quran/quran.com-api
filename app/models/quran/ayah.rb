@@ -94,6 +94,9 @@ class Quran::Ayah < ActiveRecord::Base
     end
 
     def self.matched_parents_query( query, types )
+        # This seperates the dot within the schema of PSQL to match the mappings
+        types = types.map{|t| t.split(".").last}
+
         should_array = Array.new
 
         types.each do |type|
