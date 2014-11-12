@@ -5,6 +5,9 @@ class SearchController < ApplicationController
         # Init the config hash and the output
         config, @output = Hash.new, Hash.new
 
+        # Init the start time
+        start_time = Time.now
+
         query = params[:q]
         page  = ( params[:page] || "1" ).to_i
         size  = ( params[:size] || "20" ).to_i
@@ -81,7 +84,20 @@ class SearchController < ApplicationController
         # it was assigned a value of '1' to some results when it should have been much less than 1 (seems like a bug).
         # discovering this issue took me all day :( but alhamdulelah :)
 
-        render json: results
+        # End time for query
+        end_time = Time.now
+
+        to_render = {
+            query: params[:q], 
+            hits: matched_parents.results.total, 
+            took: (end_time-start_time), 
+            page: params[:page], 
+            size: params[:size], 
+            returned_size: results.length, 
+            results: results
+        }
+
+        render json: to_render
 
     end
 end
