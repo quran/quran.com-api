@@ -90,8 +90,8 @@ development:
 #   production:
 #     url: <%= ENV['DATABASE_URL'] %>
 #
-#production:
-#  <<: *default
+production:
+ <<: *default
 #  database: quran_production
 #  username: quran
 #  password: <%= ENV['QURAN_DATABASE_PASSWORD'] %>
