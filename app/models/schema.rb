@@ -18,7 +18,7 @@ module Schema
         # Rails.logger.ap schema_name
         # Rails.logger.ap @@schema_name
 
-        @@schema_name["#{schema_name}"] = schema_name
+        # @@schema_name["#{schema_name}"] = schema_name
     end
 
     # When this module is included, callback this function
