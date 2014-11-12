@@ -15,8 +15,8 @@ module Searchable
       index: "quran",
       body: { settings: settings, mappings: mappings }
 
-    models.each do |m|
-        m.import
+    Parallel.each(models, in_threads: models.length, progress: "Importing...") do |model|
+        model.import
     end
   end
 

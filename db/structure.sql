@@ -37,70 +37,6 @@ CREATE SCHEMA i18n;
 CREATE SCHEMA quran;
 
 
-SET search_path = i18n, pg_catalog;
-
---
--- Name: valid_translation(); Type: FUNCTION; Schema: i18n; Owner: -
---
-
-CREATE FUNCTION valid_translation() RETURNS trigger
-    LANGUAGE plperl
-    AS $_X$
-my $query = spi_prepare('select message_id, language from i18n.translation where translation_id = $1', 'INTEGER');
-my $result = spi_exec_prepared($query, $_TD->{new}{translation_id});
-my $message_id = $result->{rows}[0]->{message_id};
-my $language = $result->{rows}[0]->{language};
-spi_freeplan($query);
-if ($_TD->{new}{message_id} != $message_id or $_TD->{new}{language} ne $language) {
-return 'SKIP';
-}
-else {
-return;
-}
-$_X$;
-
-
-SET search_path = public, pg_catalog;
-
---
--- Name: timestamp_created_updated(); Type: FUNCTION; Schema: public; Owner: -
---
-
-CREATE FUNCTION timestamp_created_updated() RETURNS trigger
-    LANGUAGE plperl
-    AS $_X$
-my $result = spi_exec_query('select now() as timestamp');
-my $timestamp = $result->{rows}[0]->{timestamp};
-my $insert = $_TD->{event} eq 'INSERT';
-my $update = $_TD->{event} eq 'UPDATE';
-if ($insert) {
-$_TD->{new}{created} = $timestamp;
-}
-elsif ($update) {
-$_TD->{new}{updated} = $timestamp;
-}
-if ($insert || $update) {
-return 'MODIFY';
-} else {
-return;
-}
-$_X$;
-
-
-SET search_path = quran, pg_catalog;
-
---
--- Name: dec2hex(integer); Type: FUNCTION; Schema: quran; Owner: -
---
-
-CREATE FUNCTION dec2hex(integer) RETURNS pg_catalog.text
-    LANGUAGE plperl
-    AS $_$
-my $i = shift;
-return sprintf '%x', $i;
-$_$;
-
-
 SET search_path = audio, pg_catalog;
 
 SET default_tablespace = '';
@@ -788,34 +724,6 @@ ALTER SEQUENCE translation_translation_id_seq1 OWNED BY word_translation.transla
 
 
 --
--- Name: view; Type: TABLE; Schema: quran; Owner: -; Tablespace: 
---
-
-CREATE TABLE view (
-    view_id integer NOT NULL
-);
-
-
---
--- Name: view_view_id_seq; Type: SEQUENCE; Schema: quran; Owner: -
---
-
-CREATE SEQUENCE view_view_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: view_view_id_seq; Type: SEQUENCE OWNED BY; Schema: quran; Owner: -
---
-
-ALTER SEQUENCE view_view_id_seq OWNED BY view.view_id;
-
-
---
 -- Name: word; Type: TABLE; Schema: quran; Owner: -; Tablespace: 
 --
 
@@ -977,13 +885,6 @@ ALTER TABLE ONLY stem ALTER COLUMN stem_id SET DEFAULT nextval('stem_stem_id_seq
 --
 
 ALTER TABLE ONLY token ALTER COLUMN token_id SET DEFAULT nextval('token_token_id_seq'::regclass);
-
-
---
--- Name: view_id; Type: DEFAULT; Schema: quran; Owner: -
---
-
-ALTER TABLE ONLY view ALTER COLUMN view_id SET DEFAULT nextval('view_view_id_seq'::regclass);
 
 
 --
@@ -1345,14 +1246,6 @@ ALTER TABLE ONLY word_translation
 
 
 --
--- Name: view_pkey; Type: CONSTRAINT; Schema: quran; Owner: -; Tablespace: 
---
-
-ALTER TABLE ONLY view
-    ADD CONSTRAINT view_pkey PRIMARY KEY (view_id);
-
-
---
 -- Name: word_ayah_key_position_key; Type: CONSTRAINT; Schema: quran; Owner: -; Tablespace: 
 --
 
@@ -1430,16 +1323,16 @@ CREATE UNIQUE INDEX unique_schema_migrations ON schema_migrations USING btree (v
 --
 
 CREATE RULE "_RETURN" AS
-    ON SELECT TO text_root DO INSTEAD  SELECT concat_ws(':'::pg_catalog.text, 'quran', 'root', 'ayah', a.ayah_key) AS id,
-    a.ayah_key,
-    a.surah_id,
-    a.ayah_num,
-    true AS is_hidden,
+    ON SELECT TO text_root DO INSTEAD  SELECT concat_ws(':'::pg_catalog.text, 'quran', 'root', 'ayah', a.ayah_key) AS id, 
+    a.ayah_key, 
+    a.surah_id, 
+    a.ayah_num, 
+    true AS is_hidden, 
     string_agg((t.value)::pg_catalog.text, ' '::pg_catalog.text ORDER BY w."position", j."position") AS text
    FROM (((word w
-     JOIN ayah a USING (ayah_key))
-     JOIN word_root j USING (word_id))
-     JOIN root t USING (root_id))
+   JOIN ayah a USING (ayah_key))
+   JOIN word_root j USING (word_id))
+   JOIN root t USING (root_id))
   GROUP BY a.ayah_key
   ORDER BY a.surah_id, a.ayah_num;
 
@@ -1449,16 +1342,16 @@ CREATE RULE "_RETURN" AS
 --
 
 CREATE RULE "_RETURN" AS
-    ON SELECT TO text_lemma DO INSTEAD  SELECT concat_ws(':'::pg_catalog.text, 'quran', 'lemma', 'ayah', a.ayah_key) AS id,
-    a.ayah_key,
-    a.surah_id,
-    a.ayah_num,
-    true AS is_hidden,
+    ON SELECT TO text_lemma DO INSTEAD  SELECT concat_ws(':'::pg_catalog.text, 'quran', 'lemma', 'ayah', a.ayah_key) AS id, 
+    a.ayah_key, 
+    a.surah_id, 
+    a.ayah_num, 
+    true AS is_hidden, 
     string_agg((t.value)::pg_catalog.text, ' '::pg_catalog.text ORDER BY w."position", j."position") AS text
    FROM (((word w
-     JOIN ayah a USING (ayah_key))
-     JOIN word_lemma j USING (word_id))
-     JOIN lemma t USING (lemma_id))
+   JOIN ayah a USING (ayah_key))
+   JOIN word_lemma j USING (word_id))
+   JOIN lemma t USING (lemma_id))
   GROUP BY a.ayah_key
   ORDER BY a.surah_id, a.ayah_num;
 
@@ -1468,16 +1361,16 @@ CREATE RULE "_RETURN" AS
 --
 
 CREATE RULE "_RETURN" AS
-    ON SELECT TO text_stem DO INSTEAD  SELECT concat_ws(':'::pg_catalog.text, 'quran', 'stem', 'ayah', a.ayah_key) AS id,
-    a.ayah_key,
-    a.surah_id,
-    a.ayah_num,
-    true AS is_hidden,
+    ON SELECT TO text_stem DO INSTEAD  SELECT concat_ws(':'::pg_catalog.text, 'quran', 'stem', 'ayah', a.ayah_key) AS id, 
+    a.ayah_key, 
+    a.surah_id, 
+    a.ayah_num, 
+    true AS is_hidden, 
     string_agg((t.value)::pg_catalog.text, ' '::pg_catalog.text ORDER BY w."position", j."position") AS text
    FROM (((word w
-     JOIN ayah a USING (ayah_key))
-     JOIN word_stem j USING (word_id))
-     JOIN stem t USING (stem_id))
+   JOIN ayah a USING (ayah_key))
+   JOIN word_stem j USING (word_id))
+   JOIN stem t USING (stem_id))
   GROUP BY a.ayah_key
   ORDER BY a.surah_id, a.ayah_num;
 
@@ -1487,15 +1380,15 @@ CREATE RULE "_RETURN" AS
 --
 
 CREATE RULE "_RETURN" AS
-    ON SELECT TO text_token DO INSTEAD  SELECT concat_ws(':'::pg_catalog.text, 'quran', 'token', 'ayah', a.ayah_key) AS id,
-    a.ayah_key,
-    a.surah_id,
-    a.ayah_num,
-    true AS is_hidden,
+    ON SELECT TO text_token DO INSTEAD  SELECT concat_ws(':'::pg_catalog.text, 'quran', 'token', 'ayah', a.ayah_key) AS id, 
+    a.ayah_key, 
+    a.surah_id, 
+    a.ayah_num, 
+    true AS is_hidden, 
     string_agg((t.value)::pg_catalog.text, ' '::pg_catalog.text ORDER BY w."position") AS text
    FROM ((word w
-     JOIN ayah a USING (ayah_key))
-     JOIN token t USING (token_id))
+   JOIN ayah a USING (ayah_key))
+   JOIN token t USING (token_id))
   GROUP BY a.ayah_key
   ORDER BY a.surah_id, a.ayah_num;
 
