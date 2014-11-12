@@ -33,7 +33,7 @@ elasticsearch --config=/usr/local/opt/elasticsearch/config/elasticsearch.yml
 ```
 #### Plugin
 
-To install: Web portal: sudo plugin -install mobz/elasticsearch-head
+To install: Web portal: sudo elasticsearch/bin/plugin -install mobz/elasticsearch-head
 
 Github:  https://github.com/mobz/elasticsearch-head
 
@@ -67,6 +67,8 @@ View mappings: in browser - `http://localhost:9200/quran/_mapping`
     client.indices.delete_mapping index: 'quran', type: 'translation'
     client.indices.put_mapping index: 'quran', type: 'translation', body: { translation: { _parent: { type: 'ayah' }, _routing: { required: true, path: 'ayah_key' }, properties: { text: { type: 'string', term_vector: 'with_positions_offsets_payloads' } } } }
 ```
+
+**Note**: you will run into the problem of not having the arabic_synonyms.txt file in the proper location for elasticsearch. That's fine. The file is located in the public directory and should be placed in `/etc/elasticsearch/analysis` on your server.
 
 #### Querying 
 
