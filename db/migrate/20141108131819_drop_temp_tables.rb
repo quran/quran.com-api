@@ -1,12 +1,10 @@
 class DropTempTables < ActiveRecord::Migration
-  def change
-      drop_table :in_author
-      drop_table :in_source
-      drop_table :in_resource_api_version
-      drop_table :in_transliteration
-      drop_table :in_translation
-      drop_table :in_tafsir_ayah
-      drop_table :in_tafsir
-      drop_table :in_resource
+  def change 
+    tables = [:in_author, :in_source, :in_resource_api_version, :in_transliteration, :in_translation, :in_tafsir_ayah, :in_tafsir, :in_resource]
+    tables.each do |table|
+      if ActiveRecord::Base.connection.table_exists? table
+          drop_table table
+      end
+    end
   end
 end
