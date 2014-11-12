@@ -2,9 +2,12 @@ module Schema
     # mattr_accessor :schema_name
     @@schema_name = Hash.new
     def table_name
-        @@schema_name[self.name.split("::").first.downcase] +'.'+ super
-        # Rails.logger.ap self.name.split("::").first.downcase
-        # Rails.logger.ap @@schema_name[self.name.split("::").first.downcase]
+        # This is the old way of doing it. I think we will no longer use this
+        # @@schema_name[self.name.split("::").first.downcase] +'.'+ super
+        
+        # New way
+        self.name.split("::").first.downcase << '.' << super
+
     end
 
     def self.schema_name
@@ -12,6 +15,9 @@ module Schema
     end
 
     def self.schema_name=(schema_name)
+        # Rails.logger.ap schema_name
+        # Rails.logger.ap @@schema_name
+
         @@schema_name["#{schema_name}"] = schema_name
     end
 
