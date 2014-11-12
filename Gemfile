@@ -40,12 +40,17 @@ gem 'spring',        group: :development
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
-
+# 
+# Rails console to work
 gem 'rb-readline'
+
+# composite primary keys
 gem 'composite_primary_keys', {
     :git => 'git://github.com/composite-primary-keys/composite_primary_keys.git',
     :branch => 'ar_4.2.x'
 }
+
+# Printing in console made easy. Simple run or add Rails.logger.ap #YOUR_VAR
 gem 'awesome_print'
 
 
@@ -61,13 +66,13 @@ gem 'capistrano-touch-linked-files', group: :development
 gem 'dotenv-rails'
 gem 'dotenv-deployment'
 
+# Elasticsearch
 gem 'elasticsearch-model' 
 gem 'elasticsearch-rails'
-# To launch elastic search
-# elasticsearch --config=/usr/local/opt/elasticsearch/config/elasticsearch.yml
 
 
-gem 'batchelor' # This is for batching the Content::Translation
+# This is for batching the Content::Translation, batches based on the string primary keys
+gem 'batchelor' 
 
 # Paging the results
 # gem 'will_paginate'
@@ -77,7 +82,14 @@ gem 'kaminari'
 gem 'yaml_db', github: 'sharabash/yaml_db'
 gem 'sass-rails', github: 'rails/sass-rails' # '~> 4.0.3'
 
+# This is to run the rake task for importing in parallel
+gem 'parallel'
+# Will provide a progress bar as the import happens
+gem 'ruby-progressbar'
+
 group :development, :test do
       gem 'jazz_hands', github: 'nixme/jazz_hands', branch: 'bring-your-own-debugger'
       gem 'pry-byebug'
 end
+
+
