@@ -222,6 +222,7 @@ GEM
       binding_of_caller (>= 0.7)
       pry (>= 0.9.11)
     rack (1.6.0.beta)
+    rack-cors (0.2.9)
     rack-test (0.6.2)
       rack (>= 1.0)
     rails-deprecated_sanitizer (1.0.3)
@@ -298,6 +299,7 @@ DEPENDENCIES
   parallel
   pg
   pry-byebug
+  rack-cors
   rails!
   rb-readline
   ruby-progressbar

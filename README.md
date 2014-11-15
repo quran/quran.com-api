@@ -38,6 +38,8 @@ To install: Web portal: sudo elasticsearch/bin/plugin -install mobz/elasticsearc
 Github:  https://github.com/mobz/elasticsearch-head
 
 To run: Open in browser `http://localhost:9200/_plugin/head/`
+
+If you’ve installed the .deb package, then the plugin exectuable will be available at /usr/share/elasticsearch/bin/plugin.
     
 #### Indices
 ```
