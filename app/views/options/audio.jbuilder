@@ -1,8 +1,4 @@
-
 json.array! @results do |result|
-
-
-
     json.reciter do 
         json.slug result["reciter_slug"]
         json.id result["reciter_id"]
