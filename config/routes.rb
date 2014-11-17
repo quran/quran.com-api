@@ -6,9 +6,7 @@ Rails.application.routes.draw do
 
   get "search", to: 'search#query'
 
-  namespace :info do
-    resources :surahs
-  end
+  
 
   resources :options do
     collection do 
@@ -20,7 +18,7 @@ Rails.application.routes.draw do
     end
   end
 
-  namespace :bucket do
+  resources :surahs do
       resources :ayat
   end
 

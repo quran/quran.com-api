@@ -1,13 +1,11 @@
-class Bucket::AyatController < ApplicationController
-
-
-    def index
+class AyatController < ApplicationController
+  def index
         # Set the variables
         @cardinalities, cut, @results = Hash.new, Hash.new, Hash.new
 
 
         # The range of which the ayahs to search
-        range = params[:range].split("-")
+        range = params[:range] ? params[:range].split("-") : ["1", "10"]
 
         # Raise error whenever the range is more than 50
         # The database would take too long to process
@@ -20,13 +18,12 @@ class Bucket::AyatController < ApplicationController
         # keys = Quran::Ayah.fetch_ayahs(params[:surah], range.first, range.last)
 
         # Keys for the ayahs
-        keys = Quran::Ayah.fetch_ayahs(params[:surah], range.first, range.last).map{|k| k.ayah_key}
-
+        keys = Quran::Ayah.fetch_ayahs(params[:surah_id], range.first, range.last).map{|k| k.ayah_key}
         # For each key, need to setup the hash
         keys.each do |ayah_key|
             @results["#{ayah_key}".to_sym] = Hash.new
             @results["#{ayah_key}".to_sym][:ayah] = ayah_key.split(":").last.to_i
-            @results["#{ayah_key}".to_sym][:surah] = params[:surah].to_i
+            @results["#{ayah_key}".to_sym][:surah] = params[:surah_id].to_i
             @results["#{ayah_key}".to_sym][:content] = Array.new
             @results["#{ayah_key}".to_sym][:audio] = Hash.new
             @results["#{ayah_key}".to_sym][:quran] = Array.new
@@ -69,5 +66,5 @@ class Bucket::AyatController < ApplicationController
         end
 
         @results = @results.values
-    end
+    end 
 end

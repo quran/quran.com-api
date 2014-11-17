@@ -1,5 +1,4 @@
-class Info::SurahsController < ApplicationController
-  
+class SurahsController < ApplicationController
   def index
     @results = Quran::Surah.order("quran.surah.surah_id")
   end
@@ -7,6 +6,3 @@ class Info::SurahsController < ApplicationController
     @surah = Quran::Surah.find(params[:id])
   end
 end
-
-
-
