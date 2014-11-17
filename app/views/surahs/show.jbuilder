@@ -1,4 +1,3 @@
-
 json.page @surah.page
 json.revelation do 
     json.order @surah.revelation_order
