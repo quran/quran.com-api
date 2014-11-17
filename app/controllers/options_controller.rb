@@ -1,5 +1,6 @@
 class OptionsController < ApplicationController
     def default
+        @results = {content: 217, quran: 1, audio: 1, url: "?content=217&quran=1&audio=1"}
     end
 
     def language
@@ -16,8 +17,6 @@ class OptionsController < ApplicationController
     end
 
     def audio
-
-
         @results = Audio::Recitation.list_audio_options
         
     end
