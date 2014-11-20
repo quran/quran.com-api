@@ -3,13 +3,12 @@ class Content::Resource < ActiveRecord::Base
 
     self.table_name = 'resource'
     self.primary_key = 'resource_id'
-# Rails.logger.ap self.table_name
 
     self.inheritance_column = nil
 
-    belongs_to :author, class_name: 'Content::Author'
-    belongs_to :source, class_name: 'Content::Source'
-    belongs_to :language, class_name: 'I18n::Language', foreign_key: 'language_code'
+    belongs_to :author, class_name: 'Content::Author', foreign_key: 'author_id'
+    belongs_to :source, class_name: 'Content::Source', foreign_key: 'source_id'
+    belongs_to :language, class_name: 'Locale::Language', foreign_key: 'language_code'
 
     # maybe make the block below a polymorphic class, accessible via 'content' or something
     # dunno wth polymorphic relationships really are, so maybe not -- fancy crap not worth a brain cell

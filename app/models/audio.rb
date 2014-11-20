@@ -1,6 +1,5 @@
 module Audio
-  include Schema
+    include Schema
 
-
-  Schema.schema_name = 'audio'
+    Schema.schema_name( 'Audio', 'audio' )
 end
