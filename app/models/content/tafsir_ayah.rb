@@ -17,11 +17,13 @@ class Content::TafsirAyah < ActiveRecord::Base
     end
 
     def self.import( options = {} )
-        transform = lambda do |a|
-            { index: { _id: "#{a.tafsir.resource_id},#{a.ayah_key}", _parent: a.ayah_key, data: a.__elasticsearch__.as_indexed_json.merge( a.tafsir.__elasticsearch__.as_indexed_json ) } }
+        Content::TafsirAyah.connection.cache do
+            transform = lambda do |a|
+                { index: { _id: "#{a.tafsir.resource_id},#{a.ayah_key}", _parent: a.ayah_key, data: a.__elasticsearch__.as_indexed_json.merge( a.tafsir.__elasticsearch__.as_indexed_json ) } }
+            end
+            options = { transform: transform, batch_size: 6236 }.merge( options )
+            self.importing options
         end
-        options = { transform: transform, batch_size: 6236 }.merge( options )
-        self.importing options
     end
 end
 # notes:

@@ -8,6 +8,21 @@ index:
 #                type: mapping
 #                mappings: [ "\x{670}=>ا", "ٰ=>ا", "ٱ=>ا", "آ=>ا", "ٖ=>ا" ]
         filter:
+            # english analyzer, see http://www.elasticsearch.org/guide/en/elasticsearch/reference/1.4/analysis-lang-analyzer.html#english-analyzer
+            english_stop:
+                type: stop
+                stopwords_path: analysis/english_stop.txt
+            english_keywords:
+                type: keyword_marker
+                keywords: [ 'allah' ]
+            english_stemmer:
+                type: stemmer
+                language: english
+            english_possessive_stemmer:
+                type: stemmer
+                language: possessive_english
+
+
             unique_tokens:
                 type: unique
                 only_on_same_position: true
@@ -37,6 +52,16 @@ index:
                 type: stemmer
                 language: arabic
         analyzer:
+            # english analyzer, see http://www.elasticsearch.org/guide/en/elasticsearch/reference/1.4/analysis-lang-analyzer.html#english-analyzer
+            english:
+                tokenizer: standard
+                filter:
+                    - english_possessive_stemmer
+                    - lowercase
+                    - english_stop
+                    - english_keywords
+                    - english_stemmer
+
             arabic_ngram_index:
                 tokenizer: standard
 #                char_filter: [ arabic_normalization_extra ]
