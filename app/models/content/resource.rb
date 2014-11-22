@@ -83,11 +83,9 @@ class Content::Resource < ActiveRecord::Base
         cut = Hash.new
 
         if self.cardinality_type == "1_ayah"
-            
-            join = "join quran.text c using ( resource_id )";
 
             Content::Resource
-            .joins(join)
+            .joins("JOIN quran.text c using ( resource_id )")
             .joins("JOIN quran.ayah using ( ayah_key )")
             .select("c.*")
             .where("content.resource.resource_id = ?", params[:quran])
@@ -95,9 +93,7 @@ class Content::Resource < ActiveRecord::Base
             .order("quran.ayah.surah_id, quran.ayah.ayah_num")
 
         elsif self.cardinality_type == "1_word"
-            
-            join = "join quran.word_font c using ( resource_id )";
-            
+
             if  self.slug == 'word_font' 
                 cut[:select] = "
                               concat( 'p', c.page_num ) char_font
@@ -106,9 +102,8 @@ class Content::Resource < ActiveRecord::Base
                         "
                 cut[:join] = "join quran.char_type ct on ct.char_type_id = c.char_type_id"
             end
-
-            Content::Resource
-            .joins(join)
+            results = Content::Resource
+            .joins("JOIN quran.word_font c using ( resource_id )")
             .joins("JOIN quran.ayah using (ayah_key) ")
             .joins(cut[:join])
             .joins("left join quran.word w on w.word_id = c.word_id")
@@ -123,17 +118,18 @@ class Content::Resource < ActiveRecord::Base
             .joins("left join quran.root qr on wr.root_id = qr.root_id")
             .where("content.resource.resource_id = ? ", params[:quran])
             .where("quran.ayah.ayah_key IN (?)", keys)
-            .select("content.resource.resource_id")
             .select("c.*")
+            .select("content.resource.resource_id")
             .select(cut[:select])
             .select("wt.value word_translation
                  , t.value word_arabic
                  , l.value word_lemma
                  , qr.value word_root
-                 , s.value word_stem")
-            .order("quran.ayah.surah_id, quran.ayah.ayah_num, c.position")
-            .to_a # Must make it into an array to use the .uniq function otherwise will trigger ActiveResource
-            .uniq{|word| word.word_lemma && word.position} # Unique by the word_lemma & position. The reason for why lemma because that's where the word is from and position is in ayah
+                 , s.value word_stem
+                 , quran.ayah.surah_id
+                 , quran.ayah.ayah_num")
+            .order("quran.ayah.surah_id, quran.ayah.ayah_num, c.position") # TODO: output both options, turns out it's the word_lemma and the word_root that creates the 'repeating' bug.
+            .group_by{|ayah| ayah.ayah_key}.map{|k,v| v.uniq{|word| word.position} }.flatten # This rids of the repeating problems although there must be a better way to show them both
             .map do |word|
                 {
                     ayah_key: word.ayah_key,
@@ -159,9 +155,9 @@ class Content::Resource < ActiveRecord::Base
                 }
             end
             .group_by{|a| a[:ayah_key]}.values
-                        
+            
+            return results
         end
-                
     end
 
     def self.bucket_results_content(row, keys)
