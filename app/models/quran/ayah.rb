@@ -4,6 +4,8 @@ class Quran::Ayah < ActiveRecord::Base
     self.table_name = 'ayah'
     self.primary_key = 'ayah_key'
     # Rails.logger.ap self.table_name
+    #
+    # relationships
     belongs_to :surah, class_name: 'Quran::Surah'
 
     has_many :words, class_name: 'Quran::Word', foreign_key: 'ayah_key'
@@ -117,6 +119,7 @@ class Quran::Ayah < ActiveRecord::Base
 
         # The query hash
         query_hash = {
+            explain: true,
             query: {
                 bool: {
                     should: should_array,
@@ -132,56 +135,61 @@ class Quran::Ayah < ActiveRecord::Base
     end
 
     def self.matched_children_query( query, types, ayat = [] )
-        msearch_body = []
-        ayat.each do |ayah_key|
-            ayah = {
-                search: {
-                    highlight: {
-                        fields: {
-                            text: {
-                                type: 'fvh',
-                                number_of_fragments: 1,
-                                fragment_size: 1024
+        msearch = { body: [] }
+        types.each do |type|
+            ayat.each do |ayah_key|
+                search = {
+                    index: 'quran',
+                    type: type,
+                    search_type: 'dfs_query_then_fetch',
+                    search: {
+                        highlight: {
+                            fields: {
+                                text: {
+                                    type: 'fvh',
+                                    number_of_fragments: 1,
+                                    fragment_size: 1024
+                                }
+                            },
+                            tags_schema: 'styled'
+                        },
+                        # fields: [:ayah_key],
+                        explain: true,
+                        # fielddata_fields: ["ayah_key"], # this will split each of the words into an array
+                        query: {
+                            bool: {
+                                must: [ {
+                                    term: {
+                                        _parent: {
+                                            value: ayah_key
+                                        }
+                                    }
+                                }, {
+                                    match: {
+                                        text: {
+                                            query: query,
+                                            minimum_should_match: '3<62%'
+                                        }
+                                    }
+                                } ]
                             }
                         },
-                        tags_schema: 'styled'
-                    },
-                    # fields: [:ayah_key],
-                    # explain: true, # This will explain why the scoring is done in such a way, use for debugging! 
-                    # fielddata_fields: ["ayah_key"], # this will split each of the words into an array
-                    query: {
-                        bool: {
-                            must: [ {
-                                term: {
-                                    _parent: {
-                                        value: ayah_key
-                                    }
-                                }
-                            }, {
-                                match: {
-                                    text: {
-                                        query: query,
-                                        minimum_should_match: '3<62%'
-                                    }
-                                }
-                            } ]
-                        }
-                    },
-                    size: 3 # limit number of child hits per ayah, i.e. bring back no more then 3 hits per ayah
+                        size: 3 # limit number of child hits per ayah, i.e. bring back no more then 3 hits per ayah
+                    }
                 }
-            }
-            msearch_body.push( ayah )
+                msearch[:body].push( search )
+            end
         end
-
-        msearch_query = {
-            index: 'quran',
-            type: types,
-            body: msearch_body
-        }
+        return msearch
     end
 
-    def self.import(options = {})
-        options = { batch_size: 6236 }.merge(options)
+    def self.import( options = {} )
+        transform = lambda do |a|
+            data = a.__elasticsearch__.as_indexed_json
+            data.delete( :text )
+            { index: { _id: "#{a.ayah_key}", data: data } }
+        end
+        options = { transform: transform, batch_size: 6236 }.merge( options )
         self.importing options
     end
 end

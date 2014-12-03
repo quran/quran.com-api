@@ -5,9 +5,12 @@ class Content::Transliteration < ActiveRecord::Base
     self.table_name = 'transliteration'
     self.primary_keys = :resource_id, :ayah_key
 
+    # relationships
     belongs_to :resource, class_name: 'Content::Resource'
     belongs_to :ayah, class_name: 'Quran::Ayah'
 
+    # scope
+    #default_scope { where resource_id: 56000 }
 
     ########## ES FUNCTIONS ##################################################
     document_type "transliteration"

@@ -5,12 +5,16 @@ class Quran::Text < ActiveRecord::Base
     self.table_name = 'text'
     self.primary_keys = :resource_id, :ayah_key
 
+    # relationships
     belongs_to :resource, class_name: 'Content::Resource'
     belongs_to :ayah, class_name: 'Quran::Ayah'
 
+    # scope
+    #default_scope { where resource_id: 7000 }
+
     def self.import(options = {})
         transform = lambda do |a|
-            {index: {_id: "#{a.resource_id},#{a.ayah_key}", _parent: a.ayah_key, data: a.__elasticsearch__.as_indexed_json}} 
+            {index: {_id: "#{a.resource_id}:#{a.ayah_key}", _parent: a.ayah_key, data: a.__elasticsearch__.as_indexed_json}} 
         end
         options = { transform: transform, batch_size: 6236 }.merge(options)
         self.importing options 

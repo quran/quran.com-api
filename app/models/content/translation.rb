@@ -9,6 +9,7 @@ class Content::Translation < ActiveRecord::Base
     belongs_to :ayah, class_name: 'Quran::Ayah'
     scope :ordered,     ->              { joins( 'join quran.ayah on translation.ayah_key = ayah.ayah_key' ).order( 'translation.resource_id asc, ayah.surah_id asc, ayah.ayah_num asc' ) }
     scope :resource_id, ->(id_resource) { ordered.where( resource_id: id_resource ) }
+    #default_scope { where resource_id: 17 }
 
     def self.import( options = {} )
         Content::Translation.connection.cache do

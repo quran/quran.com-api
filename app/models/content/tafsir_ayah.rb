@@ -5,8 +5,11 @@ class Content::TafsirAyah < ActiveRecord::Base
     self.table_name = 'tafsir_ayah'
     self.primary_keys = :tafsir_id, :ayah_key
 
+    # relationships
     belongs_to :tafsir, class_name: 'Content::Tafsir'
     belongs_to :ayah, class_name: 'Quran::Ayah'
+
+    #default_scope { where ayah_key: '2:255000' }
 
     ########## ES FUNCTIONS ##################################################
     document_type "tafsir"
