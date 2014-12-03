@@ -5,7 +5,11 @@ class Quran::TextRoot < ActiveRecord::Base
     self.table_name = 'text_root'
     self.primary_key = 'id'
 
+    # relationships
     belongs_to :ayah, class_name: 'Quran::Ayah'
+
+    # scope
+    #default_scope { where surah_id: 1000 }
 
     def self.import(options = {})
         transform = lambda do |a|

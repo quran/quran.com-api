@@ -58,6 +58,7 @@ index:
                 filter:
                     - english_possessive_stemmer
                     - lowercase
+                    - type_as_payload
                     - english_stop
                     - english_keywords
                     - english_stemmer

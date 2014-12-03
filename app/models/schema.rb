@@ -23,6 +23,7 @@ module Schema
                 Rails.logger.info "included Searchable in #{ mod }"
                 # Include the elasticsearch concern
                 mod.include( Searchable )
+                mod.extend( Searchable )
 
                 # This is commented out but you can, if you wish, invoke a function
                 # this function would be in the Schema.rb file and would be an instance
