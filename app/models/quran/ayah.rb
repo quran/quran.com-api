@@ -183,7 +183,7 @@ class Quran::Ayah < ActiveRecord::Base
     def self.import( options = {} )
         transform = lambda do |a|
             data = a.__elasticsearch__.as_indexed_json
-            data.delete( :text )
+            data.delete( 'text' )
             { index: { _id: "#{a.ayah_key}", data: data } }
         end
         options = { transform: transform, batch_size: 6236 }.merge( options )
