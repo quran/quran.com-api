@@ -19,7 +19,7 @@ class SearchController < ApplicationController
         matched_parents = Quran::Ayah.matched_parents( query, config[:types] )
 
         # Array of ayah keys to use to search for the child model
-        array_of_ayah_keys = matched_parents.map{|r| r._source.ayah_key}
+        array_of_ayah_keys = matched_parents['hits']['hits'].map{|r| r['_source']['ayah_key']}
 
         # Search child models, i.e. found what hit against the set of ayah_keys above^
         matched_children = ( OpenStruct.new Quran::Ayah.matched_children( query, config[:types], array_of_ayah_keys ) ).responses
@@ -27,7 +27,7 @@ class SearchController < ApplicationController
         # Init results of matched parent and child array
         results = Array.new
 
-        matched_parents.results.each_with_index do |ayah, index|
+        matched_parents['hits']['hits'].each_with_index do |ayah, index|
             # Rails.logger.info ayah.to_hash
             best = Array.new
 
@@ -47,10 +47,10 @@ class SearchController < ApplicationController
 
 
             ayah = {
-                key: ayah._source.ayah_key,
-                ayah: ayah._source.ayah_num,
-                surah: ayah._source.surah_id,
-                index: ayah._source.ayah_index,
+                key: ayah['_source']['ayah_key'],
+                ayah: ayah['_source']['ayah_num'],
+                surah: ayah['_source']['surah_id'],
+                index: ayah['_source']['ayah_index'],
                 score: score, #ayah._score,
                 match: {
                     hits: matched_children[index]["hits"]["total"],
@@ -59,11 +59,11 @@ class SearchController < ApplicationController
 
                 },
                 bucket: {
-                    surah: ayah._source.surah_id,
+                    surah: ayah['_source']['surah_id'],
                     quran: {
-                        text: ayah._source.text
+                        text: ayah['_source']['text']
                     },
-                    ayah: ayah._source.ayah_num
+                    ayah: ayah['_source']['ayah_num']
 
                 }
             }

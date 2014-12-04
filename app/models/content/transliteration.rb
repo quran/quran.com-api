@@ -10,7 +10,7 @@ class Content::Transliteration < ActiveRecord::Base
     belongs_to :ayah, class_name: 'Quran::Ayah'
 
     # scope
-    #default_scope { where resource_id: 56000 }
+    #default_scope { where resource_id: -1 }
 
     ########## ES FUNCTIONS ##################################################
     document_type "transliteration"

@@ -1,5 +1,7 @@
 index:
     number_of_shards: 1
+    query:
+        default_field: text
     similarity:
         my_bm25:
             type: BM25
@@ -103,6 +105,7 @@ index:
                 tokenizer: standard
                 filter:
                     - lowercase
+                    - type_as_payload
                     - arabic_stop
                     - arabic_synonym
                     - arabic_normalization
@@ -112,6 +115,7 @@ index:
                 tokenizer: standard
                 filter:
                     - lowercase
+                    - type_as_payload
                     - arabic_stop
                     - arabic_synonym
                     - arabic_normalization

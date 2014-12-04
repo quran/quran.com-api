@@ -35,7 +35,6 @@ class Quran::Ayah < ActiveRecord::Base
         self
         .where("quran.ayah.surah_id = ? AND quran.ayah.ayah_num >= ? AND quran.ayah.ayah_num <= ?", surah_id, from, to)
         .order("quran.ayah.surah_id, quran.ayah.ayah_num")
-        
     end
 
 
@@ -65,18 +64,6 @@ class Quran::Ayah < ActiveRecord::Base
     # curl -XGET 'http://localhost:9200/_mapping'
     #
     # Example: https://gist.github.com/karmi/3200212
-    mapping _source: { enabled: true }  do
-      indexes :ayah_index, type: "integer"
-      indexes :surah_id, type: "integer"
-      indexes :ayah_num, type: "integer"
-      indexes :page_num, type: "integer"
-      indexes :juz_num, type: "integer"
-      indexes :hizb_num, type: "integer"
-      indexes :rub_num, type: "integer"
-      indexes :text, type: "string"
-      indexes :ayah_key, type: "string"
-
-    end
 
     # NOTE I removed this function and refactored it into the matched_products and matched_children
     # methods below, but I'm leaving the stub here so that perhaps we can encapsulate the independent
@@ -92,7 +79,8 @@ class Quran::Ayah < ActiveRecord::Base
         # Matched parent ayahs
         # NOTE: we need to get all possible ayahs because the result set is not yet sorted by relevance,
         # which is apparently a limitation of 'has_child', so we'll set the pagination size to 6236 (the entire set of ayahs in the quran)
-        matched_parents = searching( query_hash ).page( 1 ).per( 6236 )
+        matched_parents = self.__elasticsearch__.client.search( query_hash ) #.page( 1 ).per( 6236 )
+        return matched_parents
     end
 
     def self.matched_parents_query( query, types )
@@ -101,7 +89,7 @@ class Quran::Ayah < ActiveRecord::Base
         types.each do |type|
             should_array.push( {
                 has_child: {
-                    type: type,
+                    type: 'data',
                     query: {
                         match: {
                             text: {
@@ -117,10 +105,13 @@ class Quran::Ayah < ActiveRecord::Base
         # The query hash
         query_hash = {
             explain: true,
-            query: {
-                bool: {
-                    should: should_array,
-                    minimum_number_should_match: 1
+            size: 6236,
+            body: {
+                query: {
+                    bool: {
+                        should: should_array,
+                        minimum_number_should_match: 1
+                    }
                 }
             }
         }
@@ -132,7 +123,7 @@ class Quran::Ayah < ActiveRecord::Base
     end
 
     def self.matched_children_query( query, types, ayat = [] )
-        msearch = { body: [], index: 'quran', type: types }
+        msearch = { body: [], index: types, type: [ 'data' ] }
 #        msearch = { body: [], index: 'quran' }
 #        types.each do |type|
             ayat.each do |ayah_key|
@@ -181,13 +172,17 @@ class Quran::Ayah < ActiveRecord::Base
         return msearch
     end
 
-    def self.import( options = {} )
+    def self.import_options ( options = {} )
         transform = lambda do |a|
             data = a.__elasticsearch__.as_indexed_json
             data.delete( 'text' )
             { index: { _id: "#{a.ayah_key}", data: data } }
         end
         options = { transform: transform, batch_size: 6236 }.merge( options )
-        self.importing options
+        return options
+    end
+
+    def self.import ( options = {} )
+        self.importing( self.import_options( options ) )
     end
 end
