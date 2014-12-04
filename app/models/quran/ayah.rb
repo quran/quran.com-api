@@ -147,7 +147,7 @@ class Quran::Ayah < ActiveRecord::Base
                         tags_schema: 'styled'
                     },
                     # fields: [:ayah_key],
-                    explain: true,
+                    # explain: true, # This will explain why the scoring is done in such a way, use for debugging! 
                     # fielddata_fields: ["ayah_key"], # this will split each of the words into an array
                     query: {
                         bool: {
