@@ -105,3 +105,10 @@ ElasticSearch Optimization TODO NOTES
     - in combination with a rails console inspection of:
 
     matched_children = ( OpenStruct.new Quran::Ayah.matched_children( query, config[:types], array_of_ayah_keys ) ).responses
+
+
+##Usage
+
+```
+http://localhost:3000/surahs/1/ayat?audio=1&content=21&from=1&quran=1&to=10
+```
