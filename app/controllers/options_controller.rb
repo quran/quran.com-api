@@ -1,6 +1,6 @@
 class OptionsController < ApplicationController
     def default
-        @results = {content: 217, quran: 1, audio: 1, url: "?content=217&quran=1&audio=1"}
+        @results = {content: [21], quran: 1, audio: 1, url: "?content=217&quran=1&audio=1"}
     end
 
     def language
