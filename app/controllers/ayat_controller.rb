@@ -5,7 +5,14 @@ class AyatController < ApplicationController
 
 
         # The range of which the ayahs to search
-        range = params[:range] ? params[:range].split("-") : ["1", "10"]
+        if params[:range] 
+            range = params[:range].split("-")
+        elsif params[:from] && params[:to]
+            range = [params[:from] , params[:to]]
+        else
+            ["1", "10"]
+        end
+                
 
         # Raise error whenever the range is more than 50
         # The database would take too long to process
