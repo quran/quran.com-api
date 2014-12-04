@@ -135,13 +135,14 @@ class Quran::Ayah < ActiveRecord::Base
     end
 
     def self.matched_children_query( query, types, ayat = [] )
-        msearch = { body: [] }
-        types.each do |type|
+        msearch = { body: [], index: 'quran', type: types }
+#        msearch = { body: [], index: 'quran' }
+#        types.each do |type|
             ayat.each do |ayah_key|
                 search = {
-                    index: 'quran',
-                    type: type,
-                    search_type: 'dfs_query_then_fetch',
+                    #index: 'quran',
+                    #type: [ type ],
+                    #search_type: 'dfs_query_then_fetch',
                     search: {
                         highlight: {
                             fields: {
@@ -179,7 +180,7 @@ class Quran::Ayah < ActiveRecord::Base
                 }
                 msearch[:body].push( search )
             end
-        end
+#        end
         return msearch
     end
 

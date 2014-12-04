@@ -12,24 +12,24 @@ ayah:
         sajdah:     { type: string,  index: not_analyzed }
         ayah_key:   { type: string,  index: not_analyzed }
 
-# NOTE: field norms disabled because it seemed to mess up relevance scoring ( i.e. "norms: { enabled: false } " )
+# NOTE: field norms disabled because it seemed to mess up relevance scoring ( i.e. "norms: { enabled: true } " )
 text:
     _parent: { type: ayah }
     _routing: { path: ayah_key }
     properties:
-        text: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index, norms: { enabled: false }   }
+        text: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index, norms: { enabled: true }   }
 text_root:
     _parent: { type: ayah }
     _routing: { path: ayah_key }
     properties:
-        text: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index, norms: { enabled: false }   }
+        text: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index, norms: { enabled: true }   }
 
 text_token:
     _parent: { type: ayah }
     _routing: { path: ayah_key }
     properties:
-        text: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index, norms: { enabled: false }  }
-        clean: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index, norms: { enabled: false }   }
+        text: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index, norms: { enabled: true }  }
+        clean: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index, norms: { enabled: true }   }
 #                    text:
 #                        type: string
 #                        term_vector: with_positions_offsets_payloads
@@ -51,27 +51,27 @@ text_stem:
     _parent: { type: ayah }
     _routing: { path: ayah_key }
     properties:
-        text: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index, norms: { enabled: false }   }
-        clean: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index, norms: { enabled: false }   }
+        text: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index, norms: { enabled: true }   }
+        clean: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index, norms: { enabled: true }   }
 text_lemma:
     _parent: { type: ayah }
     _routing: { path: ayah_key }
     properties:
-        text: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index, norms: { enabled: false }   }
-        clean: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index, norms: { enabled: false }   }
+        text: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index, norms: { enabled: true }   }
+        clean: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index, norms: { enabled: true }   }
 translation:
     _parent: { type: ayah }
     _routing: { path: ayah_key }
     properties:
         # NOTE experimenting with english stop words and stemmer
-        text: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: english, index_analyzer: english, norms: { enabled: false } }
+        text: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: english, index_analyzer: english, norms: { enabled: true } }
 transliteration:
     _parent: { type: ayah }
     _routing: { path: ayah_key }
     properties:
-        text: { type: string, term_vector: with_positions_offsets_payloads, norms: { enabled: false } }
+        text: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, norms: { enabled: true } }
 tafsir:
     _parent: { type: ayah }
     _routing: { path: ayah_key }
     properties:
-        text: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index, norms: { enabled: false }  }
+        text: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index, norms: { enabled: true }  }
