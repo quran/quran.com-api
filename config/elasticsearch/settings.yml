@@ -1,5 +1,9 @@
 index:
     number_of_shards: 1
+    similarity:
+        my_bm25:
+            type: BM25
+            b: 0.236
     analysis:
 # TODO make the unicode stuff under mappings declaration decoded
 # because ruby YAML can't read it as is
