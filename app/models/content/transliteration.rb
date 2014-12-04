@@ -15,6 +15,7 @@ class Content::Transliteration < ActiveRecord::Base
     ########## ES FUNCTIONS ##################################################
     document_type "transliteration"
     mapping :_parent => { :type => 'ayah' }, :_routing => { :path => 'ayah_key', :required => true } do
+
       indexes :resource_id, type: "integer"
       indexes :ayah_key
       indexes :text, term_vector: "with_positions_offsets_payloads"
