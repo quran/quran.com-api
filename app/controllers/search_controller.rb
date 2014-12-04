@@ -27,25 +27,36 @@ class SearchController < ApplicationController
         # Search child models, i.e. found what hit against the set of ayah_keys above^
         matched_children = ( OpenStruct.new Quran::Ayah.matched_children( query, config[:types], array_of_ayah_keys ) ).responses
 
+
         # Init results of matched parent and child array
         results = Array.new
-
+        
         matched_parents.results.each_with_index do |ayah, index|
             # Rails.logger.info ayah.to_hash
+            
             best = Array.new
 
             score = 0
-            matched_children[index]["hits"]["hits"].each do |hit|
-                best.push({
-                    # name: hit["_source"]["resource"]["name"], 
-                    # slug: hit["_source"]["resource"]["slug"], 
-                    # type: hit["_source"]["resource"]["type"], 
-                    highlight: hit["highlight"]["text"].first, 
-                    score: hit["_score"],
-                    id: hit["_source"]["resource_id"],
-                    text: hit["_source"]["text"]
-                })
-                score = hit["_score"] if hit["_score"] > score
+
+
+            if matched_children[index]["hits"].present? && matched_children[index]["hits"]["hits"].present?
+                matched_children[index]["hits"]["hits"].each do |hit|
+                    best.push({
+                        # name: hit["_source"]["resource"]["name"], 
+                        # slug: hit["_source"]["resource"]["slug"], 
+                        # type: hit["_source"]["resource"]["type"], 
+                        highlight: hit["highlight"]["text"].first, 
+                        score: hit["_score"],
+                        id: hit["_source"]["resource_id"],
+                        text: hit["_source"]["text"],
+                        test: hit,
+                        resource: Content::Resource.where(resource_id: hit["_source"]["resource_id"]).first # TODO: reduce this to initialize Content::Resource.all once and then find accordingly
+                    })
+                    score = hit["_score"] if hit["_score"] > score
+                end
+            else
+                Rails.logger.ap matched_children[index]
+                # Rails.logger.ap matched_children[index]
             end
 
 
@@ -91,8 +102,8 @@ class SearchController < ApplicationController
             query: params[:q], 
             hits: matched_parents.results.total, 
             took: (end_time-start_time), 
-            page: params[:page], 
-            size: params[:size], 
+            page: page, 
+            size: size, 
             returned_size: results.length, 
             results: results
         }
