@@ -31,12 +31,7 @@ module Searchable
     def self.setup_index
         @@models.each do | model |
             model = Kernel.const_get( model )
-            if model == Content::Translation
-                model.setup_index( 'translation', { recreate: true } )
-            else
-                model.setup_index
-            end
-
+            model.setup_index
         end
     end
 
@@ -100,7 +95,7 @@ module Searchable
                 self.__elasticsearch__.client.indices.create \
                     index: index_name, body: { settings: settings, mappings: mappings }
 
-                Rails.logger.debug( "mappings #{mappings}" )
+                Rails.logger.debug( "index_name #{index_name} mappings #{mappings}" )
 
                 # NOTE 1.1 we want to import the stock ayah document because it serves as a "parent" across all indices
                 Quran::Ayah.import( { index: index_name, type: 'ayah' } )
@@ -118,7 +113,7 @@ module Searchable
                 Rails.logger.info "setting up #{ index_name } index"
 
                 self.delete_index( index_name )
-                self.create_index( index_name ) if not index_name == 'translation'
+                self.create_index( index_name )
                 self.import_index( index_name, opts )
             end
 
