@@ -11,9 +11,9 @@ namespace :es_tasks do
     Searchable.create_index
   end
 
-  desc "recreates all elasticsearch indices"
-  task recreate_index: :environment do
+  desc "setup all elasticsearch indices"
+  task setup_index: :environment do
     ActiveRecord::Base.logger = Logger.new( STDOUT )
-    Searchable.recreate_index
+    Searchable.setup_index
   end
 end

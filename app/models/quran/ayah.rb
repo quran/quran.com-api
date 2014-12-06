@@ -79,36 +79,43 @@ class Quran::Ayah < ActiveRecord::Base
         # NOTE: we need to get all possible ayahs because the result set is not yet sorted by relevance,
         # which is apparently a limitation of 'has_child', so we'll set the pagination size to 6236 (the entire set of ayahs in the quran)
         matched_parents = self.__elasticsearch__.client.search( query_hash ) #.page( 1 ).per( 6236 )
-        return matched_parents
+        seen = {}
+        results = []
+        matched_parents['hits']['hits'].each do |r|
+            source = r['_source']
+            ayah_key = source['ayah_key']
+            results.push( [ ayah_key, source ] ) if not seen.key? ayah_key
+            seen[ ayah_key ] = true
+        end
+        return results
     end
 
     def self.matched_parents_query( query, types )
-        should_array = Array.new
+        should = Array.new
 
-        types.each do |type|
-            should_array.push( {
-                has_child: {
-                    type: 'data',
-                    query: {
-                        match: {
-                            text: {
-                                query: query,
-                                minimum_should_match: '3<62%'
-                            }
+        should.push( {
+            has_child: {
+                type: 'data',
+                query: {
+                    match: {
+                        text: {
+                            query: query,
+                            minimum_should_match: '3<62%'
                         }
                     }
                 }
-            } )
-        end
+            }
+        } )
 
         # The query hash
         query_hash = {
             explain: true,
             size: 6236,
+            index: types,
             body: {
                 query: {
                     bool: {
-                        should: should_array,
+                        should: should,
                         minimum_number_should_match: 1
                     }
                 }
