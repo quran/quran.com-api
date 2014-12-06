@@ -1,3 +1,4 @@
+# vim: ts=4 sw=4 expandtab
 class Quran::Text < ActiveRecord::Base
     extend Quran
     extend Batchelor
@@ -7,16 +8,16 @@ class Quran::Text < ActiveRecord::Base
 
     # relationships
     belongs_to :resource, class_name: 'Content::Resource'
-    belongs_to :ayah, class_name: 'Quran::Ayah'
+    belongs_to :ayah,     class_name: 'Quran::Ayah'
 
     # scope
-    #default_scope { where resource_id: -1 }
+    # default_scope { where resource_id: -1 }
 
     def self.import(options = {})
         transform = lambda do |a|
-            {index: {_id: "#{a.resource_id}:#{a.ayah_key}", _parent: a.ayah_key, data: a.__elasticsearch__.as_indexed_json}} 
+            { index: {_id: "#{a.resource_id}:#{a.ayah_key}", _parent: a.ayah_key, data: a.__elasticsearch__.as_indexed_json} }
         end
-        options = { transform: transform, batch_size: 6236 }.merge(options)
+        options = { transform: transform, batch_size: 6236 }.merge( options )
         self.importing options 
     end
 end

@@ -1,3 +1,4 @@
+# vim: ts=4 sw=4 expandtab
 class Content::Transliteration < ActiveRecord::Base
     extend Content
     extend Batchelor
@@ -7,43 +8,27 @@ class Content::Transliteration < ActiveRecord::Base
 
     # relationships
     belongs_to :resource, class_name: 'Content::Resource'
-    belongs_to :ayah, class_name: 'Quran::Ayah'
+    belongs_to :ayah,     class_name: 'Quran::Ayah'
 
     # scope
-    #default_scope { where resource_id: -1 }
+    # default_scope { where resource_id: -1 } # NOTE uncomment or modify to disable/experiment on the elasticsearch import
 
-    ########## ES FUNCTIONS ##################################################
-    document_type "transliteration"
-    mapping :_parent => { :type => 'ayah' }, :_routing => { :path => 'ayah_key', :required => true } do
-
-      indexes :resource_id, type: "integer"
-      indexes :ayah_key
-      indexes :text, term_vector: "with_positions_offsets_payloads"
-    end
-
-    def self.import(options = {})
+    def self.import ( options = {} )
         transform = lambda do |a|
-            {index: {_id: "#{a.resource_id},#{a.ayah_key}", _parent: a.ayah_key, data: a.__elasticsearch__.as_indexed_json}} 
+            {index: {_id: "#{a.resource_id},#{a.ayah_key}", _parent: a.ayah_key, data: a.__elasticsearch__.as_indexed_json}}
         end
-        options = { transform: transform, batch_size: 6236 }.merge(options)
-        self.importing options 
+        options = { transform: transform, batch_size: 6236 }.merge( options )
+        self.importing options
     end
 
     # def as_indexed_json(options={})
     #     self.as_json(
-        
     #         # methods: [:resource_info],
     #         include: {
     #             resource: {
     #                 only: [:slug, :name, :type]
     #             }
     #         }
-
     #     )
     # end
-
-
-
 end
-# notes:
-# - provides a 'text' column

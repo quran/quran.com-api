@@ -1,30 +1,35 @@
+# vim: ts=4 sw=4 expandtab
 module Searchable
     extend ActiveSupport::Concern
 
-    # Setup the index mappings
-    def self.setup_index
-        models = [
-            Content::Translation, Content::Transliteration, Content::TafsirAyah,
-            Quran::Text, Quran::TextRoot, Quran::TextStem, Quran::TextLemma, Quran::TextToken
-        ]
+    @@models = [ 'Content::Translation', 'Content::Transliteration', 'Content::TafsirAyah',
+                 'Quran::Text', 'Quran::TextRoot', 'Quran::TextStem', 'Quran::TextLemma', 'Quran::TextToken' ]
 
-        models.each do |m|
-            m.create_index
+    # convenience functions for creating/recreating/deleting all indexes in one go
+
+    def self.create_index
+        @@models.each do | model |
+            model = Kernel.const_get( model )
+            model.create_index
         end
     end
 
     def self.delete_index
-        models = [
-            Content::Translation, Content::Transliteration, Content::TafsirAyah,
-            Quran::Text, Quran::TextRoot, Quran::TextStem, Quran::TextLemma, Quran::TextToken
-        ]
+        @@models.each do | model |
+            model = Kernel.const_get( model )
+            model.delete_index
+        end
+    end
 
-        models.each do |m|
-            m.delete_index
+    def self.recreate_index
+        @@models.each do | model |
+            model = Kernel.const_get( model )
+            model.recreate_index
         end
     end
 
 
+    # TODO this is so convoluted, I don't know what's happening anymore -- our multiple inheritance/mix-in strategy should be more elegant
     # When this module is included, this callback function is called
     included do |mod|
         Rails.logger.info( "searchable included into #{ mod } !!!" )
@@ -35,38 +40,53 @@ module Searchable
         mod.class_eval do
             index_name document_type # e.g. translation
             document_type "data"     # e.g. rename from translation to just "data"
-            Rails.logger.info( "!!! #{ self } index name is #{ index_name } and document type is #{ document_type }" )
 
             def self.delete_index
-                if self.__elasticsearch__.client.indices.exists index: index_name
-                    self.__elasticsearch__.client.indices.delete index: index_name
+                Rails.logger.info "deleting #{ index_name } index"
+
+                if not self.__elasticsearch__.client.indices.exists index: index_name
+                    Rails.logger.warn "#{ index_name } didn't exist"
+                    return
                 end
+
+                self.__elasticsearch__.client.indices.delete index: index_name
             end
 
             def self.create_index
-                Rails.logger.info( "!!! #{ self } index name is #{ index_name } and document type is #{ document_type }" )
-                settings = YAML.load( File.read( File.expand_path( "#{Rails.root}/config/elasticsearch/settings.yml", __FILE__ ) ) )
-                all_mappings = YAML.load( File.read( File.expand_path( "#{Rails.root}/config/elasticsearch/mappings.yml", __FILE__ ) ) )
-                mappings = {}
+                Rails.logger.info "creating #{ index_name } index"
+
+                if self.__elasticsearch__.client.indices.exists index: index_name
+                    Rails.logger.warn "#{ index_name } already exists"
+                    return
+                end
+
+                settings     = YAML.load( File.read( File.expand_path( "#{Rails.root}/config/elasticsearch/settings.yml", __FILE__ ) ) )
+                mappings_all = YAML.load( File.read( File.expand_path( "#{Rails.root}/config/elasticsearch/mappings.yml", __FILE__ ) ) )
+                mappings     = {}
+
                 mappings[ 'ayah' ] = all_mappings[ 'ayah' ]
                 mappings[ 'data' ] = all_mappings[ index_name ]
+
                 self.__elasticsearch__.client.indices.create \
                     index: index_name, body: { settings: settings, mappings: mappings }
 
-                # import into the 'ayah' type
+                # we want to import the stock ayah document because it serves as a "parent" across all indices
                 Quran::Ayah.import( { index: index_name, type: 'ayah' } )
 
-                # import into the 'data' type
+                # and this imports the "child" content data
                 self.import
             end
 
             def self.recreate_index
+                Rails.logger.info "recreating #{ index_name } index"
+
                 self.delete_index
                 self.create_index
             end
 
+            # this is temporary -- nour
             def self.debug_query ( query, types )
-                Rails.logger.info( "this is debug query in #{ self } mod !!!" )
+                Rails.logger.info( "#{ self }.debug_query" )
 
                 client = self.__elasticsearch__.client
                 matched_parents = self.matched_parents( query, types )
@@ -100,10 +120,6 @@ module Searchable
                     }
                 }
             end
-
-
-            Rails.logger.info( "this is class eval #{ mod } !!!" )
-
         end
 
         # Initial the paging gem, Kaminari

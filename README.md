@@ -42,7 +42,7 @@ It's painful. But this will help a lot:
     - http://www.rubydoc.info/gems/elasticsearch-api/Elasticsearch/API
     - https://github.com/elasticsearch/elasticsearch-ruby/tree/master/elasticsearch-api
 
-* To create the ElasticSearch index: `rake es_tasks:setup_index`
+* To create the ElasticSearch index: `rake es_tasks:create_index`
 * To delete it, run `rake es_tasks:delete_index`
 * To check your mappings are registered correctly, browse to http://127.0.0.1:9200/quran/_mapping
 * To delete and recreate only a single mapping from the rails console:
