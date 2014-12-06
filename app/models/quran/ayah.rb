@@ -1,3 +1,4 @@
+# vim: ts=4 sw=4 expandtab
 class Quran::Ayah < ActiveRecord::Base
     extend Quran
 
@@ -8,36 +9,33 @@ class Quran::Ayah < ActiveRecord::Base
     # relationships
     belongs_to :surah, class_name: 'Quran::Surah'
 
-    has_many :words, class_name: 'Quran::Word', foreign_key: 'ayah_key'
-
-    has_many :tokens, class_name: 'Quran::Token', through: :words
-    has_many :stems, class_name:  'Quran::Stem',  through: :words
-    has_many :lemmas, class_name: 'Quran::Lemma', through: :words
-    has_many :roots, class_name:  'Quran::Root',  through: :words
+    has_many :words,  class_name: 'Quran::Word',  foreign_key: 'ayah_key'
+    has_many :tokens, class_name: 'Quran::Token', through:     :words
+    has_many :stems,  class_name: 'Quran::Stem',  through:     :words
+    has_many :lemmas, class_name: 'Quran::Lemma', through:     :words
+    has_many :roots,  class_name: 'Quran::Root',  through:     :words
 
     has_many :_tafsir_ayah, class_name: 'Content::TafsirAyah', foreign_key: 'ayah_key'
+    has_many :tafsirs,      class_name: 'Content::Tafsir',     through:     :_tafsir_ayah
 
-    has_many :audio, class_name: 'Audio::File', foreign_key: 'ayah_key'
-    has_many :texts, class_name: 'Quran::Text', foreign_key: 'ayah_key'
-    has_many :images, class_name: 'Quran::Image', foreign_key: 'ayah_key'
-    has_many :glyphs, class_name: 'Quran::WordFont', foreign_key: 'ayah_key'
-    has_many :tafsirs, class_name: 'Content::Tafsir', through: :_tafsir_ayah
-    has_many :translations, class_name: 'Content::Translation', foreign_key: 'ayah_key'
+    has_many :translations,     class_name: 'Content::Translation',     foreign_key: 'ayah_key'
     has_many :transliterations, class_name: 'Content::Transliteration', foreign_key: 'ayah_key'
 
-    # The relationships below were created as database-side views for use with elasticsearch
-    has_many :text_roots,  class_name: 'Quran::TextRoot', foreign_key: 'ayah_key'
+    has_many :audio,  class_name: 'Audio::File',     foreign_key: 'ayah_key'
+    has_many :texts,  class_name: 'Quran::Text',     foreign_key: 'ayah_key'
+    has_many :images, class_name: 'Quran::Image',    foreign_key: 'ayah_key'
+    has_many :glyphs, class_name: 'Quran::WordFont', foreign_key: 'ayah_key'
+
+    # NOTE the relationships below were created as database-side views for use with elasticsearch
+    has_many :text_roots,  class_name: 'Quran::TextRoot',  foreign_key: 'ayah_key'
     has_many :text_lemmas, class_name: 'Quran::TextLemma', foreign_key: 'ayah_key'
-    has_many :text_stems,  class_name: 'Quran::TextStem', foreign_key: 'ayah_key'
+    has_many :text_stems,  class_name: 'Quran::TextStem',  foreign_key: 'ayah_key'
     has_many :text_tokens, class_name: 'Quran::TextToken', foreign_key: 'ayah_key'
 
     def self.fetch_ayahs(surah_id, from, to)
-        self
-        .where("quran.ayah.surah_id = ? AND quran.ayah.ayah_num >= ? AND quran.ayah.ayah_num <= ?", surah_id, from, to)
-        .order("quran.ayah.surah_id, quran.ayah.ayah_num")
+        self.where("quran.ayah.surah_id = ? AND quran.ayah.ayah_num >= ? AND quran.ayah.ayah_num <= ?", surah_id, from, to)
+            .order("quran.ayah.surah_id, quran.ayah.ayah_num")
     end
-
-
 
     ############### ES FUNCTIONS ################################################################# 
 
@@ -55,7 +53,6 @@ class Quran::Ayah < ActiveRecord::Base
     #             #     }
     #             # }
     #         }
-
     #     })
     # end
 
@@ -65,15 +62,17 @@ class Quran::Ayah < ActiveRecord::Base
     #
     # Example: https://gist.github.com/karmi/3200212
 
-    # NOTE I removed this function and refactored it into the matched_products and matched_children
+    # NOTE / TODO I removed this function and refactored it into the matched_products and matched_children
     # methods below, but I'm leaving the stub here so that perhaps we can encapsulate the independent
     # searching of each set and subsequent merging of the two sets here instead of in SearchController.query
     # later on
+
     def self.search( query, page = 1, size = 20, types )
     end
 
     # NOTE I split these functions into matched_parents and matched_blah_query so that I could properly
     # debug them from the rails console
+
     def self.matched_parents( query, types )
         query_hash = self.matched_parents_query( query, types )
         # Matched parent ayahs
@@ -127,58 +126,50 @@ class Quran::Ayah < ActiveRecord::Base
 
     def self.matched_children_query( query, types, ayat = [] )
         msearch = { body: [], index: types, type: [ 'data' ] }
-#        msearch = { body: [], index: 'quran' }
-#        types.each do |type|
-            ayat.each do |ayah_key|
-                search = {
-                    #index: 'quran',
-                    #type: [ type ],
-                    #search_type: 'dfs_query_then_fetch',
-                    search: {
-                        highlight: {
-                            fields: {
-                                text: {
-                                    type: 'fvh',
-                                    number_of_fragments: 1,
-                                    fragment_size: 1024
-                                }
-                            },
-                            tags_schema: 'styled'
-                        },
-                        # fields: [:ayah_key],
-                        explain: true,
-                        # fielddata_fields: ["ayah_key"], # this will split each of the words into an array
-                        query: {
-                            bool: {
-                                must: [ {
-                                    term: {
-                                        _parent: {
-                                            value: ayah_key
-                                        }
-                                    }
-                                }, {
-                                    match: {
-                                        text: {
-                                            query: query,
-                                            minimum_should_match: '3<62%'
-                                        }
-                                    }
-                                } ]
+        ayat.each do |ayah_key|
+            search = {
+                search: {
+                    highlight: {
+                        fields: {
+                            text: {
+                                type: 'fvh',
+                                number_of_fragments: 1,
+                                fragment_size: 1024
                             }
                         },
-                        size: 3 # limit number of child hits per ayah, i.e. bring back no more then 3 hits per ayah
-                    }
+                        tags_schema: 'styled'
+                    },
+                    explain: true,
+                    query: {
+                        bool: {
+                            must: [ {
+                                term: {
+                                    _parent: {
+                                        value: ayah_key
+                                    }
+                                }
+                            }, {
+                                match: {
+                                    text: {
+                                        query: query,
+                                        minimum_should_match: '3<62%'
+                                    }
+                                }
+                            } ]
+                        }
+                    },
+                    size: 3 # limit number of child hits per ayah, i.e. bring back no more then 3 hits per ayah
                 }
-                msearch[:body].push( search )
-            end
-#        end
+            }
+            msearch[:body].push( search )
+        end
         return msearch
     end
 
     def self.import_options ( options = {} )
         transform = lambda do |a|
             data = a.__elasticsearch__.as_indexed_json
-            data.delete( 'text' )
+            data.delete( 'text' ) # NOTE we exclude text because it serves no value in the parent mapping
             { index: { _id: "#{a.ayah_key}", data: data } }
         end
         options = { transform: transform, batch_size: 6236 }.merge( options )

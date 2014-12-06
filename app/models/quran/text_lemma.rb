@@ -1,3 +1,4 @@
+# vim: ts=4 sw=4 expandtab
 class Quran::TextLemma < ActiveRecord::Base
     extend Quran
     extend Batchelor
@@ -8,7 +9,7 @@ class Quran::TextLemma < ActiveRecord::Base
     belongs_to :ayah, class_name: 'Quran::Ayah'
 
     # scope
-    #default_scope { where surah_id: -1 }
+    # default_scope { where surah_id: -1 }
 
     def self.import(options = {})
         transform = lambda do |a|

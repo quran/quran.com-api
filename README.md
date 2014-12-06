@@ -64,6 +64,7 @@ View mappings: in browser - `http://localhost:9200/quran/_mapping`
     - https://github.com/elasticsearch/elasticsearch-ruby/tree/master/elasticsearch-api
 
 
+
 #### Pre-build tasks:
 * To create the ElasticSearch index: `rake es_tasks:setup_index`
 * To delete it, run `rake es_tasks:delete_index`
