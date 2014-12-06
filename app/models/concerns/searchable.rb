@@ -11,6 +11,8 @@ module Searchable
     settings = YAML.load( File.read( File.expand_path( "#{Rails.root}/config/elasticsearch/settings.yml", __FILE__ ) ) )
     mappings = YAML.load( File.read( File.expand_path( "#{Rails.root}/config/elasticsearch/mappings.yml", __FILE__ ) ) )
 
+    self.delete_index if models.first.__elasticsearch__.client.indices.exists index: "quran"
+    
     models.first.__elasticsearch__.client.indices.create \
       index: "quran",
       body: { settings: settings, mappings: mappings }
