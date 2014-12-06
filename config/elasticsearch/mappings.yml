@@ -14,49 +14,68 @@ ayah:
 text:
     _all: { enabled: false }
     _parent: { type: ayah }
-    _routing: { path: ayah_key }
+    _routing: { required: false, path: ayah_key }
     properties:
-        text:  { type: string, term_vector: with_positions_offsets_payloads, search_analyzer: arabic_search, index_analyzer: arabic_index }
+        #text:  { type: string, term_vector: with_positions_offsets_payloads, search_analyzer: arabic_search, index_analyzer: arabic_index }
+        text: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, fields: { stemmed: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, search_analyzer: arabic_search, index_analyzer: arabic_index } } }
 text_root:
     _all: { enabled: false }
     _parent: { type: ayah }
-    _routing: { path: ayah_key }
+    _routing: { required: false, path: ayah_key }
     properties:
-        text:  { type: string, term_vector: with_positions_offsets_payloads, search_analyzer: arabic_search, index_analyzer: arabic_index }
+        #text:  { type: string, term_vector: with_positions_offsets_payloads, search_analyzer: arabic_search, index_analyzer: arabic_index }
+        text: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, fields: { stemmed: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, search_analyzer: arabic_search, index_analyzer: arabic_index } } }
 text_token:
     _all: { enabled: false }
     _parent: { type: ayah }
-    _routing: { path: ayah_key }
+    _routing: { required: false, path: ayah_key }
     properties:
-        text:  { type: string, term_vector: with_positions_offsets_payloads, search_analyzer: arabic_search, index_analyzer: arabic_index }
+        #text:  { type: string, term_vector: with_positions_offsets_payloads, search_analyzer: arabic_search, index_analyzer: arabic_index }
+        text: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, fields: { stemmed: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, search_analyzer: arabic_search, index_analyzer: arabic_index } } }
 text_stem:
     _all: { enabled: false }
     _parent: { type: ayah }
-    _routing: { path: ayah_key }
+    _routing: { required: false, path: ayah_key }
     properties:
-        text:  { type: string, term_vector: with_positions_offsets_payloads, search_analyzer: arabic_search, index_analyzer: arabic_index }
+        #text:  { type: string, term_vector: with_positions_offsets_payloads, search_analyzer: arabic_search, index_analyzer: arabic_index }
+        text: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, fields: { stemmed: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, search_analyzer: arabic_search, index_analyzer: arabic_index } } }
 text_lemma:
     _all: { enabled: false }
     _parent: { type: ayah }
-    _routing: { path: ayah_key }
+    _routing: { required: false, path: ayah_key }
     properties:
-        text:  { type: string, term_vector: with_positions_offsets_payloads, search_analyzer: arabic_search, index_analyzer: arabic_index }
+        #text:  { type: string, term_vector: with_positions_offsets_payloads, search_analyzer: arabic_search, index_analyzer: arabic_index }
+        text: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, fields: { stemmed: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, search_analyzer: arabic_search, index_analyzer: arabic_index } } }
 transliteration:
     _all: { enabled: false }
     _parent: { type: ayah }
-    _routing: { path: ayah_key }
+    _routing: { required: false, path: ayah_key }
     properties:
-        text: { type: string, term_vector: with_positions_offsets_payloads, analyzer: english }
+        #text: { type: string, term_vector: with_positions_offsets_payloads, analyzer: english }
+        text: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, fields: { stemmed: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, analyzer: standard } } }
 tafsir:
     _all: { enabled: false }
     _parent: { type: ayah }
-    _routing: { path: ayah_key }
+    _routing: { required: false, path: ayah_key }
     properties:
-        text: { type: string, term_vector: with_positions_offsets_payloads, search_analyzer: arabic_search, index_analyzer: arabic_index }
+        #text: { type: string, term_vector: with_positions_offsets_payloads, search_analyzer: arabic_search, index_analyzer: arabic_index }
+        text: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, fields: { stemmed: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, search_analyzer: arabic_search, index_analyzer: arabic_index } } }
 translation:
     _all: { enabled: false }
     _parent: { type: ayah }
-    _routing: { path: ayah_key }
+    _routing: { required: false, path: ayah_key }
     properties:
-        text: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, analyzer: english }
+        text: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, fields: { stemmed: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, analyzer: standard } } }
+#    dynamic_templates:
+#        template_1:
+#            match: 'text*',
+#            match_mapping_type: string
+#            mapping:
+#                type: string
+#                similarity: my_bm25
+#                term_vector: with_positions_offsets_payloads
+#                fields:
+#                    stemmed:
+#                        type: string
+#                        analyzer: standard
 

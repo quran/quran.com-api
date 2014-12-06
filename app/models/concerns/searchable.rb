@@ -21,10 +21,22 @@ module Searchable
         end
     end
 
+    def self.import_index
+        @@models.each do | model |
+            model = Kernel.const_get( model )
+            model.import_index
+        end
+    end
+
     def self.setup_index
         @@models.each do | model |
             model = Kernel.const_get( model )
-            model.setup_index
+            if model == Content::Translation
+                model.setup_index( 'translation', { recreate: true } )
+            else
+                model.setup_index
+            end
+
         end
     end
 
@@ -81,22 +93,33 @@ module Searchable
                 # NOTE this is a hack to let the import routine in Content::Translation to pass in analyzer settings like so:
                 # self.create_index( index_name_lc, { analyzer: es_analyzer_default } ) TODO put it in mappings.yml?
                 if extra_text_mapping_opts
-                    mappings[ 'data' ][ 'properties' ][ 'text' ].merge! extra_text_mapping_opts
+                    mappings[ 'data' ][ 'properties' ][ 'text' ][ 'fields' ][ 'stemmed' ].merge! extra_text_mapping_opts
+                    Rails.logger.debug( "extra_text_mapping_opts #{extra_text_mapping_opts}" )
                 end
 
                 self.__elasticsearch__.client.indices.create \
                     index: index_name, body: { settings: settings, mappings: mappings }
 
+                Rails.logger.debug( "mappings #{mappings}" )
+
                 # NOTE 1.1 we want to import the stock ayah document because it serves as a "parent" across all indices
                 Quran::Ayah.import( { index: index_name, type: 'ayah' } )
             end
 
-            def self.setup_index( index_name = index_name )
+            def self.import_index( index_name = index_name, opts = {} )
+                Rails.logger.info "importing #{ index_name } index"
+
+                # NOTE 1.2 and this imports the "child" content data (see NOTE 1.1)
+                self.import( { index: index_name }.merge( opts ) )
+            end
+
+
+            def self.setup_index( index_name = index_name, opts = {} )
                 Rails.logger.info "setting up #{ index_name } index"
 
                 self.delete_index( index_name )
-                self.create_index( index_name )
-                self.import # NOTE 1.2 and this imports the "child" content data (see NOTE 1.1)
+                self.create_index( index_name ) if not index_name == 'translation'
+                self.import_index( index_name, opts )
             end
 
             # NOTE this is temporary -- nour

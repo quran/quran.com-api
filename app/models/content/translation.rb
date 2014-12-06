@@ -18,6 +18,7 @@ class Content::Translation < ActiveRecord::Base
 
     def self.import( options = {} )
         # we want to loop through each language code (in general)
+        recreate = options.delete :recreate
         Content::Resource.select( :language_code ).distinct.map { |row| row.language_code }.each do |lc|
             # except when we specify a specific index, e.g. translation-en, so we'll just break out if we have lc already set
             if options.key?( :index ) and options[:index].split( '-' ).length > 1
@@ -41,7 +42,7 @@ class Content::Translation < ActiveRecord::Base
                     language_data                   = a.resource.language.__elasticsearch__.as_indexed_json
                     author_data                     = a.resource.author.__elasticsearch__.as_indexed_json
                     source_data                     = a.resource.source.__elasticsearch__.as_indexed_json
-                    translation_data[ '_analyzer' ] = language_data[ 'es_analyzer_default' ]
+                   #translation_data[ '_analyzer' ] = language_data[ 'es_analyzer_default' ]
 
                     { index: {
                             _id: "#{a.resource_id}:#{a.ayah_key}",
@@ -51,6 +52,10 @@ class Content::Translation < ActiveRecord::Base
                 end
 
                 options = { index: index_name_lc, query: query, transform: transform, batch_size: 6236 }.merge( options )
+
+                if recreate
+                    self.delete_index( index_name_lc )
+                end
 
                 if not self.__elasticsearch__.client.indices.exists index: index_name_lc
                     language_obj = Locale::Language.find_by( language_code: lc )
