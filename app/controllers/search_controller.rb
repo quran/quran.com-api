@@ -1,4 +1,9 @@
 # vim: ts=4 sw=4 expandtab
+# DONE 1. set analyzers for every language
+# TODO 1.a. actually configure the analyzer so that certain words are protected (like allah, don't want to stem that). hopefully an alternate solution is available, so this isn't priority until the steps below are done.
+# TODO 2. determine the language of the query (here)
+# TODO 3. apply weights to different types of indices e.g. text > tafsir
+# TODO 4. break down fields into analyzed and unanalyzed and weigh them
 class SearchController < ApplicationController
     def query
         # Init the config hash and the output

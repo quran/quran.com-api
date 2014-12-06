@@ -52,7 +52,7 @@ module Searchable
                 self.__elasticsearch__.client.indices.delete index: index_name
             end
 
-            def self.create_index( index_name = index_name )
+            def self.create_index( index_name = index_name, extra_text_mapping_opts = {} )
                 Rails.logger.info "creating #{ index_name } index"
 
                 if self.__elasticsearch__.client.indices.exists index: index_name
@@ -76,6 +76,12 @@ module Searchable
                 end
                 if not mappings.key? 'data'
                     raise "elasticsearch mapping for #{ index_name } not configured; check config/elasticsearch/mappings.yml"
+                end
+
+                # NOTE this is a hack to let the import routine in Content::Translation to pass in analyzer settings like so:
+                # self.create_index( index_name_lc, { analyzer: es_analyzer_default } ) TODO put it in mappings.yml?
+                if extra_text_mapping_opts
+                    mappings[ 'data' ][ 'properties' ][ 'text' ].merge! extra_text_mapping_opts
                 end
 
                 self.__elasticsearch__.client.indices.create \

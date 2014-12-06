@@ -36,17 +36,31 @@ class Content::Translation < ActiveRecord::Base
                 end
 
                 transform = lambda do |a|
+                    translation_data                = a.__elasticsearch__.as_indexed_json
+                    resource_data                   = a.resource.__elasticsearch__.as_indexed_json
+                    language_data                   = a.resource.language.__elasticsearch__.as_indexed_json
+                    author_data                     = a.resource.author.__elasticsearch__.as_indexed_json
+                    source_data                     = a.resource.source.__elasticsearch__.as_indexed_json
+                    translation_data[ '_analyzer' ] = language_data[ 'es_analyzer_default' ]
+
                     { index: {
                             _id: "#{a.resource_id}:#{a.ayah_key}",
                         _parent: a.ayah_key,
-                           data: a.__elasticsearch__.as_indexed_json.merge( { 'resource' => a.resource.__elasticsearch__.as_indexed_json, 'language' => a.resource.language.__elasticsearch__.as_indexed_json, 'source' => a.resource.source.__elasticsearch__.as_indexed_json, 'author' => a.resource.author.__elasticsearch__.as_indexed_json } )
+                           data: translation_data.merge( { 'resource' => resource_data, 'language' => language_data, 'source' => source_data, 'author' => author_data } )
                     } }
                 end
 
                 options = { index: index_name_lc, query: query, transform: transform, batch_size: 6236 }.merge( options )
 
                 if not self.__elasticsearch__.client.indices.exists index: index_name_lc
-                    self.create_index( index_name_lc )
+                    language_obj = Locale::Language.find_by( language_code: lc )
+                    es_analyzer_default = language_obj.es_analyzer_default if language_obj
+
+                    if es_analyzer_default
+                        self.create_index( index_name_lc, { 'analyzer' => es_analyzer_default } )
+                    else
+                        self.create_index( index_name_lc )
+                    end
                 end
 
                 Rails.logger.debug( "importing index #{index_name_lc}" )

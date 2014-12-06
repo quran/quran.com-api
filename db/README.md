@@ -10,12 +10,14 @@ DB INITIAL SETUP
 
     alter database quran_dev set search_path = "$user", quran, content, audio, i18n, public
 
-3. initialize your db with:
+3. mv db/structure.sql.init to db/structure.sql
+
+4. initialize your db with:
 
     rake db:reset
     rake db:migrate
 
-4. if migrations don't apply even though you reset (weird issue, happened to me), then truncate the schema_migrations table and try `rake db:migrate` again
+5. if migrations don't apply even though you reset (weird issue, happened to me), then truncate the schema_migrations table and try `rake db:migrate` again
 
 
 NOTES
