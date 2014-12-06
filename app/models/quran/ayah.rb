@@ -97,11 +97,11 @@ class Quran::Ayah < ActiveRecord::Base
             has_child: {
                 type: 'data',
                 query: {
-                    match: {
-                        text: {
-                            query: query,
-                            minimum_should_match: '3<62%'
-                        }
+                    multi_match: {
+                        type: 'most_fields',
+                        query: query,
+                        fields: [ 'text', 'text.stemmed' ],
+                        minimum_should_match: '3<62%'
                     }
                 }
             }
@@ -153,14 +153,17 @@ class Quran::Ayah < ActiveRecord::Base
                                     }
                                 }
                             }, {
-                                match: {
-                                    text: {
-                                        query: query,
-                                        minimum_should_match: '3<62%'
-                                    }
+                                multi_match: {
+                                    type: 'most_fields',
+                                    query: query,
+                                    fields: [ 'text^1.5', 'text.stemmed' ],
+                                    minimum_should_match: '3<62%'
                                 }
                             } ]
                         }
+                    },
+                    indices_boost: {
+                        :"translation-en" => 3
                     },
                     size: 3 # limit number of child hits per ayah, i.e. bring back no more then 3 hits per ayah
                 }

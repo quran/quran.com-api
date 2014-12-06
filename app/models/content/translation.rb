@@ -19,6 +19,8 @@ class Content::Translation < ActiveRecord::Base
     def self.import( options = {} )
         # we want to loop through each language code (in general)
         recreate = options.delete :recreate
+        recreate = true
+        Rails.logger.info( 'recreate true!' )
         Content::Resource.select( :language_code ).distinct.map { |row| row.language_code }.each do |lc|
             # except when we specify a specific index, e.g. translation-en, so we'll just break out if we have lc already set
             if options.key?( :index ) and options[:index].split( '-' ).length > 1
