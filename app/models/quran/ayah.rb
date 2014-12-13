@@ -67,7 +67,97 @@ class Quran::Ayah < ActiveRecord::Base
     # searching of each set and subsequent merging of the two sets here instead of in SearchController.query
     # later on
 
-    def self.search( query, page = 1, size = 20, types )
+    #def self.search( query, page = 1, size = 20, types )
+    def self.search( query, params = {} )
+        es_params = {
+            explain: true,
+            size: 6236,
+            index: [ "text-font" ],
+            type: 'data',
+            body: {
+                highlight: {
+                    fields: {
+                        text: {
+                            type: 'fvh',
+                            number_of_fragments: 1,
+                            fragment_size: 1024
+                        }
+                    },
+                    tags_schema: 'styled'
+                },
+                query: {
+                    bool: {
+                        must: [ {
+                            multi_match: {
+                                type: 'most_fields',
+                                query: query,
+                                fields: [ 'text^5', 'text.lemma^4', 'text.stem^3', 'text.root^1.5', 'text.lemma_clean^3', 'text.stem_clean^2', 'text.ngram^2', 'text.stemmed^2' ],
+                                minimum_should_match: '3<62%'
+                            }
+#                        }, {
+#                            term: {
+#                                :'ayah.surah_id' => '2'
+#                            }
+                        } ]
+                    }
+                },
+                indices_boost: {
+                    :"translation-en" => 3,
+                    :"text" => 5,
+                    :"text-token" => 5,
+                    :"text-lemma" => 4,
+                    :"text-stem" => 3,
+                    :"text-root" => 2,
+                    :"tafsir" => 1,
+                }
+
+            }
+        }
+        #return es_params
+
+        results = self.__elasticsearch__.client.search( es_params )
+        #return results
+
+        by_key = {}
+        results[ 'hits' ][ 'hits' ].each do |hit|
+            _source    = hit[ '_source' ]
+            _score     = hit[ '_score' ]
+            _highlight = ( hit.key?( 'highlight' ) && hit[ 'highlight' ].key?( 'text' ) ) ? hit[ 'highlight' ][ 'text' ].first : ''
+            ayah       = OpenStruct.new _source[ 'ayah' ]
+            by_key[ ayah.ayah_key ] = {
+                key:   ayah.ayah_key,
+                ayah:  ayah.ayah_num,
+                surah: ayah.surah_id,
+                index: ayah.ayah_index,
+                score: 0,
+                match: {
+                    hits: 0,
+                    best: []
+                },
+                bucket: {
+                    surah: ayah.surah_id,
+                    ayah:  ayah.ayah_num,
+                    quran: {
+                        text: nil
+                    }
+                }
+            } if by_key[ ayah.ayah_key ] == nil
+
+            result = by_key[ ayah.ayah_key ]
+
+            result[:score]        = _score if _score > result[:score]
+            result[:match][:hits] = result[:match][:hits] + 1
+            result[:match][:best].push( {
+                text:      _source[ 'text' ],
+                score:     _score,
+                highlight: _highlight
+            } )
+        end
+
+        return by_key.keys.sort { |a,b| by_key[ b ][ :score ] <=> by_key[ a ][ :score ] } .map { |k| by_key[ k ] }
+
+
+
     end
 
     # NOTE I split these functions into matched_parents and matched_blah_query so that I could properly

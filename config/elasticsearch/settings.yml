@@ -1,18 +1,12 @@
 index:
-    number_of_shards: 1
-    query:
-        default_field: text
+    number_of_shards: 5
+#    query:
+        #        default_field: text
     similarity:
         my_bm25:
             type: BM25
             b: 0.236
     analysis:
-# TODO make the unicode stuff under mappings declaration decoded
-# because ruby YAML can't read it as is
-#        char_filter:
-#            arabic_normalization_extra:
-#                type: mapping
-#                mappings: [ "\x{670}=>ا", "ٰ=>ا", "ٱ=>ا", "آ=>ا", "ٖ=>ا" ]
         filter:
             # english analyzer, see http://www.elasticsearch.org/guide/en/elasticsearch/reference/1.4/analysis-lang-analyzer.html#english-analyzer
             english_stop:
@@ -37,16 +31,10 @@ index:
                 type: synonym
                 expand: false
                 synonyms_path: analysis/arabic_synonym.txt
-            arabic_ngram_front:
-                type: edgeNGram
-                side: front
-                min_gram: 2
-                max_gram: 20
-            arabic_ngram_back:
-                type: edgeNGram
-                side: back
-                min_gram: 2
-                max_gram: 20
+            arabic_ngram:
+                type: nGram
+                min_gram: 5
+                max_gram: 8
             arabic_stop:
                 type: stop
                 stopwords: _arabic_
@@ -57,77 +45,186 @@ index:
             arabic_stemmer:
                 type: stemmer
                 language: arabic
+            quran_font_to_token_synonym:
+                type: synonym
+                synonyms_path: analysis/synonym.text-font.to.text-token.txt
+            quran_font_to_token_stop:
+                type: stop
+                stopwords_path: analysis/stop.text-font.to.text-token.txt
+            quran_token_to_lemma_synonym:
+                type: synonym
+                synonyms_path: analysis/synonym.text-token.to.text-lemma.txt
+            quran_token_to_lemma_stop:
+                type: stop
+                stopwords_path: analysis/stop.text-token.to.text-lemma.txt
+
+            quran_token_to_stem_synonym:
+                type: synonym
+                synonyms_path: analysis/synonym.text-token.to.text-stem.txt
+
+            quran_token_to_root_synonym:
+                type: synonym
+                synonyms_path: analysis/synonym.text-token.to.text-root.txt
+            quran_token_to_root_stop:
+                type: stop
+                stopwords_path: analysis/stop.text-token.to.text-root.txt
+
         analyzer:
             # english analyzer, see http://www.elasticsearch.org/guide/en/elasticsearch/reference/1.4/analysis-lang-analyzer.html#english-analyzer
+            quran_token_to_lemma:
+                tokenizer: icu_tokenizer
+                filter:
+                    - quran_token_to_lemma_synonym
+                    - quran_token_to_lemma_stop
+            quran_token_to_lemma_normalized:
+                tokenizer: icu_tokenizer
+                filter:
+                    - quran_token_to_lemma_synonym
+                    - quran_token_to_lemma_stop
+                    - arabic_normalization
+                    - arabic_keywords
+                    - icu_folding
+                    - icu_normalizer
+            quran_token_to_stem:
+                tokenizer: icu_tokenizer
+                filter:
+                    - quran_token_to_stem_synonym
+            quran_token_to_stem_normalized:
+                tokenizer: icu_tokenizer
+                filter:
+                    - quran_token_to_stem_synonym
+                    - arabic_normalization
+                    - arabic_keywords
+                    - icu_folding
+                    - icu_normalizer
+            quran_token_to_root:
+                tokenizer: icu_tokenizer
+                filter:
+                    - quran_token_to_root_synonym
+                    - quran_token_to_root_stop
+            arabic_normalized:
+                tokenizer: whitespace
+                filter:
+                    - arabic_normalization
+                    - arabic_keywords
+            arabic_stemmed:
+                tokenizer: whitespace
+                filter:
+                    - arabic_normalization
+                    - arabic_keywords
+                    - arabic_stemmer
+            arabic_ngram:
+                tokenizer: whitespace
+                filter:
+                    - arabic_normalization
+                    - arabic_keywords
+                    - arabic_ngram
+                    - reverse
+                    - arabic_ngram
+                    - reverse
+                    - unique_tokens
+
+
+
+            quran_font_to_token:
+                tokenizer: whitespace
+                filter:
+                    - quran_font_to_token_synonym
+                    - quran_font_to_token_stop
+                    - arabic_normalization
+                    - arabic_keywords
+                    - icu_folding
+                    - icu_normalizer
+
+            quran_font_to_token_to_lemma:
+                tokenizer: whitespace
+                filter:
+                    - quran_font_to_token_synonym
+                    - quran_font_to_token_stop
+                    - quran_token_to_lemma_synonym
+                    - quran_token_to_lemma_stop
+            quran_font_to_token_to_lemma_normalized:
+                tokenizer: whitespace
+                filter:
+                    - quran_font_to_token_synonym
+                    - quran_font_to_token_stop
+                    - quran_token_to_lemma_synonym
+                    - quran_token_to_lemma_stop
+                    - arabic_normalization
+                    - arabic_keywords
+                    - icu_folding
+                    - icu_normalizer
+
+            quran_font_to_token_to_stem:
+                tokenizer: whitespace
+                filter:
+                    - quran_font_to_token_synonym
+                    - quran_font_to_token_stop
+                    - quran_token_to_stem_synonym
+
+            quran_font_to_token_to_stem_normalized:
+                tokenizer: whitespace
+                filter:
+                    - quran_font_to_token_synonym
+                    - quran_font_to_token_stop
+                    - quran_token_to_stem_synonym
+                    - arabic_normalization
+                    - arabic_keywords
+                    - icu_folding
+                    - icu_normalizer
+
+            quran_font_to_token_to_root:
+                tokenizer: whitespace
+                filter:
+                    - quran_font_to_token_synonym
+                    - quran_font_to_token_stop
+                    - quran_token_to_root_synonym
+                    - quran_token_to_root_stop
+
+            quran_font_to_token_to_arabic_stemmed:
+                tokenizer: whitespace
+                filter:
+                    - quran_font_to_token_synonym
+                    - quran_font_to_token_stop
+                    - arabic_normalization
+                    - arabic_keywords
+                    - icu_folding
+                    - icu_normalizer
+                    - arabic_stemmer
+            quran_font_to_token_to_arabic_ngram:
+                tokenizer: whitespace
+                filter:
+                    - quran_font_to_token_synonym
+                    - quran_font_to_token_stop
+                    - arabic_normalization
+                    - arabic_keywords
+                    - icu_folding
+                    - icu_normalizer
+                    - arabic_ngram
+                    - reverse
+                    - arabic_ngram
+                    - reverse
+                    - unique_tokens
+
+
+
+
             english:
                 tokenizer: standard
                 filter:
                     - english_possessive_stemmer
                     - lowercase
-                    - type_as_payload
                     - english_stop
                     - english_keywords
                     - english_stemmer
 
-            arabic_ngram_index:
-                tokenizer: standard
-#                char_filter: [ arabic_normalization_extra ]
-                filter:
-                    - lowercase
-                    - arabic_normalization
-                    - arabic_keywords
-                    - unique_tokens
-            arabic_ngram_query:
-                tokenizer: standard
-                filter:
-                    - lowercase
-                    - arabic_normalization
-                    - arabic_keywords
-                    - unique_tokens
-            arabic_facet_index:
-                tokenizer: standard
-                filter:
-                    - lowercase
-                    - arabic_normalization
-                    - arabic_keywords
-                    - arabic_ngram_front
-                    - arabic_ngram_back
-                    - unique_tokens
-            arabic_facet_query:
-                tokenizer: standard
-                filter:
-                    - lowercase
-                    - arabic_normalization
-                    - arabic_keywords
-                    - unique_tokens
-            # deprecated
-            arabic_search:
-                tokenizer: standard
-                filter:
-                    - lowercase
-                    - type_as_payload
-                    - arabic_stop
-                    - arabic_synonym
-                    - arabic_normalization
-                    - arabic_keywords
-                    - unique_tokens
-            arabic_index:
-                tokenizer: standard
-                filter:
-                    - lowercase
-                    - type_as_payload
-                    - arabic_stop
-                    - arabic_synonym
-                    - arabic_normalization
-                    - arabic_keywords
-                    - arabic_ngram_front
-                    - arabic_ngram_back
-                    - unique_tokens
             arabic:
-                tokenizer: standard
+                tokenizer: whitespace
                 filter:
-                    - lowercase
-                    - arabic_stop
                     - arabic_normalization
                     - arabic_keywords
                     - arabic_stemmer
+            minimal:
+                tokenizer: whitespace
+                filter:
+                    - lowercase

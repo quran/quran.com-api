@@ -80,4 +80,7 @@ gem 'sass-rails', github: 'rails/sass-rails' # '~> 4.0.3'
 group :development, :test do
       gem 'jazz_hands', github: 'nixme/jazz_hands', branch: 'bring-your-own-debugger'
       gem 'pry-byebug'
+      gem 'pry-rails'
 end
+
+

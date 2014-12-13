@@ -133,7 +133,7 @@ GEM
       execjs
     coffee-script-source (1.8.0)
     colorize (0.7.3)
-    columnize (0.8.9)
+    columnize (0.9.0)
     coolline (0.5.0)
       unicode_utils (~> 1.4)
     debug_inspector (0.0.2)
@@ -295,6 +295,7 @@ DEPENDENCIES
   kaminari
   pg
   pry-byebug
+  pry-rails
   rails!
   rb-readline
   sass-rails!

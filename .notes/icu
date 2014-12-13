@@ -1,0 +1,2 @@
+bin/plugin -install elasticsearch/elasticsearch-analysis-icu/2.4.1
+

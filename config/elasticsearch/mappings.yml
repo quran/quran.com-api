@@ -1,71 +1,174 @@
 ---
-ayah:
-    _source: { enabled: true }
-    properties:
-        ayah_index: { type: integer, index: not_analyzed }
-        surah_id:   { type: integer, index: not_analyzed }
-        ayah_num:   { type: integer, index: not_analyzed }
-        page_num:   { type: integer, index: not_analyzed }
-        juz_num:    { type: integer, index: not_analyzed }
-        hizb_num:   { type: integer, index: not_analyzed }
-        rub_num:    { type: integer, index: not_analyzed }
-        sajdah:     { type: string,  index: not_analyzed }
-        ayah_key:   { type: string,  index: not_analyzed }
 text:
-    _all: { enabled: false }
-    _parent: { type: ayah }
-    _routing: { path: ayah_key }
+    _all:
+        enabled: false
     properties:
-        #text:  { type: string, term_vector: with_positions_offsets_payloads, search_analyzer: arabic_search, index_analyzer: arabic_index }
-        text: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, fields: { stemmed: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, search_analyzer: arabic_search, index_analyzer: arabic_index } } }
-text_root:
+        text:
+            type: string
+            similarity: my_bm25
+            term_vector: with_positions_offsets_payloads
+            fields:
+                stemmed:
+                    type: string
+                    similarity: my_bm25
+                    term_vector: with_positions_offsets_payloads
+                    search_analyzer: arabic_normalized
+                    index_analyzer: arabic_ngram
+text-root:
     _all: { enabled: false }
-    _parent: { type: ayah }
-    _routing: { path: ayah_key }
+    #_parent: { type: ayah }
+    #_routing: { path: ayah_key }
     properties:
-        #text:  { type: string, term_vector: with_positions_offsets_payloads, search_analyzer: arabic_search, index_analyzer: arabic_index }
-        text: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, fields: { stemmed: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, search_analyzer: arabic_search, index_analyzer: arabic_index } } }
-text_token:
+        #text:  { type: string, term_vector: with_positions_offsets_payloads, search_analyzer: arabic_normalized, index_analyzer: arabic_ngram }
+        text: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, fields: { stemmed: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, search_analyzer: arabic_normalized, index_analyzer: arabic_ngram } } }
+text-token:
+    _all:
+        enabled: false
+    properties:
+        text:
+            type: string
+            similarity: my_bm25
+            term_vector: with_positions_offsets_payloads
+            analyzer: minimal
+            fields:
+                lemma:
+                    type: string
+                    similarity: my_bm25
+                    term_vector: with_positions_offsets_payloads
+                    analyzer: quran_token_to_lemma
+                stem:
+                    type: string
+                    similarity: my_bm25
+                    term_vector: with_positions_offsets_payloads
+                    analyzer: quran_token_to_stem
+                root:
+                    type: string
+                    similarity: my_bm25
+                    term_vector: with_positions_offsets_payloads
+                    analyzer: quran_token_to_root
+                normalized_lemma:
+                    type: string
+                    similarity: my_bm25
+                    term_vector: with_positions_offsets_payloads
+                    analyzer: quran_token_to_lemma_normalized
+                normalized_stem:
+                    type: string
+                    similarity: my_bm25
+                    term_vector: with_positions_offsets_payloads
+                    analyzer: quran_token_to_stem_normalized
+                normalized:
+                    type: string
+                    similarity: my_bm25
+                    term_vector: with_positions_offsets_payloads
+                    analyzer: arabic_normalized
+                stemmed:
+                    type: string
+                    similarity: my_bm25
+                    term_vector: with_positions_offsets_payloads
+                    analyzer: arabic_stemmed
+                ngram:
+                    type: string
+                    similarity: my_bm25
+                    term_vector: with_positions_offsets_payloads
+                    search_analyzer: arabic_normalized
+                    index_analyzer: arabic_ngram
+
+text-font:
+    _all:
+        enabled: true
+    properties:
+        text:
+            type: string
+            similarity: my_bm25
+            term_vector: with_positions_offsets_payloads
+            analyzer: quran_font_to_token
+            fields:
+                lemma:
+                    type: string
+                    similarity: my_bm25
+                    term_vector: with_positions_offsets_payloads
+                    analyzer: quran_font_to_token_to_lemma
+                stem:
+                    type: string
+                    similarity: my_bm25
+                    term_vector: with_positions_offsets_payloads
+                    analyzer: quran_font_to_token_to_stem
+                root:
+                    type: string
+                    similarity: my_bm25
+                    term_vector: with_positions_offsets_payloads
+                    analyzer: quran_font_to_token_to_root
+                lemma_clean:
+                    type: string
+                    similarity: my_bm25
+                    term_vector: with_positions_offsets_payloads
+                    analyzer: quran_font_to_token_to_lemma_normalized
+                stem_clean:
+                    type: string
+                    similarity: my_bm25
+                    term_vector: with_positions_offsets_payloads
+                    analyzer: quran_font_to_token_to_stem_normalized
+                stemmed:
+                    type: string
+                    similarity: my_bm25
+                    term_vector: with_positions_offsets_payloads
+                    analyzer: quran_font_to_token_to_arabic_stemmed
+                ngram:
+                    type: string
+                    similarity: my_bm25
+                    term_vector: with_positions_offsets_payloads
+                    search_analyzer: quran_font_to_token
+                    index_analyzer: quran_font_to_token_to_arabic_ngram
+
+
+
+text-stem:
     _all: { enabled: false }
-    _parent: { type: ayah }
-    _routing: { path: ayah_key }
+    #_parent: { type: ayah }
+    #_routing: { path: ayah_key }
     properties:
-        #text:  { type: string, term_vector: with_positions_offsets_payloads, search_analyzer: arabic_search, index_analyzer: arabic_index }
-        text: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, fields: { stemmed: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, search_analyzer: arabic_search, index_analyzer: arabic_index } } }
-text_stem:
+        #text:  { type: string, term_vector: with_positions_offsets_payloads, search_analyzer: arabic_normalized, index_analyzer: arabic_ngram }
+        text: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, fields: { stemmed: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, search_analyzer: arabic_normalized, index_analyzer: arabic_ngram } } }
+text-lemma:
     _all: { enabled: false }
-    _parent: { type: ayah }
-    _routing: { path: ayah_key }
+    #_parent: { type: ayah }
+    #_routing: { path: ayah_key }
     properties:
-        #text:  { type: string, term_vector: with_positions_offsets_payloads, search_analyzer: arabic_search, index_analyzer: arabic_index }
-        text: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, fields: { stemmed: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, search_analyzer: arabic_search, index_analyzer: arabic_index } } }
-text_lemma:
-    _all: { enabled: false }
-    _parent: { type: ayah }
-    _routing: { path: ayah_key }
-    properties:
-        #text:  { type: string, term_vector: with_positions_offsets_payloads, search_analyzer: arabic_search, index_analyzer: arabic_index }
-        text: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, fields: { stemmed: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, search_analyzer: arabic_search, index_analyzer: arabic_index } } }
+        #text:  { type: string, term_vector: with_positions_offsets_payloads, search_analyzer: arabic_normalized, index_analyzer: arabic_ngram }
+        text: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, fields: { stemmed: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, search_analyzer: arabic_normalized, index_analyzer: arabic_ngram } } }
+#text-font:
+#    _all: { enabled: false }
+#    #_parent: { type: ayah }
+#    #_routing: { path: ayah_key }
+#    properties:
+#        #text:  { type: string, term_vector: with_positions_offsets_payloads, search_analyzer: arabic_normalized, index_analyzer: arabic_ngram }
+#        text: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, analyzer: quran_font_to_token, fields: { stemmed: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, analyzer: standard } } }
+
 transliteration:
     _all: { enabled: false }
-    _parent: { type: ayah }
-    _routing: { path: ayah_key }
+    #_parent: { type: ayah }
+    #_routing: { path: ayah_key }
     properties:
         #text: { type: string, term_vector: with_positions_offsets_payloads, analyzer: english }
         text: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, fields: { stemmed: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, analyzer: standard } } }
 tafsir:
     _all: { enabled: false }
-    _parent: { type: ayah }
-    _routing: { path: ayah_key }
+    #_parent: { type: ayah }
+    #_routing: { path: ayah_key }
     properties:
-        #text: { type: string, term_vector: with_positions_offsets_payloads, search_analyzer: arabic_search, index_analyzer: arabic_index }
-        text: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, fields: { stemmed: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, search_analyzer: arabic_search, index_analyzer: arabic_index } } }
+        #text: { type: string, term_vector: with_positions_offsets_payloads, search_analyzer: arabic_normalized, index_analyzer: arabic_ngram }
+        text: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, fields: { stemmed: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, search_analyzer: arabic_normalized, index_analyzer: arabic_ngram } } }
 translation:
     _all: { enabled: false }
-    _parent: { type: ayah }
-    _routing: { path: ayah_key }
+    #_parent: { type: ayah }
+    #_routing: { path: ayah_key }
     properties:
         text: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, fields: { stemmed: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, analyzer: standard } } }
+#        ayah:
+#            type: nested
+#            properties:
+#                ayah_key: { type: string, index: not_analyzed }
+
 #    dynamic_templates:
 #        template_1:
 #            match: 'text*',
