@@ -90,7 +90,9 @@ gem 'ruby-progressbar'
 group :development, :test do
       gem 'jazz_hands', github: 'nixme/jazz_hands', branch: 'bring-your-own-debugger'
       gem 'pry-byebug'
+      gem 'pry-rails'
 end
+
 
 # To allow CORS for the angular project
 # https://github.com/cyu/rack-cors

@@ -1,0 +1,2 @@
+curl -XGET 'http://localhost:9200/text-token/data/_termvector?pretty_true' -d '{ "doc": { "text": "this is a test test test" } }'|json_pp
+

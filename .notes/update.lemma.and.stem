@@ -1,0 +1,8 @@
+quran_dev=> update quran.lemma set value = replace( value,   substr( trim( ' ٱللَّه ' ) , 1, 1)   ,     substr(  trim( ' اللَّهُ '  ) , 1, 1 )   ) where value ~ concat( '^', substr( trim( ' ٱللَّه ' ) , 1, 1) );
+UPDATE 189
+Time: 69.977 ms
+quran_dev=> update quran.lemma set value = replace( value,   substr( trim( ' ٱللَّه ' ) , 1, 1)   ,     substr(  trim( ' اللَّهُ '  ) , 1, 1 )   ) where value ~ concat( '^', substr( trim( ' ٱللَّه ' ) , 1, 1) );
+UPDATE 0
+Time: 6.045 ms
+quran_dev=> update quran.stem set value = replace( value,   substr( trim( ' ٱللَّه ' ) , 1, 1)   ,     substr(  trim( ' اللَّهُ '  ) , 1, 1 )   ) where value ~ concat( '^', substr( trim( ' ٱللَّه ' ) , 1, 1) );
+

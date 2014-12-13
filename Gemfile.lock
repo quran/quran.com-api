@@ -133,7 +133,7 @@ GEM
       execjs
     coffee-script-source (1.8.0)
     colorize (0.7.3)
-    columnize (0.8.9)
+    columnize (0.9.0)
     coolline (0.5.0)
       unicode_utils (~> 1.4)
     debug_inspector (0.0.2)
@@ -300,6 +300,8 @@ DEPENDENCIES
   pg
   pry-byebug
   rack-cors
+  pry-rails
+languages also work. now we mostly need to work in the controller and refactor the model, but the elasticsearch settings/mappings and architecture should be pretty well configured
   rails!
   rb-readline
   ruby-progressbar

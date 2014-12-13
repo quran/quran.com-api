@@ -8,7 +8,7 @@ class Content::TafsirAyah < ActiveRecord::Base
 
     # relationships
     belongs_to :tafsir, class_name: 'Content::Tafsir'
-    belongs_to :ayah,   class_name: 'Quran::Ayah'
+    belongs_to :ayah,   class_name: 'Quran::Ayah', foreign_key: 'ayah_key'
 
     # scope
     # default_scope { where ayah_key: -1 }
@@ -18,9 +18,15 @@ class Content::TafsirAyah < ActiveRecord::Base
     def self.import( options = {} )
         Content::TafsirAyah.connection.cache do
             transform = lambda do |a|
-                { index: { _id: "#{a.tafsir.resource_id}:#{a.ayah_key}", _parent: a.ayah_key, data: a.__elasticsearch__.as_indexed_json.merge( a.tafsir.__elasticsearch__.as_indexed_json ) } }
+                this_data = a.__elasticsearch__.as_indexed_json.merge( a.tafsir.__elasticsearch__.as_indexed_json )
+                ayah_data = a.ayah.__elasticsearch__.as_indexed_json
+                this_data.delete( 'ayah_key' )
+                ayah_data.delete( 'text' )
+                {   index:   {
+                    _id:     "#{a.tafsir.resource_id}:#{a.ayah_key}",
+                    data:    this_data.merge( { 'ayah' => ayah_data } )
+                } }
             end
-
             options = { transform: transform, batch_size: 6236 }.merge( options )
             self.importing options
         end

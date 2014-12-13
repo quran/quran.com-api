@@ -6,16 +6,27 @@ class Quran::TextToken < ActiveRecord::Base
     self.table_name = 'text_token'
     self.primary_key = 'id'
 
-    belongs_to :ayah, class_name: 'Quran::Ayah'
+    belongs_to :ayah, class_name: 'Quran::Ayah', foreign_key: 'ayah_key'
 
     # scope
     # default_scope { where surah_id: -1 }
 
-    def self.import(options = {})
-        transform = lambda do |a|
-            {index: {_id: "#{a.id}", _parent: a.ayah_key, data: a.__elasticsearch__.as_indexed_json}}
+    index_name 'text-token'
+
+    def self.import( options = {} )
+        Quran::TextToken.connection.cache do
+            transform = lambda do |a|
+                this_data = a.__elasticsearch__.as_indexed_json
+                ayah_data = a.ayah.__elasticsearch__.as_indexed_json
+                this_data.delete( 'ayah_key' )
+                ayah_data.delete( 'text' )
+                {   index:   {
+                    _id:     "#{a.id}",
+                    data:    this_data.merge( { 'ayah' => ayah_data } )
+                } }
+            end
+            options = { transform: transform, batch_size: 6236 }.merge( options )
+            self.importing options
         end
-        options = { transform: transform, batch_size: 6236 }.merge(options)
-        self.importing options
     end
 end

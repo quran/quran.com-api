@@ -51,17 +51,28 @@ module Searchable
             def self.delete_index( index_name = index_name )
                 Rails.logger.info "deleting #{ index_name } index"
 
-                if not self.__elasticsearch__.client.indices.exists index: index_name
-                    Rails.logger.warn "#{ index_name } didn't exist"
-                    return
-                end
+                # delete all the translation-* indices if the argument was just 'translation'
+                if index_name == 'translation'
+                    self.__elasticsearch__.client.cat.indices( index: 'translation-*', h: [ 'index' ], format: 'json' ).each do |d|
+                        self.__elasticsearch__.client.indices.delete index: d['index']
+                    end
+                else
+                    if not self.__elasticsearch__.client.indices.exists index: index_name
+                        Rails.logger.warn "#{ index_name } didn't exist"
+                        return
+                    end
 
-                self.__elasticsearch__.client.indices.delete index: index_name
+                    self.__elasticsearch__.client.indices.delete index: index_name
+                end
             end
 
             def self.create_index( index_name = index_name, extra_text_mapping_opts = {} )
                 Rails.logger.info "creating #{ index_name } index"
 
+#                if index_name == 'translation'
+#                    Rails.logger.debug "skipping create_index on translation because this is a hack"
+#                    return
+#                end
                 if self.__elasticsearch__.client.indices.exists index: index_name
                     Rails.logger.warn "#{ index_name } already exists"
                     return
@@ -71,7 +82,7 @@ module Searchable
                 mappings_all = YAML.load( File.read( File.expand_path( "#{Rails.root}/config/elasticsearch/mappings.yml", __FILE__ ) ) )
                 mappings     = {}
 
-                mappings[ 'ayah' ] = mappings_all[ 'ayah' ]
+                #mappings[ 'ayah' ] = mappings_all[ 'ayah' ]
                 if mappings_all.key? index_name
                     mappings[ 'data' ] = mappings_all[ index_name ]
                 elsif index_name.match( /-/ )
@@ -98,7 +109,7 @@ module Searchable
                 Rails.logger.debug( "index_name #{index_name} mappings #{mappings}" )
 
                 # NOTE 1.1 we want to import the stock ayah document because it serves as a "parent" across all indices
-                Quran::Ayah.import( { index: index_name, type: 'ayah' } )
+                #Quran::Ayah.import( { index: index_name, type: 'ayah' } )
             end
 
             def self.import_index( index_name = index_name, opts = {} )

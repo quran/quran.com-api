@@ -8,7 +8,7 @@ class Content::Translation < ActiveRecord::Base
 
     # relationships
     belongs_to :resource, class_name: 'Content::Resource'
-    belongs_to :ayah,     class_name: 'Quran::Ayah'
+    belongs_to :ayah,     class_name: 'Quran::Ayah', foreign_key: 'ayah_key'
 
     # scope
     # default_scope { where resource_id: 17 } # NOTE uncomment or modify to disable/experiment on the elasticsearch import
@@ -39,17 +39,20 @@ class Content::Translation < ActiveRecord::Base
                 end
 
                 transform = lambda do |a|
-                    translation_data                = a.__elasticsearch__.as_indexed_json
-                    resource_data                   = a.resource.__elasticsearch__.as_indexed_json
-                    language_data                   = a.resource.language.__elasticsearch__.as_indexed_json
-                    author_data                     = a.resource.author.__elasticsearch__.as_indexed_json
-                    source_data                     = a.resource.source.__elasticsearch__.as_indexed_json
-                   #translation_data[ '_analyzer' ] = language_data[ 'es_analyzer_default' ]
+                    this_data = a.__elasticsearch__.as_indexed_json
+                    ayah_data = a.ayah.__elasticsearch__.as_indexed_json
+                    this_data.delete( 'ayah_key' )
+                    ayah_data.delete( 'text' )
+
+                    resource_data = a.resource.__elasticsearch__.as_indexed_json
+                    language_data = a.resource.language.__elasticsearch__.as_indexed_json
+                    author_data   = a.resource.author.__elasticsearch__.as_indexed_json
+                    source_data   = a.resource.source.__elasticsearch__.as_indexed_json
+                   #this_data[ '_analyzer' ] = language_data[ 'es_analyzer_default' ]
 
                     { index: {
                             _id: "#{a.resource_id}:#{a.ayah_key}",
-                        _parent: a.ayah_key,
-                           data: translation_data.merge( { 'resource' => resource_data, 'language' => language_data, 'source' => source_data, 'author' => author_data } )
+                           data: this_data.merge( { 'ayah' => ayah_data, 'resource' => resource_data, 'language' => language_data, 'source' => source_data, 'author' => author_data } )
                     } }
                 end
 
