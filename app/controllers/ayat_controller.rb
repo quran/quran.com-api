@@ -1,5 +1,5 @@
 class AyatController < ApplicationController
-  def index
+    def self.index params = {}, headers = {}, session = {}
         # Set the variables
         @cardinalities, cut, @results = Hash.new, Hash.new, Hash.new
 
@@ -73,5 +73,10 @@ class AyatController < ApplicationController
         end
 
         @results = @results.values
-    end 
+    end
+
+    def index
+        render json: AyatController.query( params, request.headers, session )
+        return
+    end
 end

@@ -93,6 +93,7 @@ group :development, :test do
       gem 'pry-rails'
 end
 
+gem 'elasticsearch'
 
 # To allow CORS for the angular project
 # https://github.com/cyu/rack-cors

@@ -21,8 +21,9 @@ class Quran::TextRoot < ActiveRecord::Base
                 ayah_data = a.ayah.__elasticsearch__.as_indexed_json
                 this_data.delete( 'ayah_key' )
                 ayah_data.delete( 'text' )
+                ayah_data[ 'ayah_key' ].gsub!( /:/, '_' )
                 { index:      {
-                    _id:      "#{a.id}",
+                    _id:      "#{this_data['id'].gsub!( /:/, '_' )}",
                     data:     this_data.merge( { 'ayah' => ayah_data } )
                 } }
             end

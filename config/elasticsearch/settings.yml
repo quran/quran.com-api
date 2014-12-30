@@ -26,11 +26,6 @@ index:
             unique_tokens:
                 type: unique
                 only_on_same_position: true
-            arabic_synonym:
-                # this might break root/stem/lemma mapping, might need separate synonym lists for each class
-                type: synonym
-                expand: false
-                synonyms_path: analysis/arabic_synonym.txt
             arabic_ngram:
                 type: nGram
                 min_gram: 5
@@ -48,9 +43,6 @@ index:
             quran_font_to_token_synonym:
                 type: synonym
                 synonyms_path: analysis/synonym.text-font.to.text-token.txt
-            quran_font_to_token_stop:
-                type: stop
-                stopwords_path: analysis/stop.text-font.to.text-token.txt
             quran_token_to_lemma_synonym:
                 type: synonym
                 synonyms_path: analysis/synonym.text-token.to.text-lemma.txt
@@ -130,7 +122,6 @@ index:
                 tokenizer: whitespace
                 filter:
                     - quran_font_to_token_synonym
-                    - quran_font_to_token_stop
                     - arabic_normalization
                     - arabic_keywords
                     - icu_folding
@@ -140,14 +131,12 @@ index:
                 tokenizer: whitespace
                 filter:
                     - quran_font_to_token_synonym
-                    - quran_font_to_token_stop
                     - quran_token_to_lemma_synonym
                     - quran_token_to_lemma_stop
             quran_font_to_token_to_lemma_normalized:
                 tokenizer: whitespace
                 filter:
                     - quran_font_to_token_synonym
-                    - quran_font_to_token_stop
                     - quran_token_to_lemma_synonym
                     - quran_token_to_lemma_stop
                     - arabic_normalization
@@ -159,14 +148,12 @@ index:
                 tokenizer: whitespace
                 filter:
                     - quran_font_to_token_synonym
-                    - quran_font_to_token_stop
                     - quran_token_to_stem_synonym
 
             quran_font_to_token_to_stem_normalized:
                 tokenizer: whitespace
                 filter:
                     - quran_font_to_token_synonym
-                    - quran_font_to_token_stop
                     - quran_token_to_stem_synonym
                     - arabic_normalization
                     - arabic_keywords
@@ -177,7 +164,6 @@ index:
                 tokenizer: whitespace
                 filter:
                     - quran_font_to_token_synonym
-                    - quran_font_to_token_stop
                     - quran_token_to_root_synonym
                     - quran_token_to_root_stop
 
@@ -185,7 +171,6 @@ index:
                 tokenizer: whitespace
                 filter:
                     - quran_font_to_token_synonym
-                    - quran_font_to_token_stop
                     - arabic_normalization
                     - arabic_keywords
                     - icu_folding
@@ -195,7 +180,6 @@ index:
                 tokenizer: whitespace
                 filter:
                     - quran_font_to_token_synonym
-                    - quran_font_to_token_stop
                     - arabic_normalization
                     - arabic_keywords
                     - icu_folding
