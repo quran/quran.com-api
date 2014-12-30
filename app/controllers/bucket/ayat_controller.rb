@@ -1,7 +1,5 @@
 class Bucket::AyatController < ApplicationController
-
-
-    def index
+    def self.index params = {}, headers = {}, session = {}
         # Set the variables
         @cardinalities, cut, @results = Hash.new, Hash.new, Hash.new
 
@@ -69,5 +67,10 @@ class Bucket::AyatController < ApplicationController
         end
 
         @results = @results.values
+    end
+
+    def index
+        render json: Bucket::AyatController.query( params, request.headers, session )
+        return
     end
 end

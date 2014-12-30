@@ -43,6 +43,7 @@ class Content::Translation < ActiveRecord::Base
                     ayah_data = a.ayah.__elasticsearch__.as_indexed_json
                     this_data.delete( 'ayah_key' )
                     ayah_data.delete( 'text' )
+                    ayah_data[ 'ayah_key' ].gsub!( /:/, '_' )
 
                     resource_data = a.resource.__elasticsearch__.as_indexed_json
                     language_data = a.resource.language.__elasticsearch__.as_indexed_json
@@ -51,7 +52,7 @@ class Content::Translation < ActiveRecord::Base
                    #this_data[ '_analyzer' ] = language_data[ 'es_analyzer_default' ]
 
                     { index: {
-                            _id: "#{a.resource_id}:#{a.ayah_key}",
+                            _id: "#{a.resource_id}_#{ayah_data[ 'ayah_key' ]}",
                            data: this_data.merge( { 'ayah' => ayah_data, 'resource' => resource_data, 'language' => language_data, 'source' => source_data, 'author' => author_data } )
                     } }
                 end

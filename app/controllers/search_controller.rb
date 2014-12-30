@@ -11,6 +11,7 @@
 #      3. refactor code
 #      4. refine search, optimize for performance
 require 'awesome_print'
+require 'elasticsearch'
 class SearchController < ApplicationController
     def self.query params = {}, headers = {}, session = {}
         query = params[:q]
@@ -63,7 +64,7 @@ class SearchController < ApplicationController
 
             # handle the country code determined from their geolocation
             if session[ 'country_code' ]
-                # TODO this is NOT how we're going to do this
+                # TODO this is NOT how we're going to do thiاللَّهُ نُورُs
                 country_to_language_code = {}
                 File.open( '/usr/share/i18n/SUPPORTED' ).each do |line|
                     line.gsub! /[ .@].*/, ''
@@ -89,8 +90,10 @@ class SearchController < ApplicationController
                     # just give it double score because they chose it explicitly
                     boost_language_code[ lc ] = boost_language_code.values.max * 2
                 else
+
                     boost_language_code[ lc ] = 4
                 end
+
             end
 
             # fallback to doubling the boost on english queries if we haven't gotten anywhere
@@ -105,7 +108,7 @@ class SearchController < ApplicationController
             end
 
             search_params.merge!( {
-                index: [ 'trans*' ],
+                index: [ 'trans*', 'text-font' ],
                 body: {
                     indices_boost: indices_boost
                 }
@@ -113,16 +116,18 @@ class SearchController < ApplicationController
         end
 
         search_params.merge!( {
-            explain: true,
             type: 'data',
+
+            explain: true, # debugging... on or off?
         } )
 
+        # highlighting
         search_params[:body].merge!( {
             highlight: {
                 fields: {
                     text: {
                         type: 'fvh',
-                        matched_fields: [ 'text.root', 'text.stem_clean', 'text.lemma_clean', 'text.stemmed' ],
+                        matched_fields: [ 'text.root', 'text.stem_clean', 'text.lemma_clean', 'text.stemmed', 'text' ],
                         ## NOTE this set of commented options highlights up to the first 100 characters only but returns the whole string
                         #fragment_size: 100,
                         #fragment_offset: 0,
@@ -134,12 +139,19 @@ class SearchController < ApplicationController
                 tags_schema: 'styled',
                 #force_source: true
             },
+
+
+        } )
+
+        # query
+        search_params[:body].merge!( {
             query: {
                 bool: {
                     must: [ {
                     ## NOTE leaving this in for future reference
-                    #    term: {
-                    #        :'ayah.surah_id' => '2'
+                    #   terms: {
+                    #        :'ayah.surah_id' => [ 24 ]
+                    #        :'ayah.ayah_key' => [ '24_35' ]
                     #    }
                     #}, {
                         multi_match: {
@@ -151,83 +163,151 @@ class SearchController < ApplicationController
                     } ]
                 }
             },
-            _source: [ "text", "ayah.*" ],
+        } )
+
+        # other experimental stuff
+        search_params[:body].merge!( {
             fields: [ 'ayah.ayah_key', 'ayah.ayah_num', 'ayah.surah_id', 'ayah.ayah_index', 'text' ],
+            _source: [ "text", "ayah.*", "resource.*", "language.*" ],
+        } )
+
+        # aggregations
+        search_params[:body].merge!( {
+            aggs: {
+                by_ayah_key: {
+                    terms: {
+                        field: "ayah.ayah_key",
+                        size: 6236,
+                        order: {
+                            max_score: "desc"
+                        }
+                    },
+                    aggs: {
+                        max_score: {
+                            max: {
+                                script: "_score"
+                            }
+                        }
+                    }
+                }
+            },
+            size: 0
         } )
 
         #return search_params
 
+        client = Elasticsearch::Client.new # trace: true, log: true;
+        results = client.search( search_params )
+        #return results
+
+        total_hits = results[ 'hits' ][ 'total' ]
+        buckets = results[ 'aggregations' ][ 'by_ayah_key' ][ 'buckets' ]
+        imin = ( page - 1 ) * size
+        imax = page * size - 1
+        buckets_on_page = buckets[ imin .. imax ]
+        keys = buckets_on_page.map { |h| h[ 'key' ] }
+        doc_count = buckets_on_page.inject( 0 ) { |doc_count, h| doc_count + h[ 'doc_count' ] }
+
+        #return buckets
+        # restrict to keys on this page
+        search_params[:body][:query][:bool][:must].unshift( {
+            terms: {
+                :'ayah.ayah_key' => keys
+            }
+        } )
+
+        # limit to the number of docs we know we want
+        search_params[:body][:size] = doc_count
+
+        # get rid of the aggregations
+        search_params[:body].delete( :aggs )
+
+        #return search_params
+
+        # pull the new query with hits
+        results = client.search( search_params )
+        #return results
+
+        # override experimental
+        search_params_text_font = {
+            index: [ 'text-font' ],
+            type: 'data',
+            explain: false,
+            size: keys.length,
+            body: {
+                query: {
+                    ids: {
+                        type: 'data',
+                        values: keys.map { |k| "1_#{k}" }
+                    }
+                }
+            }
+        }
+        results_text_font = client.search( search_params_text_font )
+        ayah_key_to_font_text = results_text_font['hits']['hits'].map { |h| [ h['_source']['ayah']['ayah_key'], h['_source']['text'] ] }.to_h
+
         by_key = {}
 
-        window = ( size * 1.5 ).to_i
-        start = 0
+        results[ 'hits' ][ 'hits' ].each do |hit|
+            _source    = hit[ '_source' ]
+            _score     = hit[ '_score' ]
+            _highlight = ( hit.key?( 'highlight' ) && hit[ 'highlight' ].key?( 'text' ) ) ? hit[ 'highlight' ][ 'text' ].first : ''
+            _ayah      = _source[ 'ayah' ]
 
-        loop do
-            from = ( page - 1 ) * window + start
-            start = start + window
-            search_params.merge!( {
-                from: from,
-                size: window
-            } )
-
-            break if by_key.keys.length >= size
-
-            begin
-                results = Quran::Ayah.__elasticsearch__.client.search( search_params )
-            rescue Elasticsearch::Transport::Transport::Errors::BadRequest => e
-                return e
-            else
-                Rails.logger.debug( ap by_key )
-                Rails.logger.debug( "from #{ from } window #{ window } size #{size} length #{ by_key.keys.length } results #{ results[ 'hits' ][ 'hits' ].length } " )
-                #return results
-#                return "oops"
-            end
-
-            break if results[ 'hits' ][ 'hits' ].length == 0
-
-            # r['hits']['total']
-            #return results
-
-            results[ 'hits' ][ 'hits' ].each do |hit|
-                _source    = hit[ '_source' ]
-                _score     = hit[ '_score' ]
-                _highlight = ( hit.key?( 'highlight' ) && hit[ 'highlight' ].key?( 'text' ) ) ? hit[ 'highlight' ][ 'text' ].first : ''
-                ayah       = OpenStruct.new _source[ 'ayah' ]
-
-                # break out of this enumerable if we already gathered 20 ayahs, for example
-                break if by_key.keys.length == size and by_key[ ayah.ayah_key ] == nil
-
-                by_key[ ayah.ayah_key ] = {
-                    _index: hit[ '_index' ],
-                    _id: hit[ '_id' ],
-                    key:   ayah.ayah_key,
-                    ayah:  ayah.ayah_num,
-                    surah: ayah.surah_id,
-                    index: ayah.ayah_index,
-                    score: 0,
-                    match: {
-                        hits: 0,
-                        best: []
-                    },
-                    bucket: {
-                        surah: ayah.surah_id,
-                        ayah:  ayah.ayah_num,
-                        quran: {
-                            text: nil
-                        }
+            by_key[ _ayah[ 'ayah_key' ] ] = {
+                  key: _ayah[ 'ayah_key' ],
+                 ayah: _ayah[ 'ayah_num' ],
+                surah: _ayah[ 'surah_id' ],
+                index: _ayah[ 'ayah_index' ],
+                score: 0,
+                match: {
+                    hits: 0,
+                    best: []
+                },
+                bucket: {
+                    surah: _ayah[ 'surah_id' ],
+                    ayah:  _ayah[ 'ayah_num' ],
+                    quran: {
+                        text: nil
                     }
-                } if by_key[ ayah.ayah_key ] == nil
+                }
+            } if by_key[ _ayah[ 'ayah_key' ] ] == nil
 
-                result = by_key[ ayah.ayah_key ]
+            quran = by_key[ _ayah[ 'ayah_key' ] ][:bucket][:quran]
 
-                result[:score]        = _score if _score > result[:score]
-                result[:match][:hits] = result[:match][:hits] + 1
-                result[:match][:best].push( {
-                    text:      _source[ 'text' ],
-                    score:     _score,
-                    highlight: _highlight
-                } )
+            if hit[ '_index' ] == 'text-font' && _highlight.length
+                quran[:text] = _highlight
+            elsif ayah_key_to_font_text[ _ayah[ 'ayah_key' ] ]
+                quran[:text] = ayah_key_to_font_text[ _ayah[ 'ayah_key' ] ]
             end
+
+            result = by_key[ _ayah[ 'ayah_key' ] ]
+
+            if hit[ '_index' ] == 'text-font'
+                while _source['text'].match( /([\d]+)-([a-z0-9]+)/ )
+                    page = $1
+                    code = $2
+                    _source['text'].sub!( "#{page}-#{code}", "&#x#{code};" )
+                end
+            end
+
+            result[:score]        = _score if _score > result[:score]
+            result[:match][:hits] = result[:match][:hits] + 1
+            result[:match][:best].push( {
+                score:     _score,
+                highlight: _highlight,
+                source:    _source
+            } )
+        end
+
+        by_key.keys.each do |key|
+            quran = by_key[ key ][:bucket][:quran]
+            while quran[:text].match( /([\d]+)-([a-z0-9]+)/ )
+                quran[:page] = $1 if quran[:page] == nil
+                code = $2
+                quran[:text].sub!( "#{quran[:page]}-#{code}", "&#x#{code};" )
+            end
+
         end
 
         return by_key.keys.sort { |a,b| by_key[ b ][ :score ] <=> by_key[ a ][ :score ] } .map { |k| by_key[ k ] }
@@ -237,78 +317,5 @@ class SearchController < ApplicationController
         render json: SearchController.query( params, request.headers, session )
         return
         # Init the config hash and the output
-        config, @output = Hash.new, Hash.new
-
-        query = params[:q]
-
-        results = Quran::Ayah.search( query )
-
-        render json: results
-
-#        page  = ( params[:page] || "1" ).to_i
-#        size  = ( params[:size] || "20" ).to_i
-#
-#        # TODO ditch this types switch and instead set the index property to [ text*, tafsir ], trans*, or translation-* according to whatever is proper
-#        # if the query is pure Arabic, then we should only match against ayah text and tafsir types
-#        # if the query is pure ASCII, then it's either transliteration or a translation (probably english)
-#        # if the query is not pure ASCII and not Arabic, then it has to be a translation
-#
-#        config[:types] ||= [ "text*", "tafsir" ] if query =~ /^(?:\s*[\p{Arabic}\p{Diacritic}]+\s*)+$/
-#        config[:types] ||= [ "transl*"] if query =~ /^(?:\s*\p{ASCII}+\s*)+$/ # TODO some additional control to favor translation-en in this case (since it's pure ASCII)
-#        config[:types] ||= [ "translation-*" ] # this is what happens when we encounter an umlaut, for example
-#
-#        matched_parents = Quran::Ayah.matched_parents( query, config[:types] )
-#        ayah_keys = matched_parents.map { |tup| tup[0] }
-#
-#        # Search child models, i.e. found what hit against the set of ayah_keys above^
-#        matched_children = ( OpenStruct.new Quran::Ayah.matched_children( query, config[:types], ayah_keys ) ).responses
-#
-#        # Init results of matched parent and child array
-#        results = Array.new
-#
-#        matched_parents.each_with_index do |tup, index|
-#            source = tup[1]
-#            best = Array.new
-#
-#            score = 0
-#            matched_children[index]["hits"]["hits"].each do |hit|
-#                best.push( {
-#                    highlight: hit["highlight"]["text"].first,
-#                    score:     hit["_score"],
-#                    id:        hit["_source"]["resource_id"],
-#                    text:      hit["_source"]["text"]
-#                } )
-#                score = hit["_score"] if hit["_score"] > score
-#            end
-#
-#            ayah = {
-#                key:   source['ayah_key'],
-#                ayah:  source['ayah_num'],
-#                surah: source['surah_id'],
-#                index: source['ayah_index'],
-#                score: score, #ayah._score,
-#                match: {
-#                    hits: matched_children[index]["hits"]["total"],
-#                    best: best
-#                },
-#                bucket: {
-#                    surah: source['surah_id'],
-#                    quran: {
-#                        text: source['text']
-#                    },
-#                    ayah:  source['ayah_num']
-#                }
-#            }
-#            results.push(ayah)
-#        end
-#
-#        # NOTE due to the technical complexities of searching both the 'parent' set then subsequent 'child' sets
-#        # and merging the two result sets above, we manually do these two steps here:
-#        # a) capture the entire set of parent ayahs (which may be more then the desired pagination size), and
-#        # b) sort them by the highest scores of their child matches
-#        results.sort! { |a,b| b[:score] <=> a[:score] }
-#        results = results[ ( page - 1 ) * size, size ]
-#
-#        render json: results
     end
 end

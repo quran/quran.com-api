@@ -21,8 +21,12 @@ class Quran::TextFont < ActiveRecord::Base
                 ayah_data = a.ayah.__elasticsearch__.as_indexed_json
                 this_data.delete( 'ayah_key' )
                 ayah_data.delete( 'text' )
+                ayah_data[ 'ayah_key' ].gsub!( /:/, '_' )
+                _id = a.id
+                _id.gsub!( /:/, '_' )
+                this_data[ 'id' ] = _id
                 { index:      {
-                    _id:      "#{a.id}",
+                    _id:      "#{_id}",
                     data:     this_data.merge( { 'ayah' => ayah_data } )
                 } }
             end

@@ -286,6 +286,7 @@ DEPENDENCIES
   composite_primary_keys!
   dotenv-deployment
   dotenv-rails
+  elasticsearch
   elasticsearch-model
   elasticsearch-rails
   execjs
