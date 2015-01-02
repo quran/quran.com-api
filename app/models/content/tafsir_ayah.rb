@@ -23,9 +23,14 @@ class Content::TafsirAyah < ActiveRecord::Base
                 this_data.delete( 'ayah_key' )
                 ayah_data.delete( 'text' )
                 ayah_data[ 'ayah_key' ].gsub!( /:/, '_' )
+
+
+                resource_data = a.tafsir.resource.__elasticsearch__.as_indexed_json
+                language_data = a.tafsir.resource.language.__elasticsearch__.as_indexed_json
+
                 {   index:   {
                     _id:     "#{a.tafsir.resource_id}_#{ayah_data[ 'ayah_key' ]}",
-                    data:    this_data.merge( { 'ayah' => ayah_data } )
+                    data:    this_data.merge( { 'ayah' => ayah_data, 'resource' => resource_data, 'language' => language_data } )
                 } }
             end
             options = { transform: transform, batch_size: 6236 }.merge( options )

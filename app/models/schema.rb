@@ -13,6 +13,10 @@ module Schema
         @@schema_name
     end
 
+    def self.schema_name(module_name, schema_name)
+        @@schema_name[ "#{module_name}" ] = schema_name
+    end
+
     # When this module is included, callback this function
     def self.included( inc_mod )
         # Rails.logger.info "#{ inc_mod } included Schema"

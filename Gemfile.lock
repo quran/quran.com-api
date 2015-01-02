@@ -300,9 +300,8 @@ DEPENDENCIES
   parallel
   pg
   pry-byebug
-  rack-cors
   pry-rails
-languages also work. now we mostly need to work in the controller and refactor the model, but the elasticsearch settings/mappings and architecture should be pretty well configured
+  rack-cors
   rails!
   rb-readline
   ruby-progressbar
