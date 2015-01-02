@@ -48,13 +48,12 @@ class Content::Resource < ActiveRecord::Base
     # BUCKET RELATED
     def self.fetch_cardinalities(params)
         cardinality = Hash.new
-        cardinality[:quran] =  self.fetch_cardinality_quran(params[:quran]).first
-        cardinality[:content] =  self.fetch_cardinality_content(params[:content])
-
+        cardinality[:quran]   = self.fetch_cardinality_quran(params[:quran]).first if params.key? :quran
+        cardinality[:content] = self.fetch_cardinality_content(params[:content])   if params[:content] #.key? :content
         return cardinality
     end
+
     def self.fetch_cardinality_quran(params_quran)
-        
         self
         .joins('JOIN content.resource_api_version  using ( resource_id )')
         .select([:sub_type, :cardinality_type, :language_code, :slug, :is_available, :description, :name].map{ |term| "content.resource.#{term}" }.join(', '))
@@ -106,42 +105,30 @@ class Content::Resource < ActiveRecord::Base
                 cut[:join] = "join quran.char_type ct on ct.char_type_id = c.char_type_id"
             end
 
-            Content::Resource
+            r = Content::Resource
             .joins(join)
             .joins("JOIN quran.ayah using (ayah_key) ")
             .joins(cut[:join])
             .joins("left join quran.word w on w.word_id = c.word_id")
             .joins("left join quran.word_translation wt on w.word_id = wt.word_id and wt.language_code = 'en'")
             .joins("left join quran.token t on w.token_id = t.token_id")
-            .joins("left join quran.word_stem ws on w.word_id = ws.word_id")
-            .joins("left join quran.word_lemma wl on w.word_id = wl.word_id")
-            .joins("left join quran.word_root wr on w.word_id = wr.word_id")
-            .joins("left join quran.stem s on ws.stem_id = s.stem_id")
-            .joins("left join quran.stem s on ws.stem_id = s.stem_id")
-            .joins("left join quran.lemma l on wl.lemma_id = l.lemma_id")
-            .joins("left join quran.root qr on wr.root_id = qr.root_id")
             .where("content.resource.resource_id = ? ", params[:quran])
             .where("quran.ayah.ayah_key IN (?)", keys)
             .select("content.resource.resource_id")
             .select("c.*")
             .select(cut[:select])
             .select("wt.value word_translation
-                 , t.value word_arabic
-                 , l.value word_lemma
-                 , qr.value word_root
-                 , s.value word_stem")
+                 , t.value word_arabic" )
             .order("quran.ayah.surah_id, quran.ayah.ayah_num, c.position")
             .to_a # Must make it into an array to use the .uniq function otherwise will trigger ActiveResource
-            .uniq{|word| word.word_lemma && word.position} # Unique by the word_lemma & position. The reason for why lemma because that's where the word is from and position is in ayah
             .map do |word|
+                #Rails.logger.debug( "DEBUG DEBUG DEBUG" )
+                #Rails.logger.debug( "word_id #{ word.word_id }" )
                 {
                     ayah_key: word.ayah_key,
                     word: {
-                        stem: word.word_stem,
                         arabic: word.word_arabic,
-                        lemma: word.word_lemma,
                         id: word.word_id,
-                        root: word.word_root,
                         translation: word.word_translation
                     },
                     char: {
@@ -158,9 +145,11 @@ class Content::Resource < ActiveRecord::Base
                 }
             end
             .group_by{|a| a[:ayah_key]}.values
-                        
+#            r.first.each do |a|
+#                Rails.logger.debug( "FIRST #{ap a[:word]}" )
+#            end
+            return r
         end
-                
     end
 
     def self.bucket_results_content(row, keys)
@@ -173,7 +162,7 @@ class Content::Resource < ActiveRecord::Base
             self
             .joins(join)
             .joins("JOIN quran.ayah using ( ayah_key )")
-            .select("c.resource_id, quran.ayah.ayah_key, concat( '/', concat_ws( '/', '#{row.type}', '#{row.sub_type}', c.#{row.sub_type}_id ) ) url, content.resource.name")
+            .select("c.resource_id, quran.ayah.ayah_key, concat( '/', concat_ws( '/', '#{row.type}', '#{row.sub_type}', c.#{row.sub_type}_id ) ) url, content.resource.slug, content.resource.name")
             .where("content.resource.resource_id = ?", row.resource_id)
             .where("quran.ayah.ayah_key IN (?)", keys)
             .order("quran.ayah.surah_id , quran.ayah.ayah_num")
@@ -182,7 +171,7 @@ class Content::Resource < ActiveRecord::Base
             self
             .joins(join)
             .joins("join quran.ayah using ( ayah_key )")
-            .select("c.*, content.resource.name")
+            .select("c.*, content.resource.slug, content.resource.name")
             .where("content.resource.resource_id = ?", row.resource_id)
             .where("quran.ayah.ayah_key IN (?)", keys)
             .order("quran.ayah.surah_id , quran.ayah.ayah_num")

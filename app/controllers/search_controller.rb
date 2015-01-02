@@ -225,7 +225,7 @@ class SearchController < ApplicationController
         #return search_params
 
         # pull the new query with hits
-        results = client.search( search_params )
+        results = client.search( search_params ).deep_symbolize_keys
         #return results
 
         # override experimental
@@ -243,70 +243,184 @@ class SearchController < ApplicationController
                 }
             }
         }
-        results_text_font = client.search( search_params_text_font )
-        ayah_key_to_font_text = results_text_font['hits']['hits'].map { |h| [ h['_source']['ayah']['ayah_key'], h['_source']['text'] ] }.to_h
+        results_text_font = client.search( search_params_text_font ).deep_symbolize_keys
+        ayah_key_to_font_text = results_text_font[:hits][:hits].map { |h| [ h[:_source][:ayah][:ayah_key], h[:_source][:text] ] }.to_h
+        ayah_key_to_font_text = {}
+        ayah_key_hash = {}
 
         by_key = {}
 
-        results[ 'hits' ][ 'hits' ].each do |hit|
-            _source    = hit[ '_source' ]
-            _score     = hit[ '_score' ]
-            _highlight = ( hit.key?( 'highlight' ) && hit[ 'highlight' ].key?( 'text' ) ) ? hit[ 'highlight' ][ 'text' ].first : ''
-            _ayah      = _source[ 'ayah' ]
+        results[:hits][:hits].each do |hit|
+            _source    = hit[:_source]
+            _score     = hit[:_score]
+            _text = ( hit.key?( :highlight ) && hit[ :highlight ].key?( :text ) && hit[ :highlight ][ :text ].first.length ) ? hit[ :highlight ][ :text ].first : _source[ :text ]
+            _ayah      = _source[:ayah]
 
-            by_key[ _ayah[ 'ayah_key' ] ] = {
-                  key: _ayah[ 'ayah_key' ],
-                 ayah: _ayah[ 'ayah_num' ],
-                surah: _ayah[ 'surah_id' ],
-                index: _ayah[ 'ayah_index' ],
+            by_key[ _ayah[:ayah_key] ] = {
+                  key: _ayah[:ayah_key],
+                 ayah: _ayah[:ayah_num],
+                surah: _ayah[:surah_id],
+                index: _ayah[:ayah_index],
                 score: 0,
                 match: {
                     hits: 0,
                     best: []
-                },
-                bucket: {
-                    surah: _ayah[ 'surah_id' ],
-                    ayah:  _ayah[ 'ayah_num' ],
-                    quran: {
-                        text: nil
-                    }
                 }
-            } if by_key[ _ayah[ 'ayah_key' ] ] == nil
+            } if by_key[ _ayah[:ayah_key] ] == nil
 
-            quran = by_key[ _ayah[ 'ayah_key' ] ][:bucket][:quran]
+            #quran = by_key[ _ayah[ 'ayah_key' ] ][:bucket][:quran]
+            result = by_key[ _ayah[:ayah_key] ]
 
-            if hit[ '_index' ] == 'text-font' && _highlight.length
-                quran[:text] = _highlight
-            elsif ayah_key_to_font_text[ _ayah[ 'ayah_key' ] ]
-                quran[:text] = ayah_key_to_font_text[ _ayah[ 'ayah_key' ] ]
-            end
 
-            result = by_key[ _ayah[ 'ayah_key' ] ]
+            #id name slug text lang dir
+            extension = {
+                text: _text,
+                score: _score,
+            }.merge( _source[:resource] ? {
+                id: _source[:resource][:resource_id],
+                name: _source[:resource][:name],
+                slug: _source[:resource][:slug],
+                lang: _source[:resource][:language_code],
+            } : {} )
+            .merge( _source[:language] ? {
+                dir: _source[:language][:direction],
+            } : {} )
+#            .merge( { debug: hit } )
 
-            if hit[ '_index' ] == 'text-font'
-                while _source['text'].match( /([\d]+)-([a-z0-9]+)/ )
-                    page = $1
-                    code = $2
-                    _source['text'].sub!( "#{page}-#{code}", "&#x#{code};" )
-                end
+            if hit[:_index] == 'text-font' && _text.length
+                extension[:_do_interpolate] = true
             end
 
             result[:score]        = _score if _score > result[:score]
             result[:match][:hits] = result[:match][:hits] + 1
-            result[:match][:best].push( {
-                score:     _score,
-                highlight: _highlight,
-                source:    _source
-            } )
+            result[:match][:best].push( {}.merge!( extension ) )
         end
 
-        by_key.keys.each do |key|
-            quran = by_key[ key ][:bucket][:quran]
-            while quran[:text].match( /([\d]+)-([a-z0-9]+)/ )
-                quran[:page] = $1 if quran[:page] == nil
-                code = $2
-                quran[:text].sub!( "#{quran[:page]}-#{code}", "&#x#{code};" )
+        word_id_hash = {}
+        word_id_to_highlight = {}
+
+        # attribute the "bucket" structure for each ayah result
+        by_key.values.each do |result|
+            result[:bucket] = Bucket::AyatController.index( { surah: result[:surah], ayah: result[:ayah], content: params[:content] } ).first
+            if result[:bucket][:content]
+                resource_id_to_bucket_content_index = {}
+                result[:bucket][:content].each_with_index do | c, i |
+                    resource_id_to_bucket_content_index[ c[:id].to_i ] = i
+                end
+
+                #
+                result[:match][:best].each do |b|
+                    id = b[:id].to_i
+
+                    if index = resource_id_to_bucket_content_index[ id ]
+                        result[:bucket][:content][ index ][:text] = b[:text]
+                    end
+                end
             end
+
+            result[:match][:best].each do |h|
+                if h.delete( :_do_interpolate )
+                    t = h[:text].split( '' )
+                    parsed = { word_ids: [] }
+                    for i in 0 .. t.length - 1
+                        # state logic
+                        # if its in a highlight tag
+                            # if its in the class value
+                        # if its in a word id
+                            # if its a start index
+                            # if its an end index
+                        # if its highlighted
+                        parsed[:a_number] = t[i].match( /\d/ ) ? true : false
+                        parsed[:a_start_index] = false
+                        parsed[:an_end_index] = false
+
+                        if not parsed[:in_highlight_tag] and t[i] == '<'
+                            parsed[:in_highlight_tag] = true
+                        elsif parsed[:in_highlight_tag] and t[i] == '<'
+                            parsed[:in_highlight_tag] = false
+                        end
+
+                        if parsed[:in_highlight_tag] and not parsed[:in_class_value] and t[i-1] == '"' and t[i-2] == '='
+                            parsed[:in_class_value] = true
+                        elsif parsed[:in_highlight_tag] and parsed[:in_class_value] and t[i] == '"'
+                            parsed[:in_class_value] = false
+                        end
+
+                        if parsed[:a_number] and ( i == 0 or ( t[i-1] == ' ' or t[i-1] == '>' ) )
+                            parsed[:in_word_id] = true
+                            parsed[:a_start_index] = true
+                        elsif not parsed[:a_number] and parsed[:in_word_id]
+                            parsed[:in_word_id] = false
+                        end
+
+                        if parsed[:in_word_id] and ( i == t.length - 1 or ( t[i+1] == ' ' or t[i+1] == '<' ) )
+                            parsed[:an_end_index] = true
+                        end
+
+                        # control logic
+                        if i == 0
+                            parsed[:current] = { word_id: [], indices: [], highlight: [] }
+                        end
+
+
+                        if parsed[:in_class_value]
+                            parsed[:current][:highlight].push( t[i] )
+                        end
+
+                        if parsed[:in_word_id]
+
+                            parsed[:current][:word_id].push( t[i] )
+
+                            if parsed[:a_start_index]
+                                parsed[:current][:indices][0] = i
+                            end
+
+                            if parsed[:an_end_index]
+                                parsed[:current][:indices][1] = i
+                                parsed[:current][:word_id] = parsed[:current][:word_id].join( '' )
+                                parsed[:current][:highlight] = parsed[:current][:highlight].join( '' )
+                                if not parsed[:current][:highlight].length > 0
+                                    parsed[:current].delete( :highlight )
+                                end
+
+                                if parsed[:current].key?( :highlight )
+                                    word_id_to_highlight[ parsed[:current][:word_id].to_i ] = true
+                                end
+
+                                parsed[:word_ids].push( parsed[:current] )
+                                parsed[:current] = { word_id: [], indices: [], highlight: [] }
+                            end
+                        end
+                    end
+
+
+                    if parsed[:word_ids].length > 0
+                        # init the word_id_hash
+                        result[:bucket][:quran].each do |h|
+                            word_id_hash[ h[:word][:id].to_s.to_sym ] = { text: h[:word][:arabic] } if h[:word][:id]
+                            if word_id_to_highlight.key? h[:word][:id].to_i
+                                h[:highlight] = true
+                            end
+                        end
+
+                        parsed[:word_ids].each do |p|
+                            word_id = p[:word_id] #.delete :word_id
+                            word_id_hash[ word_id.to_s.to_sym ].merge!( p )
+                        end
+                    end
+
+                    word_id_hash.each do |id,h|
+                        for i in h[:indices][0]  .. h[:indices][1]
+                            t[i] = nil
+                        end
+                        t[ h[:indices][0] ] = h[:text]
+                    end
+                    h[:text] = t.join( '' )
+
+                end
+
+            end
+
 
         end
 

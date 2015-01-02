@@ -3,9 +3,17 @@ class Bucket::AyatController < ApplicationController
         # Set the variables
         @cardinalities, cut, @results = Hash.new, Hash.new, Hash.new
 
+        # require the surah parameter
+        raise APIValidation, 'missing required surah parameter' if not params.key? :surah
 
         # The range of which the ayahs to search
-        range = params[:range].split("-")
+        range = params.key?( :ayah ) ? [ params[:ayah] ] : params[:range].split("-")
+
+        # require either an ayah or range parameter
+        raise APIValidation, 'missing required range or ayah parameter' if not range.length > 0
+
+        # default select the word font for the quran parameter
+        params[:quran] ||= 1
 
         # Raise error whenever the range is more than 50
         # The database would take too long to process
@@ -34,37 +42,53 @@ class Bucket::AyatController < ApplicationController
         @cardinalities = Content::Resource.fetch_cardinalities(params)
 
         # The cardinalities for the quran
-        @cardinalities[:quran].bucket_results_quran(params, keys).each do |ayah|
-            if ayah.kind_of?(Array)
-                @results["#{ayah.first[:ayah_key]}".to_sym][:quran] = ayah
-            else
-                @results["#{ayah[:ayah_key]}".to_sym][:quran] = ayah
+        if @cardinalities.key? :quran
+            @cardinalities[:quran].bucket_results_quran(params, keys).each do |ayah|
+                #Rails.logger.debug( "each ayah #{ ap ayah }" )
+                if ayah.kind_of?(Array)
+                    @results["#{ayah.first[:ayah_key]}".to_sym][:quran] = ayah
+                else
+                    @results["#{ayah[:ayah_key]}".to_sym][:quran] = ayah
+                end
             end
         end
 
         # Fetch the content corresponding to the the ayah keys and the content requested.
-        @cardinalities[:content].each do |row|
-            Content::Resource.bucket_results_content(row, keys).each do |ayah|
-                @results["#{ayah.ayah_key}".to_sym][:content] << { name: ayah.name }.merge( ayah.has_attribute?( :text ) ? { text: ayah.text } : {} ).merge( ayah.has_attribute?( :url ) ? { url: ayah.url } : {} )
+        if @cardinalities.key? :content
+            @cardinalities[:content].each do |row|
+                Content::Resource.bucket_results_content(row, keys).each do |ayah|
+                    #Rails.logger.debug( "aYAH #{ap ayah.as_json.deep_symbolize_keys}" )
+                    @results["#{ayah.ayah_key}".to_sym][:content] << { id: ayah.id, name: ayah.name, slug: ayah.slug }.merge( ayah.has_attribute?( :text ) ? { text: ayah.text } : {} ).merge( ayah.has_attribute?( :url ) ? { url: ayah.url } : {} )
+                end
             end
         end
 
-        Audio::File.fetch_audio_files(params, keys).each do |ayah|
-            @results["#{ayah.ayah_key}".to_sym][:audio] = {
-                ogg: 
-                    {
-                        url: ayah.ogg_url, 
-                        duration: ayah.ogg_duration, 
-                        mime_type: ayah.ogg_mime_type
-                    }, 
-                mp3: 
-                    {
-                        url: ayah.mp3_url, 
-                        duration: ayah.mp3_duration, 
-                        mime_type: ayah.mp3_mime_type
-                    } 
-            }
+        if params.key? :audio
+            Audio::File.fetch_audio_files(params, keys).each do |ayah|
+                @results["#{ayah.ayah_key}".to_sym][:audio] = {
+                    ogg: 
+                        {
+                            url: ayah.ogg_url, 
+                            duration: ayah.ogg_duration, 
+                            mime_type: ayah.ogg_mime_type
+                        }, 
+                    mp3: 
+                        {
+                            url: ayah.mp3_url, 
+                            duration: ayah.mp3_duration, 
+                            mime_type: ayah.mp3_mime_type
+                        } 
+                }
+            end
         end
+
+        # do some trimming
+        keys.each do |ayah_key|
+            @results["#{ayah_key}".to_sym].delete( :content ) if not @results["#{ayah_key}".to_sym][:content].length > 0
+            @results["#{ayah_key}".to_sym].delete( :audio   ) if not @results["#{ayah_key}".to_sym][:audio].length > 0
+        end
+
+
 
         @results = @results.values
     end
