@@ -384,7 +384,7 @@ class SearchController < ApplicationController
                                 end
 
                                 if parsed[:current].key?( :highlight )
-                                    word_id_to_highlight[ parsed[:current][:word_id].to_i ] = true
+                                    word_id_to_highlight[ parsed[:current][:word_id].to_i ] = parsed[:current][:highlight] #true
                                 end
 
                                 parsed[:word_ids].push( parsed[:current] )
@@ -399,7 +399,7 @@ class SearchController < ApplicationController
                         result[:bucket][:quran].each do |h|
                             word_id_hash[ h[:word][:id].to_s.to_sym ] = { text: h[:word][:arabic] } if h[:word][:id]
                             if word_id_to_highlight.key? h[:word][:id].to_i
-                                h[:highlight] = true
+                                h[:highlight] = word_id_to_highlight[ h[:word][:id] ]
                             end
                         end
 
