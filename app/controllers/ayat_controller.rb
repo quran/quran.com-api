@@ -93,6 +93,5 @@ class AyatController < ApplicationController
 
     def index
         render json: AyatController.query( params, request.headers, session )
-        return
     end
 end
