@@ -94,7 +94,7 @@ class Bucket::AyatController < ApplicationController
     end
 
     def index
-        render json: Bucket::AyatController.query( params, request.headers, session )
+        render json: Bucket::AyatController.index( params, request.headers, session )
         return
     end
 end
