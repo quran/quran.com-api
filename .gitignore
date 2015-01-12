@@ -16,3 +16,6 @@
 /tmp
 .*.sw*
 .tmp/
+
+config/deploy.rb
+vendor/cache

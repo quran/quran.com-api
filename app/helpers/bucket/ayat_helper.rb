@@ -1,2 +1,0 @@
-module Bucket::AyatHelper
-end

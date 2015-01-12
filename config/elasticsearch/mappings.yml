@@ -1,0 +1,77 @@
+---
+ayah:
+    _source: { enabled: true }
+    properties:
+        ayah_index: { type: integer, index: not_analyzed }
+        surah_id:   { type: integer, index: not_analyzed }
+        ayah_num:   { type: integer, index: not_analyzed }
+        page_num:   { type: integer, index: not_analyzed }
+        juz_num:    { type: integer, index: not_analyzed }
+        hizb_num:   { type: integer, index: not_analyzed }
+        rub_num:    { type: integer, index: not_analyzed }
+        sajdah:     { type: string,  index: not_analyzed }
+        text:       { type: string,  index: not_analyzed }
+        ayah_key:   { type: string,  index: not_analyzed }
+text:
+    _parent: { type: ayah }
+    _routing: { required: true, path: ayah_key }
+    properties:
+        text: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index, norms: { enabled: false }   }
+text_root:
+    _parent: { type: ayah }
+    _routing: { required: true, path: ayah_key }
+    properties:
+        text: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index, norms: { enabled: false }   }
+
+text_token:
+    _parent: { type: ayah }
+    _routing: { required: true, path: ayah_key }
+    properties:
+        text: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index, norms: { enabled: false }  }
+        clean: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index, norms: { enabled: false }   }
+#                    text:
+#                        type: string
+#                        term_vector: with_positions_offsets_payloads
+#                        index: analyzed
+#                        fields:
+#                            ngram:
+#                                type: string
+#                                term_vector: with_positions_offsets_payloads
+#                                index: analyzed
+#                                index_analyzer:  arabic_ngram_index
+#                                search_analyzer: arabic_ngram_query
+#                            facet:
+#                                type: string
+#                                term_vector: with_positions_offsets_payloads
+#                                index: analyzed
+#                                index_analyzer:  arabic_facet_index
+#                                search_analyzer: arabic_facet_query
+text_stem:
+    _parent: { type: ayah }
+    _routing: { required: true, path: ayah_key }
+    properties:
+        text: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index, norms: { enabled: false }   }
+        clean: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index, norms: { enabled: false }   }
+text_lemma:
+    _parent: { type: ayah }
+    _routing: { required: true, path: ayah_key }
+    properties:
+        text: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index, norms: { enabled: false }   }
+        clean: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index, norms: { enabled: false }   }
+translation:
+    _parent: { type: ayah }
+    _routing: { required: true, path: ayah_key }
+    properties:
+        # NOTE: disabling field norms because it seemed to mess up relevance scoring
+        # http://www.elasticsearch.org/guide/en/elasticsearch/guide/current/scoring-theory.html#field-norm
+        text: { type: string, term_vector: with_positions_offsets_payloads, norms: { enabled: false } }
+transliteration:
+    _parent: { type: ayah }
+    _routing: { required: true, path: ayah_key }
+    properties:
+        text: { type: string, term_vector: with_positions_offsets_payloads, norms: { enabled: false } }
+tafsir:
+    _parent: { type: ayah }
+    _routing: { required: true, path: ayah_key }
+    properties:
+        text: { type: string, term_vector: with_positions_offsets_payloads, index: analyzed, search_analyzer: arabic_search, index_analyzer: arabic_index, norms: { enabled: false }  }

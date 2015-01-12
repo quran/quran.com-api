@@ -2,17 +2,20 @@ source 'https://rubygems.org'
 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.1.1'
+#gem 'rails', '4.1.1'
+gem 'rails', github: 'rails/rails' #:git => 'git://github.com/rails/rails.git' 
+
 # Use postgresql as the database for Active Record
 gem 'pg'
 # Use SCSS for stylesheets
-gem 'sass-rails', '~> 4.0.3'
+#gem 'sass-rails' #, '~> 4.0.3'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .js.coffee assets and views
 gem 'coffee-rails', '~> 4.0.0'
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-# gem 'therubyracer',  platforms: :ruby
+gem 'execjs'
+gem 'therubyracer',  platforms: :ruby
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
@@ -37,6 +40,58 @@ gem 'spring',        group: :development
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
-
+# 
+# Rails console to work
 gem 'rb-readline'
-gem 'composite_primary_keys'
+
+# composite primary keys
+gem 'composite_primary_keys', {
+    :git => 'git://github.com/composite-primary-keys/composite_primary_keys.git',
+    :branch => 'ar_4.2.x'
+}
+
+# Printing in console made easy. Simple run or add Rails.logger.ap #YOUR_VAR
+gem 'awesome_print'
+
+
+
+# For deploying
+gem 'capistrano', group: :development
+gem 'capistrano-rails', group: :development
+gem 'capistrano-bundler', group: :development
+gem 'capistrano-rvm', group: :development
+gem 'capistrano-touch-linked-files', group: :development
+
+# This is for env variables
+gem 'dotenv-rails'
+gem 'dotenv-deployment'
+
+# Elasticsearch
+gem 'elasticsearch-model' 
+gem 'elasticsearch-rails'
+
+
+# This is for batching the Content::Translation, batches based on the string primary keys
+gem 'batchelor' 
+
+# Paging the results
+# gem 'will_paginate'
+gem 'kaminari'
+
+
+gem 'yaml_db', github: 'sharabash/yaml_db'
+gem 'sass-rails', github: 'rails/sass-rails' # '~> 4.0.3'
+
+# This is to run the rake task for importing in parallel
+gem 'parallel'
+# Will provide a progress bar as the import happens
+gem 'ruby-progressbar'
+
+group :development, :test do
+      gem 'jazz_hands', github: 'nixme/jazz_hands', branch: 'bring-your-own-debugger'
+      gem 'pry-byebug'
+end
+
+# To allow CORS for the angular project
+# https://github.com/cyu/rack-cors
+gem 'rack-cors', :require => 'rack/cors'

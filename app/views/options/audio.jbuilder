@@ -1,6 +1,4 @@
-
 json.array! @results do |result|
-
     json.reciter do 
         json.slug result["reciter_slug"]
         json.id result["reciter_id"]
@@ -11,7 +9,7 @@ json.array! @results do |result|
     end
     json.style do 
         json.slug result["style_slug"]
-        json.id result["reciter_id"]
+        json.id result["style_id"]
     end
     json.id result["id"].to_i
 end

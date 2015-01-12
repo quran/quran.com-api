@@ -1,0 +1,99 @@
+index:
+    number_of_shards: 1
+    analysis:
+# TODO make the unicode stuff under mappings declaration decoded
+# because ruby YAML can't read it as is
+#        char_filter:
+#            arabic_normalization_extra:
+#                type: mapping
+#                mappings: [ "\x{670}=>ا", "ٰ=>ا", "ٱ=>ا", "آ=>ا", "ٖ=>ا" ]
+        filter:
+            unique_tokens:
+                type: unique
+                only_on_same_position: true
+            arabic_synonym:
+                # this might break root/stem/lemma mapping, might need separate synonym lists for each class
+                type: synonym
+                expand: false
+                synonyms_path: analysis/arabic_synonym.txt
+            arabic_ngram_front:
+                type: edgeNGram
+                side: front
+                min_gram: 2
+                max_gram: 20
+            arabic_ngram_back:
+                type: edgeNGram
+                side: back
+                min_gram: 2
+                max_gram: 20
+            arabic_stop:
+                type: stop
+                stopwords: _arabic_
+            arabic_keywords:
+                type: keyword_marker
+                keywords:
+                    - الله
+            arabic_stemmer:
+                type: stemmer
+                language: arabic
+        analyzer:
+            arabic_ngram_index:
+                tokenizer: standard
+#                char_filter: [ arabic_normalization_extra ]
+                filter:
+                    - lowercase
+                    - arabic_normalization
+                    - arabic_keywords
+                    - unique_tokens
+            arabic_ngram_query:
+                tokenizer: standard
+                filter:
+                    - lowercase
+                    - arabic_normalization
+                    - arabic_keywords
+                    - unique_tokens
+            arabic_facet_index:
+                tokenizer: standard
+                filter:
+                    - lowercase
+                    - arabic_normalization
+                    - arabic_keywords
+                    - arabic_ngram_front
+                    - arabic_ngram_back
+                    - unique_tokens
+            arabic_facet_query:
+                tokenizer: standard
+                filter:
+                    - lowercase
+                    - arabic_normalization
+                    - arabic_keywords
+                    - unique_tokens
+            # deprecated
+            arabic_search:
+                tokenizer: standard
+                filter:
+                    - lowercase
+                    - arabic_stop
+                    - arabic_synonym
+                    - arabic_normalization
+                    - arabic_keywords
+                    - unique_tokens
+            arabic_index:
+                tokenizer: standard
+                filter:
+                    - lowercase
+                    - arabic_stop
+                    - arabic_synonym
+                    - arabic_normalization
+                    - arabic_keywords
+                    - arabic_ngram_front
+                    - arabic_ngram_back
+                    - unique_tokens
+            arabic:
+                tokenizer: standard
+                filter:
+                    - lowercase
+                    - arabic_stop
+                    - arabic_normalization
+                    - arabic_keywords
+                    - arabic_stemmer

@@ -3,7 +3,7 @@ class Quran::Ayah < ActiveRecord::Base
 
     self.table_name = 'ayah'
     self.primary_key = 'ayah_key'
-
+    # Rails.logger.ap self.table_name
     belongs_to :surah, class_name: 'Quran::Surah'
 
     has_many :words, class_name: 'Quran::Word', foreign_key: 'ayah_key'
@@ -22,4 +22,166 @@ class Quran::Ayah < ActiveRecord::Base
     has_many :tafsirs, class_name: 'Content::Tafsir', through: :_tafsir_ayah
     has_many :translations, class_name: 'Content::Translation', foreign_key: 'ayah_key'
     has_many :transliterations, class_name: 'Content::Transliteration', foreign_key: 'ayah_key'
+
+    # The relationships below were created as database-side views for use with elasticsearch
+    has_many :text_roots,  class_name: 'Quran::TextRoot', foreign_key: 'ayah_key'
+    has_many :text_lemmas, class_name: 'Quran::TextLemma', foreign_key: 'ayah_key'
+    has_many :text_stems,  class_name: 'Quran::TextStem', foreign_key: 'ayah_key'
+    has_many :text_tokens, class_name: 'Quran::TextToken', foreign_key: 'ayah_key'
+
+    def self.fetch_ayahs(surah_id, from, to)
+        self
+        .where("quran.ayah.surah_id = ? AND quran.ayah.ayah_num >= ? AND quran.ayah.ayah_num <= ?", surah_id, from, to)
+        .order("quran.ayah.surah_id, quran.ayah.ayah_num")
+        
+    end
+
+
+
+    ############### ES FUNCTIONS ################################################################# 
+
+    # This function affects the indexed JSON for
+    # Quran::Ayah.import
+    # def as_indexed_json(options={})
+    #   self.as_json(
+    #     include: {
+    #         translations: {
+    #             only: [:resource_id, :ayah_key, :text],
+    #             # methods: [:resource_info]
+    #             # include: {
+    #             #     resource: {
+    #             #         only: [:slug, :name, :type]
+    #             #     }
+    #             # }
+    #         }
+
+    #     })
+    # end
+
+    # Get all the mappings!
+    # curl -XGET 'http://localhost:9200/_all/_mapping'
+    # curl -XGET 'http://localhost:9200/_mapping'
+    #
+    # Example: https://gist.github.com/karmi/3200212
+    mapping _source: { enabled: true }  do
+      indexes :ayah_index, type: "integer"
+      indexes :surah_id, type: "integer"
+      indexes :ayah_num, type: "integer"
+      indexes :page_num, type: "integer"
+      indexes :juz_num, type: "integer"
+      indexes :hizb_num, type: "integer"
+      indexes :rub_num, type: "integer"
+      indexes :text, type: "string"
+      indexes :ayah_key, type: "string"
+
+    end
+
+    # NOTE I removed this function and refactored it into the matched_products and matched_children
+    # methods below, but I'm leaving the stub here so that perhaps we can encapsulate the independent
+    # searching of each set and subsequent merging of the two sets here instead of in SearchController.query
+    # later on
+    def self.search( query, page = 1, size = 20, types )
+    end
+
+    # NOTE I split these functions into matched_parents and matched_blah_query so that I could properly
+    # debug them from the rails console
+    def self.matched_parents( query, types )
+        query_hash = self.matched_parents_query( query, types )
+        # Matched parent ayahs
+        # NOTE: we need to get all possible ayahs because the result set is not yet sorted by relevance,
+        # which is apparently a limitation of 'has_child', so we'll set the pagination size to 6236 (the entire set of ayahs in the quran)
+        matched_parents = searching( query_hash ).page( 1 ).per( 6236 )
+    end
+
+    def self.matched_parents_query( query, types )
+        # This seperates the dot within the schema of PSQL to match the mappings
+        types = types.map{|t| t.split(".").last}
+
+        should_array = Array.new
+
+        types.each do |type|
+            should_array.push( {
+                has_child: {
+                    type: type,
+                    query: {
+                        match: {
+                            text: {
+                                query: query,
+                                minimum_should_match: '3<62%'
+                            }
+                        }
+                    }
+                }
+            } )
+        end
+
+        # The query hash
+        query_hash = {
+            query: {
+                bool: {
+                    should: should_array,
+                    minimum_number_should_match: 1
+                }
+            }
+        }
+    end
+
+    def self.matched_children( query, types, ayat = [] )
+        msearch_query = self.matched_children_query( query, types, ayat )
+        self.__elasticsearch__.client.msearch( msearch_query )
+    end
+
+    def self.matched_children_query( query, types, ayat = [] )
+        msearch_body = []
+        ayat.each do |ayah_key|
+            ayah = {
+                search: {
+                    highlight: {
+                        fields: {
+                            text: {
+                                type: 'fvh',
+                                number_of_fragments: 1,
+                                fragment_size: 1024
+                            }
+                        },
+                        tags_schema: 'styled'
+                    },
+                    # fields: [:ayah_key],
+                    # explain: true, # This will explain why the scoring is done in such a way, use for debugging! 
+                    # fielddata_fields: ["ayah_key"], # this will split each of the words into an array
+                    query: {
+                        bool: {
+                            must: [ {
+                                term: {
+                                    _parent: {
+                                        value: ayah_key
+                                    }
+                                }
+                            }, {
+                                match: {
+                                    text: {
+                                        query: query,
+                                        minimum_should_match: '3<62%'
+                                    }
+                                }
+                            } ]
+                        }
+                    },
+                    size: 3 # limit number of child hits per ayah, i.e. bring back no more then 3 hits per ayah
+                }
+            }
+            msearch_body.push( ayah )
+        end
+
+        msearch_query = {
+            index: 'quran',
+            type: types,
+            body: msearch_body
+        }
+    end
+
+    def self.import(options = {})
+        options = { batch_size: 6236 }.merge(options)
+        self.importing options
+    end
 end

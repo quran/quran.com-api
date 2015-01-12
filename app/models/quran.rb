@@ -1,4 +1,5 @@
 module Quran
-  include Schema
-  @@schema_name = 'quran'
+    include Schema
+
+    Schema.schema_name = 'quran'
 end
