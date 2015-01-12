@@ -154,15 +154,15 @@ class Content::Resource < ActiveRecord::Base
 
     def self.bucket_results_content(row, keys)
         if row.cardinality_type == 'n_ayah'
-            join = "JOIN #{row.type}.#{row.sub_type} c using ( resource_id ) JOIN #{row.type}.#{row.sub_type}_ayah n using ( #{row.sub_type}_id )"
+            join = "JOIN i18n.language l using ( language_code ) JOIN #{row.type}.#{row.sub_type} c using ( resource_id ) JOIN #{row.type}.#{row.sub_type}_ayah n using ( #{row.sub_type}_id )"
         elsif row.cardinality_type == '1_ayah'
-            join = "JOIN #{row.type}.#{row.sub_type} c using ( resource_id )"
+            join = "JOIN i18n.language l using ( language_code ) JOIN #{row.type}.#{row.sub_type} c using ( resource_id )"
         end
         if row.cardinality_type == 'n_ayah'
             self
             .joins(join)
             .joins("JOIN quran.ayah using ( ayah_key )")
-            .select("c.resource_id, quran.ayah.ayah_key, concat( '/', concat_ws( '/', '#{row.type}', '#{row.sub_type}', c.#{row.sub_type}_id ) ) url, content.resource.slug, content.resource.name")
+            .select("c.resource_id, l.language_code lang, l.direction dir, quran.ayah.ayah_key, concat( '/', concat_ws( '/', '#{row.type}', '#{row.sub_type}', c.#{row.sub_type}_id ) ) url, content.resource.slug, content.resource.name")
             .where("content.resource.resource_id = ?", row.resource_id)
             .where("quran.ayah.ayah_key IN (?)", keys)
             .order("quran.ayah.surah_id , quran.ayah.ayah_num")
@@ -171,7 +171,7 @@ class Content::Resource < ActiveRecord::Base
             self
             .joins(join)
             .joins("join quran.ayah using ( ayah_key )")
-            .select("c.*, content.resource.slug, content.resource.name")
+            .select("c.*, l.language_code lang, l.direction dir, content.resource.slug, content.resource.name")
             .where("content.resource.resource_id = ?", row.resource_id)
             .where("quran.ayah.ayah_key IN (?)", keys)
             .order("quran.ayah.surah_id , quran.ayah.ayah_num")

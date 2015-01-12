@@ -58,7 +58,7 @@ class Bucket::AyatController < ApplicationController
             @cardinalities[:content].each do |row|
                 Content::Resource.bucket_results_content(row, keys).each do |ayah|
                     #Rails.logger.debug( "aYAH #{ap ayah.as_json.deep_symbolize_keys}" )
-                    @results["#{ayah.ayah_key}".to_sym][:content] << { id: ayah.id, name: ayah.name, slug: ayah.slug }.merge( ayah.has_attribute?( :text ) ? { text: ayah.text } : {} ).merge( ayah.has_attribute?( :url ) ? { url: ayah.url } : {} )
+                    @results["#{ayah.ayah_key}".to_sym][:content] << { id: ayah.id, name: ayah.name, slug: ayah.slug, lang: ayah.lang, dir: ayah.dir }.merge( ayah.has_attribute?( :text ) ? { text: ayah.text } : {} ).merge( ayah.has_attribute?( :url ) ? { url: ayah.url } : {} )
                 end
             end
         end
