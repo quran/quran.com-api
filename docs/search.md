@@ -41,7 +41,13 @@ results are presented as a series of hits, and each hit is an ayah. in context o
 - s: the size of each page, i.e. results per page
 - any option used with the bucket/ayat controller to control what items are returned in the context of each ayah, e.g. 'content' and 'audio' are valid options. so if the user has content items 18 and 19 selected, content should be appended to the query string as 'content=18,19' as it normally is on the bucket controller
 
-### structure of json response
+### example request
+
+```
+GET /search?content=17,18&audio=1&q=allah%20light
+```
+
+### example response
 
 ```
 [
@@ -132,8 +138,7 @@ results are presented as a series of hits, and each hit is an ayah. in context o
       ],
       "audio": {
         "ogg": {
-          "url": "htt    }
-  }p://audio.quran.com:9999/AbdulBaset/Mujawwad/ogg/024035.ogg",
+          "url": "http://audio.quran.com:9999/AbdulBaset/Mujawwad/ogg/024035.ogg",
           "duration": 174.956,
           "mime_type": "audio/ogg"
         },
@@ -150,6 +155,63 @@ results are presented as a series of hits, and each hit is an ayah. in context o
 ]
 ```
 
-## elasticsearch setup and initial import
+## elasticsearch setup and import
+
+1. download and extract elasticsearch or install it using a package manager (tested on version 1.4.0, any version higher is probably safe)
+2. under the installation direction (might be /opt/elasticsearch, /usr/share/elasticsearch, /etc/elasticsearch or somewhere else), you should have a 'config' sub-directory.
+
+```
+$ ls /opt/elasticsearch-1.4.0/config/
+analysis/  elasticsearch.yml  logging.yml
+```
+
+3. if things aren't working right, my config/elasticsearch.yml file has the following three lines -- adding them probably won't solve anything, but i'm adding them here for reference:
+
+```
+script.disable_dynamic: false
+threadpool.search.size: 24
+threadpool.search.queue_size: 18708
+```
+
+4. symlink the analysis texts from this code base that exist in ./config/elasticsearch/analysis/ into your elasticsearch ./config/analysis/ directory.
+   here's a script you can run from the root directory of this repo, but substitute out the correct path for where elasticsearch's config directory is:
+
+```
+export es_config_analysis_dir="/opt/elasticsearch-1.4.0/config/analysis"
+
+for dir in $( ls --color=never -d $PWD/config/elasticsearch/analysis/* ); do
+    export file=$( echo $dir | sed -e 's/.*\/\([^\/]\+\)$/\1/');
+    ln -s $dir $es_config_analysis_dir/$file;
+done
+```
+
+   the end result should look like this:
+
+```
+$ ls /opt/elasticsearch-1.4.0/config/analysis/ -las
+total 36
+4 drwxr-xr-x 2 nour nour 4096 Dec 30 08:14 ./
+4 drwxr-xr-x 3 nour nour 4096 Dec  6 17:17 ../
+4 lrwxrwxrwx 1 nour nour   88 Dec 30 08:14 english_stop.txt -> /home/nour/code/quran.com/quran-api-rails/config/elasticsearch/analysis/english_stop.txt
+4 lrwxrwxrwx 1 nour nour  105 Dec 30 08:14 stop.text-token.to.text-lemma.txt -> /home/nour/code/quran.com/quran-api-rails/config/elasticsearch/analysis/stop.text-token.to.text-lemma.txt
+4 lrwxrwxrwx 1 nour nour  104 Dec 30 08:14 stop.text-token.to.text-root.txt -> /home/nour/code/quran.com/quran-api-rails/config/elasticsearch/analysis/stop.text-token.to.text-root.txt
+4 lrwxrwxrwx 1 nour nour  107 Dec 30 08:14 synonym.text-font.to.text-token.txt -> /home/nour/code/quran.com/quran-api-rails/config/elasticsearch/analysis/synonym.text-font.to.text-token.txt
+4 lrwxrwxrwx 1 nour nour  108 Dec 30 08:14 synonym.text-token.to.text-lemma.txt -> /home/nour/code/quran.com/quran-api-rails/config/elasticsearch/analysis/synonym.text-token.to.text-lemma.txt
+4 lrwxrwxrwx 1 nour nour  107 Dec 30 08:14 synonym.text-token.to.text-root.txt -> /home/nour/code/quran.com/quran-api-rails/config/elasticsearch/analysis/synonym.text-token.to.text-root.txt
+4 lrwxrwxrwx 1 nour nour  107 Dec 30 08:14 synonym.text-token.to.text-stem.txt -> /home/nour/code/quran.com/quran-api-rails/config/elasticsearch/analysis/synonym.text-token.to.text-stem.txt
+```
+
+5. to list available elasticsearch tasks, run:
+
+```
+ $ rake --tasks | grep es_tasks
+ rake es_tasks:create_index              # creates all elasticsearch indices
+ rake es_tasks:delete_index              # deletes all elasticsearch indices
+ rake es_tasks:setup_index               # setup all elasticsearch indices
+```
+
+6. use `rake es_tasks:setup_index` to create the indices -- this task implicitly runs a delete action on existing indices before (re)creating them and importing data
+
+
 ## elasticsearch update import
 
