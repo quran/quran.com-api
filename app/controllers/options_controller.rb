@@ -18,6 +18,10 @@ class OptionsController < ApplicationController
 
     def audio
         @results = Audio::Recitation.list_audio_options
-        
+    end
+
+    def setup_index
+        Searchable.delay.setup_index
+        render json: "Working..."
     end
 end

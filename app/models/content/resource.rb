@@ -135,6 +135,7 @@ class Content::Resource < ActiveRecord::Base
                     ayah_key: word.ayah_key,
                     word: {
                         stem: word.word_stem,
+                        position: word.position,
                         arabic: word.word_arabic,
                         lemma: word.word_lemma,
                         id: word.word_id,
