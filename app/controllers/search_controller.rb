@@ -293,7 +293,7 @@ class SearchController < ApplicationController
 
             result[:score]        = _score if _score > result[:score]
             result[:match][:hits] = result[:match][:hits] + 1
-            result[:match][:best].push( {}.merge!( extension ) ) if result[:match][:best].length < 3
+            result[:match][:best].push( {}.merge!( extension ) ) # if result[:match][:best].length < 3
         end
 
         word_id_hash = {}
@@ -438,6 +438,7 @@ class SearchController < ApplicationController
                 q.delete :word if q[:word] and q[:word][:id] == nil # get rid of the word block if its just a bunch of nils
                 q
             end
+            r[:match][:best] = r[:match][:best][ 0 .. 2 ] # top 3
             r
         end
 
