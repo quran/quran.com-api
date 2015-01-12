@@ -1,5 +1,4 @@
 # search
-
 ## ui/ux vision
 
 results are presented as a series of hits, and each hit is an ayah. in context of the ayah, we want to break it down into 3 different layers to contextually constitute what users are interested in:
@@ -42,59 +41,115 @@ results are presented as a series of hits, and each hit is an ayah. in context o
 - s: the size of each page, i.e. results per page
 - any option used with the bucket/ayat controller to control what items are returned in the context of each ayah, e.g. 'content' and 'audio' are valid options. so if the user has content items 18 and 19 selected, content should be appended to the query string as 'content=18,19' as it normally is on the bucket controller
 
-### structure of json response TODO RESUME HERE
+### structure of json response
 
-- key
-- ayah
-- surah
-- index
-- score
-- match
-  - hits
-  - best (list)
-    - id
-    - name
-    - slug
-    - lang
-    - dir
-    - text
-    - score
-- bucket
-  - ayah
-  - surah
-  - quran (list)
-    - ayah_key
-    - word
-      - id
-      - arabic
-      - translation
-    - char
-      - page
-      - font
-      - code_hex
-      - type_id
-      - type
-      - code_dec
-      - line
-      - code
-  - content (list)
-    - id
-    - name
-    - slug
-    - lang
-    - dir
-    - text
-  - audio
-    - ogg
-        - url
-        - duration
-        - mime_type
-    - mp3
-        - url
-        - duration
-        - mime_type
+```
+[
+  {
+    "key": "24:35",
+    "index": 2826,
+    "surah": 24,
+    "ayah": 35,
+    "score": 116.64196,
+    "match": {
+      "hits": 6,
+      "best": [
+        {
+          "id": 20,
+          "name": "Shakir",
+          "slug": "shakir",
+          "lang": "en",
+          "dir": "ltr",
+          "text": "<em class=\"hlt3\">Allah</em> is the <em class=\"hlt4\">light</em> of the heavens and the earth; a likeness of His <em class=\"hlt4\">light</em> is as a niche in which is a lamp, the lamp is in a glass, (and) the glass is as it were a brightly shining star, lit from a blessed olive-tree, neither eastern nor western, the oil whereof almost gives <em class=\"hlt4\">light</em> though fire touch it not-- <em class=\"hlt4\">light</em> upon <em class=\"hlt4\">light</em>-- <em class=\"hlt3\">Allah</em> guides to His <em class=\"hlt4\">light</em> whom He pleases, and <em class=\"hlt3\">Allah</em> sets forth parables for men, and <em class=\"hlt3\">Allah</em> is Cognizant of all things.",
+          "score": 116.64196
+        },
+        { ... },
+        ...
+      ]
+    },
+    "bucket": {
+      "quran": [
+        {
+          "char": {
+            "page": 354,
+            "font": "p354",
+            "code_hex": "fba8",
+            "type_id": 4,
+            "type": "rub-el-hizb",
+            "code_dec": 64424,
+            "line": 9,
+            "code": "&#xfba8;"
+          }
+        },
+        {
+          "word": {
+            "id": 45531,
+            "arabic": "اللَّهُ",
+            "translation": "Allah"
+          },
+          "char": {
+            "page": 354,
+            "font": "p354",
+            "code_hex": "fba9",
+            "type_id": 1,
+            "type": "word",
+            "code_dec": 64425,
+            "line": 9,
+            "code": "&#xfba9;"
+          }
+        },
+        ...,
+        {
+          "char": {
+            "page": 354,
+            "font": "p354",
+            "code_hex": "fc01",
+            "type_id": 2,
+            "type": "end",
+            "code_dec": 64513,
+            "line": 14,
+            "code": "&#xfc01;"
+          }
+        }
+      ],
+      "content": [
+        {
+          "id": 17,
+          "name": "Muhsin Khan",
+          "slug": "muhsin_khan",
+          "lang": "en",
+          "dir": "ltr",
+          "text": "<em class=\"hlt3\">Allah</em> is the <em class=\"hlt4\">Light</em> of the heavens and the earth. The parable of His <em class=\"hlt4\">Light</em> is as (if there were) a niche and within it a lamp, the lamp is in glass, the glass as it were a brilliant star, lit from a blessed tree, an olive, neither of the east (i.e. neither it gets sun-rays only in the morning) nor of the west (i.e. nor it gets sun-rays only in the afternoon, but it is exposed to the sun all day long), whose oil would almost glow forth (of itself), though no fire touched it. <em class=\"hlt4\">Light</em> upon <em class=\"hlt4\">Light</em>! <em class=\"hlt3\">Allah</em> guides to His <em class=\"hlt4\">Light</em> whom He wills. And <em class=\"hlt3\">Allah</em> sets forth parables for mankind, and <em class=\"hlt3\">Allah</em> is All-Knower of everything."
+        },
+        {
+          "id": 18,
+          "name": "Pickthall",
+          "slug": "pickthall",
+          "lang": "en",
+          "dir": "ltr",
+          "text": "<em class=\"hlt3\">Allah</em> is the <em class=\"hlt4\">Light</em> of the heavens and the earth. The similitude of His <em class=\"hlt4\">light</em> is as a niche wherein is a lamp. The lamp is in a glass. The glass is as it were a shining star. (This lamp is) kindled from a blessed tree, an olive neither of the East nor of the West, whose oil would almost glow forth (of itself) though no fire touched it. <em class=\"hlt4\">Light</em> upon <em class=\"hlt4\">light</em>. <em class=\"hlt3\">Allah</em> guideth unto His <em class=\"hlt4\">light</em> whom He will. And <em class=\"hlt3\">Allah</em> speaketh to mankind in allegories, for <em class=\"hlt3\">Allah</em> is Knower of all things."
+        }
+      ],
+      "audio": {
+        "ogg": {
+          "url": "htt    }
+  }p://audio.quran.com:9999/AbdulBaset/Mujawwad/ogg/024035.ogg",
+          "duration": 174.956,
+          "mime_type": "audio/ogg"
+        },
+        "mp3": {
+          "url": "http://audio.quran.com:9999/AbdulBaset/Mujawwad/mp3/024035.mp3",
+          "duration": 174.99,
+          "mime_type": "audio/mpeg"
+        }
+      }
+    }
+  },
+  { ... },
+  ...
+]
+```
 
 ## elasticsearch setup and initial import
-
 ## elasticsearch update import
 

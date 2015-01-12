@@ -293,7 +293,7 @@ class SearchController < ApplicationController
 
             result[:score]        = _score if _score > result[:score]
             result[:match][:hits] = result[:match][:hits] + 1
-            result[:match][:best].push( {}.merge!( extension ) )
+            result[:match][:best].push( {}.merge!( extension ) ) if result[:match][:best].length < 3
         end
 
         word_id_hash = {}
@@ -301,7 +301,7 @@ class SearchController < ApplicationController
 
         # attribute the "bucket" structure for each ayah result
         by_key.values.each do |result|
-            result[:bucket] = Bucket::AyatController.index( { surah: result[:surah], ayah: result[:ayah], content: params[:content] } ).first
+            result[:bucket] = Bucket::AyatController.index( { surah: result[:surah], ayah: result[:ayah], content: params[:content], audio: params[:audio] } ).first
             if result[:bucket][:content]
                 resource_id_to_bucket_content_index = {}
                 result[:bucket][:content].each_with_index do | c, i |
@@ -424,11 +424,31 @@ class SearchController < ApplicationController
 
         end
 
-        return by_key.keys.sort { |a,b| by_key[ b ][ :score ] <=> by_key[ a ][ :score ] } .map { |k| by_key[ k ] }
+        return_result = by_key.keys.sort { |a,b| by_key[ b ][ :score ] <=> by_key[ a ][ :score ] } .map { |k| by_key[ k ] }
+
+        # HACK: a block of transformation hacks
+        return_result.map! do |r|
+            # HACK: move back from '2_255' ayah_key format (was an experimental change b/c of ES acting weird) to '2:255'
+            r[:key].gsub! /_/, ':'
+            # HACK: a bit of a hack, or just keeping redundant info tidy? removing redundant keys from the 'bucket' property (I really want to rename that property)
+            r[:bucket].delete :surah
+            r[:bucket].delete :ayah
+            r[:bucket][:quran].map! do |q|
+                q.delete :ayah_key
+                q.delete :word if q[:word] and q[:word][:id] == nil # get rid of the word block if its just a bunch of nils
+                q
+            end
+            r
+        end
+
+        return_result
+
+        return return_result
+
     end
 
     def query
-        render json: SearchController.query( params, request.headers, session )
+        render json: JSON.pretty_generate( SearchController.query( params, request.headers, session ) )
         return
         # Init the config hash and the output
     end
