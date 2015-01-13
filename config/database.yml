@@ -32,6 +32,10 @@ development:
   #database: quran_dev_lite
   #host: dev.quran.com
 
+test:
+  <<: *default
+  database: quran_dev_test
+
 #development_remote_readonly:
 #  <<: *default
 #  host: dev.quran.com
