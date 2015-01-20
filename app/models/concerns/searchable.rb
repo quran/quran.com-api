@@ -49,7 +49,7 @@ module Searchable
             index_name document_type # e.g. translation
             document_type "data"     # e.g. rename from translation to just "data"
 
-            def self.delete_index( index_name = index_name )
+            def self.delete_index( index_name )
                 Rails.logger.info "deleting #{ index_name } index"
 
                 # delete all the translation-* indices if the argument was just 'translation'
@@ -67,7 +67,7 @@ module Searchable
                 end
             end
 
-            def self.create_index( index_name = index_name, extra_text_mapping_opts = {} )
+            def self.create_index( index_name, extra_text_mapping_opts = {} )
                 Rails.logger.info "creating #{ index_name } index"
 
 #                if index_name == 'translation'
@@ -113,7 +113,7 @@ module Searchable
                 #Quran::Ayah.import( { index: index_name, type: 'ayah' } )
             end
 
-            def self.import_index( index_name = index_name, opts = {} )
+            def self.import_index( index_name , opts = {} )
                 Rails.logger.info "importing #{ index_name } index"
 
                 # NOTE 1.2 and this imports the "child" content data (see NOTE 1.1)
@@ -121,7 +121,7 @@ module Searchable
             end
 
 
-            def self.setup_index( index_name = index_name, opts = {} )
+            def self.setup_index( index_name , opts = {} )
                 Rails.logger.info "setting up #{ index_name } index"
 
                 self.delete_index( index_name )
