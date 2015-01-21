@@ -3,10 +3,10 @@ source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 #gem 'rails', '4.1.1'
-gem 'rails', github: 'rails/rails' #:git => 'git://github.com/rails/rails.git' 
+gem 'rails', '4.2.0'
 
 # Use postgresql as the database for Active Record
-gem 'pg'
+gem 'pg', '~> 0.18.1'
 # Use SCSS for stylesheets
 #gem 'sass-rails' #, '~> 4.0.3'
 # Use Uglifier as compressor for JavaScript assets
@@ -80,7 +80,7 @@ gem 'kaminari'
 
 
 gem 'yaml_db', github: 'sharabash/yaml_db'
-gem 'sass-rails', github: 'rails/sass-rails' # '~> 4.0.3'
+gem 'sass-rails', '~> 5.0.1'
 
 # This is to run the rake task for importing in parallel
 gem 'parallel'
