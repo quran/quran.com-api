@@ -121,12 +121,12 @@ module Searchable
             end
 
 
-            def self.setup_index( index_name , opts = {} )
-                Rails.logger.info "setting up #{ index_name } index"
+            def self.setup_index( index = index_name , opts = {} )
+                Rails.logger.info "setting up #{ index } index"
 
-                self.delete_index( index_name )
-                self.create_index( index_name )
-                self.import_index( index_name, opts )
+                #self.delete_index( index )
+                self.create_index( index )
+                self.import_index( index, opts )
             end
 
             # NOTE this is temporary -- nour
