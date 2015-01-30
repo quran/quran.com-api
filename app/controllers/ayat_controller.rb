@@ -4,9 +4,13 @@ class AyatController < ApplicationController
         @cardinalities, cut, @results = Hash.new, Hash.new, Hash.new
 
         # The range of which the ayahs to search
-        range = params.key?( :ayah ) ? [ params[:ayah] ] : params[:range].split("-")
-
-        range = [params[:from], params[:to]] if params.key?(:from) && params.key?(:to)
+        if params.key?(:range)
+            range = params[:range].split("-")
+        elsif params.key?(:from) && params.key?(:to)
+            range = [params[:from], params[:to]]
+        else
+            range = ["1", "10"]
+        end
 
         # require either an ayah or range parameter
         raise APIValidation, 'missing required range or ayah parameter' if not range.length > 0
