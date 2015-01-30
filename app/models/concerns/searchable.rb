@@ -54,19 +54,19 @@ module Searchable
 
                 # delete all the translation-* indices if the argument was just 'translation'
                 if index_name == 'translation'
-			begin
-			    self.__elasticsearch__.client.cat.indices( index: 'translation-*', h: [ 'index' ], format: 'json' ).each do |d|
-				if self.__elasticsearch__.client.indices.exists index: d['index']
-					self.__elasticsearch__.client.indices.delete index: d['index']
-				end
-			    end
-			rescue
-			    Rails.logger.warn "no translation-* indices"
-			end
+                    begin
+                        self.__elasticsearch__.client.cat.indices( index: 'translation-*', h: [ 'index' ], format: 'json' ).each do |d|
+                            if self.__elasticsearch__.client.indices.exists index: d['index']
+                            	self.__elasticsearch__.client.indices.delete index: d['index']
+                            end
+                        end
+                    rescue
+                        Rails.logger.warn "no translation-* indices"
+                    end
                 else
                     if self.__elasticsearch__.client.indices.exists index: index_name
-                    	self.__elasticsearch__.client.indices.delete index: index_name
-		    end
+                        self.__elasticsearch__.client.indices.delete index: index_name
+                    end
                 end
             end
 
