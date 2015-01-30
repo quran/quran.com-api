@@ -6,6 +6,8 @@ class AyatController < ApplicationController
         # The range of which the ayahs to search
         range = params.key?( :ayah ) ? [ params[:ayah] ] : params[:range].split("-")
 
+        range = [params[:from], params[:to]] if params.key?(:from) && params.key?(:to)
+
         # require either an ayah or range parameter
         raise APIValidation, 'missing required range or ayah parameter' if not range.length > 0
 
