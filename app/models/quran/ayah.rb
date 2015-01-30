@@ -182,7 +182,6 @@ class Quran::Ayah < ActiveRecord::Base
 
     def self.matched_parents_query( query, types )
         should = Array.new
-
         should.push( {
             has_child: {
                 type: 'data',

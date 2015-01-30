@@ -1,17 +1,15 @@
 class AyatController < ApplicationController
-    def self.query params = {}, headers = {}, session = {}
+    def self.index params = {}, headers = {}, session = {}
         # Set the variables
         @cardinalities, cut, @results = Hash.new, Hash.new, Hash.new
 
         # The range of which the ayahs to search
-        if params[:range] 
-            range = params[:range].split("-")
-        elsif params[:from] && params[:to]
-            range = [params[:from] , params[:to]]
-        else
-            ["1", "10"]
-        end
-                
+        range = params.key?( :ayah ) ? [ params[:ayah] ] : params[:range].split("-")
+
+        # require either an ayah or range parameter
+        raise APIValidation, 'missing required range or ayah parameter' if not range.length > 0
+
+        # default select the word font for the quran parameter
         params[:quran] ||= 1
 
         # Raise error whenever the range is more than 50
@@ -22,15 +20,16 @@ class AyatController < ApplicationController
         end
 
         # Generate the keys for the given surah and range
-        # keys = Quran::Ayah.fetch_ayahs(params[:surah], range.first, range.last)
+        # keys = Quran::Ayah.fetch_ayahs(params[:surah_id], range.first, range.last)
 
         # Keys for the ayahs
         keys = Quran::Ayah.fetch_ayahs(params[:surah_id], range.first, range.last).map{|k| k.ayah_key}
+
         # For each key, need to setup the hash
         keys.each do |ayah_key|
             @results["#{ayah_key}".to_sym] = Hash.new
             @results["#{ayah_key}".to_sym][:ayah] = ayah_key.split(":").last.to_i
-            @results["#{ayah_key}".to_sym][:surah] = params[:surah_id].to_i
+            @results["#{ayah_key}".to_sym][:surah_id] = params[:surah_id].to_i
             @results["#{ayah_key}".to_sym][:content] = Array.new
             @results["#{ayah_key}".to_sym][:audio] = Hash.new
             @results["#{ayah_key}".to_sym][:quran] = Array.new
@@ -92,6 +91,7 @@ class AyatController < ApplicationController
     end
 
     def index
-        render json: AyatController.query( params, request.headers, session )
+        render json: AyatController.index( params, request.headers, session )
+        return
     end
 end

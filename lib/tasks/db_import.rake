@@ -5,9 +5,9 @@ namespace :db do
         next
     else
       sh "rake db:setup_structure"
-      sh "rake db:reset; true"
+      sh "rake db:create; true"
+      sh "rake db:setup; true"
       sh "rake db:migrate; true"
-      sh "rake db:seed; true"
     end
   end
 end

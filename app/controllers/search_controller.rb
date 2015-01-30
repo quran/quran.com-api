@@ -24,7 +24,6 @@ class SearchController < ApplicationController
         #   c. Use language-code from user application settings (should get at least double priority to anything else)
         #   d. Fallback to boosting English if nothing was determined from above and the query is pure ascii
 
-
         Rails.logger.info "headers #{ ap headers }"
         Rails.logger.info "session #{ ap session }"
         Rails.logger.info "params #{ ap params }"
@@ -195,10 +194,11 @@ class SearchController < ApplicationController
         } )
 
         #return search_params
-
-        client = Elasticsearch::Client.new # trace: true, log: true;
+        client = Elasticsearch::Client.new  # trace: true, log: true;
+        # client = Elasticsearch::Client.new host: 'http://162.243.158.101:9200' # trace: true, log: true;
         results = client.search( search_params )
         #return results
+        Rails.logger.ap results
 
         total_hits = results[ 'hits' ][ 'total' ]
         buckets = results[ 'aggregations' ][ 'by_ayah_key' ][ 'buckets' ]
@@ -301,7 +301,7 @@ class SearchController < ApplicationController
 
         # attribute the "bucket" structure for each ayah result
         by_key.values.each do |result|
-            result[:bucket] = Bucket::AyatController.index( { surah: result[:surah], ayah: result[:ayah], content: params[:content], audio: params[:audio] } ).first
+            result[:bucket] = AyatController.index( { surah: result[:surah], ayah: result[:ayah], content: params[:content], audio: params[:audio] } ).first
             if result[:bucket][:content]
                 resource_id_to_bucket_content_index = {}
                 result[:bucket][:content].each_with_index do | c, i |
