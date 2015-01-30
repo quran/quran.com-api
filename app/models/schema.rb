@@ -3,18 +3,18 @@ module Schema
     @@schema_name = Hash.new
     def table_name
         # This is the old way of doing it. I think we will no longer use this
-        # @@schema_name[self.name.split("::").first.downcase] +'.'+ super
+        @@schema_name[self.name.split("::").first.downcase] +'.'+ super
         
-        # New way
-        self.name.split("::").first.downcase << '.' << super
+        # The way we should adopt our schemas
+        # self.name.split("::").first.downcase << '.' << super
     end
 
-    def self.schema_name
-        @@schema_name
-    end
+    # def self.schema_name
+    #     @@schema_name
+    # end
 
     def self.schema_name(module_name, schema_name)
-        @@schema_name[ "#{module_name}" ] = schema_name
+        @@schema_name[ "#{module_name.downcase}" ] = schema_name.downcase
     end
 
     # When this module is included, callback this function
