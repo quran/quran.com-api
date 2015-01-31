@@ -11,6 +11,10 @@ class AyatController < ApplicationController
         else
             range = ["1", "10"]
         end
+        # range = params.key?( :ayah ) ? [ params[:ayah] ] : params[:range].split("-")
+
+        Rails.logger.ap params
+        Rails.logger.ap range
 
         # require either an ayah or range parameter
         raise APIValidation, 'missing required range or ayah parameter' if not range.length > 0
