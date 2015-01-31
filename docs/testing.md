@@ -19,3 +19,9 @@ rake test test/controllers/search_controller_test.rb
 
 visit http://guides.rubyonrails.org/testing.html
 
+
+If you want to use the development database, use:
+```
+RAILS_ENV=development rake test test/controllers/search_controller_test.rb
+```
+

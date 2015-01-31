@@ -11,7 +11,10 @@ class AyatController < ApplicationController
         else
             range = ["1", "10"]
         end
-        # range = params.key?( :ayah ) ? [ params[:ayah] ] : params[:range].split("-")
+        if params.key?( :ayah )
+            range = [ params[:ayah] ] 
+        end
+        
 
         Rails.logger.ap params
         Rails.logger.ap range

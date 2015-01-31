@@ -302,7 +302,7 @@ class SearchController < ApplicationController
         # attribute the "bucket" structure for each ayah result
         by_key.values.each do |result|
             result[:bucket] = AyatController.index( { surah_id: result[:surah], ayah: result[:ayah], content: params[:content], audio: params[:audio] } ).first
-            Rails.logger.ap result[:bucket]
+
             if result[:bucket][:content]
                 resource_id_to_bucket_content_index = {}
                 result[:bucket][:content].each_with_index do | c, i |
@@ -403,6 +403,9 @@ class SearchController < ApplicationController
                                 h[:highlight] = word_id_to_highlight[ h[:word][:id] ]
                             end
                         end
+
+                        Rails.logger.ap word_id_hash
+                        Rails.logger.ap parsed[:word_ids]
 
                         parsed[:word_ids].each do |p|
                             word_id = p[:word_id] #.delete :word_id
