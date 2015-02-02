@@ -28,6 +28,8 @@ class SearchController < ApplicationController
         Rails.logger.info "session #{ ap session }"
         Rails.logger.info "params #{ ap params }"
 
+        start_time = Time.now
+
         search_params = {}
         boost_language_code = {}
         most_fields_fields_val = []
@@ -199,9 +201,10 @@ class SearchController < ApplicationController
         results = client.search( search_params )
         #return results
         
-
         total_hits = results[ 'hits' ][ 'total' ]
+
         buckets = results[ 'aggregations' ][ 'by_ayah_key' ][ 'buckets' ]
+
         imin = ( page - 1 ) * size
         imax = page * size - 1
         buckets_on_page = buckets[ imin .. imax ]
@@ -446,9 +449,20 @@ class SearchController < ApplicationController
             r
         end
 
-        return_result
+        delta_time = Time.now - start_time
 
-        return return_result
+        to_render = {
+            query: params[:q], 
+            hits: return_result.length, 
+            page: page,
+            size: size,
+            took: delta_time,
+            total: buckets.length,
+            results: return_result
+        }
+        
+
+        return to_render
 
     end
 
