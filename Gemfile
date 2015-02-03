@@ -98,3 +98,5 @@ gem 'elasticsearch'
 # To allow CORS for the angular project
 # https://github.com/cyu/rack-cors
 gem 'rack-cors', :require => 'rack/cors'
+
+gem 'httparty'
