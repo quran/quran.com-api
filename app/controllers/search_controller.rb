@@ -119,7 +119,7 @@ class SearchController < ApplicationController
         search_params.merge!( {
             type: 'data',
 
-            explain: true, # debugging... on or off?
+            explain: false, # debugging... on or off?
         } )
 
         # highlighting
@@ -225,12 +225,10 @@ class SearchController < ApplicationController
         # get rid of the aggregations
         search_params[:body].delete( :aggs )
 
-        #return search_params
-
         # pull the new query with hits
         results = client.search( search_params ).deep_symbolize_keys
         #return results
-        
+
         # override experimental
         search_params_text_font = {
             index: [ 'text-font' ],
@@ -274,7 +272,7 @@ class SearchController < ApplicationController
             #quran = by_key[ _ayah[ 'ayah_key' ] ][:bucket][:quran]
             result = by_key[ _ayah[:ayah_key] ]
 
-
+            # TODO: transliteration does not have a resource or language.
             #id name slug text lang dir
             extension = {
                 text: _text,
@@ -284,7 +282,7 @@ class SearchController < ApplicationController
                 name: _source[:resource][:name],
                 slug: _source[:resource][:slug],
                 lang: _source[:resource][:language_code],
-            } : {} )
+            } : {name: 'Transliteration'} )
             .merge( _source[:language] ? {
                 dir: _source[:language][:direction],
             } : {} )
@@ -406,9 +404,6 @@ class SearchController < ApplicationController
                                 h[:highlight] = word_id_to_highlight[ h[:word][:id] ]
                             end
                         end
-
-                        Rails.logger.ap word_id_hash
-                        Rails.logger.ap parsed[:word_ids]
 
                         parsed[:word_ids].each do |p|
                             word_id = p[:word_id] #.delete :word_id
