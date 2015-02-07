@@ -462,6 +462,8 @@ class SearchController < ApplicationController
     end
 
     def query
+        Keen.publish(:search, { params: params, query: params[:q] })
+        
         render json: JSON.pretty_generate( SearchController.query( params, request.headers, session ) )
         return
         # Init the config hash and the output

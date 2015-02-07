@@ -100,3 +100,6 @@ gem 'elasticsearch'
 gem 'rack-cors', :require => 'rack/cors'
 
 gem 'httparty'
+
+# Keen.io
+gem 'keen'
