@@ -1,7 +1,7 @@
 class AyatController < ApplicationController
     def self.index params = {}, headers = {}, session = {}
         # Set the variables
-        @cardinalities, @results = Hash.new, Hash.new, Hash.new
+        @cardinalities, @results = Hash.new, Hash.new
 
         # The range of which the ayahs to search
         if params.key?(:range)
@@ -107,15 +107,15 @@ class AyatController < ApplicationController
     end
 
     def index
-        Keen.publish(:ayat, { 
-            params: params, 
-            audio: params[:audio], 
-            content: params[:content], 
-            quran: params[:quran], 
-            from: params[:from], 
-            to: params[:to],
-            surah: params[:surah_id] 
-        })
+        # Keen.publish(:ayat, { 
+        #     params: params, 
+        #     audio: params[:audio], 
+        #     content: params[:content], 
+        #     quran: params[:quran], 
+        #     from: params[:from], 
+        #     to: params[:to],
+        #     surah: params[:surah_id] 
+        # })
 
         render json: AyatController.index( params, request.headers, session )
         return
