@@ -122,6 +122,7 @@ class Content::Resource < ActiveRecord::Base
                     ayah_key: word.ayah_key,
                     word: {
                         position: word.position,
+                        line: word.line_num,
                         arabic: word.word_arabic,
                         id: word.word_id,
                         translation: word.word_translation

@@ -37,6 +37,11 @@ class Quran::Ayah < ActiveRecord::Base
             .order("quran.ayah.surah_id, quran.ayah.ayah_num")
     end
 
+    def self.fetch_paged_ayahs(page)
+        self.where(page_num: page)
+            .order("quran.ayah.surah_id, quran.ayah.ayah_num")
+    end
+
     ############### ES FUNCTIONS ################################################################# 
 
     # This function affects the indexed JSON for

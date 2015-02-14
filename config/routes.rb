@@ -24,6 +24,8 @@ Rails.application.routes.draw do
       resources :ayat
   end
 
+  resources :pages
+
   
   
 end
