@@ -138,7 +138,7 @@ class Content::Resource < ActiveRecord::Base
                 }
             end
 
-            if params[:group] || params[:grouped] || params[:by_line] || params[:line]
+            if params[:line]
                 # results = results.sort_by!{|a| a[:position] && a[:line] }
                 results = results.group_by{|a| a[:line]}.values
             else

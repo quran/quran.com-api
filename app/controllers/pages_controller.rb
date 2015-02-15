@@ -25,9 +25,9 @@ class PagesController < ApplicationController
     # cardinalities will be used to determine the kind of rendering to fetch
     @cardinalities = Content::Resource.fetch_cardinalities(params)
 
+
     # The cardinalities for the quran
     if @cardinalities.key? :quran
-      return @results = @cardinalities[:quran].bucket_results_quran(params, keys)
         @cardinalities[:quran].bucket_results_quran(params, keys).each do |ayah|
             #Rails.logger.debug( "each ayah #{ ap ayah }" )
             if ayah.kind_of?(Array)
@@ -66,6 +66,11 @@ class PagesController < ApplicationController
             }
         end
     end
+
+    if params[:line]
+      return @results = @cardinalities[:quran].bucket_results_quran(params, keys)
+    end
+    
 
     # do some trimming
     keys.each do |ayah_key|
