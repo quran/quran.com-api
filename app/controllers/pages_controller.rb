@@ -2,7 +2,6 @@ class PagesController < ApplicationController
   def show
     @cardinalities, @results = Hash.new, Hash.new, Hash.new
 
-
     # default select the word font for the quran parameter
     params[:quran] ||= 1
 
@@ -28,6 +27,7 @@ class PagesController < ApplicationController
 
     # The cardinalities for the quran
     if @cardinalities.key? :quran
+      return @results = @cardinalities[:quran].bucket_results_quran(params, keys)
         @cardinalities[:quran].bucket_results_quran(params, keys).each do |ayah|
             #Rails.logger.debug( "each ayah #{ ap ayah }" )
             if ayah.kind_of?(Array)
