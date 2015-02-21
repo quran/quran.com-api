@@ -48,8 +48,8 @@ class Content::Resource < ActiveRecord::Base
     # BUCKET RELATED
     def self.fetch_cardinalities(params)
         cardinality = Hash.new
-        cardinality[:quran]   = self.fetch_cardinality_quran(params[:quran]).first if params.key? :quran
-        cardinality[:content] = self.fetch_cardinality_content(params[:content])   if params[:content] #.key? :content
+        cardinality[:quran]   = self.fetch_cardinality_quran(params[:quran]).first if params[:quran]
+        cardinality[:content] = self.fetch_cardinality_content(params[:content])   if params[:content]
         return cardinality
     end
 
@@ -73,13 +73,10 @@ class Content::Resource < ActiveRecord::Base
         .where("content.resource.type = 'content' ")
         .where("content.resource.resource_id IN (?)", params_content)
         .order("content.resource.resource_id")
-
         
     end
 
     def bucket_results_quran(params, keys)
-        cut = Hash.new
-
         if self.cardinality_type == "1_ayah"
 
             Content::Resource
@@ -93,18 +90,17 @@ class Content::Resource < ActiveRecord::Base
         elsif self.cardinality_type == "1_word"
 
             if  self.slug == 'word_font' 
-                cut[:select] = "
+                select = "
                               concat( 'p', c.page_num ) char_font
                              , concat( '&#x', c.code_hex, ';' ) char_code
                              , ct.name char_type
                         "
-                cut[:join] = "join quran.char_type ct on ct.char_type_id = c.char_type_id"
             end
 
             results = Content::Resource
             .joins("JOIN quran.word_font c using ( resource_id )")
             .joins("JOIN quran.ayah using (ayah_key) ")
-            .joins(cut[:join])
+            .joins("join quran.char_type ct on ct.char_type_id = c.char_type_id")
             .joins("left join quran.word w on w.word_id = c.word_id")
             .joins("left join quran.word_translation wt on w.word_id = wt.word_id and wt.language_code = 'en'")
             .joins("left join quran.token t on w.token_id = t.token_id")
@@ -112,14 +108,15 @@ class Content::Resource < ActiveRecord::Base
             .where("quran.ayah.ayah_key IN (?)", keys)
             .select("c.*")
             .select("content.resource.resource_id")
-            .select(cut[:select])
+            .select(select)
             .select("wt.value word_translation
                  , t.value word_arabic" )
             .order("quran.ayah.surah_id, quran.ayah.ayah_num, c.position")
-            .to_a # Must make it into an array to use the .uniq function otherwise will trigger ActiveResource
             .map do |word|
                 {
                     ayah_key: word.ayah_key,
+                    position: word.position,
+                    line: word.line_num,
                     word: {
                         position: word.position,
                         line: word.line_num,
@@ -140,7 +137,14 @@ class Content::Resource < ActiveRecord::Base
                     }
                 }
             end
-            .group_by{|a| a[:ayah_key]}.values
+
+            if params[:line]
+                # results = results.sort_by!{|a| a[:position] && a[:line] }
+                results = results.group_by{|a| a[:line]}.values
+            else
+                results = results.group_by{|a| a[:ayah_key]}.values
+            end
+            
             
             return results
         end
@@ -149,10 +153,7 @@ class Content::Resource < ActiveRecord::Base
     def self.bucket_results_content(row, keys)
         if row.cardinality_type == 'n_ayah'
             join = "JOIN i18n.language l using ( language_code ) JOIN #{row.type}.#{row.sub_type} c using ( resource_id ) JOIN #{row.type}.#{row.sub_type}_ayah n using ( #{row.sub_type}_id )"
-        elsif row.cardinality_type == '1_ayah'
-            join = "JOIN i18n.language l using ( language_code ) JOIN #{row.type}.#{row.sub_type} c using ( resource_id )"
-        end
-        if row.cardinality_type == 'n_ayah'
+
             self
             .joins(join)
             .joins("JOIN quran.ayah using ( ayah_key )")
@@ -162,6 +163,8 @@ class Content::Resource < ActiveRecord::Base
             .order("quran.ayah.surah_id , quran.ayah.ayah_num")
 
         elsif row.cardinality_type == '1_ayah'
+            join = "JOIN i18n.language l using ( language_code ) JOIN #{row.type}.#{row.sub_type} c using ( resource_id )"
+
             self
             .joins(join)
             .joins("join quran.ayah using ( ayah_key )")

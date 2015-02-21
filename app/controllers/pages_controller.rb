@@ -2,7 +2,6 @@ class PagesController < ApplicationController
   def show
     @cardinalities, @results = Hash.new, Hash.new, Hash.new
 
-
     # default select the word font for the quran parameter
     params[:quran] ||= 1
 
@@ -25,6 +24,7 @@ class PagesController < ApplicationController
 
     # cardinalities will be used to determine the kind of rendering to fetch
     @cardinalities = Content::Resource.fetch_cardinalities(params)
+
 
     # The cardinalities for the quran
     if @cardinalities.key? :quran
@@ -66,6 +66,11 @@ class PagesController < ApplicationController
             }
         end
     end
+
+    if params[:line]
+      return @results = @cardinalities[:quran].bucket_results_quran(params, keys)
+    end
+    
 
     # do some trimming
     keys.each do |ayah_key|

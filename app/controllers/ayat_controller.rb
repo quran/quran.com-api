@@ -1,7 +1,7 @@
 class AyatController < ApplicationController
     def self.index params = {}, headers = {}, session = {}
         # Set the variables
-        @cardinalities, @results = Hash.new, Hash.new, Hash.new
+        @cardinalities, @results = Hash.new, Hash.new
 
         # The range of which the ayahs to search
         if params.key?(:range)
