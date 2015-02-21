@@ -48,8 +48,8 @@ class Content::Resource < ActiveRecord::Base
     # BUCKET RELATED
     def self.fetch_cardinalities(params)
         cardinality = Hash.new
-        cardinality[:quran]   = self.fetch_cardinality_quran(params[:quran]).first if params.key? :quran
-        cardinality[:content] = self.fetch_cardinality_content(params[:content])   if params.key? :content
+        cardinality[:quran]   = self.fetch_cardinality_quran(params[:quran]).first if params[:quran]
+        cardinality[:content] = self.fetch_cardinality_content(params[:content])   if params[:content]
         return cardinality
     end
 
