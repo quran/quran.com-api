@@ -9,23 +9,19 @@ Rails.application.routes.draw do
 
   post 'support', to: 'support#zendesk'  
 
-  resources :options do
+  resources :options, only: [] do
     collection do 
       get :default
       get :language
       get :quran
       get :content
       get :audio
-      get :setup_index
     end
   end
 
-  resources :surahs do
-      resources :ayat
+  resources :surahs, only: [:index, :show] do
+      resources :ayat, only: [:index]
   end
 
-  resources :pages
-
-  
-  
+  resources :pages, only: [:index]
 end
