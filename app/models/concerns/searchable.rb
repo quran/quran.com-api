@@ -30,7 +30,7 @@ module Searchable
     end
 
     def self.setup_index
-        Parallel.each(@@models, in_processes: 3, progress: 'Importing...') do | model |
+        @@models.each do | model |
             model = Kernel.const_get( model )
             model.setup_index
         end
