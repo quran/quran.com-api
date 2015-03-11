@@ -13,7 +13,7 @@ namespace :es_tasks do
 
   desc "setup all elasticsearch indices"
   task setup_index: :environment do
-    ActiveRecord::Base.logger = Logger::INFO
+    ActiveRecord::Base.logger = Logger.new( STDOUT )
     Rails.logger.level = Logger::INFO
     Searchable.setup_index
   end
