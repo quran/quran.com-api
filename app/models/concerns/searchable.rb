@@ -34,20 +34,23 @@ module Searchable
         return if Quran::Ayah.__elasticsearch__.client.cluster.health['unassigned_shards'] == 200
 
         # Let's check to see which is missing and go from there.
-        if Quran::Ayah.__elasticsearch__.client.cat.indices(index: 'translation*', h: [:index], format: 'json').count == 37
-            @@models.delete('Content::Translation')
-        end
+        begin
+            if Quran::Ayah.__elasticsearch__.client.cat.indices(index: 'translation*', h: [:index], format: 'json').count == 37
+                @@models.delete('Content::Translation')
+            end
 
-        if Quran::Ayah.__elasticsearch__.client.cat.indices(index: 'transliteration', h: [:index], format: 'json').count == 1
-             @@models.delete('Content::Transliteration')
-        end
+            if Quran::Ayah.__elasticsearch__.client.cat.indices(index: 'transliteration', h: [:index], format: 'json').count == 1
+                 @@models.delete('Content::Transliteration')
+            end
 
-        if Quran::Ayah.__elasticsearch__.client.cat.indices(index: 'tafsir', h: [:index], format: 'json').count == 1
-             @@models.delete('Content::TafsirAyah')
-        end
+            if Quran::Ayah.__elasticsearch__.client.cat.indices(index: 'tafsir', h: [:index], format: 'json').count == 1
+                 @@models.delete('Content::TafsirAyah')
+            end
 
-        if Quran::Ayah.__elasticsearch__.client.cat.indices(index: 'text-font', h: [:index], format: 'json').count == 1
-             @@models.delete('Content::TafsirAyah')
+            if Quran::Ayah.__elasticsearch__.client.cat.indices(index: 'text-font', h: [:index], format: 'json').count == 1
+                 @@models.delete('Content::TafsirAyah')
+            end
+        rescue
         end
 
         return if @@models.empty?
