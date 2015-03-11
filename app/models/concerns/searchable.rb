@@ -8,6 +8,7 @@ module Searchable
 
     # convenience functions for setting up all indices in one go
 
+
     def self.create_index
         @@models.each do | model |
             model = Kernel.const_get( model )
@@ -30,8 +31,29 @@ module Searchable
     end
 
     def self.setup_index
+        return if Quran::Ayah.__elasticsearch__.client.cluster.health['unassigned_shards'] == 200
+
+        # Let's check to see which is missing and go from there.
+        if Quran::Ayah.__elasticsearch__.client.cat.indices(index: 'translation*', h: [:index], format: 'json').count == 37
+            @@models.delete('Content::Translation')
+        end
+
+        if Quran::Ayah.__elasticsearch__.client.cat.indices(index: 'transliteration', h: [:index], format: 'json').count == 1
+             @@models.delete('Content::Transliteration')
+        end
+
+        if Quran::Ayah.__elasticsearch__.client.cat.indices(index: 'tafsir', h: [:index], format: 'json').count == 1
+             @@models.delete('Content::TafsirAyah')
+        end
+
+        if Quran::Ayah.__elasticsearch__.client.cat.indices(index: 'text-font', h: [:index], format: 'json').count == 1
+             @@models.delete('Content::TafsirAyah')
+        end
+
+        return if @@models.empty?
+
         @@models.each do | model |
-            model = Kernel.const_get( model )
+            model = Kernel.const_get(model)
             model.setup_index
         end
     end
