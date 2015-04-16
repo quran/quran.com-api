@@ -28,6 +28,7 @@ gem 'sdoc', '~> 0.4.0',          group: :doc
 
 # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
 gem 'spring',        group: :development
+gem 'spring-commands-rspec', group: :development
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
@@ -40,7 +41,7 @@ gem 'spring',        group: :development
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
-# 
+#
 # Rails console to work
 gem 'rb-readline'
 
@@ -67,12 +68,12 @@ gem 'dotenv-rails'
 gem 'dotenv-deployment'
 
 # Elasticsearch
-gem 'elasticsearch-model' 
+gem 'elasticsearch-model'
 gem 'elasticsearch-rails'
 
 
 # This is for batching the Content::Translation, batches based on the string primary keys
-gem 'batchelor' 
+gem 'batchelor'
 
 # Paging the results
 # gem 'will_paginate'
@@ -91,6 +92,10 @@ group :development, :test do
       gem 'jazz_hands', github: 'nixme/jazz_hands', branch: 'bring-your-own-debugger'
       gem 'pry-byebug'
       gem 'pry-rails'
+      gem 'rspec-rails' # http://betterspecs.org/
+      gem 'factory_girl'
+      gem 'guard-rspec', require: false
+      gem 'rb-fsevent'
 end
 
 gem 'elasticsearch'

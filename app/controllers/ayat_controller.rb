@@ -1,7 +1,8 @@
 class AyatController < ApplicationController
     def self.index params = {}, headers = {}, session = {}
-        # Set the variables
-        @cardinalities, @results = Hash.new, Hash.new, Hash.new
+
+        cardinalities = Hash.new
+        @results = Hash.new
 
         # The range of which the ayahs to search
         if params.key?(:range)
@@ -12,15 +13,8 @@ class AyatController < ApplicationController
             range = ["1", "10"]
         end
         if params.key?( :ayah )
-            range = [ params[:ayah] ] 
+            range = [ params[:ayah] ]
         end
-        
-
-        Rails.logger.ap params
-        Rails.logger.ap range
-
-        # require either an ayah or range parameter
-        raise APIValidation, 'missing required range or ayah parameter' if not range.length > 0
 
         # default select the word font for the quran parameter
         params[:quran] ||= 1
@@ -29,11 +23,8 @@ class AyatController < ApplicationController
         # The database would take too long to process
         # It is suggested to do 10 ayah blocks though
         if (range.last.to_i - range.first.to_i) > 50
-            raise APIValidation, "Range not set or invalid, use a string or an array (maximum 50 ayat per request), e.g. '1-3' or [ 1, 3 ]"
+            raise APIValidation, "Range not set or invalid, use a string or an array (maximum 50 ayat per request), e.g. '1-3'"
         end
-
-        # Generate the keys for the given surah and range
-        # keys = Quran::Ayah.fetch_ayahs(params[:surah_id], range.first, range.last)
 
         # Keys for the ayahs
         ayahs = Quran::Ayah.fetch_ayahs(params[:surah_id], range.first, range.last)
@@ -52,11 +43,12 @@ class AyatController < ApplicationController
         end
 
         # cardinalities will be used to determine the kind of rendering to fetch
-        @cardinalities = Content::Resource.fetch_cardinalities(params)
+        cardinalities = Content::Resource.fetch_cardinalities(params)
 
         # The cardinalities for the quran
-        if @cardinalities.key? :quran
-            @cardinalities[:quran].bucket_results_quran(params, keys).each do |ayah|
+        Rails.logger.debug cardinalities
+        if cardinalities.key? :quran
+            cardinalities[:quran].bucket_results_quran(params, keys).each do |ayah|
                 #Rails.logger.debug( "each ayah #{ ap ayah }" )
                 if ayah.kind_of?(Array)
                     @results["#{ayah.first[:ayah_key]}".to_sym][:quran] = ayah
@@ -67,8 +59,8 @@ class AyatController < ApplicationController
         end
 
         # Fetch the content corresponding to the the ayah keys and the content requested.
-        if @cardinalities.key? :content
-            @cardinalities[:content].each do |row|
+        if cardinalities.key? :content
+            cardinalities[:content].each do |row|
                 Content::Resource.bucket_results_content(row, keys).each do |ayah|
                     #Rails.logger.debug( "aYAH #{ap ayah.as_json.deep_symbolize_keys}" )
                     @results["#{ayah.ayah_key}".to_sym][:content] << { id: ayah.id, name: ayah.name, slug: ayah.slug, lang: ayah.lang, dir: ayah.dir }.merge( ayah.has_attribute?( :text ) ? { text: ayah.text } : {} ).merge( ayah.has_attribute?( :url ) ? { url: ayah.url } : {} )
@@ -79,18 +71,18 @@ class AyatController < ApplicationController
         if params.key? :audio
             Audio::File.fetch_audio_files(params, keys).each do |ayah|
                 @results["#{ayah.ayah_key}".to_sym][:audio] = {
-                    ogg: 
+                    ogg:
                         {
-                            url: ayah.ogg_url, 
-                            duration: ayah.ogg_duration, 
+                            url: ayah.ogg_url,
+                            duration: ayah.ogg_duration,
                             mime_type: ayah.ogg_mime_type
-                        }, 
-                    mp3: 
+                        },
+                    mp3:
                         {
-                            url: ayah.mp3_url, 
-                            duration: ayah.mp3_duration, 
+                            url: ayah.mp3_url,
+                            duration: ayah.mp3_duration,
                             mime_type: ayah.mp3_mime_type
-                        } 
+                        }
                 }
             end
         end
@@ -101,23 +93,10 @@ class AyatController < ApplicationController
             @results["#{ayah_key}".to_sym].delete( :audio   ) if not @results["#{ayah_key}".to_sym][:audio].length > 0
         end
 
-
-
         @results = @results.values
     end
 
     def index
-        # Keen.publish(:ayat, { 
-        #     params: params, 
-        #     audio: params[:audio], 
-        #     content: params[:content], 
-        #     quran: params[:quran], 
-        #     from: params[:from], 
-        #     to: params[:to],
-        #     surah: params[:surah_id] 
-        # })
-
-        render json: AyatController.index( params, request.headers, session )
-        return
+        render json: AyatController.index(params)
     end
 end

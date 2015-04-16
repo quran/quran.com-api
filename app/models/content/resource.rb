@@ -42,9 +42,6 @@ class Content::Resource < ActiveRecord::Base
             .order("i18n.language.language_code")
     end
 
-
-
-
     # BUCKET RELATED
     def self.fetch_cardinalities(params)
         cardinality = Hash.new
@@ -60,7 +57,7 @@ class Content::Resource < ActiveRecord::Base
         .where("content.resource.is_available = 't' AND content.resource.type = 'quran'")
         .where("content.resource_api_version.v2_is_enabled = 't' ")
         .where("content.resource.resource_id = ?", params_quran)
-        
+
     end
 
     def self.fetch_cardinality_content(params_content)
@@ -74,7 +71,7 @@ class Content::Resource < ActiveRecord::Base
         .where("content.resource.resource_id IN (?)", params_content)
         .order("content.resource.resource_id")
 
-        
+
     end
 
     def bucket_results_quran(params, keys)
@@ -92,7 +89,7 @@ class Content::Resource < ActiveRecord::Base
 
         elsif self.cardinality_type == "1_word"
 
-            if  self.slug == 'word_font' 
+            if  self.slug == 'word_font'
                 cut[:select] = "
                               concat( 'p', c.page_num ) char_font
                              , concat( '&#x', c.code_hex, ';' ) char_code
@@ -141,7 +138,7 @@ class Content::Resource < ActiveRecord::Base
                 }
             end
             .group_by{|a| a[:ayah_key]}.values
-            
+
             return results
         end
     end
