@@ -14,26 +14,45 @@ RSpec.describe AyatController, type: :controller do
     expect(JSON.parse(response.body).first.has_key?('audio')).to be_truthy
   end
 
-  it 'should return content with ayahs' do
-    get :index, {surah_id: 1, range: '1-5', content: 21}
+  describe 'content' do
+    it 'should return content with ayahs' do
+      get :index, {surah_id: 1, range: '1-5', content: 21}
 
-    expect(JSON.parse(response.body).first.has_key?('content')).to be_truthy
+      expect(JSON.parse(response.body).first.has_key?('content')).to be_truthy
+    end
+
+    it 'should not return content with ayahs' do
+      get :index, {surah_id: 1, range: '1-5'}
+
+      expect(JSON.parse(response.body).first.has_key?('content')).to be_falsy
+    end
+
+    it 'should return multiple contents with ayahs' do
+      get :index, {surah_id: 1, range: '1-5', content: '21, 16'}
+
+      expect(JSON.parse(response.body).first.has_key?('content')).to be_truthy
+      expect(JSON.parse(response.body).first['content'].length).to be > 1
+    end
   end
 
-  it 'should return multiple contents with ayahs' do
-    get :index, {surah_id: 1, range: '1-5', content: '21, 16'}
+  describe 'quran' do
+    it 'should return quran font rendering' do
+      get :index, {surah_id: 1, range: '1-5', quran: 1}
 
-    expect(JSON.parse(response.body).first.has_key?('content')).to be_truthy
-    expect(JSON.parse(response.body).first['content'].length).to be > 1
-  end
+      expect(JSON.parse(response.body).first.has_key?('quran')).to be_truthy
+      expect(JSON.parse(response.body).first['quran'].length).to eql 5
+      expect(JSON.parse(response.body).first['quran'].first.has_key?('word')).to be_truthy
+      expect(JSON.parse(response.body).first['quran'].first.has_key?('char')).to be_truthy
+    end
 
-  it 'should turn quran font rendering' do
-    get :index, {surah_id: 1, range: '1-5', quran: 1}
+    it 'should always return quran font rendering' do
+      get :index, {surah_id: 1, range: '1-5'}
 
-    expect(JSON.parse(response.body).first.has_key?('quran')).to be_truthy
-    expect(JSON.parse(response.body).first['quran'].length).to eql 5
-    expect(JSON.parse(response.body).first['quran'].first.has_key?('word')).to be_truthy
-    expect(JSON.parse(response.body).first['quran'].first.has_key?('char')).to be_truthy
+      expect(JSON.parse(response.body).first.has_key?('quran')).to be_truthy
+      expect(JSON.parse(response.body).first['quran'].length).to eql 5
+      expect(JSON.parse(response.body).first['quran'].first.has_key?('word')).to be_truthy
+      expect(JSON.parse(response.body).first['quran'].first.has_key?('char')).to be_truthy
+    end
   end
 
   describe 'range' do
@@ -65,7 +84,6 @@ RSpec.describe AyatController, type: :controller do
       get :index, {surah_id: 2, range: '1-52'}
 
       expect(JSON.parse(response.body).has_key?('error')).to be_truthy
-      expect(response).to have_http_status(404)
     end
   end
 end

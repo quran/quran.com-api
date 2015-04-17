@@ -42,78 +42,55 @@ class Content::Resource < ActiveRecord::Base
             .order("i18n.language.language_code")
     end
 
-    # BUCKET RELATED
-    def self.fetch_cardinalities(params)
-        cardinality = Hash.new
-        cardinality[:quran]   = self.fetch_cardinality_quran(params[:quran]).first if params.key? :quran
-        cardinality[:content] = self.fetch_cardinality_content(params[:content])   if params[:content] #.key? :content
-        return cardinality
-    end
 
-    def self.fetch_cardinality_quran(params_quran)
+    def self.fetch_cardinality_quran(quran_id)
         self
         .joins('JOIN content.resource_api_version  using ( resource_id )')
         .select([:sub_type, :cardinality_type, :language_code, :slug, :is_available, :description, :name].map{ |term| "content.resource.#{term}" }.join(', '))
         .where("content.resource.is_available = 't' AND content.resource.type = 'quran'")
         .where("content.resource_api_version.v2_is_enabled = 't' ")
-        .where("content.resource.resource_id = ?", params_quran)
-
+        .find(quran_id)
     end
 
-    def self.fetch_cardinality_content(params_content)
-        params_content = params_content.split(",").map{|p| p.to_i}
+    def self.bucket_results_quran(quran_id, keys)
+        cardinality = self.fetch_cardinality_quran(quran_id)
 
-        self
-        .joins("JOIN content.resource_api_version  using ( resource_id )")
-        .where("content.resource.is_available = 't' ")
-        .where("content.resource_api_version.v2_is_enabled = 't' ")
-        .where("content.resource.type = 'content' ")
-        .where("content.resource.resource_id IN (?)", params_content)
-        .order("content.resource.resource_id")
+        if cardinality.cardinality_type == "1_ayah"
 
-
-    end
-
-    def bucket_results_quran(params, keys)
-        cut = Hash.new
-
-        if self.cardinality_type == "1_ayah"
-
-            Content::Resource
+            self
             .joins("JOIN quran.text c using ( resource_id )")
             .joins("JOIN quran.ayah using ( ayah_key )")
             .select("c.*")
-            .where("content.resource.resource_id = ?", params[:quran])
+            .where("content.resource.resource_id = ?", quran_id)
             .where("quran.ayah.ayah_key IN (?)", keys)
             .order("quran.ayah.surah_id, quran.ayah.ayah_num")
 
-        elsif self.cardinality_type == "1_word"
+        elsif cardinality.cardinality_type == "1_word"
 
-            if  self.slug == 'word_font'
-                cut[:select] = "
+            if  cardinality.slug == 'word_font'
+                select = "
                               concat( 'p', c.page_num ) char_font
                              , concat( '&#x', c.code_hex, ';' ) char_code
                              , ct.name char_type
                         "
-                cut[:join] = "join quran.char_type ct on ct.char_type_id = c.char_type_id"
+                join = "join quran.char_type ct on ct.char_type_id = c.char_type_id"
             end
 
-            results = Content::Resource
+            self
             .joins("JOIN quran.word_font c using ( resource_id )")
             .joins("JOIN quran.ayah using (ayah_key) ")
-            .joins(cut[:join])
+            .joins(join)
             .joins("left join quran.word w on w.word_id = c.word_id")
             .joins("left join quran.word_translation wt on w.word_id = wt.word_id and wt.language_code = 'en'")
             .joins("left join quran.token t on w.token_id = t.token_id")
-            .where("content.resource.resource_id = ? ", params[:quran])
+            .where("content.resource.resource_id = ? ", quran_id)
             .where("quran.ayah.ayah_key IN (?)", keys)
             .select("c.*")
             .select("content.resource.resource_id")
-            .select(cut[:select])
+            .select(select)
             .select("wt.value word_translation
                  , t.value word_arabic" )
             .order("quran.ayah.surah_id, quran.ayah.ayah_num, c.position")
-            .to_a # Must make it into an array to use the .uniq function otherwise will trigger ActiveResource
             .map do |word|
                 {
                     ayah_key: word.ayah_key,
@@ -139,34 +116,76 @@ class Content::Resource < ActiveRecord::Base
             end
             .group_by{|a| a[:ayah_key]}.values
 
-            return results
         end
     end
 
-    def self.bucket_results_content(row, keys)
-        if row.cardinality_type == 'n_ayah'
-            join = "JOIN i18n.language l using ( language_code ) JOIN #{row.type}.#{row.sub_type} c using ( resource_id ) JOIN #{row.type}.#{row.sub_type}_ayah n using ( #{row.sub_type}_id )"
-        elsif row.cardinality_type == '1_ayah'
-            join = "JOIN i18n.language l using ( language_code ) JOIN #{row.type}.#{row.sub_type} c using ( resource_id )"
-        end
-        if row.cardinality_type == 'n_ayah'
-            self
-            .joins(join)
-            .joins("JOIN quran.ayah using ( ayah_key )")
-            .select("c.resource_id, l.language_code lang, l.direction dir, quran.ayah.ayah_key, concat( '/', concat_ws( '/', '#{row.type}', '#{row.sub_type}', c.#{row.sub_type}_id ) ) url, content.resource.slug, content.resource.name")
-            .where("content.resource.resource_id = ?", row.resource_id)
-            .where("quran.ayah.ayah_key IN (?)", keys)
-            .order("quran.ayah.surah_id , quran.ayah.ayah_num")
+    def self.fetch_cardinality_content(params_content)
+        return if params_content.nil?
 
-        elsif row.cardinality_type == '1_ayah'
-            self
-            .joins(join)
-            .joins("join quran.ayah using ( ayah_key )")
-            .select("c.*, l.language_code lang, l.direction dir, content.resource.slug, content.resource.name")
-            .where("content.resource.resource_id = ?", row.resource_id)
-            .where("quran.ayah.ayah_key IN (?)", keys)
-            .order("quran.ayah.surah_id , quran.ayah.ayah_num")
-
+        if !params_content.is_a? Array
+            params_content = params_content.split(',').map{|p| p.to_i}
         end
+
+        self
+        .joins("JOIN content.resource_api_version  using ( resource_id )")
+        .where("content.resource.is_available = 't' ")
+        .where("content.resource_api_version.v2_is_enabled = 't' ")
+        .where("content.resource.type = 'content' ")
+        .where("content.resource.resource_id IN (?)", params_content)
+        .order("content.resource.resource_id")
+    end
+
+    def self.bucket_results_content(params_content, keys)
+        ayahs = Array.new
+        rows = self.fetch_cardinality_content(params_content)
+
+        rows.each do |row|
+            if row.cardinality_type == 'n_ayah'
+                join = "JOIN i18n.language l using ( language_code ) JOIN #{row.type}.#{row.sub_type} c using ( resource_id ) JOIN #{row.type}.#{row.sub_type}_ayah n using ( #{row.sub_type}_id )"
+            elsif row.cardinality_type == '1_ayah'
+                join = "JOIN i18n.language l using ( language_code ) JOIN #{row.type}.#{row.sub_type} c using ( resource_id )"
+            end
+            if row.cardinality_type == 'n_ayah'
+                self
+                .joins(join)
+                .joins("JOIN quran.ayah using ( ayah_key )")
+                .select("c.resource_id, l.language_code lang, l.direction dir, quran.ayah.ayah_key, concat( '/', concat_ws( '/', '#{row.type}', '#{row.sub_type}', c.#{row.sub_type}_id ) ) url, content.resource.slug, content.resource.name")
+                .where("content.resource.resource_id = ?", row.resource_id)
+                .where("quran.ayah.ayah_key IN (?)", keys)
+                .order("quran.ayah.surah_id , quran.ayah.ayah_num")
+
+            elsif row.cardinality_type == '1_ayah'
+                k = self
+                .joins(join)
+                .joins("join quran.ayah using ( ayah_key )")
+                .select("c.*, l.language_code lang, l.direction dir, content.resource.slug, content.resource.name")
+                .where("content.resource.resource_id = ?", row.resource_id)
+                .where("quran.ayah.ayah_key IN (?)", keys)
+                .order("quran.ayah.surah_id , quran.ayah.ayah_num")
+
+                k.each{|ayah| ayahs << ayah}
+            end
+        end
+
+        ayahs
+        .map do |ayah|
+            {
+                id: ayah.id,
+                name: ayah.name,
+                slug: ayah.slug,
+                lang: ayah.lang,
+                dir: ayah.dir,
+                ayah_key: ayah.ayah_key
+            }.merge(
+                ayah.has_attribute?(:text) ?
+                {text: ayah.text} :
+                {}
+            ).merge(
+                ayah.has_attribute?(:url) ?
+                {url: ayah.url} :
+                {}
+            )
+        end
+        .group_by{|a| a[:ayah_key]}.values
     end
 end

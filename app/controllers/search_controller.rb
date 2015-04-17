@@ -200,7 +200,7 @@ class SearchController < ApplicationController
         # client = Elasticsearch::Client.new host: 'http://162.243.158.101:9200' # trace: true, log: true;
         results = client.search( search_params )
         #return results
-        
+
         total_hits = results[ 'hits' ][ 'total' ]
 
         buckets = results[ 'aggregations' ][ 'by_ayah_key' ][ 'buckets' ]
@@ -302,7 +302,7 @@ class SearchController < ApplicationController
 
         # attribute the "bucket" structure for each ayah result
         by_key.values.each do |result|
-            result[:bucket] = AyatController.index( { surah_id: result[:surah], ayah: result[:ayah], content: params[:content], audio: params[:audio] } ).first
+            result[:bucket] = Quran::Ayah.get_ayat( { surah_id: result[:surah], ayah: result[:ayah], content: params[:content], audio: params[:audio] } ).first
 
             if result[:bucket][:content]
                 resource_id_to_bucket_content_index = {}
@@ -447,25 +447,21 @@ class SearchController < ApplicationController
         delta_time = Time.now - start_time
 
         to_render = {
-            query: params[:q], 
-            hits: return_result.length, 
+            query: params[:q],
+            hits: return_result.length,
             page: page,
             size: size,
             took: delta_time,
             total: buckets.length,
             results: return_result
         }
-        
+
 
         return to_render
 
     end
 
     def query
-        Keen.publish(:search, { params: params, query: params[:q] })
-        
         render json: JSON.pretty_generate( SearchController.query( params, request.headers, session ) )
-        return
-        # Init the config hash and the output
     end
 end

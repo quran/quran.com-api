@@ -7,7 +7,7 @@ class Audio::File < ActiveRecord::Base
     belongs_to :ayah,       class_name: 'Quran::Ayah'
     belongs_to :recitation, class_name: 'Audio::Recitation'
 
-    def self.fetch_audio_files(params, keys)
+    def self.fetch_audio_files(audio_id, keys)
         self
         .joins("join quran.ayah a using ( ayah_key )")
         .joins("left join ( select t.recitation_id
@@ -39,9 +39,26 @@ class Audio::File < ActiveRecord::Base
                      , mp3.url mp3_url
                      , mp3.duration mp3_duration
                      , mp3.mime_type mp3_mime_type")
-        .where("audio.file.recitation_id = ?", params[:audio])
+        .where("audio.file.recitation_id = ?", audio_id)
         .where("a.ayah_key IN (?)", keys)
         .group("a.ayah_key, ogg.url, ogg.duration, ogg.mime_type, mp3.url, mp3.duration, mp3.mime_type, audio.file.file_id")
         .order("a.surah_id, a.ayah_num")
+        .map do |ayah|
+          {
+            ayah_key: ayah.ayah_key,
+            ogg:
+                {
+                    url: ayah.ogg_url,
+                    duration: ayah.ogg_duration,
+                    mime_type: ayah.ogg_mime_type
+                },
+            mp3:
+                {
+                    url: ayah.mp3_url,
+                    duration: ayah.mp3_duration,
+                    mime_type: ayah.mp3_mime_type
+                }
+          }
+        end
     end
 end
