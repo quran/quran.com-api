@@ -111,6 +111,8 @@ RSpec.describe SearchController, type: :controller do
       get :query, { 'q' => 'allah light', content: '19,13' }, nil, nil
       result = JSON.parse(response.body)['results']
 
+      Rails.logger.info result
+
       expect(result[0]['bucket']['content']).not_to be_empty
       expect(result[0]['bucket']['content'][0]['id']).to eql(13)
       expect(result[0]['bucket']['content'][0]['name']).not_to be_nil

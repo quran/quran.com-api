@@ -33,6 +33,14 @@ RSpec.describe AyatController, type: :controller do
       expect(JSON.parse(response.body).first.has_key?('content')).to be_truthy
       expect(JSON.parse(response.body).first['content'].length).to be > 1
     end
+
+    it 'should return tafsir' do
+      get :index, {surah_id: 1, range: '1-5', content: '21, 13'}
+
+      expect(JSON.parse(response.body).first.has_key?('content')).to be_truthy
+      expect(JSON.parse(response.body).first['content'].first.has_key?('url')).to be_truthy
+      expect(JSON.parse(response.body).first['content'].first['lang']).to eql 'ar'
+    end
   end
 
   describe 'quran' do

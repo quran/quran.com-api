@@ -153,17 +153,17 @@ class Content::Resource < ActiveRecord::Base
                 .where("content.resource.resource_id = ?", row.resource_id)
                 .where("quran.ayah.ayah_key IN (?)", keys)
                 .order("quran.ayah.surah_id , quran.ayah.ayah_num")
+                .each{|ayah| ayahs << ayah}
 
             elsif row.cardinality_type == '1_ayah'
-                k = self
+                self
                 .joins(join)
                 .joins("join quran.ayah using ( ayah_key )")
                 .select("c.*, l.language_code lang, l.direction dir, content.resource.slug, content.resource.name")
                 .where("content.resource.resource_id = ?", row.resource_id)
                 .where("quran.ayah.ayah_key IN (?)", keys)
                 .order("quran.ayah.surah_id , quran.ayah.ayah_num")
-
-                k.each{|ayah| ayahs << ayah}
+                .each{|ayah| ayahs << ayah}
             end
         end
 
