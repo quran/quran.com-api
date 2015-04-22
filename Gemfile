@@ -108,3 +108,7 @@ gem 'httparty'
 
 # Keen.io
 gem 'keen'
+
+
+gem 'levenshtein-ffi'
+gem 'levenshtein'
