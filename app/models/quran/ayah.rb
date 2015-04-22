@@ -105,7 +105,7 @@ class Quran::Ayah < ActiveRecord::Base
             end
         end
 
-        if params.key? :audio
+        if !params[:audio].nil?
             Audio::File.fetch_audio_files(params[:audio], keys).each do |ayah|
                 results["#{ayah[:ayah_key]}".to_sym][:audio] = ayah
             end

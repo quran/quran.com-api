@@ -3,9 +3,17 @@ require 'rails_helper'
 RSpec.describe SearchController, type: :controller do
   it 'should get results' do
     get :query, { q: 'allah light' }
+    results = JSON.parse(response.body)
+
     expect(response).to be_success
     expect(response.content_type).to eql('application/json')
     expect(response.body).not_to be nil
+    expect(results.key?('hits')).to be_truthy
+    expect(results.key?('page')).to be_truthy
+    expect(results.key?('size')).to be_truthy
+    expect(results.key?('took')).to be_truthy
+    expect(results.key?('total')).to be_truthy
+    expect(results.key?('results')).to be_truthy
   end
 
   it 'should allow different size params' do
