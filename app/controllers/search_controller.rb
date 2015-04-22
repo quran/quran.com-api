@@ -63,7 +63,7 @@ class SearchController < ApplicationController
             search_params.merge!( {
                 index: [ 'trans*', 'text-font' ],
                 body: {
-                    indices_boost: @indices_boost
+                    indices_boost: @indices_boost #coming from language detection
                 }
             } )
         end
