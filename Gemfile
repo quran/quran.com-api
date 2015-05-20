@@ -112,3 +112,6 @@ gem 'keen'
 
 gem 'levenshtein-ffi'
 gem 'levenshtein'
+
+gem 'actionpack-page_caching'
+gem 'actionpack-action_caching'

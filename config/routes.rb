@@ -7,10 +7,10 @@ Rails.application.routes.draw do
 
   get 'search', to: 'search#query'
 
-  post 'support', to: 'support#zendesk'  
+  post 'support', to: 'support#zendesk'
 
-  resources :options, only: [] do
-    collection do 
+  resources :options, only: [], defaults: { format: 'json' } do
+    collection do
       get :default
       get :language
       get :quran
@@ -19,9 +19,9 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :surahs, only: [:index, :show] do
-      resources :ayat, only: [:index]
+  resources :surahs, only: [:index, :show], defaults: { format: 'json' } do
+      resources :ayat, only: [:index], defaults: { format: 'json' }
   end
-
+  # get 'surahs' => 'surahs#index', defaults: { format: 'json' }
   resources :pages, only: [:index]
 end
