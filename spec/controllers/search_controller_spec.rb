@@ -61,7 +61,7 @@ RSpec.describe SearchController, type: :controller do
     expect(result[0]['index']).not_to be_nil
     expect(result[0]['score']).not_to be_nil
     expect(result[0]['match']).not_to be_empty
-    expect(result[0]['bucket']).not_to be_empty
+    expect(result[0]['quran']).not_to be_empty
   end
 
   it 'should contain match attribute' do
@@ -79,62 +79,62 @@ RSpec.describe SearchController, type: :controller do
     expect(result[0]['match']['best'][0]['score']).not_to be_nil
   end
 
-  it "should result bucket quran attribute" do
+  it "should result in quran attribute" do
       get :query, {'q' => 'allah light'}
       result = JSON.parse(response.body)['results']
 
-      expect(result[0]['bucket']['quran']).not_to be_empty
-      expect(result[0]['bucket']['quran'][0]['char']).not_to be_empty
-      expect(result[0]['bucket']['quran'][1]['word']).not_to be_empty
+      expect(result[0]['quran']).not_to be_empty
+      expect(result[0]['quran'][0]['char']).not_to be_empty
+      expect(result[0]['quran'][1]['word']).not_to be_empty
 
-      expect(result[0]['bucket']['quran'][0]['char']['code']).to match(/^&#x/)
-      expect(result[0]['bucket']['quran'][0]['char']['font']).to match(/^p\d+$/)
+      expect(result[0]['quran'][0]['char']['code']).to match(/^&#x/)
+      expect(result[0]['quran'][0]['char']['font']).to match(/^p\d+$/)
 
-      expect(result[0]['bucket']['quran'][-1]['char']['type']).to eql('end')
+      expect(result[0]['quran'][-1]['char']['type']).to eql('end')
 
-      expect(result[0]['bucket']['quran'][0]['char']['font']).not_to be_nil
-      expect(result[0]['bucket']['quran'][0]['char']['type']).not_to be_nil
-      expect(result[0]['bucket']['quran'][0]['char']['code']).not_to be_nil
-      expect(result[0]['bucket']['quran'][1]['word']['id']).not_to be_nil
-      expect(result[0]['bucket']['quran'][1]['word']['arabic']).not_to be_nil
-      expect(result[0]['bucket']['quran'][1]['word']['translation']).not_to be_nil
+      expect(result[0]['quran'][0]['char']['font']).not_to be_nil
+      expect(result[0]['quran'][0]['char']['type']).not_to be_nil
+      expect(result[0]['quran'][0]['char']['code']).not_to be_nil
+      expect(result[0]['quran'][1]['word']['id']).not_to be_nil
+      expect(result[0]['quran'][1]['word']['arabic']).not_to be_nil
+      expect(result[0]['quran'][1]['word']['translation']).not_to be_nil
   end
 
-  it "should result bucket audio attribute" do
+  it "should result in audio attribute" do
       get :query, { 'q' => 'allah light', audio: 1 }, nil, nil
       result = JSON.parse(response.body)['results']
 
-      expect(result[0]['bucket']['audio']).not_to be_empty
-      expect(result[0]['bucket']['audio']['ogg']).not_to be_empty
-      expect(result[0]['bucket']['audio']['ogg']['url']).not_to be_nil
-      expect(result[0]['bucket']['audio']['ogg']['duration']).not_to be_nil
-      expect(result[0]['bucket']['audio']['ogg']['mime_type']).not_to be_nil
-      expect(result[0]['bucket']['audio']['mp3']).not_to be_empty
-      expect(result[0]['bucket']['audio']['mp3']['url']).not_to be_nil
-      expect(result[0]['bucket']['audio']['mp3']['duration']).not_to be_nil
-      expect(result[0]['bucket']['audio']['mp3']['mime_type']).not_to be_nil
+      expect(result[0]['audio']).not_to be_empty
+      expect(result[0]['audio']['ogg']).not_to be_empty
+      expect(result[0]['audio']['ogg']['url']).not_to be_nil
+      expect(result[0]['audio']['ogg']['duration']).not_to be_nil
+      expect(result[0]['audio']['ogg']['mime_type']).not_to be_nil
+      expect(result[0]['audio']['mp3']).not_to be_empty
+      expect(result[0]['audio']['mp3']['url']).not_to be_nil
+      expect(result[0]['audio']['mp3']['duration']).not_to be_nil
+      expect(result[0]['audio']['mp3']['mime_type']).not_to be_nil
   end
 
-  it "should result bucket content attribute" do
+  it "should result in content attribute" do
       get :query, { 'q' => 'allah light', content: '19,13' }, nil, nil
       result = JSON.parse(response.body)['results']
 
       Rails.logger.info result
 
-      expect(result[0]['bucket']['content']).not_to be_empty
-      expect(result[0]['bucket']['content'][0]['id']).to eql(13)
-      expect(result[0]['bucket']['content'][0]['name']).not_to be_nil
-      expect(result[0]['bucket']['content'][0]['slug']).not_to be_nil
-      expect(result[0]['bucket']['content'][0]['lang']).not_to be_nil
-      expect(result[0]['bucket']['content'][0]['dir']).not_to be_nil
-      expect(result[0]['bucket']['content'][0]['url']).not_to be_nil
+      expect(result[0]['content']).not_to be_empty
+      expect(result[0]['content'][0]['id']).to eql(13)
+      expect(result[0]['content'][0]['name']).not_to be_nil
+      expect(result[0]['content'][0]['slug']).not_to be_nil
+      expect(result[0]['content'][0]['lang']).not_to be_nil
+      expect(result[0]['content'][0]['dir']).not_to be_nil
+      expect(result[0]['content'][0]['url']).not_to be_nil
 
-      expect(result[0]['bucket']['content'][1]['id']).to eql(19)
-      expect(result[0]['bucket']['content'][1]['name']).not_to be_nil
-      expect(result[0]['bucket']['content'][1]['slug']).not_to be_nil
-      expect(result[0]['bucket']['content'][1]['lang']).not_to be_nil
-      expect(result[0]['bucket']['content'][1]['dir']).not_to be_nil
-      expect(result[0]['bucket']['content'][1]['text']).not_to be_nil
+      expect(result[0]['content'][1]['id']).to eql(19)
+      expect(result[0]['content'][1]['name']).not_to be_nil
+      expect(result[0]['content'][1]['slug']).not_to be_nil
+      expect(result[0]['content'][1]['lang']).not_to be_nil
+      expect(result[0]['content'][1]['dir']).not_to be_nil
+      expect(result[0]['content'][1]['text']).not_to be_nil
   end
 
   it "should allow arabic query" do
@@ -147,11 +147,11 @@ RSpec.describe SearchController, type: :controller do
       expect(result[0]['ayah']).to eql(35)
       expect(result[0]['index']).to eql(2826)
       expect( result[0]['match']['best'][0]['slug']).to eql('word_font')
-      expect(result[0]['bucket']['quran'][1]['highlight']).not_to be_nil # "allah"
-      expect(result[0]['bucket']['quran'][2]['highlight']).not_to be_nil # "is the light"
-      expect(result[0]['bucket']['quran'][7]['highlight']).not_to be_nil # "of his light"
-      expect(result[0]['bucket']['quran'][10]['highlight']).not_to be_nil # "is a lamp"
-      expect(result[0]['bucket']['quran'][12]['highlight']).not_to be_nil # "the lamp"
+      expect(result[0]['quran'][1]['highlight']).not_to be_nil # "allah"
+      expect(result[0]['quran'][2]['highlight']).not_to be_nil # "is the light"
+      expect(result[0]['quran'][7]['highlight']).not_to be_nil # "of his light"
+      expect(result[0]['quran'][10]['highlight']).not_to be_nil # "is a lamp"
+      expect(result[0]['quran'][12]['highlight']).not_to be_nil # "the lamp"
 
       get :query, { q: 'اللَّهُ نُورُ' }, nil, nil
       result_with_tashkil = JSON.parse(response.body)['results']

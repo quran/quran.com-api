@@ -252,11 +252,30 @@ class SearchController < ApplicationController
 
         # attribute the "bucket" structure for each ayah result
         by_key.values.each do |result|
-            result[:bucket] = Quran::Ayah.get_ayat( { surah_id: result[:surah], ayah: result[:ayah], content: params[:content], audio: params[:audio] } ).first
 
-            if result[:bucket][:content]
+            # result[:bucket] = Quran::Ayah.get_ayat( { surah_id: result[:surah], ayah: result[:ayah], content: params[:content], audio: params[:audio] } ).first
+
+            # if result[:bucket][:content]
+            #     resource_id_to_bucket_content_index = {}
+            #     result[:bucket][:content].each_with_index do | c, i |
+            #         resource_id_to_bucket_content_index[ c[:id].to_i ] = i
+            #     end
+            #
+            #     #
+            #     result[:match][:best].each do |b|
+            #         id = b[:id].to_i
+            #
+            #         if index = resource_id_to_bucket_content_index[ id ]
+            #             result[:bucket][:content][ index ][:text] = b[:text]
+            #         end
+            #     end
+            # end
+
+            result.merge!(Quran::Ayah.get_ayat( { surah_id: result[:surah], ayah: result[:ayah], content: params[:content], audio: params[:audio] } ).first.as_json.deep_symbolize_keys)
+            Rails.logger.ap result
+            if result[:content]
                 resource_id_to_bucket_content_index = {}
-                result[:bucket][:content].each_with_index do | c, i |
+                result[:content].each_with_index do | c, i |
                     resource_id_to_bucket_content_index[ c[:id].to_i ] = i
                 end
 
@@ -265,7 +284,7 @@ class SearchController < ApplicationController
                     id = b[:id].to_i
 
                     if index = resource_id_to_bucket_content_index[ id ]
-                        result[:bucket][:content][ index ][:text] = b[:text]
+                        result[:content][ index ][:text] = b[:text]
                     end
                 end
             end
@@ -347,7 +366,8 @@ class SearchController < ApplicationController
 
                     if parsed[:word_ids].length > 0
                         # init the word_id_hash
-                        result[:bucket][:quran].each do |h|
+                        Rails.logger.ap result[:quran]
+                        result[:quran].each do |h|
                             word_id_hash[ h[:word][:id].to_s.to_sym ] = { text: h[:word][:arabic] } if h[:word][:id]
                             if word_id_to_highlight.key? h[:word][:id].to_i
                                 h[:highlight] = word_id_to_highlight[ h[:word][:id] ]
@@ -378,13 +398,13 @@ class SearchController < ApplicationController
             # HACK: move back from '2_255' ayah_key format (was an experimental change b/c of ES acting weird) to '2:255'
             r[:key].gsub! /_/, ':'
             # HACK: a bit of a hack, or just keeping redundant info tidy? removing redundant keys from the 'bucket' property (I really want to rename that property)
-            r[:bucket].delete :surah
-            r[:bucket].delete :ayah
-            r[:bucket][:quran].map! do |q|
-                q.delete :ayah_key
-                q.delete :word if q[:word] and q[:word][:id] == nil # get rid of the word block if its just a bunch of nils
-                q
-            end
+            # r[:bucket].delete :surah
+            # r[:bucket].delete :ayah
+            # r[:quran].map! do |q|
+            #     q.delete :ayah_key
+            #     q.delete :word if q[:word] and q[:word][:id] == nil # get rid of the word block if its just a bunch of nils
+            #     q
+            # end
             r[:match][:best] = r[:match][:best][ 0 .. 2 ] # top 3
             r
         end

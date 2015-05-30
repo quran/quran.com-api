@@ -22,6 +22,6 @@ Rails.application.routes.draw do
   resources :surahs, only: [:index, :show], defaults: { format: 'json' } do
       resources :ayat, only: [:index], defaults: { format: 'json' }
   end
-  # get 'surahs' => 'surahs#index', defaults: { format: 'json' }
+
   resources :pages, only: [:index]
 end
