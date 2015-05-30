@@ -79,7 +79,7 @@ gem 'batchelor'
 # gem 'will_paginate'
 gem 'kaminari'
 
-
+# nv 'dir'='/base2' rake db:data:dump_dir
 gem 'yaml_db', github: 'sharabash/yaml_db'
 gem 'sass-rails', '~> 5.0.1'
 
