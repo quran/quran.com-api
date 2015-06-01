@@ -59,13 +59,20 @@ class SearchController < ApplicationController
             most_fields_fields_val = [ 'text^1.6', 'text.stemmed' ]
 
             # TODO filter for langs that have translations only
-
             search_params.merge!( {
                 index: [ 'trans*', 'text-font' ],
                 body: {
                     indices_boost: @indices_boost #coming from language detection
                 }
             } )
+
+            # Determine if this is an AND/OR query
+            if query.downcase.split('or').length > 1
+              query_type = :or
+              query_split = query.downcase.split('or')
+            else
+              query_type = :and
+            end
         end
 
         search_params.merge!( {
@@ -92,30 +99,41 @@ class SearchController < ApplicationController
                 tags_schema: 'styled',
                 #force_source: true
             },
-
-
         } )
 
         # query
+        bool = {}
+        if query_type == :or
+          bool[:should] = query_split.map do |q|
+            {
+              multi_match: {
+                type: 'most_fields',
+                query: q.strip,
+                fields: most_fields_fields_val,
+                minimum_should_match: '3<62%'
+              }
+            }
+          end
+        else
+          bool[:must] = [{
+            ## NOTE leaving this in for future reference
+            #   terms: {
+            #        :'ayah.surah_id' => [ 24 ]
+            #        :'ayah.ayah_key' => [ '24_35' ]
+            #    }
+            #}, {
+            multi_match: {
+                type: 'most_fields',
+                query: query,
+                fields: most_fields_fields_val,
+                minimum_should_match: '3<62%'
+            }
+          }]
+        end
         search_params[:body].merge!( {
-            query: {
-                bool: {
-                    must: [ {
-                    ## NOTE leaving this in for future reference
-                    #   terms: {
-                    #        :'ayah.surah_id' => [ 24 ]
-                    #        :'ayah.ayah_key' => [ '24_35' ]
-                    #    }
-                    #}, {
-                        multi_match: {
-                            type: 'most_fields',
-                            query: query,
-                            fields: most_fields_fields_val,
-                            minimum_should_match: '3<62%'
-                        }
-                    } ]
-                }
-            },
+          query: {
+            bool: bool
+          },
         } )
 
         # other experimental stuff
@@ -157,17 +175,28 @@ class SearchController < ApplicationController
 
         imin = ( page - 1 ) * size
         imax = page * size - 1
+
         buckets_on_page = buckets[ imin .. imax ]
-        keys = buckets_on_page.map { |h| h[ 'key' ] }
+        keys = buckets_on_page.map { |h| h['key'] }
+
         doc_count = buckets_on_page.inject( 0 ) { |doc_count, h| doc_count + h[ 'doc_count' ] }
+
 
         #return buckets
         # restrict to keys on this page
-        search_params[:body][:query][:bool][:must].unshift( {
+        if search_params[:body][:query][:bool][:must].present?
+          search_params[:body][:query][:bool][:must].unshift( {
             terms: {
                 :'ayah.ayah_key' => keys
             }
-        } )
+          })
+        else
+          search_params[:body][:query][:bool][:must] = [{
+            terms: {
+                :'ayah.ayah_key' => keys
+            }
+          }]
+        end
 
         # limit to the number of docs we know we want
         search_params[:body][:size] = doc_count
@@ -178,6 +207,8 @@ class SearchController < ApplicationController
         # pull the new query with hits
         results = client.search( search_params ).deep_symbolize_keys
         #return results
+
+
 
         # override experimental
         search_params_text_font = {
@@ -272,7 +303,6 @@ class SearchController < ApplicationController
             # end
 
             result.merge!(Quran::Ayah.get_ayat( { surah_id: result[:surah], ayah: result[:ayah], content: params[:content], audio: params[:audio] } ).first.as_json.deep_symbolize_keys)
-            Rails.logger.ap result
             if result[:content]
                 resource_id_to_bucket_content_index = {}
                 result[:content].each_with_index do | c, i |
@@ -366,7 +396,7 @@ class SearchController < ApplicationController
 
                     if parsed[:word_ids].length > 0
                         # init the word_id_hash
-                        Rails.logger.ap result[:quran]
+
                         result[:quran].each do |h|
                             word_id_hash[ h[:word][:id].to_s.to_sym ] = { text: h[:word][:arabic] } if h[:word][:id]
                             if word_id_to_highlight.key? h[:word][:id].to_i
