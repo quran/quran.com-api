@@ -96,6 +96,8 @@ group :development, :test do
       gem 'factory_girl'
       gem 'guard-rspec', require: false
       gem 'rb-fsevent'
+      gem 'rack-mini-profiler'
+
 end
 
 gem 'elasticsearch'
@@ -115,3 +117,5 @@ gem 'levenshtein'
 
 gem 'actionpack-page_caching'
 gem 'actionpack-action_caching'
+
+gem 'redis-rails'

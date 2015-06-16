@@ -44,7 +44,7 @@ Github:  https://github.com/mobz/elasticsearch-head
 To run: Open in browser `http://localhost:9200/_plugin/head/`
 
 If you’ve installed the .deb package, then the plugin exectuable will be available at /usr/share/elasticsearch/bin/plugin.
-    
+
 #### Indices
 ```
 http://localhost:9200/_cat/indices?v
@@ -77,7 +77,7 @@ View mappings: in browser - `http://localhost:9200/quran/_mapping`
 
 **Note**: you will run into the problem of not having the arabic_synonyms.txt file in the proper location for elasticsearch. That's fine. The file is located in the public directory and should be placed in `/etc/elasticsearch/analysis` on your server.
 
-#### Querying 
+#### Querying
 
   * Figuring out whats wrong with a query
   - Fire up a rails console:
@@ -116,4 +116,9 @@ ElasticSearch Optimization TODO NOTES
 
 ```
 http://localhost:3000/surahs/1/ayat?audio=1&content=21&from=1&quran=1&to=10
+```
+
+Redis:
+```
+redis-server /usr/local/etc/redis.conf
 ```
