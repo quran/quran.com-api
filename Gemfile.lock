@@ -239,8 +239,6 @@ GEM
       pry (>= 0.9.11)
     rack (1.6.1)
     rack-cors (0.4.0)
-    rack-mini-profiler (0.9.3)
-      rack (>= 1.1.3)
     rack-test (0.6.3)
       rack (>= 1.0)
     rails (4.2.0)
@@ -392,7 +390,6 @@ DEPENDENCIES
   pry-byebug
   pry-rails
   rack-cors
-  rack-mini-profiler
   rails (= 4.2.0)
   rb-fsevent
   rb-readline

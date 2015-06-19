@@ -96,7 +96,6 @@ group :development, :test do
       gem 'factory_girl'
       gem 'guard-rspec', require: false
       gem 'rb-fsevent'
-      gem 'rack-mini-profiler'
 
 end
 
