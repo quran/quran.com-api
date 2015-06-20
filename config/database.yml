@@ -95,7 +95,9 @@ test:
 #     url: <%= ENV['DATABASE_URL'] %>
 #
 production:
- <<: *default
+  <<: *default
+  host: <%= ENV['POSTGRES_PORT_5432_TCP_ADDR'] %>
+  port: <%= ENV['POSTGRES_PORT_5432_TCP_PORT'] %>
 #  database: quran_production
 #  username: quran
 #  password: <%= ENV['QURAN_DATABASE_PASSWORD'] %>
