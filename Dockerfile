@@ -28,7 +28,7 @@ RUN mkdir /home/app/quran
 ADD . /home/app/quran/
 
 WORKDIR /home/app/quran
-RUN bundler install
+RUN bundle install
 RUN chown -R app log
 RUN chown -R app public
 
