@@ -24,12 +24,17 @@ ADD docker/elasticsearch-env.conf /etc/nginx/main.d/elasticsearch-env.conf
 # redis
 RUN rm /etc/service/redis/down
 
+# setup gems
+WORKDIR /tmp
+ADD Gemfile Gemfile
+ADD Gemfile.lock Gemfile.lock
+RUN bundle install
+
 # setup the app
 RUN mkdir /home/app/quran
 ADD . /home/app/quran/
 
 WORKDIR /home/app/quran
-RUN bundle install
 RUN chown -R app log
 RUN chown -R app public
 
