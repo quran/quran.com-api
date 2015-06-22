@@ -166,7 +166,11 @@ class SearchController < ApplicationController
         } )
 
         #return search_params
-        client = Elasticsearch::Client.new  # trace: true, log: true;
+        if Rails.env.production?
+           client = Elasticsearch::Client.new host: ENV['ELASTICSEARCH_PORT_9200_TCP_ADDR']
+        else
+           client = Elasticsearch::Client.new  # trace: true, log: true;
+        end
         results = client.search( search_params )
 
         total_hits = results['hits']['total']

@@ -1,5 +1,5 @@
 server {
-  listen   80;
+  listen   3000;
   server_name  quran;
 
   access_log  /var/log/nginx/localhost.access.log;

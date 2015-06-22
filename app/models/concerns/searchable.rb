@@ -31,6 +31,10 @@ module Searchable
     end
 
     def self.setup_index
+        if Rails.env.production?
+           Elasticsearch::Model.client = Elasticsearch::Client.new host: ENV['ELASTICSEARCH_PORT_9200_TCP_ADDR']
+        end
+
         return if Quran::Ayah.__elasticsearch__.client.cluster.health['unassigned_shards'] == 200
 
         # Let's check to see which is missing and go from there.

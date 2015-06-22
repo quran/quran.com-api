@@ -19,6 +19,7 @@ RUN rm /etc/service/nginx/down
 RUN rm /etc/nginx/sites-enabled/default
 ADD docker/backend.quran.com /etc/nginx/sites-enabled/backend.quran.com
 ADD docker/postgres-env.conf /etc/nginx/main.d/postgres-env.conf
+ADD docker/elasticsearch-env.conf /etc/nginx/main.d/elasticsearch-env.conf
 
 # redis
 RUN rm /etc/service/redis/down
@@ -34,3 +35,6 @@ RUN chown -R app public
 
 # cleanup apt
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# expose port 3000
+EXPOSE 3000
