@@ -11,9 +11,6 @@ RUN /pd_build/ruby2.2.sh
 RUN /pd_build/nodejs.sh
 RUN /pd_build/redis.sh
 
-# native passenger
-RUN setuser app ruby2.2 -S passenger-config build-native-support
-
 # nginx
 RUN rm /etc/service/nginx/down
 RUN rm /etc/nginx/sites-enabled/default
@@ -25,6 +22,13 @@ ENV RAILS_ENV production
 
 # redis
 RUN rm /etc/service/redis/down
+
+# upgrade passenger
+RUN apt-get update
+RUN apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
+
+# native passenger
+RUN setuser app ruby2.2 -S passenger-config build-native-support
 
 # setup gems
 WORKDIR /tmp
@@ -41,10 +45,6 @@ RUN chown -R app log
 RUN chown -R app public
 RUN chown app Gemfile
 RUN chown app Gemfile.lock
-
-# upgrade passenger
-RUN apt-get update
-RUN apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
 
 # cleanup apt
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
