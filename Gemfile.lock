@@ -245,6 +245,8 @@ GEM
       binding_of_caller (>= 0.7)
       pry (>= 0.9.11)
     rack (1.6.1)
+    rack-cache (1.2)
+      rack (>= 0.4)
     rack-cors (0.4.0)
     rack-test (0.6.3)
       rack (>= 1.0)
@@ -398,6 +400,7 @@ DEPENDENCIES
   pg (~> 0.18.1)
   pry-byebug
   pry-rails
+  rack-cache
   rack-cors
   rails (= 4.2.0)
   rb-fsevent

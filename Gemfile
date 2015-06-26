@@ -119,3 +119,4 @@ gem 'actionpack-page_caching'
 gem 'actionpack-action_caching'
 
 gem 'redis-rails'
+gem 'rack-cache', :require => 'rack/cache'
