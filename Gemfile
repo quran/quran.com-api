@@ -47,8 +47,8 @@ gem 'rb-readline'
 
 # composite primary keys
 gem 'composite_primary_keys', {
-    :git => 'git://github.com/composite-primary-keys/composite_primary_keys.git',
-    :branch => 'ar_4.2.x'
+  :git => 'git://github.com/composite-primary-keys/composite_primary_keys.git',
+  :branch => 'ar_4.2.x'
 }
 
 # Printing in console made easy. Simple run or add Rails.logger.ap #YOUR_VAR
@@ -89,14 +89,15 @@ gem 'parallel'
 gem 'ruby-progressbar'
 
 group :development, :test do
-      gem 'jazz_hands', github: 'nixme/jazz_hands', branch: 'bring-your-own-debugger'
-      gem 'pry-byebug'
-      gem 'pry-rails'
-      gem 'rspec-rails' # http://betterspecs.org/
-      gem 'factory_girl'
-      gem 'guard-rspec', require: false
-      gem 'rb-fsevent'
-
+  gem 'jazz_hands', github: 'nixme/jazz_hands', branch: 'bring-your-own-debugger'
+  gem 'pry-byebug'
+  gem 'pry-rails'
+  gem 'rspec-rails' # http://betterspecs.org/
+  gem 'factory_girl'
+  gem 'guard-rspec', require: false
+  gem 'rb-fsevent'
+  gem 'foreman'
+  gem 'passenger' # the webserver
 end
 
 gem 'elasticsearch'

@@ -12,7 +12,7 @@ class Audio::File < ActiveRecord::Base
         .joins("join quran.ayah a using ( ayah_key )")
         .joins("left join ( select t.recitation_id
                      , f.ayah_key
-                     , concat( 'http://audio.quran.com:9999/', concat_ws( '/', r.path, s.path, f.format, concat( replace( format('%3s', a.surah_id ), ' ', '0' ), replace( format('%3s', a.ayah_num ), ' ', '0' ), '.', f.format ) ) ) url
+                     , concat( 'http://verses.quran.com/', concat_ws( '/', r.path, s.path, f.format, concat( replace( format('%3s', a.surah_id ), ' ', '0' ), replace( format('%3s', a.ayah_num ), ' ', '0' ), '.', f.format ) ) ) url
                      , f.duration
                      , f.mime_type
                   from audio.file f
@@ -23,7 +23,7 @@ class Audio::File < ActiveRecord::Base
                  where f.is_enabled and f.format = 'ogg' ) ogg using ( ayah_key, recitation_id )")
         .joins("left join ( select t.recitation_id
                      , f.ayah_key
-                     , concat( 'http://audio.quran.com:9999/', concat_ws( '/', r.path, s.path, f.format, concat( replace( format('%3s', a.surah_id ), ' ', '0' ), replace( format('%3s', a.ayah_num ), ' ', '0' ), '.', f.format ) ) ) url
+                     , concat( 'http://verses.quran.com/', concat_ws( '/', r.path, s.path, f.format, concat( replace( format('%3s', a.surah_id ), ' ', '0' ), replace( format('%3s', a.ayah_num ), ' ', '0' ), '.', f.format ) ) ) url
                      , f.duration
                      , f.mime_type
                   from audio.file f

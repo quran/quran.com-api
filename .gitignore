@@ -21,3 +21,4 @@ config/deploy.rb
 vendor/cache
 vendor/bundle/
 db/structure.sql
+dump.rdb
