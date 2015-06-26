@@ -39,6 +39,12 @@ ADD . /home/app/quran/
 WORKDIR /home/app/quran
 RUN chown -R app log
 RUN chown -R app public
+RUN chown app Gemfile
+RUN chown app Gemfile.lock
+
+# upgrade passenger
+RUN apt-get update
+RUN apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
 
 # cleanup apt
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
