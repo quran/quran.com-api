@@ -54,19 +54,6 @@ gem 'composite_primary_keys', {
 # Printing in console made easy. Simple run or add Rails.logger.ap #YOUR_VAR
 gem 'awesome_print'
 
-
-
-# For deploying
-gem 'capistrano', group: :development
-gem 'capistrano-rails', group: :development
-gem 'capistrano-bundler', group: :development
-gem 'capistrano-rvm', group: :development
-gem 'capistrano-touch-linked-files', group: :development
-
-# This is for env variables
-gem 'dotenv-rails'
-gem 'dotenv-deployment'
-
 # Elasticsearch
 gem 'elasticsearch-model'
 gem 'elasticsearch-rails'
@@ -98,6 +85,10 @@ group :development, :test do
   gem 'rb-fsevent'
   gem 'foreman'
   gem 'passenger' # the webserver
+  # Performance testing
+  gem 'rails-perftest'
+  gem 'ruby-prof'
+
 end
 
 gem 'elasticsearch'
@@ -119,5 +110,3 @@ gem 'actionpack-page_caching'
 gem 'actionpack-action_caching'
 
 gem 'redis-rails'
-gem 'redis-rack-cache'
-gem 'rack-cache', :require => 'rack/cache'

@@ -15,11 +15,6 @@ module QuranAPI
 
     config.cache_store = :redis_store, 'redis://localhost:6379/0/cache', { expires_in: 3.days }
 
-    config.action_dispatch.rack_cache = {
-      metastore:   'redis://localhost:6379/1/metastore',
-      entitystore: 'redis://localhost:6379/1/entitystore'
-    }
-
     config.middleware.insert_before 0, "Rack::Cors" do
       allow do
         origins '*'
