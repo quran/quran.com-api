@@ -2,7 +2,7 @@ server {
   listen   3000;
   server_name  api.quran.com;
 
-  access_log  /var/log/nginx/localhost.access.log;
+  access_log  /var/log/nginx/api.quran.com/access.log;
 
   location / {
     passenger_enabled on;
