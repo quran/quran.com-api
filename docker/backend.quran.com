@@ -1,6 +1,6 @@
 server {
   listen   3000;
-  server_name  quran;
+  server_name  api.quran.com;
 
   access_log  /var/log/nginx/localhost.access.log;
 
