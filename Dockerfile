@@ -11,17 +11,7 @@ RUN /pd_build/ruby2.2.sh
 RUN /pd_build/nodejs.sh
 RUN /pd_build/redis.sh
 
-# nginx
-RUN rm /etc/service/nginx/down
-RUN rm /etc/nginx/sites-enabled/default
-ADD docker/backend.quran.com /etc/nginx/sites-enabled/backend.quran.com
-ADD docker/postgres-env.conf /etc/nginx/main.d/postgres-env.conf
-ADD docker/elasticsearch-env.conf /etc/nginx/main.d/elasticsearch-env.conf
-
 ENV RAILS_ENV production
-
-# redis
-RUN rm /etc/service/redis/down
 
 # upgrade passenger
 RUN apt-get update
@@ -29,6 +19,16 @@ RUN apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-
 
 # native passenger
 RUN setuser app ruby2.2 -S passenger-config build-native-support
+
+# nginx
+RUN rm /etc/service/nginx/down
+RUN rm /etc/nginx/sites-enabled/default
+ADD docker/backend.quran.com /etc/nginx/sites-enabled/backend.quran.com
+ADD docker/postgres-env.conf /etc/nginx/main.d/postgres-env.conf
+ADD docker/elasticsearch-env.conf /etc/nginx/main.d/elasticsearch-env.conf
+
+# redis
+RUN rm /etc/service/redis/down
 
 # setup gems
 WORKDIR /tmp
