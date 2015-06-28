@@ -3,6 +3,7 @@ server {
   server_name  api.quran.com;
 
   access_log  /var/log/nginx/api.quran.com/access.log;
+  error_log  /var/log/nginx/api.quran.com/error.log;
 
   location / {
     passenger_enabled on;
