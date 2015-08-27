@@ -1,28 +1,60 @@
-#README
-
--------
-NOTES
-=====
-
 Before you begin
 ----------------
 You must note that while we would like to be eager with upgrading to the latest Rails version, our biggest contingency is compositive-primary-keys gem which is playing catch up with the Rails versions especially that every new update does something to ActiveRecord and breaks CPK! So make sure CPK is happy with the Rails version first before jumping.
 
+#### Requirements
+- Rails 4+
+- Elasticsearch
+- Redis
+
+#### Installations
+Gems:
+```
+bundle install
+```
+
+Elasticsearch:
+```
+brew install elasticsearch
+```
+
+Redis:
+```
+brew install redis
+```
+
+Postgresql:
+
+This is the best way if you're on mac: http://postgresapp.com/
+But to install the pg gem, you will have to do:
+```
+gem install pg -- --with-pg-config=/Applications/Postgres.app/Contents/Versions/9.4/bin/pg_config
+```
+
+If you decide to install postgres with homebrew (`brew install postgresql`) you should not have this problem.
+
+Why should you use the app? You have quick commandline tools such as:
+The following tools come with Postgres.app:
+
+PostgreSQL: clusterdb createdb createlang createuser dropdb droplang dropuser ecpg initdb oid2name pg_archivecleanup pg_basebackup pg_config pg_controldata pg_ctl pg_dump pg_dumpall pg_receivexlog pg_resetxlog pg_restore pg_standby pg_test_fsync pg_test_timing pg_upgrade pgbench postgres postmaster psql reindexdb vacuumdb vacuumlo
+
+See: http://postgresapp.com/documentation/cli-tools.html
+
+
 Database
 --------
 
-Setup should be a three step dance.
-
-1. Look at config/database.yml and create the configured database and user. This is an exercise left
-   to the reader, but in a nutshell: install postgres, create the db, create the user with sufficient privileges so that it can drop/create the database.
-2. rake db:reset
-3. rake db:migrate
-
-If you're comfortable enough with postgres and intend to poke in the database at a lower level, then also set
-your schema search path:
-
-    alter database quran_dev set search_path = "$user", quran, content, audio, i18n, public;
-
+Currently, not everyone has access to the database as it's not opensource and will require you to contact one of the project's collaborators for access. Once you have access, you can pull down the submodule in one of two ways:
+```
+git clone --recursive git@github.com:quran/quran-api-rails.git
+cd quran-api-rails
+```
+For already cloned repo:
+```
+git clone git@github.com:quran/quran-api-rails.git
+cd quran-api-rails
+git submodule update --init --recursive
+```
 
 Elasticsearch
 -------------
@@ -86,7 +118,9 @@ View mappings: in browser - `http://localhost:9200/quran/_mapping`
     debugme=r.instance_values['search'].instance_values['definition'][:body]
     print debugme.to_json, "\n"
 
-    # {"query":{"bool":{"should":[{"has_child":{"type":"transliteration","query":{"match":{"text":{"query":"allah light","operator":"or","minimum_should_match":"3\u003c62%"}}}}},{"has_child":{"type":"translation","query":{"match":{"text":{"query":"allah light","operator":"or","minimum_should_match":"3\u003c62%"}}}}}],"minimum_number_should_match":1}}}
+    ```
+    {"query":{"bool":{"should":[{"has_child":{"type":"transliteration","query":{"match":{"text":{"query":"allah light","operator":"or","minimum_should_match":"3\u003c62%"}}}}},{"has_child":{"type":"translation","query":{"match":{"text":{"query":"allah light","operator":"or","minimum_should_match":"3\u003c62%"}}}}}],"minimum_number_should_match":1}}}
+    ```
 
   - Copy and paste that output into the 'Any Request' tab of http://127.0.0.1:9200/_plugin/head/
 
@@ -112,13 +146,24 @@ ElasticSearch Optimization TODO NOTES
     matched_children = ( OpenStruct.new Quran::Ayah.matched_children( query, config[:types], array_of_ayah_keys ) ).responses
 
 
-##Usage
+### Usage
 
 ```
 http://localhost:3000/surahs/1/ayat?audio=1&content=21&from=1&quran=1&to=10
 ```
 
-Redis:
+Redis
+-------------
+### To start:
 ```
 redis-server /usr/local/etc/redis.conf
+```
+
+Tests
+-------------
+We have put some time to test the api and the search. You may need to have elasticsearch running in order for the tests to go through search although we should be looking for an elasticsearch mock.
+
+Simply run:
+```
+rspec
 ```
