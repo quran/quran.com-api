@@ -18,12 +18,14 @@ class Content::Transliteration < ActiveRecord::Base
             transform = lambda do |a|
                 this_data = a.__elasticsearch__.as_indexed_json
                 ayah_data = a.ayah.__elasticsearch__.as_indexed_json
+                resource_data = a.resource.__elasticsearch__.as_indexed_json
+                language_data = a.resource.language.__elasticsearch__.as_indexed_json
                 this_data.delete( 'ayah_key' )
                 ayah_data.delete( 'text' )
                 ayah_data[ 'ayah_key' ].gsub!( /:/, '_' )
                 { index:      {
                     _id:      "#{a.resource_id}_#{ayah_data[ 'ayah_key' ]}",
-                    data:     this_data.merge( { 'ayah' => ayah_data } )
+                    data:     this_data.merge({ayah: ayah_data, resource:  resource_data, language: language_data})
                 } }
             end
             options = { transform: transform, batch_size: 6236 }.merge( options )

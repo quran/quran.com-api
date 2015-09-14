@@ -45,6 +45,10 @@ gem 'spring-commands-rspec', group: :development
 # Rails console to work
 gem 'rb-readline'
 
+# Detect the language
+gem 'whatlanguage'
+gem 'prose'
+
 # composite primary keys
 gem 'composite_primary_keys', {
   :git => 'git://github.com/composite-primary-keys/composite_primary_keys.git',
@@ -66,12 +70,12 @@ gem 'batchelor'
 # gem 'will_paginate'
 gem 'kaminari'
 
+# For ordering
+gem 'order_as_specified'
+
 # nv 'dir'='/base2' rake db:data:dump_dir
 gem 'yaml_db', github: 'sharabash/yaml_db'
 gem 'sass-rails', '~> 5.0.1'
-
-# Determine the language
-gem 'whatlanguage'
 
 # This is to run the rake task for importing in parallel
 gem 'parallel'
@@ -92,6 +96,7 @@ group :development, :test do
   gem 'rails-perftest'
   gem 'ruby-prof'
 
+  gem 'web-console', '~> 2.0'
 end
 
 gem 'elasticsearch'

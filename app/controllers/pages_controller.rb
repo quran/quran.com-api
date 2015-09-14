@@ -28,7 +28,7 @@ class PagesController < ApplicationController
 
     # The cardinalities for the quran
     if @cardinalities.key? :quran
-        @cardinalities[:quran].bucket_results_quran(params, keys).each do |ayah|
+        @cardinalities[:quran].bucket_quran(params, keys).each do |ayah|
             #Rails.logger.debug( "each ayah #{ ap ayah }" )
             if ayah.kind_of?(Array)
                 @results["#{ayah.first[:ayah_key]}".to_sym][:quran] = ayah
@@ -41,7 +41,7 @@ class PagesController < ApplicationController
     # Fetch the content corresponding to the the ayah keys and the content requested.
     if @cardinalities.key? :content
         @cardinalities[:content].each do |row|
-            Content::Resource.bucket_results_content(row, keys).each do |ayah|
+            Content::Resource.bucket_content(row, keys).each do |ayah|
                 #Rails.logger.debug( "aYAH #{ap ayah.as_json.deep_symbolize_keys}" )
                 @results["#{ayah.ayah_key}".to_sym][:content] << { id: ayah.id, name: ayah.name, slug: ayah.slug, lang: ayah.lang, dir: ayah.dir }.merge( ayah.has_attribute?( :text ) ? { text: ayah.text } : {} ).merge( ayah.has_attribute?( :url ) ? { url: ayah.url } : {} )
             end
@@ -49,7 +49,7 @@ class PagesController < ApplicationController
     end
 
     if params.key? :audio
-        Audio::File.fetch_audio_files(params, keys).each do |ayah|
+        Audio::File.bucket_audio(params, keys).each do |ayah|
             @results["#{ayah.ayah_key}".to_sym][:audio] = {
                 ogg: 
                     {

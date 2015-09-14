@@ -7,7 +7,7 @@ class Audio::File < ActiveRecord::Base
     belongs_to :ayah,       class_name: 'Quran::Ayah'
     belongs_to :recitation, class_name: 'Audio::Recitation'
 
-    def self.fetch_audio_files(audio_id, keys)
+    def self.bucket_audio(audio_id, keys)
         self
         .joins("join quran.ayah a using ( ayah_key )")
         .joins("left join ( select t.recitation_id
@@ -59,6 +59,6 @@ class Audio::File < ActiveRecord::Base
                     mime_type: ayah.mp3_mime_type
                 }
           }
-        end
+        end.uniq{|a| a[:ayah_key]}
     end
 end

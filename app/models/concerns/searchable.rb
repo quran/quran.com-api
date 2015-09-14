@@ -19,7 +19,7 @@ module Searchable
     def self.delete_index
         @@models.each do | model |
             model = Kernel.const_get( model )
-            model.delete_index
+            model.__elasticsearch__.delete_index!
         end
     end
 
@@ -58,11 +58,14 @@ module Searchable
         end
 
         return if @@models.empty?
-
-        @@models.each do | model |
-            model = Kernel.const_get(model)
-            model.setup_index
+        Parallel.each(@@models, in_processes: 16, :progress => "Doing stuff") do |model|
+          model = Kernel.const_get(model)
+          model.setup_index
         end
+        # @@models.each do | model |
+        #     model = Kernel.const_get(model)
+        #     model.setup_index
+        # end
     end
 
 
