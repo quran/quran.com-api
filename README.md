@@ -62,20 +62,26 @@ Elasticsearch
 The search engine used to query the Quran.
 
 #### Starting
-To run elasticsearch, in bash paste:
+To run elasticsearch, in bash paste: Note: If you brew installed, this is done automatically
 
 ```
 elasticsearch --config=/usr/local/opt/elasticsearch/config/elasticsearch.yml
 ```
+
 #### Plugin
 
-To install: Web portal: sudo elasticsearch/bin/plugin -install mobz/elasticsearch-head
+To install: Web portal: `sudo /usr/local/opt/elasticsearch/bin/plugin -install mobz/elasticsearch-head`
 
 Github:  https://github.com/mobz/elasticsearch-head
 
 To run: Open in browser `http://localhost:9200/_plugin/head/`
 
 If you’ve installed the .deb package, then the plugin exectuable will be available at /usr/share/elasticsearch/bin/plugin.
+
+##### Plugins needed:
+`elasticsearch/elasticsearch-analysis-icu`
+`lukas-vlcek/bigdesk`
+`karmi/elasticsearch-paramedic`
 
 #### Indices
 ```
@@ -123,6 +129,12 @@ View mappings: in browser - `http://localhost:9200/quran/_mapping`
     ```
 
   - Copy and paste that output into the 'Any Request' tab of http://127.0.0.1:9200/_plugin/head/
+
+#### Groovy error
+Follow this:
+https://discuss.elastic.co/t/scripts-of-type-inline-operation-aggs-and-lang-groovy-are-disabled/2493
+
+Simpy add `script.engine.groovy.inline.aggs: on` to your elasticsearch.yml
 
 ElasticSearch Optimization TODO NOTES
 -------------------------------------
