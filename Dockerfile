@@ -8,16 +8,12 @@ CMD ["/sbin/my_init"]
 
 # customizing passenger-customizable image
 RUN /pd_build/ruby2.2.sh
-RUN /pd_build/nodejs.sh
 RUN /pd_build/redis.sh
 
 ENV RAILS_ENV production
 
-# upgrade passenger
-RUN apt-get update
-RUN apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
-
 # native passenger
+RUN ruby2.2 -S passenger-config build-native-support
 RUN setuser app ruby2.2 -S passenger-config build-native-support
 
 # nginx
