@@ -174,14 +174,14 @@ RSpec.describe SearchController, type: :controller do
       get :query, { q: 'marriage or light' }, nil, nil
       result = JSON.parse(response.body)
 
-      expect(result['total']).to eql(127)
+      expect(result['total']).to eql(95)
       expect(result['size']).to eql(20)
       expect(result['results'][0]['key']).to eql('33:37')
 
       get :query, { q: 'marriage or light', page: '2' }, nil, nil
       result = JSON.parse(response.body)
 
-      expect(result['total']).to eql(127)
+      expect(result['total']).to eql(56)
       expect(result['size']).to eql(20)
       expect(result['results'][0]['key']).to eql('101:8')
     end

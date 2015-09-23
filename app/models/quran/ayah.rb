@@ -2,7 +2,7 @@
 class Quran::Ayah < ActiveRecord::Base
     extend Quran
     extend Batchelor
-    
+
     self.table_name = 'ayah'
     self.primary_key = 'ayah_key'
 
@@ -18,7 +18,7 @@ class Quran::Ayah < ActiveRecord::Base
     has_many :tafsirs,      class_name: 'Content::Tafsir',     through:     :_tafsir_ayah
 
     has_many :translations,     class_name: 'Content::Translation',     foreign_key: 'ayah_key'
-    has_many :transliterations, class_name: 'Content::Transliteration', foreign_key: 'ayah_key'
+    has_one :transliteration, class_name: 'Content::Transliteration', foreign_key: 'ayah_key'
 
     has_many :audio,  class_name: 'Audio::File',     foreign_key: 'ayah_key'
     has_many :texts,  class_name: 'Quran::Text',     foreign_key: 'ayah_key'
@@ -36,6 +36,10 @@ class Quran::Ayah < ActiveRecord::Base
             .where('quran.ayah.ayah_num >= ?', from)
             .where('quran.ayah.ayah_num <= ?', to)
             .order('quran.ayah.surah_id, quran.ayah.ayah_num')
+    end
+
+    def self.fetch_ayahs_array(ayahs_keys_array)
+      self.where(ayah_key: ayahs_keys_array)
     end
 
     def self.fetch_paged_ayahs(page)

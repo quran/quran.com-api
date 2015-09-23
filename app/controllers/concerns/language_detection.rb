@@ -7,6 +7,10 @@ module LanguageDetection
   end
 
   def determine_languages_boost
+    # Rails.logger.info "headers #{ ap headers }"
+    # Rails.logger.info "session #{ ap session }"
+    # Rails.logger.info "params #{ ap params }"
+
     boost_language_code = Hash.new
     @indices_boost = Hash.new
 
@@ -66,7 +70,6 @@ module LanguageDetection
         @indices_boost[ :"translation-#{lc}" ] = boost_language_code[ lc ]
     end
 
-    Rails.logger.ap @indices_boost
     return @indices_boost
   end
 end

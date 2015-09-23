@@ -45,6 +45,9 @@ gem 'spring-commands-rspec', group: :development
 # Rails console to work
 gem 'rb-readline'
 
+# Detect the language
+gem 'whatlanguage'
+
 # composite primary keys
 gem 'composite_primary_keys', {
   :git => 'git://github.com/composite-primary-keys/composite_primary_keys.git',
@@ -89,6 +92,7 @@ group :development, :test do
   gem 'rails-perftest'
   gem 'ruby-prof'
 
+  gem 'web-console', '~> 2.0'
 end
 
 gem 'elasticsearch'
