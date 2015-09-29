@@ -1,6 +1,30 @@
 module LanguageDetection
   extend ActiveSupport::Concern
 
+  ISO_CODES = {
+    nil => nil,
+    :arabic => :ar,
+    :danish => :da,
+    :dutch  => :nl,
+    :english => :en,
+    :farsi => :fa,
+    :finnish => :fi,
+    :french => :fr,
+    :german => :de,
+    :greek => :el,
+    :hebrew => :he,
+    :hungarian => :hu,
+    :italian => :it,
+    :korean => :ko,
+    :norwegian => :no,
+    :pinyin => :zh,
+    :polish => :pl,
+    :portuguese => :pt,
+    :russian => :ru,
+    :spanish => :es,
+    :swedish => :sv
+  }
+
   included do
     attr_reader :indices_boost
     before_filter :determine_languages_boost
@@ -43,6 +67,7 @@ module LanguageDetection
         end
     end
 
+
     # handle the language code if say sometime in the future we allow users
     # to specify their preferred language directly in their settings
     if session[ 'language_code' ]
@@ -55,12 +80,15 @@ module LanguageDetection
         end
     end
 
+    wl = WhatLanguage.new(:all)
+
     # fallback to doubling the boost on english queries if we haven't gotten anywhere
     # using the above strategies and the query is pure ascii
-    if boost_language_code.keys.length == 0 and params[:q] =~ /^(?:\s*\p{ASCII}+\s*)+$/
-        boost_language_code[ 'en' ] = 4
+    if boost_language_code.keys.length == 0
+      wl.process_text(params[:q]).each do |lang, val|
+        boost_language_code[ISO_CODES[lang]] = val
+      end
     end
-
 
     boost_language_code.keys.each do |lc|
         @indices_boost[ :"translation-#{lc}" ] = boost_language_code[ lc ]
