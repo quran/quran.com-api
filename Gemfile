@@ -70,6 +70,9 @@ gem 'kaminari'
 gem 'yaml_db', github: 'sharabash/yaml_db'
 gem 'sass-rails', '~> 5.0.1'
 
+# Determine the language
+gem 'whatlanguage'
+
 # This is to run the rake task for importing in parallel
 gem 'parallel'
 # Will provide a progress bar as the import happens
