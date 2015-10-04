@@ -2,7 +2,7 @@
 class Quran::Ayah < ActiveRecord::Base
     extend Quran
     extend Batchelor
-    
+
     self.table_name = 'ayah'
     self.primary_key = 'ayah_key'
 
@@ -29,12 +29,13 @@ class Quran::Ayah < ActiveRecord::Base
     has_many :text_roots,  class_name: 'Quran::TextRoot',  foreign_key: 'ayah_key'
     has_many :text_lemmas, class_name: 'Quran::TextLemma', foreign_key: 'ayah_key'
     has_many :text_stems,  class_name: 'Quran::TextStem',  foreign_key: 'ayah_key'
-    has_many :text_tokens, class_name: 'Quran::TextToken', foreign_key: 'ayah_key'
+    has_one :text_token, class_name: 'Quran::TextToken', foreign_key: 'ayah_key'
 
     def self.fetch_ayahs(surah_id, from, to)
         self.where('quran.ayah.surah_id = ?', surah_id)
             .where('quran.ayah.ayah_num >= ?', from)
             .where('quran.ayah.ayah_num <= ?', to)
+            .includes(:text_token)
             .order('quran.ayah.surah_id, quran.ayah.ayah_num')
     end
 
@@ -88,7 +89,7 @@ class Quran::Ayah < ActiveRecord::Base
             results["#{ayah.ayah_key}".to_sym] = Hash.new
             results["#{ayah.ayah_key}".to_sym][:ayah] = ayah.ayah_key.split(':').last.to_i
             results["#{ayah.ayah_key}".to_sym][:surah_id] = ayah.surah_id.to_i
-            results["#{ayah.ayah_key}".to_sym][:text] = ayah.text
+            results["#{ayah.ayah_key}".to_sym][:text] = ayah.text_token.text
         end
 
         Content::Resource.bucket_results_quran(params[:quran], keys).each do |ayah|
