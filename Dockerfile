@@ -22,6 +22,7 @@ RUN rm /etc/nginx/sites-enabled/default
 ADD docker/backend.quran.com /etc/nginx/sites-enabled/backend.quran.com
 ADD docker/postgres-env.conf /etc/nginx/main.d/postgres-env.conf
 ADD docker/elasticsearch-env.conf /etc/nginx/main.d/elasticsearch-env.conf
+ADD docker/gzip.conf /etc/nginx/conf.d/gzip.conf
 
 # logrotate
 COPY docker/nginx.logrotate.conf /etc/logrotate.d/nginx
