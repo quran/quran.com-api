@@ -2,7 +2,7 @@
 class Quran::Ayah < ActiveRecord::Base
     extend Quran
     extend Batchelor
-    
+
     self.table_name = 'ayah'
     self.primary_key = 'ayah_key'
 
@@ -18,7 +18,7 @@ class Quran::Ayah < ActiveRecord::Base
     has_many :tafsirs,      class_name: 'Content::Tafsir',     through:     :_tafsir_ayah
 
     has_many :translations,     class_name: 'Content::Translation',     foreign_key: 'ayah_key'
-    has_many :transliterations, class_name: 'Content::Transliteration', foreign_key: 'ayah_key'
+    has_one :transliteration, class_name: 'Content::Transliteration', foreign_key: 'ayah_key'
 
     has_many :audio,  class_name: 'Audio::File',     foreign_key: 'ayah_key'
     has_many :texts,  class_name: 'Quran::Text',     foreign_key: 'ayah_key'
@@ -31,16 +31,21 @@ class Quran::Ayah < ActiveRecord::Base
     has_many :text_stems,  class_name: 'Quran::TextStem',  foreign_key: 'ayah_key'
     has_many :text_tokens, class_name: 'Quran::TextToken', foreign_key: 'ayah_key'
 
-    def self.fetch_ayahs(surah_id, from, to)
-        self.where('quran.ayah.surah_id = ?', surah_id)
-            .where('quran.ayah.ayah_num >= ?', from)
-            .where('quran.ayah.ayah_num <= ?', to)
-            .order('quran.ayah.surah_id, quran.ayah.ayah_num')
+    def self.get_ayahs_by_range(surah_id, from, to)
+      self.where('quran.ayah.surah_id = ?', surah_id)
+          .where('quran.ayah.ayah_num >= ?', from)
+          .where('quran.ayah.ayah_num <= ?', to)
+          .order('quran.ayah.surah_id, quran.ayah.ayah_num')
     end
 
-    def self.fetch_paged_ayahs(page)
-        self.where(page_num: page)
-            .order('quran.ayah.surah_id, quran.ayah.ayah_num')
+    def self.get_ayahs_by_array(ayahs_keys_array)
+      self.where(ayah_key: ayahs_keys_array)
+          .sort{|e1, e2| ayahs_keys_array.index(e1.ayah_key) <=> ayahs_keys_array.index(e2.ayah_key)}
+    end
+
+    def self.get_ayahs_by_page(page)
+      self.where(page_num: page)
+          .order('quran.ayah.surah_id, quran.ayah.ayah_num')
     end
 
     def self.import_options ( options = {} )
@@ -57,61 +62,45 @@ class Quran::Ayah < ActiveRecord::Base
         self.importing( self.import_options( options ) )
     end
 
-    def self.get_ayat(params = {})
-        results = Hash.new
-        params[:quran] ||= 1
+    def self.merge_content(content_param = [], ayahs_array = [], keys = nil)
+      keys ||= ayahs_array.map(&:ayah_key)
 
-        # The range of which the ayahs to search
-        if params.key?(:range)
-            range = params[:range].split('-')
-        elsif params.key?(:from) && params.key?(:to)
-            range = [params[:from], params[:to]]
-        else
-            range = ['1', '10']
-        end
+      Content::Resource.bucket_content(content_param, keys).each_with_index do |ayah_content, index|
+        ayahs_array[index][:content] = ayah_content
+      end
+    end
 
-        if params.key?(:ayah)
-            range = [ params[:ayah] ]
-        end
+    def self.merge_quran(quran_param, ayahs_array = [], keys = nil)
+      keys ||= ayahs_array.map(&:ayah_key)
 
-        # Error whenever the range is more than 50
-        if (range.last.to_i - range.first.to_i) > 50
-            return {error: "Range invalid, use a string (maximum 50 ayat per request), e.g. '1-3'"}
-        end
+      Content::Resource.bucket_quran(1 || quran_param, keys).each_with_index do |ayah_quran, index|
+        ayahs_array[index][:quran] = ayah_quran
+      end
+    end
 
-        ayahs = Quran::Ayah.fetch_ayahs(params[:surah_id], range.first, range.last)
+    def self.merge_audio(audio_param, ayahs_array = [], keys = nil)
+      keys ||= ayahs_array.map(&:ayah_key)
 
-        keys = ayahs.map{|k| k.ayah_key}
+      Audio::File.bucket_audio(audio_param, keys).each_with_index do |ayah_audio, index|
+        ayahs_array[index][:audio] = ayah_audio
+      end
+    end
 
-        # For each key, need to setup the hash
-        ayahs.each do |ayah|
-            results["#{ayah.ayah_key}".to_sym] = Hash.new
-            results["#{ayah.ayah_key}".to_sym][:ayah] = ayah.ayah_key.split(':').last.to_i
-            results["#{ayah.ayah_key}".to_sym][:surah_id] = ayah.surah_id.to_i
-            results["#{ayah.ayah_key}".to_sym][:text] = ayah.text
-        end
+    def self.merge_resource_with_ayahs(params = {}, ayahs)
+      keys = ayahs.map(&:ayah_key)
+      ayahs = ayahs.map(&:attributes)
 
-        Content::Resource.bucket_results_quran(params[:quran], keys).each do |ayah|
-            if ayah.kind_of?(Array)
-                results["#{ayah.first[:ayah_key]}".to_sym][:quran] = ayah
-            else
-                results["#{ayah[:ayah_key]}".to_sym][:quran] = ayah
-            end
-        end
+      self.merge_quran(nil, ayahs, keys)
 
-        # Fetch the content corresponding to the the ayah keys and the content requested.
-        if !params[:content].nil?
-            Content::Resource.bucket_results_content(params[:content], keys).each do |ayah|
-                results["#{ayah.first[:ayah_key]}".to_sym][:content] = ayah
-            end
-        end
+      # # Fetch the content corresponding to the the ayah keys and the content requested.
+      if params[:content].present?
+        self.merge_content(params[:content], ayahs, keys)
+      end
 
-        if !params[:audio].nil?
-            Audio::File.fetch_audio_files(params[:audio], keys).each do |ayah|
-                results["#{ayah[:ayah_key]}".to_sym][:audio] = ayah
-            end
-        end
+      if params[:audio].present?
+        self.merge_audio(params[:audio], ayahs, keys)
+      end
 
-        results.values
+      ayahs
     end
 end

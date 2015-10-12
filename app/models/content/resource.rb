@@ -1,5 +1,6 @@
 class Content::Resource < ActiveRecord::Base
     extend Content
+    extend OrderAsSpecified
 
     self.table_name = 'resource'
     self.primary_key = 'resource_id'
@@ -52,12 +53,12 @@ class Content::Resource < ActiveRecord::Base
         .find(quran_id)
     end
 
-    def self.bucket_results_quran(quran_id, keys)
+    def self.bucket_quran(quran_id, keys)
         cardinality = self.fetch_cardinality_quran(quran_id)
 
         if cardinality.cardinality_type == "1_ayah"
 
-            self
+            resource = self
             .joins("JOIN quran.text c using ( resource_id )")
             .joins("JOIN quran.ayah using ( ayah_key )")
             .select("c.*")
@@ -76,7 +77,7 @@ class Content::Resource < ActiveRecord::Base
                 join = "join quran.char_type ct on ct.char_type_id = c.char_type_id"
             end
 
-            self
+            resource = self
             .joins("JOIN quran.word_font c using ( resource_id )")
             .joins("JOIN quran.ayah using (ayah_key) ")
             .joins(join)
@@ -114,7 +115,11 @@ class Content::Resource < ActiveRecord::Base
                     }
                 }
             end
-            .group_by{|a| a[:ayah_key]}.values
+            .group_by{|a| a[:ayah_key]}
+
+            Hash[resource
+            .sort_by{|k, v| keys.index(k)}]
+            .values
 
         end
     end
@@ -135,7 +140,7 @@ class Content::Resource < ActiveRecord::Base
         .order("content.resource.resource_id")
     end
 
-    def self.bucket_results_content(params_content, keys)
+    def self.bucket_content(params_content, keys)
         ayahs = Array.new
         rows = self.fetch_cardinality_content(params_content)
 
