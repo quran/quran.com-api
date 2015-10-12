@@ -62,7 +62,7 @@ module Search
             end
 
             hash[:text] = ayah['text']
-            # hash
+            hash
           end
 
           hash

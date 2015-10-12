@@ -67,11 +67,7 @@ gem 'elasticsearch-rails'
 gem 'batchelor'
 
 # Paging the results
-# gem 'will_paginate'
 gem 'kaminari'
-
-gem 'cld2'
-
 
 # nv 'dir'='/base2' rake db:data:dump_dir
 gem 'yaml_db', github: 'sharabash/yaml_db'
