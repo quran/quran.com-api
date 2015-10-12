@@ -191,8 +191,6 @@ GEM
     notiffany (0.0.6)
       nenv (~> 0.1)
       shellany (~> 0.0)
-    order_as_specified (0.1.0)
-      activerecord (~> 4.0)
     parallel (1.4.1)
     passenger (4.0.58)
       daemon_controller (>= 1.2.0)
@@ -369,7 +367,6 @@ DEPENDENCIES
   keen
   levenshtein
   levenshtein-ffi
-  order_as_specified
   parallel
   passenger
   pg (~> 0.18.2)

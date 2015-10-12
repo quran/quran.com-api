@@ -1,6 +1,5 @@
 class Content::Resource < ActiveRecord::Base
     extend Content
-    extend OrderAsSpecified
 
     self.table_name = 'resource'
     self.primary_key = 'resource_id'
