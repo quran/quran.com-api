@@ -37,7 +37,6 @@ module Search
       ayahs = Quran::Ayah.get_ayahs_by_array(keys)
 
       quran_content = Content::Resource.bucket_quran(1, keys)
-      # binding.pry
 
       results_buckets.map.with_index do |ayah_result, index|
         ayah = ayahs[index].attributes
@@ -57,12 +56,13 @@ module Search
 
           # This is when it's a word font that's a hit, aka text-font index
           if hash['cardinality_type'] == '1_word'
-            word_ids = hash[:text].scan(/(hlt[0-9])..(?!>)([0-9])(?=<)/)
+            word_ids = hash[:text].scan(/(hlt[0-9]*)..(?!>)([0-9]*)(?=<)/)
             word_ids.each do |word_id_array|
               ayah[:quran].find{|ayah| ayah[:word][:id] == word_id_array.last.to_i}[:highlight] = word_id_array.first
             end
 
             hash[:text] = ayah['text']
+            # hash
           end
 
           hash

@@ -85,6 +85,8 @@ GEM
       debugger-linecache (~> 1.2)
     celluloid (0.16.0)
       timers (~> 4.0.0)
+    cld2 (1.0.3)
+      ffi (~> 1.9.3)
     coderay (1.1.0)
     coffee-rails (4.0.1)
       coffee-script (>= 2.2.0)
@@ -191,8 +193,6 @@ GEM
     notiffany (0.0.6)
       nenv (~> 0.1)
       shellany (~> 0.0)
-    order_as_specified (0.1.0)
-      activerecord (~> 4.0)
     parallel (1.4.1)
     passenger (4.0.58)
       daemon_controller (>= 1.2.0)
@@ -352,6 +352,7 @@ DEPENDENCIES
   actionpack-page_caching
   awesome_print
   batchelor
+  cld2
   coffee-rails (~> 4.0.0)
   composite_primary_keys!
   elasticsearch
@@ -369,7 +370,6 @@ DEPENDENCIES
   keen
   levenshtein
   levenshtein-ffi
-  order_as_specified
   parallel
   passenger
   pg (~> 0.18.2)

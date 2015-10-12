@@ -70,8 +70,8 @@ gem 'batchelor'
 # gem 'will_paginate'
 gem 'kaminari'
 
-# For ordering
-gem 'order_as_specified'
+gem 'cld2'
+
 
 # nv 'dir'='/base2' rake db:data:dump_dir
 gem 'yaml_db', github: 'sharabash/yaml_db'
