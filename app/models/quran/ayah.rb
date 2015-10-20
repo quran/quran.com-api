@@ -29,7 +29,7 @@ class Quran::Ayah < ActiveRecord::Base
     has_many :text_roots,  class_name: 'Quran::TextRoot',  foreign_key: 'ayah_key'
     has_many :text_lemmas, class_name: 'Quran::TextLemma', foreign_key: 'ayah_key'
     has_many :text_stems,  class_name: 'Quran::TextStem',  foreign_key: 'ayah_key'
-    has_many :text_tokens, class_name: 'Quran::TextToken', foreign_key: 'ayah_key'
+    has_one :text_token, class_name: 'Quran::TextToken', foreign_key: 'ayah_key'
 
     def self.get_ayahs_by_range(surah_id, from, to)
       self.where('quran.ayah.surah_id = ?', surah_id)

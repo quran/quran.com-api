@@ -1,5 +1,9 @@
 class AyatController < ApplicationController
   def index
+    unless valid_params?
+      return render json: {message: 'Params are wrong.'}
+    end
+
     params_hash = (params[:range] || ("#{params[:from]}-#{params[:to]}")) + "/#{params[:quran]}/#{params[:audio]}/#{params[:content]}"
 
     if params.key?(:range)
@@ -20,5 +24,28 @@ class AyatController < ApplicationController
     end
 
     render json: @results
+  end
+
+private
+  def valid_params?
+    valid_surah_id? &&  contains_range? && params.has_key?(:quran)
+  end
+
+  def contains_range?
+    ((params.has_key?(:from) && params.has_key?(:to)) || params.has_key?(:range))
+  end
+
+  def valid_surah_id?
+    is_surah_id_in_range?
+  end
+
+  def surah_id_integer?
+    params[:surah_id].to_i > 0
+  end
+
+  def is_surah_id_in_range?
+    if surah_id_integer?
+      params[:surah_id].to_i > 0 && params[:surah_id].to_i < 115
+    end
   end
 end

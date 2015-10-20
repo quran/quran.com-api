@@ -21,6 +21,8 @@
 
 class SearchController < ApplicationController
   def query
+    return render json: {message: 'Query param is invalid'} unless search_query?
+
     query = params[:q] || params[:query]
 
     indices_boost = Search::LanguageDetection.new(headers, session, query).indices_boost
@@ -47,5 +49,23 @@ class SearchController < ApplicationController
       },
       results: search.response.records
       }
+  end
+private
+  def search_query?
+    valid_string?
+  end
+
+  def has_query?
+    params.has_key?(:q) || params.has_key?(:query)
+  end
+
+  def valid_string?
+    if has_query?
+      if params.has_key?(:q)
+        !params[:q].empty?
+      elsif params.has_key?(:query)
+        !params[:query].empty?
+      end
+    end
   end
 end
