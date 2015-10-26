@@ -1,3 +1,11 @@
+# == Schema Information
+#
+# Table name: quran.root
+#
+#  root_id :integer          not null, primary key
+#  value   :string(50)       not null
+#
+
 class Quran::Root < ActiveRecord::Base
     extend Quran
     extend Batchelor

@@ -103,12 +103,7 @@ gem 'rack-cors', :require => 'rack/cors'
 
 gem 'httparty'
 
-# Keen.io
-gem 'keen'
-
-
-gem 'levenshtein-ffi'
-gem 'levenshtein'
+gem 'annotate'
 
 gem 'actionpack-page_caching'
 gem 'actionpack-action_caching'

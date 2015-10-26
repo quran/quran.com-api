@@ -1,3 +1,12 @@
+# == Schema Information
+#
+# Table name: content.tafsir
+#
+#  tafsir_id   :integer          not null, primary key
+#  resource_id :integer          not null
+#  text        :text             not null
+#
+
 class Content::Tafsir < ActiveRecord::Base
     extend Content
 

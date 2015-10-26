@@ -1,3 +1,14 @@
+# == Schema Information
+#
+# Table name: audio.style
+#
+#  style_id :integer          not null, primary key
+#  path     :text             not null
+#  slug     :text             not null
+#  english  :text             not null
+#  arabic   :text             not null
+#
+
 class Audio::Style < ActiveRecord::Base
     extend Audio
 

@@ -1,3 +1,12 @@
+# == Schema Information
+#
+# Table name: content.source
+#
+#  source_id :integer          not null, primary key
+#  name      :text             not null
+#  url       :text
+#
+
 class Content::Source < ActiveRecord::Base
     extend Content
 

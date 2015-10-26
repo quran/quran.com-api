@@ -10,7 +10,7 @@ module Search
       end
     end
 
-    def size
+    def total_size
       if self.aggregations?
         aggregations['by_ayah_key']['buckets'].count
       else
@@ -18,7 +18,7 @@ module Search
       end
     end
 
-    def length
+    def total_length
       size
     end
 
@@ -31,8 +31,8 @@ module Search
     end
 
     def aggregation_records
-      results_buckets = aggregations['by_ayah_key']['buckets'][@min .. @max]
-      #
+      results_buckets = Kaminari.paginate_array(aggregations['by_ayah_key']['buckets']).page(@page).per(@size)
+
       keys = results_buckets.map{|ayah_result| ayah_result['key'].gsub('_', ':')}
       ayahs = Quran::Ayah.get_ayahs_by_array(keys)
 
