@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: i18n.language
+#
+#  language_code       :text             not null, primary key
+#  unicode             :text
+#  english             :text             not null
+#  direction           :text             default("ltr"), not null
+#  priority            :integer          default(999), not null
+#  beta                :boolean          default(TRUE), not null
+#  es_analyzer_default :string
+#
+
 class Locale::Language < ActiveRecord::Base
     extend Locale
 

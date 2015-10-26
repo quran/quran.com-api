@@ -1,3 +1,12 @@
+# == Schema Information
+#
+# Table name: quran.text
+#
+#  resource_id :integer          not null, primary key
+#  ayah_key    :text             not null, primary key
+#  text        :text             not null
+#
+
 # vim: ts=4 sw=4 expandtab
 class Quran::Text < ActiveRecord::Base
     extend Quran

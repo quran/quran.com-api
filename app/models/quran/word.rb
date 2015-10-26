@@ -1,3 +1,13 @@
+# == Schema Information
+#
+# Table name: quran.word
+#
+#  word_id  :integer          not null, primary key
+#  ayah_key :text             not null
+#  position :integer          not null
+#  token_id :integer          not null
+#
+
 class Quran::Word < ActiveRecord::Base
     extend Quran
 

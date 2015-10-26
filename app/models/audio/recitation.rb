@@ -1,3 +1,13 @@
+# == Schema Information
+#
+# Table name: audio.recitation
+#
+#  recitation_id :integer          not null, primary key
+#  reciter_id    :integer          not null
+#  style_id      :integer
+#  is_enabled    :boolean          default(TRUE), not null
+#
+
 class Audio::Recitation < ActiveRecord::Base
     extend Audio
 

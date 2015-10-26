@@ -1,3 +1,12 @@
+# == Schema Information
+#
+# Table name: quran.lemma
+#
+#  lemma_id :integer          not null, primary key
+#  value    :string(50)       not null
+#  clean    :string(50)       not null
+#
+
 class Quran::Lemma < ActiveRecord::Base
     extend Quran
 

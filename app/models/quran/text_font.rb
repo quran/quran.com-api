@@ -1,3 +1,15 @@
+# == Schema Information
+#
+# Table name: quran.text_font
+#
+#  id        :text             primary key
+#  ayah_key  :text
+#  surah_id  :integer
+#  ayah_num  :integer
+#  is_hidden :boolean
+#  text      :text
+#
+
 # vim: ts=4 sw=4 expandtab
 class Quran::TextFont < ActiveRecord::Base
     extend Quran
