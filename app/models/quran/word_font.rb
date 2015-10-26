@@ -1,3 +1,18 @@
+# == Schema Information
+#
+# Table name: quran.word_font
+#
+#  resource_id  :integer          not null, primary key
+#  ayah_key     :text             not null, primary key
+#  position     :integer          not null, primary key
+#  word_id      :integer
+#  page_num     :integer          not null
+#  line_num     :integer          not null
+#  code_dec     :integer          not null
+#  code_hex     :text             not null
+#  char_type_id :integer          not null
+#
+
 class Quran::WordFont < ActiveRecord::Base
     extend Quran
 

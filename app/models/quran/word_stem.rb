@@ -1,3 +1,12 @@
+# == Schema Information
+#
+# Table name: quran.word_stem
+#
+#  word_id  :integer          not null, primary key
+#  stem_id  :integer          not null, primary key
+#  position :integer          default(1), not null, primary key
+#
+
 class Quran::WordStem < ActiveRecord::Base
     extend Quran
 

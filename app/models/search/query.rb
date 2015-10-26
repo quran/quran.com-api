@@ -1,13 +1,11 @@
 module Search
   class Query
-    attr_accessor :page, :size, :start_time, :end_time, :delta_time, :indices_boost, :query, :ayahs, :doc_count, :response, :search_params
+    attr_accessor :page, :size, :start_time, :end_time, :delta_time, :indices_boost, :query, :ayahs, :doc_count, :response, :search_params, :errored
     attr_reader :imin, :imax, :type
 
     def initialize(query, options = {})
-      @page = options[:page] || 1
-      @size = options[:size] || 20
-      @imin = (@page - 1) * @size
-      @imax = @page * @size - 1
+      @page = options[:page].to_i || 1
+      @size = options[:size].to_i || 20
       @type = options[:type] || :aggregations # This could be either :hits or :aggregations
       @highlight = options[:highlight] || true
 
@@ -40,11 +38,24 @@ module Search
 
     def request
       @start_time = Time.now
-      @response = Search::Request.new(@search_params, @imin, @imax).search
+      @response = Search::Request.new(@search_params, @page, @size).search
       @end_time = Time.now
       @delta_time = @end_time - @start_time
 
       self
+
+    rescue
+
+      handle_error
+      self
+    end
+
+    def handle_error
+      @errored = true
+    end
+
+    def errored?
+      @errored
     end
 
     def indices

@@ -1,3 +1,19 @@
+# == Schema Information
+#
+# Table name: quran.surah
+#
+#  surah_id         :integer          not null, primary key
+#  ayat             :integer          not null
+#  bismillah_pre    :boolean          not null
+#  revelation_order :integer          not null
+#  revelation_place :text             not null
+#  page             :integer          not null, is an Array
+#  name_complex     :text             not null
+#  name_simple      :text             not null
+#  name_english     :text             not null
+#  name_arabic      :text             not null
+#
+
 class Quran::Surah < ActiveRecord::Base
     extend Quran
 

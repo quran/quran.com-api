@@ -1,3 +1,12 @@
+# == Schema Information
+#
+# Table name: content.author
+#
+#  author_id :integer          not null, primary key
+#  url       :text             is an Array
+#  name      :text             not null
+#
+
 class Content::Author < ActiveRecord::Base
     extend Content
 

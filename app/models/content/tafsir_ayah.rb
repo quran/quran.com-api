@@ -1,3 +1,11 @@
+# == Schema Information
+#
+# Table name: content.tafsir_ayah
+#
+#  tafsir_id :integer          not null, primary key
+#  ayah_key  :text             not null, primary key
+#
+
 # vim: ts=4 sw=4 expandtab
 class Content::TafsirAyah < ActiveRecord::Base
     extend Content

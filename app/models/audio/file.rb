@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: audio.file
+#
+#  file_id       :integer          not null, primary key
+#  recitation_id :integer          not null
+#  ayah_key      :text             not null
+#  format        :text             not null
+#  duration      :float            not null
+#  mime_type     :text             not null
+#  is_enabled    :boolean          default(TRUE), not null
+#
+
 class Audio::File < ActiveRecord::Base
     extend Audio
 

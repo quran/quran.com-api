@@ -1,3 +1,19 @@
+# == Schema Information
+#
+# Table name: quran.ayah
+#
+#  ayah_index :integer          not null
+#  surah_id   :integer
+#  ayah_num   :integer
+#  page_num   :integer
+#  juz_num    :integer
+#  hizb_num   :integer
+#  rub_num    :integer
+#  text       :text
+#  ayah_key   :text             not null, primary key
+#  sajdah     :text
+#
+
 # vim: ts=4 sw=4 expandtab
 class Quran::Ayah < ActiveRecord::Base
     extend Quran
