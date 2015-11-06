@@ -1,15 +1,17 @@
 module Search
   class Request
-    attr_accessor :params, :ayahs, :keys, :doc_count, :results, :min, :max
+    include Virtus.model
 
-    def initialize(params, page = nil, size = nil)
+    attribute :params, Hash
+    attribute :type, Symbol
+
+    def initialize(params, type = :aggregations)
       @params = params
-      @page = page
-      @size = size
+      @type = type
     end
 
     def search
-      Search::Results.new(Search.client.search(@params).merge(page: @page, size: @size))
+      Search::Results.new(Search.client.search(@params), @type)
     end
   end
 end

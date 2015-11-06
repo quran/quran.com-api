@@ -1,13 +1,24 @@
 module Search
   class Results
-    attr_accessor :options
-    def initialize(results)
+    include Virtus.model
+
+    attribute :options, Hash
+    attribute :aggregations, Hash
+    attribute :hits, Hash
+    attribute :took, Integer
+    attribute :time_out, Boolean
+    attribute :_shards, Hash
+    attribute :type, Symbol
+
+    def initialize(results, type)
       results.each do |key, value|
         # So that we can access the methods quickly and easily.
-        name = key.to_s.include?(".") ? key.split(".").last : key
+        name = key.to_s.include?('.') ? key.split('.').last : key
         self.class.send(:attr_accessor, key)
-        self.instance_variable_set("@#{name}", value)
+        instance_variable_set("@#{name}", value)
       end
+
+      @type = type
     end
 
     def total_size
@@ -31,7 +42,7 @@ module Search
     end
 
     def aggregation_records
-      results_buckets = Kaminari.paginate_array(aggregations['by_ayah_key']['buckets']).page(@page).per(@size)
+      results_buckets = aggregations['by_ayah_key']['buckets']
 
       keys = results_buckets.map{|ayah_result| ayah_result['key'].gsub('_', ':')}
       ayahs = Quran::Ayah.get_ayahs_by_array(keys)
@@ -79,9 +90,11 @@ module Search
     end
 
     def records
-      if self.aggregations?
-        return self.aggregation_records
-      end
+      return self.aggregation_records if self.aggregations?
+    end
+
+    def keys
+      aggregations['by_ayah_key']['buckets'].map { |bucket| bucket['key'] }
     end
   end
 end
