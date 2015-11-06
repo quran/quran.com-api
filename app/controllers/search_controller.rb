@@ -6,23 +6,23 @@ class SearchController < ApplicationController
 
     indices_boost = Search::LanguageDetection.new(headers, session, query).indices_boost
 
-    search = Search::Query.new(query, {
+    search = Search::Query::Client.new(query,
       page: params[:page] || params[:p] || 1,
       size: params[:size] || params[:s] || 20,
       indices_boost: indices_boost,
       content: params[:content], # The user can specific what audio or additional content to retrieve
       audio: params[:audio]
-    })
+    )
 
     search.request
 
-    if search.errored?
-      return render json: {error: 'Something wrong happened'}
-    end
+    # if search.errored?
+    #   return render json: {error: 'Something wrong happened'}
+    # end
 
     render json: {
       query: params[:q],
-      total: search.response.total_size,
+      total: search.total,
       page: search.page,
       size: search.size,
       from: search.from + 1,
