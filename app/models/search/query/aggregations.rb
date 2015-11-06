@@ -39,7 +39,6 @@ module Search
                 _source: {
                   include: [
                     'text',
-                    'ayah.*',
                     'resource.*',
                     'language.*'
                   ]
@@ -48,11 +47,11 @@ module Search
               }
             },
             # Don't need for now.
-            max_score: {
-              max: {
-                script: '_score'
-              }
-            }
+            # max_score: {
+            #   max: {
+            #     script: '_score'
+            #   }
+            # }
           )
         end
 

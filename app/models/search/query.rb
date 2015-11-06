@@ -51,7 +51,7 @@ module Search
       def search_params
         {
           index: indices,
-          type: type,
+          type: :data,
           explain: explain,
           body: {
             indices_boost: index_boost,
@@ -68,7 +68,6 @@ module Search
       end
 
       def request
-        binding.pry
         @start_time = Time.now
         @ayah_keys = Search::Request.new(search_params, @type).search.keys
         @total = @ayah_keys.length
@@ -91,10 +90,6 @@ module Search
 
       def errored?
         @errored
-      end
-
-      def type
-        :data
       end
 
       def explain
@@ -143,8 +138,8 @@ module Search
       def simple_query_string
         {
           simple_query_string: {
-            query: @query.query.force_encoding('ASCII-8BIT').force_encoding('UTF-8'),
-            # default_field: "_all", We could use this for later but it adds unneeded time.
+            query: @query.query,
+            # default_field: "_all",
             # lenient: true,
             fields: fields_val,
             minimum_should_match: '85%'
@@ -156,7 +151,8 @@ module Search
         {
           query_string: {
             query: @query.query,
-            # default_field: "_all", We could use this for later but it adds unneeded time.
+            #  We could use this for later but it adds unneeded time.
+            # default_field: "_all",
             auto_generate_phrase_queries: true,
             lenient: true,
             fields: fields_val,
@@ -174,9 +170,7 @@ module Search
           }
         }
 
-        if hits_query?
-          query[:bool][:must].unshift(terms)
-        end
+        query[:bool][:must].unshift(terms) if hits_query?
 
         query
       end
