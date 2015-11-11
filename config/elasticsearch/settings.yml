@@ -64,6 +64,9 @@ index:
             quran_token_to_root_stop:
                 type: stop
                 stopwords_path: analysis/stop.text-token.to.text-root.txt
+            dbl_metaphone:
+                type: phonetic
+                encoder: double_metaphone
 
         analyzer:
             autocomplete:
@@ -227,3 +230,8 @@ index:
                 tokenizer: whitespace
                 filter:
                     - lowercase
+
+            dbl_metaphone:
+                tokenizer: standard
+                filter:
+                    - dbl_metaphone

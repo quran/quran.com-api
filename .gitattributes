@@ -1,0 +1,2 @@
+*.psql filter=lfs diff=lfs merge=lfs -text
+*.psql.bz2 filter=lfs diff=lfs merge=lfs -text

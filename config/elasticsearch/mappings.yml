@@ -153,10 +153,10 @@ text-lemma:
 
 transliteration:
     _all: { enabled: false }
-    #_parent: { type: ayah }
-    #_routing: { path: ayah_key }
+    # _parent: { type: ayah }
+    # _routing: { path: ayah_key }
     properties:
-        #text: { type: string, term_vector: with_positions_offsets_payloads, analyzer: english }
+        # text: { type: string, term_vector: with_positions_offsets_payloads, analyzer: english }
         text: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, fields: { stemmed: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, analyzer: standard } } }
 tafsir:
     _all: { enabled: false }
@@ -202,4 +202,3 @@ translation:
 #                    stemmed:
 #                        type: string
 #                        analyzer: standard
-

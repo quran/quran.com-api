@@ -191,6 +191,7 @@ GEM
     nokogiri (1.6.7.2)
       mini_portile2 (~> 2.0.0.rc2)
     notiffany (0.0.8)
+    newrelic_rpm (3.12.0.288)
       nenv (~> 0.1)
       shellany (~> 0.0)
     parallel (1.6.2)
@@ -371,6 +372,7 @@ DEPENDENCIES
   jbuilder (~> 2.0)
   jquery-rails
   kaminari
+  newrelic_rpm
   parallel
   passenger
   pg (~> 0.18.2)

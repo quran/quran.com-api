@@ -3,14 +3,17 @@ class SearchController < ApplicationController
     return render json: {message: 'Query param is invalid'}, status: 400 unless search_query?
 
     query = params[:q] || params[:query]
+    page = params[:page] || params[:p] || 1
+    size = params[:size] || params[:s] || 20
 
     indices_boost = Search::LanguageDetection.new(headers, session, query).indices_boost
 
-    search = Search::Query::Client.new(query,
-      page: params[:page] || params[:p] || 1,
-      size: params[:size] || params[:s] || 20,
+    search = Search::Query::Client.new(
+      query,
+      page: page,
+      size: size,
       indices_boost: indices_boost,
-      content: params[:content], # The user can specific what audio or additional content to retrieve
+      content: params[:content],
       audio: params[:audio]
     )
 

@@ -23,13 +23,14 @@ module Search
       attribute :total, Integer
       attribute :response, Search::Results
       attribute :ayah_keys, Array
-      attribute :type, Symbol, default: TYPE_AGGREGATIONS
+      attribute :type, Symbol, default: TYPE_AGGREGATIONS, lazy: true
 
       # Options
       # attribute :highlight, Boolean, default: true
-      attribute :prefix_length, Integer, default: 1
-      attribute :fuzziness, Integer, default: 1
-
+      # # Fuzziness describes the distance from the actual word
+      # see: https://www.elastic.co/blog/found-fuzzy-search
+      attribute :fuzzy_prefix_length, Integer, default: 0, lazy: true
+      attribute :fuzziness, Integer, default: 1, lazy: true
 
       def initialize(query, options = {})
         @page = options[:page].to_i
@@ -38,11 +39,6 @@ module Search
 
         @indices_boost = options[:indices_boost]
         @query = Search::Query::Query.new(query)
-
-        @prefix_length = options[:prefix_length]
-        # Fuzziness describes the distance from the actual word
-        # see: https://www.elastic.co/blog/found-fuzzy-search
-        @fuzziness = options[:fuzziness]
 
         @content = options[:content]
         @audio = options[:audio]
@@ -69,6 +65,7 @@ module Search
 
       def request
         @start_time = Time.now
+        # binding.pry
         @ayah_keys = Search::Request.new(search_params, @type).search.keys
         @total = @ayah_keys.length
         @type = :hits
@@ -150,19 +147,44 @@ module Search
       def query_string
         {
           query_string: {
-            query: @query.query,
+            query: "#{@query.query}~",
             #  We could use this for later but it adds unneeded time.
             # default_field: "_all",
             auto_generate_phrase_queries: true,
             lenient: true,
             fields: fields_val,
+            fuzziness: fuzziness,
+            phrase_slop: 100,
             minimum_should_match: '95%'
           }
         }
       end
 
-      def query_object
-        query = {
+      def multi_match(type = 'most_fields')
+        {
+          multi_match: {
+            type: type,
+            query: @query.query,
+            fields: fields_val,
+            fuzziness: fuzziness,
+            minimum_should_match: '3<62%'
+          }
+        }
+      end
+
+      def match
+        {
+          match: {
+            text: {
+              query: @query.query,
+              fuzziness: fuzziness
+            }
+          }
+        }
+      end
+
+      def bool_query
+        bool = {
           bool: {
             must: [
               query_string
@@ -170,9 +192,54 @@ module Search
           }
         }
 
-        query[:bool][:must].unshift(terms) if hits_query?
+        bool[:must].unshift(terms) if hits_query?
 
+        bool
+      end
+
+      def dis_max_query
+        {
+          dis_max: {
+            tie_breaker: 0.7,
+            boost: 1,
+            queries: [
+              query_string,
+              multi_match,
+              multi_match('phrase')
+            ]
+          }
+        }
+      end
+
+      def query_object
+        query = bool_query
         query
+      end
+
+      def suggest
+        # {
+        #   text: @query.query,
+        #   "simple_phrase": {
+        #     "phrase": {
+        #       "field": "text",
+        #       "size": 5,
+        #       "real_word_error_likelihood": 0.95,
+        #       "max_errors": 0.5,
+        #       "gram_size": 2,
+        #       "direct_generator": [
+        #         {
+        #           "field": "text",
+        #           "suggest_mode": "always",
+        #           "min_word_length": 1
+        #         }
+        #       ],
+        #       "highlight": {
+        #         "pre_tag": "<em>",
+        #         "post_tag": "</em>"
+        #       }
+        #     }
+        #   }
+        # }
       end
     end
   end
