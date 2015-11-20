@@ -10,7 +10,7 @@
 # vim: ts=4 sw=4 expandtab
 class Content::Translation < ActiveRecord::Base
   extend Content
-  # extend Batchelor
+  # # extend Batchelor
 
   self.table_name = 'translation'
   self.primary_keys = :ayah_key, :resource_id # composite primary key which is a combination of ayah_key & resource_id
@@ -37,7 +37,10 @@ class Content::Translation < ActiveRecord::Base
                      analyzer: 'standard'
       indexes :stemmed, type: 'string', similarity: 'my_bm25',
                         term_vector: 'with_positions_offsets_payloads',
-                        analyzer: 'standard'
+                        analyzer: 'english'
+      indexes :shingles, type: 'string', similarity: 'my_bm25',
+                         term_vector: 'with_positions_offsets_payloads',
+                         analyzer: 'shingle_analyzer'
     end
   end
 

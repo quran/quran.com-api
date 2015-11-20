@@ -13,7 +13,7 @@
 # vim: ts=4 sw=4 expandtab
 class Quran::TextRoot < ActiveRecord::Base
     extend Quran
-    extend Batchelor
+    # extend Batchelor
 
     self.table_name = 'text_root'
     self.primary_key = 'id'

@@ -7,7 +7,7 @@
 #
 class Content::TafsirAyah < ActiveRecord::Base
   extend Content
-  extend Batchelor
+  # extend Batchelor
 
   self.table_name = 'tafsir_ayah'
   self.primary_keys = :tafsir_id, :ayah_key

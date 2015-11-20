@@ -20,7 +20,8 @@ module Search
           ]
         else
           [
-            'text^1.6',
+            'text^2.5',
+            'text.shingles^1.5',
             'text.phonetic^1.1',
             'text.stemmed'
           ]

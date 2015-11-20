@@ -8,7 +8,7 @@
 
 class Quran::Root < ActiveRecord::Base
     extend Quran
-    extend Batchelor
+    # extend Batchelor
 
     self.table_name = 'root'
     self.primary_key = 'root_id'

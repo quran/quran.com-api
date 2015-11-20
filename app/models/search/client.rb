@@ -164,10 +164,11 @@ module Search
         {
           multi_match: {
             type: type,
+            slop: 50,
             query: @query.query,
             fields: fields_val,
             fuzziness: fuzziness,
-            minimum_should_match: '3<62%'
+            minimum_should_match: '<65%'
           }
         }
       end
@@ -187,7 +188,11 @@ module Search
         bool = {
           bool: {
             must: [
-              query_string
+              multi_match
+            ],
+            should: [
+              multi_match('phrase'),
+              simple_query_string
             ]
           }
         }
