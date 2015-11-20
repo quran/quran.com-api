@@ -10,7 +10,7 @@
 # vim: ts=4 sw=4 expandtab
 class Content::Translation < ActiveRecord::Base
   extend Content
-  extend Batchelor
+  # extend Batchelor
 
   self.table_name = 'translation'
   self.primary_keys = :ayah_key, :resource_id # composite primary key which is a combination of ayah_key & resource_id
@@ -47,7 +47,7 @@ class Content::Translation < ActiveRecord::Base
 
   def self.import(options = {})
     # TODO: Allow to import one specific language_code
-    codes = options.delete(:language_codes) ||  []
+    codes = options.delete(:language_codes) || []
     code = options.delete(:language_code) || nil
 
     codes << code unless code.nil?
@@ -63,8 +63,9 @@ class Content::Translation < ActiveRecord::Base
         tries ||= 3
 
         query = lambda do
-          joins('join content.resource using ( resource_id )').select('content.translation.*').where('resource.language_code' => language_code)
+          joins(:resource).where(resource: {language_code: language_code})
         end
+
         transform = lambda do |model|
           {
             index: {
@@ -76,7 +77,6 @@ class Content::Translation < ActiveRecord::Base
 
         options = {
           index: "#{index_name}-#{language_code}",
-          mappings: mappings,
           transform: transform,
           batch_size: 6236,
           query: query
@@ -86,7 +86,7 @@ class Content::Translation < ActiveRecord::Base
       rescue Exception => e
         retry unless (tries -= 1).zero?
       ensure
-        Rails.logger.ap e.message
+        Rails.logger.ap e
       end
     end
   end

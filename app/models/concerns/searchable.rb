@@ -22,7 +22,7 @@ module Searchable
       def delete_index
         # delete all the translation-* indices if the argument was
         # just 'translation'
-        if class_name == 'translation'
+        if class_name.downcase == 'translation'
           begin
             __elasticsearch__.client.cat.indices(
               index: 'translation-*', h: ['index'], format: 'json'

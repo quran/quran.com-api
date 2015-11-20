@@ -7,6 +7,7 @@ namespace :elasticsearch do
     'Quran::TextFont'
   ]
 
+  # I don't remmeber what this is for. I will find out soon.
   def self.create_index
     @models.each do |model|
       model = Kernel.const_get(model)
@@ -15,7 +16,7 @@ namespace :elasticsearch do
   end
 
   desc 'deletes all elasticsearch indices'
-  task delete_index: :environment do
+  task delete_indices: :environment do
     ActiveRecord::Base.logger = Logger.new(STDOUT)
 
     @models.each do |model|
@@ -25,16 +26,16 @@ namespace :elasticsearch do
   end
 
   desc 'setup all elasticsearch indices'
-  task create_index: :environment do
+  task setup_indices: :environment do
     ActiveRecord::Base.logger = Logger.new(STDOUT)
-    Parallel.each(@models, in_processes: 16, progress: 'Doing stuff') do |model|
+    Parallel.each(@models, in_processes: 16, progress: 'Importing models') do |model|
       model = Kernel.const_get(model)
       model.setup_index
     end
   end
 
   desc 'setup elasticsearch files'
-  task setup_index: :environment do
+  task setup_files: :environment do
     analysis_dir = '/usr/local/etc/elasticsearch/analysis'
 
     Dir.mkdir(analysis_dir) unless File.exist?(analysis_dir)

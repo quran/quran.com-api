@@ -10,17 +10,17 @@ gem 'pg', '~> 0.18.2'
 # Use SCSS for stylesheets
 #gem 'sass-rails' #, '~> 4.0.3'
 # Use Uglifier as compressor for JavaScript assets
-gem 'uglifier', '>= 1.3.0'
+# gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .js.coffee assets and views
-gem 'coffee-rails', '~> 4.0.0'
+# gem 'coffee-rails', '~> 4.0.0'
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 gem 'execjs'
 gem 'therubyracer',  platforms: :ruby
 
 # Use jquery as the JavaScript library
-gem 'jquery-rails'
+# gem 'jquery-rails'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
-gem 'turbolinks'
+# gem 'turbolinks'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
@@ -29,8 +29,6 @@ gem 'sdoc', '~> 0.4.0',          group: :doc
 # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
 gem 'spring',        group: :development
 gem 'spring-commands-rspec', group: :development
-
-gem 'newrelic_rpm'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
@@ -57,7 +55,7 @@ gem 'virtus'
 # composite primary keys
 gem 'composite_primary_keys', {
   :git => 'git://github.com/composite-primary-keys/composite_primary_keys.git',
-  :branch => 'ar_4.2.x'
+  # :branch => 'ar_4.2.x'
 }
 
 # Printing in console made easy. Simple run or add Rails.logger.ap #YOUR_VAR
@@ -69,14 +67,13 @@ gem 'elasticsearch-rails'
 
 
 # This is for batching the Content::Translation, batches based on the string primary keys
-gem 'batchelor'
+# gem 'batchelor'
 
 # Paging the results
 gem 'kaminari'
 
 # nv 'dir'='/base2' rake db:data:dump_dir
 gem 'yaml_db', github: 'sharabash/yaml_db'
-gem 'sass-rails', '~> 5.0.1'
 
 # This is to run the rake task for importing in parallel
 gem 'parallel'
