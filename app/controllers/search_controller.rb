@@ -1,6 +1,6 @@
 class SearchController < ApplicationController
   def query
-    return render json: {message: 'Query param is invalid'} unless search_query?
+    return render json: {message: 'Query param is invalid'}, status: 400 unless search_query?
 
     query = params[:q] || params[:query]
 
@@ -16,9 +16,9 @@ class SearchController < ApplicationController
 
     search.request
 
-    # if search.errored?
-    #   return render json: {error: 'Something wrong happened'}
-    # end
+    if search.errored?
+      return render json: {error: 'Something wrong happened'}, status: 400
+    end
 
     render json: {
       query: params[:q],

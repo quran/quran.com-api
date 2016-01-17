@@ -1,8 +1,6 @@
 class AyatController < ApplicationController
   def index
-    unless valid_params?
-      return render json: {message: 'Params are wrong.'}
-    end
+    return render json: { message: 'Params are wrong.' } unless valid_params?
 
     params_hash = (params[:range] || ("#{params[:from]}-#{params[:to]}")) + "/#{params[:quran]}/#{params[:audio]}/#{params[:content]}"
 

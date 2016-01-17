@@ -48,30 +48,30 @@ class Quran::Ayah < ActiveRecord::Base
     has_one :text_token, class_name: 'Quran::TextToken', foreign_key: 'ayah_key'
 
     def self.get_ayahs_by_range(surah_id, from, to)
-      self.where('quran.ayah.surah_id = ?', surah_id)
-          .where('quran.ayah.ayah_num >= ?', from)
-          .where('quran.ayah.ayah_num <= ?', to)
-          .order('quran.ayah.surah_id, quran.ayah.ayah_num')
+      where('quran.ayah.surah_id = ?', surah_id)
+        .where('quran.ayah.ayah_num >= ?', from)
+        .where('quran.ayah.ayah_num <= ?', to)
+        .order('quran.ayah.surah_id, quran.ayah.ayah_num')
     end
 
     def self.get_ayahs_by_array(ayahs_keys_array)
-      self.where(ayah_key: ayahs_keys_array)
+      where(ayah_key: ayahs_keys_array)
           .sort{|e1, e2| ayahs_keys_array.index(e1.ayah_key) <=> ayahs_keys_array.index(e2.ayah_key)}
     end
 
     def self.get_ayahs_by_page(page)
-      self.where(page_num: page)
-          .order('quran.ayah.surah_id, quran.ayah.ayah_num')
+      where(page_num: page).order('quran.ayah.surah_id, quran.ayah.ayah_num')
     end
 
     def self.import_options ( options = {} )
-        transform = lambda do |a|
-            data = a.__elasticsearch__.as_indexed_json
-            data.delete( 'text' ) # NOTE we exclude text because it serves no value in the parent mapping
-            { index: { _id: "#{a.ayah_key}", data: data } }
-        end
-        options = { transform: transform, batch_size: 6236 }.merge( options )
-        return options
+      transform = lambda do |a|
+        data = a.__elasticsearch__.as_indexed_json
+        data.delete( 'text' ) # NOTE we exclude text because it serves no value in the parent mapping
+        { index: { _id: "#{a.ayah_key}", data: data } }
+      end
+      options = { transform: transform, batch_size: 6236 }.merge(options)
+
+      return options
     end
 
     def self.import ( options = {} )

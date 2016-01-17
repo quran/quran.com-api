@@ -2,18 +2,13 @@
 #
 # Table name: word_corpus
 #
-#  location            :integer          not null
-#  word_id             :integer
-#  description         :string
-#  transliteration     :string
-#  image_src           :string
-#  segment             :string
-#  segment_class       :string
-#  segment_description :string
-#  segment_translation :string
-#  grammar             :string
-#  created_at          :datetime         not null
-#  updated_at          :datetime         not null
+#  corpus_id       :integer          not null, primary key
+#  word_id         :integer
+#  location        :string
+#  description     :string
+#  transliteration :string
+#  image_src       :string
+#  segment         :json
 #
 # Indexes
 #
@@ -21,4 +16,7 @@
 #
 
 class Quran::WordCorpus < ActiveRecord::Base
+  belongs_to :word
+
+  self.primary_key = 'corpus_id'
 end
