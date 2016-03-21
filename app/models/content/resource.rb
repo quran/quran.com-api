@@ -73,87 +73,82 @@ class Content::Resource < ActiveRecord::Base
         cardinality = self.fetch_cardinality_quran(quran_id)
 
         if cardinality.cardinality_type == "1_ayah"
-
-            resource = self
-            .joins("JOIN quran.text c using ( resource_id )")
-            .joins("JOIN quran.ayah using ( ayah_key )")
-            .select("c.*")
-            .where("content.resource.resource_id = ?", quran_id)
-            .where("quran.ayah.ayah_key IN (?)", keys)
-            .order("quran.ayah.surah_id, quran.ayah.ayah_num")
+          resource = self
+          .joins("JOIN quran.text c using ( resource_id )")
+          .joins("JOIN quran.ayah using ( ayah_key )")
+          .select("c.*")
+          .where("content.resource.resource_id = ?", quran_id)
+          .where("quran.ayah.ayah_key IN (?)", keys)
+          .order("quran.ayah.surah_id, quran.ayah.ayah_num")
 
         elsif cardinality.cardinality_type == "1_word"
 
-            if  cardinality.slug == 'word_font'
-                select = "
-                              concat( 'p', c.page_num ) char_font
-                             , concat( '&#x', c.code_hex, ';' ) char_code
-                             , ct.name char_type
-                        "
-                join = "join quran.char_type ct on ct.char_type_id = c.char_type_id"
-            end
+          if  cardinality.slug == 'word_font'
+            select = "
+              concat( 'p', c.page_num ) char_font
+             , concat( '&#x', c.code_hex, ';' ) char_code
+             , ct.name char_type"
+            join = 'join quran.char_type ct on ct.char_type_id = c.char_type_id'
+          end
 
-            resource = self
-            .joins("JOIN quran.word_font c using ( resource_id )")
-            .joins("JOIN quran.ayah using (ayah_key) ")
+          resource = self
+            .joins('JOIN quran.word_font c using ( resource_id )')
+            .joins('JOIN quran.ayah using (ayah_key) ')
             .joins(join)
-            .joins("left join quran.word w on w.word_id = c.word_id")
+            .joins('left join quran.word w on w.word_id = c.word_id')
             .joins("left join quran.word_translation wt on w.word_id = wt.word_id and wt.language_code = 'en'")
-            .joins("left join quran.token t on w.token_id = t.token_id")
-            .where("content.resource.resource_id = ? ", quran_id)
-            .where("quran.ayah.ayah_key IN (?)", keys)
-            .select("c.*")
-            .select("content.resource.resource_id")
+            .joins('left join quran.word_transliteration wtt on w.word_id = wtt.word_id')
+            .joins('left join quran.token t on w.token_id = t.token_id')
+            .where('content.resource.resource_id = ? ', quran_id)
+            .where('quran.ayah.ayah_key IN (?)', keys)
+            .select('c.*')
+            .select('content.resource.resource_id')
             .select(select)
-            .select("wt.value word_translation
-                 , t.value word_arabic" )
-            .order("quran.ayah.surah_id, quran.ayah.ayah_num, c.position")
+            .select('wt.value word_translation, wtt.value word_transliteration, t.value word_arabic')
+            .order('quran.ayah.surah_id, quran.ayah.ayah_num, c.position')
             .map do |word|
-                {
-                    ayah_key: word.ayah_key,
-                    word: {
-                        position: word.position,
-                        line: word.line_num,
-                        arabic: word.word_arabic,
-                        id: word.word_id,
-                        translation: word.word_translation
-                    },
-                    char: {
-                        page: word.page_num,
-                        font: word.char_font,
-                        code_hex: word.code_hex,
-                        type_id: word.char_type_id,
-                        type: word.char_type,
-                        code_dec: word.code_dec,
-                        line: word.line_num,
-                        code: word.char_code
-
-                    }
+              {
+                ayah_key: word.ayah_key,
+                word: {
+                  position: word.position,
+                  line: word.line_num,
+                  arabic: word.word_arabic,
+                  id: word.word_id,
+                  translation: word.word_translation,
+                  transliteration: word.word_transliteration
+                },
+                char: {
+                  page: word.page_num,
+                  font: word.char_font,
+                  code_hex: word.code_hex,
+                  type_id: word.char_type_id,
+                  type: word.char_type,
+                  code_dec: word.code_dec,
+                  line: word.line_num,
+                  code: word.char_code
                 }
+              }
             end
             .group_by{|a| a[:ayah_key]}
 
-            Hash[resource
-            .sort_by{|k, v| keys.index(k)}]
-            .values
-
+          Hash[resource.sort_by{|k, v| keys.index(k)}].values
         end
     end
 
     def self.fetch_cardinality_content(params_content)
-        return if params_content.nil?
+      return if params_content.nil?
 
-        if !params_content.is_a? Array
-            params_content = params_content.split(',').map{|p| p.to_i}
-        end
+      if !params_content.is_a? Array
+          params_content = params_content.split(',').map{|p| p.to_i}
+      end
 
-        self
-        .joins("JOIN content.resource_api_version  using ( resource_id )")
-        .where("content.resource.is_available = 't' ")
-        .where("content.resource_api_version.v2_is_enabled = 't' ")
-        .where("content.resource.type = 'content' ")
-        .where("content.resource.resource_id IN (?)", params_content)
-        .order("content.resource.resource_id")
+      self
+      .joins("JOIN content.resource_api_version  using ( resource_id )")
+      .where("content.resource.is_available = 't' ")
+      .where("content.resource_api_version.v2_is_enabled = 't' ")
+      .where("content.resource.type = 'content' ")
+      .where("content.resource.resource_id IN (?)", params_content)
+      .order("content.resource.resource_id")
     end
 
     def self.bucket_content(params_content, keys)

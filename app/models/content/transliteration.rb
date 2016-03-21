@@ -1,3 +1,12 @@
+# == Schema Information
+#
+# Table name: content.transliteration
+#
+#  resource_id :integer          not null, primary key
+#  ayah_key    :text             not null, primary key
+#  text        :text             not null
+#
+
 # vim: ts=4 sw=4 expandtab
 class Content::Transliteration < ActiveRecord::Base
     extend Content
