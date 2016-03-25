@@ -20,7 +20,7 @@ class Quran::Text < ActiveRecord::Base
     belongs_to :ayah,     class_name: 'Quran::Ayah', foreign_key: 'ayah_key'
 
     # scope
-    # default_scope { where resource_id: -1 }
+    default_scope { where resource_id: 6 } # limit to Simple Enhanced
 
     def self.import( options = {} )
         Quran::Text.connection.cache do

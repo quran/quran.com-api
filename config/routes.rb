@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   end
 
   get 'search', to: 'search#query'
+  get 'suggest', to: 'suggest#query'
 
   post 'support', to: 'support#zendesk'
 
