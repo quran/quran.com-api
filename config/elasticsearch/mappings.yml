@@ -36,13 +36,8 @@ text-token:
             type: string
             similarity: my_bm25
             term_vector: with_positions_offsets_payloads
-            analyzer: arabic_normalized
+            analyzer: minimal
             fields:
-                autocomplete:
-                    type: string
-                    index_analyzer: autocomplete_arabic
-                    search_analyzer: arabic_normalized
-                    index_options: offsets
                 lemma:
                     type: string
                     similarity: my_bm25
@@ -95,12 +90,6 @@ text-font:
             term_vector: with_positions_offsets_payloads
             analyzer: quran_font_to_token
             fields:
-                autocomplete:
-                    type: string
-                    index_analyzer: autocomplete_arabic
-                    search_analyzer: arabic_normalized
-                    index_options: offsets
-
                 lemma:
                     type: string
                     similarity: my_bm25
@@ -196,7 +185,6 @@ translation:
                     index_analyzer: autocomplete
                     search_analyzer: standard
                     index_options: offsets
-                    #term_vector: with_positions_offsets
 #        ayah:
 #            type: nested
 #            properties:
