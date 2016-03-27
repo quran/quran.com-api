@@ -22,20 +22,29 @@ class SuggestController < ApplicationController
     end
 
     indices = []
-    esquerytype = 'match'
+    querydsl = {}
 
     if query.is_arabic?
       indices.push( 'text' ) # "text" is just 6236 records of ayah text without tashkeel (mostly)
-      esquerytype = 'match_phrase_prefix'
+      querydsl = {
+        match_phrase_prefix: {
+          "text.autocomplete" => qtext
+        }
+      }
     else
       if lang == 'en' # TODO BUG this is a workaround for a bug, the translation-en index doesn't populate and for some reason populates 'translation' instead
         indices.push( 'translation' )
       end
       indices.push( "translation-#{lang}" )
+      querydsl = {
+        match: {
+          "text.autocomplete" => {
+            query: qtext,
+            operator: "and"
+          }
+        }
+      }
     end
-
-    esqueryobj = {}
-    esqueryobj[ esquerytype ] = { "text.autocomplete" => qtext }
 
     # TODO wrap this in try catch
     result = client.search(
@@ -43,10 +52,11 @@ class SuggestController < ApplicationController
       _source_include: [ 'resource_id', 'ayah.surah_id', 'ayah.ayah_num', 'text' ],
       index: indices,
       body: {
-        query: esqueryobj,
+        query: querydsl,
         highlight: {
           fields: {
             "text.autocomplete" => {
+              number_of_fragments: 0, # just highlight the entire string instead of breaking it down into sentence fragments, that's easier for now
               pre_tags: [ "<b>" ],
               post_tags: [ "</b>" ],
               type: "postings"
