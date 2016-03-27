@@ -72,6 +72,7 @@ class SuggestController < ApplicationController
     result['hits']['hits'].each do |hit|
       text = hit['highlight']['text.autocomplete'][0]
       ayah = "#{hit['_source']['ayah']['surah_id']}:#{hit['_source']['ayah']['ayah_num']}"
+      href = "/#{hit['_source']['ayah']['surah_id']}/#{hit['_source']['ayah']['ayah_num']}"
       if not seen.key?(ayah)
         seen[ayah] = true
         h = {
@@ -80,6 +81,7 @@ class SuggestController < ApplicationController
           text: text,
           #full: hit['_source']['text'],
           #hlit: hit['highlight']['text.autocomplete'],
+          href: href,
           ayah: ayah
         }
         processed.push( h )
