@@ -21,6 +21,10 @@ index:
             english_possessive_stemmer:
                 type: stemmer
                 language: possessive_english
+            autocomplete:
+                type: "edgeNGram"
+                min_gram: 1
+                max_gram: 30
 
 
             unique_tokens:
@@ -62,6 +66,18 @@ index:
                 stopwords_path: analysis/stop.text-token.to.text-root.txt
 
         analyzer:
+            autocomplete:
+                type: custom
+                tokenizer: standard
+                filter: [ "lowercase", "autocomplete" ]
+            autocomplete_arabic:
+                type: custom
+                tokenizer: whitespace
+                filter:
+                    - arabic_normalization
+                    - arabic_keywords
+                    - autocomplete
+
             # english analyzer, see http://www.elasticsearch.org/guide/en/elasticsearch/reference/1.4/analysis-lang-analyzer.html#english-analyzer
             quran_token_to_lemma:
                 tokenizer: icu_tokenizer
@@ -115,7 +131,6 @@ index:
                     - arabic_ngram
                     - reverse
                     - unique_tokens
-
 
 
             quran_font_to_token:

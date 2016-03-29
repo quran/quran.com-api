@@ -7,7 +7,14 @@ text:
             type: string
             similarity: my_bm25
             term_vector: with_positions_offsets_payloads
+            analyzer: arabic_normalized
             fields:
+                autocomplete:
+                    type: string
+                    index_analyzer: autocomplete_arabic
+                    search_analyzer: arabic_normalized
+                    index_options: offsets
+
                 stemmed:
                     type: string
                     similarity: my_bm25
@@ -163,7 +170,21 @@ translation:
     #_parent: { type: ayah }
     #_routing: { path: ayah_key }
     properties:
-        text: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, fields: { stemmed: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, analyzer: standard } } }
+        text:
+            type: string
+            similarity: my_bm25
+            term_vector: with_positions_offsets_payloads
+            fields:
+                stemmed:
+                    type: string
+                    similarity: my_bm25
+                    term_vector: with_positions_offsets_payloads
+                    analyzer: standard
+                autocomplete:
+                    type: string
+                    index_analyzer: autocomplete
+                    search_analyzer: standard
+                    index_options: offsets
 #        ayah:
 #            type: nested
 #            properties:

@@ -2,9 +2,13 @@
 module Searchable
     extend ActiveSupport::Concern
 
-    @@models = [ 'Content::Translation', 'Content::Transliteration', 'Content::TafsirAyah',
-                 'Quran::TextFont' ]
-#    @@models = [ 'Quran::TextFont', 'Content::TafsirAyah' ]
+    @@models = [
+      'Content::Translation',
+      'Content::Transliteration', 
+      'Content::TafsirAyah',
+      'Quran::Text',
+      'Quran::TextFont'
+    ]
 
     # convenience functions for setting up all indices in one go
 
