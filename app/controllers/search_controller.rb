@@ -34,6 +34,24 @@ class SearchController < ApplicationController
     }
   end
 
+  def suggest
+    return render json: {message: 'Query param is invalid'}, status: 400 unless search_query?
+    query = params[:q] || params[:query]
+
+    search = Search::Suggest::Client.new(query,
+      lang: params[:l] || params[:lang] || 'en', # TODO we need to explicitly pass in lang, this default shouldn't be around forever
+      size: ( params[:s] || params[:size] || '5' ).to_i
+    )
+
+    search.request
+
+    if search.errored?
+      return render json: {error: 'Something wrong happened'}, status: 400
+    end
+
+    render json: search.result
+  end
+
 private
 
   def search_query?
