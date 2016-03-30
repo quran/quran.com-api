@@ -6,6 +6,7 @@ json.juz_num        ayah.juz_num
 json.hizb_num       ayah.hizb_num
 json.rub_num        ayah.rub_num
 json.text           ayah.text
+<<<<<<< 3d98ebc8bca07505f1e721078baf7247c529e1b4
 json.text_tashkeel  ayah.text_tashkeel if ayah.text_tashkeel
 json.ayah_key       ayah.ayah_key
 json.sajdah         ayah.sajdah
@@ -28,4 +29,13 @@ json.set! :audio do
   json.set! :ogg do
     json.partial! "v2/ayahs/audio", file: ogg if ogg
   end
+=======
+json.ayah_key       ayah.ayah_key
+json.sajdah         ayah.sajdah
+json.set! :words do
+  json.partial! "glyph", collection: ayah.glyphs, as: :glyph
+end
+json.set! :content do
+  json.partial! "content", collection: ayah.translations, as: :content
+>>>>>>> WIP
 end
