@@ -34,7 +34,7 @@ class Quran::Ayah < ActiveRecord::Base
     has_many :tafsirs,      class_name: 'Content::Tafsir',     through:     :_tafsir_ayah
 
     has_many :translations,     class_name: 'Content::Translation',     foreign_key: 'ayah_key'
-    has_one :transliteration, class_name: 'Content::Transliteration', foreign_key: 'ayah_key'
+    has_one :transliteration,   class_name: 'Content::Transliteration', foreign_key: 'ayah_key'
 
     has_many :audio,  class_name: 'Audio::File',     foreign_key: 'ayah_key'
     has_many :texts,  class_name: 'Quran::Text',     foreign_key: 'ayah_key'
@@ -45,7 +45,7 @@ class Quran::Ayah < ActiveRecord::Base
     has_many :text_roots,  class_name: 'Quran::TextRoot',  foreign_key: 'ayah_key'
     has_many :text_lemmas, class_name: 'Quran::TextLemma', foreign_key: 'ayah_key'
     has_many :text_stems,  class_name: 'Quran::TextStem',  foreign_key: 'ayah_key'
-    has_one :text_token, class_name: 'Quran::TextToken', foreign_key: 'ayah_key'
+    has_one :text_token,   class_name: 'Quran::TextToken', foreign_key: 'ayah_key'
 
     def self.get_ayahs_by_range(surah_id, from, to)
       where('quran.ayah.surah_id = ?', surah_id)

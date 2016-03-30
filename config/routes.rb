@@ -1,5 +1,11 @@
 Rails.application.routes.draw do
 
+  namespace :v2 do
+    resources :surahs, only: [:index, :show], defaults: { format: 'json' } do
+      resources :ayahs, only: [:index], defaults: { format: 'json' }
+    end
+  end
+
   namespace :content do
     get 'tafsir/:id', to: 'tafsir#show'
   end
