@@ -55,7 +55,7 @@ gem 'virtus'
 # composite primary keys
 gem 'composite_primary_keys', {
   :git => 'git://github.com/composite-primary-keys/composite_primary_keys.git',
-  # :branch => 'ar_4.2.x'
+  :branch => 'ar_4.2.x'
 }
 
 # Printing in console made easy. Simple run or add Rails.logger.ap #YOUR_VAR
