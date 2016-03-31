@@ -63,7 +63,7 @@ module Search
           }
 
           hash.merge!(hit['_source']['resource'])
-          hash.merge!(hit['_source']['language'])
+          # hash.merge!(hit['_source']['language'])
 
           # This is when it's a word font that's a hit, aka text-font index
           if hash['cardinality_type'] == '1_word'

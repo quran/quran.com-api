@@ -8,13 +8,28 @@ module Search
         hash = {
           by_ayah_key: {
             terms: {
-              field: 'ayah.ayah_key',
+              field: 'ayah_key',
               size: 6236,
               order: {
                 average_score: 'desc'
               }
             },
-            aggregations: {
+            aggs: {
+              top_query_hits: {
+                top_hits: {
+                  sort: [
+                    {
+                      _score: {
+                        order: 'desc'
+                      }
+                    }
+                  ],
+                  _source: '*',
+                  size: 10
+                }
+              }
+            },
+            aggs: {
               average_score: {
                 avg: {
                   script: '_score'
@@ -25,7 +40,7 @@ module Search
         }
 
         if hits_query?
-          hash[:by_ayah_key][:aggregations].merge!(
+          hash[:by_ayah_key][:aggs].merge!(
             match: {
               top_hits: {
                 highlight: highlight,

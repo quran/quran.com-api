@@ -64,7 +64,7 @@ module Search
 
     def request
       @start_time = Time.now
-      # binding.pry
+      binding.pry
       @ayah_keys = Search::Request.new(search_params, @type).search.keys
       @total = @ayah_keys.length
       @type = :hits
@@ -74,14 +74,10 @@ module Search
 
       self
 
-    rescue
+    # rescue
 
-      handle_error
-      self
-    end
-
-    def handle_error
-      @errored = true
+      # @errored = true
+      # self
     end
 
     def errored?
@@ -126,7 +122,7 @@ module Search
       {
         terms: {
           # Ayah keys go here, make sure they are underscored like 1_2
-          'ayah.ayah_key' => Kaminari.paginate_array(@ayah_keys).page(@page).per(@size)
+          'ayah_key' => Kaminari.paginate_array(@ayah_keys).page(@page).per(@size)
         }
       }
     end
@@ -216,34 +212,8 @@ module Search
     end
 
     def query_object
-      query = bool_query
-      query
-    end
-
-    def suggest
-      # {
-      #   text: @query.query,
-      #   "simple_phrase": {
-      #     "phrase": {
-      #       "field": "text",
-      #       "size": 5,
-      #       "real_word_error_likelihood": 0.95,
-      #       "max_errors": 0.5,
-      #       "gram_size": 2,
-      #       "direct_generator": [
-      #         {
-      #           "field": "text",
-      #           "suggest_mode": "always",
-      #           "min_word_length": 1
-      #         }
-      #       ],
-      #       "highlight": {
-      #         "pre_tag": "<em>",
-      #         "post_tag": "</em>"
-      #       }
-      #     }
-      #   }
-      # }
+      # bool_query
+      simple_query_string
     end
   end
 end
