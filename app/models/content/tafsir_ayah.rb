@@ -32,7 +32,7 @@ class Content::TafsirAyah < ActiveRecord::Base
       indexes :stemmed, type: 'string', similarity: 'my_bm25',
                         term_vector: 'with_positions_offsets_payloads',
                         search_analyzer: 'arabic_normalized',
-                        index_analyzer: 'arabic_ngram'
+                        analyzer: 'arabic_ngram'
     end
   end
 

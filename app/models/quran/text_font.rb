@@ -53,7 +53,7 @@ class Quran::TextFont < ActiveRecord::Base
       indexes :ngram, type: 'string', similarity: 'my_bm25',
                       term_vector: 'with_positions_offsets_payloads',
                       search_analyzer: 'quran_font_to_token',
-                      index_analyzer: 'quran_font_to_token_to_arabic_ngram'
+                      analyzer: 'quran_font_to_token_to_arabic_ngram'
     end
   end
 

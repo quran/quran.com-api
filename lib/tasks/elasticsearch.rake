@@ -28,7 +28,7 @@ namespace :elasticsearch do
   desc 'setup all elasticsearch indices'
   task setup_indices: :environment do
     ActiveRecord::Base.logger = Logger.new(STDOUT)
-    Parallel.each(@models, in_processes: 16, progress: 'Importing models') do |model|
+    Parallel.each(@models, in_processes: 4, progress: 'Importing models') do |model|
       model = Kernel.const_get(model)
       model.setup_index
     end

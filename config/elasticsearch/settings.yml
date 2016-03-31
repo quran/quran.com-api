@@ -66,7 +66,7 @@ index:
                 stopwords_path: analysis/stop.text-token.to.text-root.txt
             dbl_metaphone:
                 type: phonetic
-                encoder: double_metaphone
+                encoder: doublemetaphone
             shingle_filter:
                 type: shingle
                 min_shingle_size: 2
