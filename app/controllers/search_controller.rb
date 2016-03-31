@@ -8,7 +8,7 @@ class SearchController < ApplicationController
 
     indices_boost = Search::LanguageDetection.new(headers, session, query).indices_boost
 
-    search = Search::Query::Client.new(
+    search = Search::Client.new(
       query,
       page: page,
       size: size,
