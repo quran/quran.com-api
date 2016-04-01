@@ -26,18 +26,26 @@ class Content::Transliteration < ActiveRecord::Base
 
   mappings _all: { enabled: false } do
     indexes :text, type: 'multi_field' do
-      indexes :text, type: 'string', similarity: 'my_bm25',
-                     term_vector: 'with_positions_offsets_payloads',
-                     analyzer: 'standard'
-      indexes :stemmed, type: 'string', similarity: 'my_bm25',
-                        term_vector: 'with_positions_offsets_payloads',
-                        analyzer: 'english'
-      indexes :phonetic, type: 'string', similarity: 'my_bm25',
-                         term_vector: 'with_positions_offsets_payloads',
-                         analyzer: 'dbl_metaphone'
-      indexes :shingles, type: 'string', similarity: 'my_bm25',
-                         term_vector: 'with_positions_offsets_payloads',
-                         analyzer: 'shingle_analyzer'
+      indexes :text,
+        type: 'string',
+        similarity: 'my_bm25',
+        term_vector: 'with_positions_offsets_payloads',
+        analyzer: 'standard'
+      indexes :stemmed,
+        type: 'string',
+        similarity: 'my_bm25',
+        term_vector: 'with_positions_offsets_payloads',
+        analyzer: 'english'
+      indexes :phonetic,
+        type: 'string',
+        similarity: 'my_bm25',
+        term_vector: 'with_positions_offsets_payloads',
+        analyzer: 'dbl_metaphone'
+      indexes :shingles,
+        type: 'string',
+        similarity: 'my_bm25',
+        term_vector: 'with_positions_offsets_payloads',
+        analyzer: 'shingle_analyzer'
     end
   end
 

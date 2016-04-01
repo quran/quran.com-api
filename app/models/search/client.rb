@@ -1,3 +1,9 @@
+# How search works:
+# Currently, two calls are being made to ES since we are using their aggregations query.
+# 1. Makes a call to fetch the ayahs that match the query. This is very fast and lightweight. After
+# we get the keys, we then paginate on the Rails level and make 2. query to fetch the data.
+# after data is returned, we query it against our database to return to the frontend. Hence why there are
+# two type calls, one is :aggregations (the ayah one) and :hits (getting the actual results).
 module Search
   class Client
     TYPE_HITS = :hits
@@ -44,7 +50,7 @@ module Search
     end
 
     def search_params
-      {
+      params = {
         index: indices,
         type: :data,
         explain: explain,
@@ -60,24 +66,31 @@ module Search
           query: query_object
         }
       }
+
+      params[:body].merge!(highlight: highlight) if hits_query?
+
+      params
     end
 
     def request
       @start_time = Time.now
-      binding.pry
+      # This call goes and fetches the ayahs, then we just want their keys.
       @ayah_keys = Search::Request.new(search_params, @type).search.keys
+
       @total = @ayah_keys.length
-      @type = :hits
+      @type = TYPE_HITS
+
+      # Fetches the actual results.
       @response = Search::Request.new(search_params, @type).search
       @end_time = Time.now
       @delta_time = @end_time - @start_time
 
       self
 
-    # rescue
+    rescue
 
-      # @errored = true
-      # self
+      @errored = true
+      self
     end
 
     def errored?
@@ -90,12 +103,11 @@ module Search
     end
 
     def hits_query?
-      # Could be :raw or :aggregation
-      @type == :hits
+      @type == TYPE_HITS
     end
 
     def aggregations_query?
-      @type == :aggregations
+      @type == TYPE_AGGREGATIONS
     end
 
     def size_query
@@ -163,7 +175,7 @@ module Search
           query: @query.query,
           fields: fields_val,
           fuzziness: fuzziness,
-          minimum_should_match: '<65%'
+          minimum_should_match: '65%'
         }
       }
     end
@@ -192,28 +204,34 @@ module Search
         }
       }
 
-      bool[:must].unshift(terms) if hits_query?
+      bool[:bool][:filter] = terms if hits_query?
 
       bool
     end
 
     def dis_max_query
+      queries = [
+        # query_string,
+        multi_match,
+        multi_match('phrase')
+      ]
+
+      queries.push(terms) if hits_query?
+
       {
         dis_max: {
           tie_breaker: 0.7,
           boost: 1,
-          queries: [
-            query_string,
-            multi_match,
-            multi_match('phrase')
-          ]
+          queries: queries
         }
       }
     end
 
     def query_object
-      # bool_query
-      simple_query_string
+      bool_query
+      # This is the best query as it's a union of all the queries! But we need to
+      # figure out how to get the TYPE_HITS query to behave nicely.
+      # dis_max_query
     end
   end
 end

@@ -22,7 +22,6 @@ module Search
           [
             'text^2.5',
             'text.shingles^1.5',
-            'text.phonetic^1.1',
             'text.stemmed'
           ]
         end

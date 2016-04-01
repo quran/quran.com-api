@@ -32,15 +32,21 @@ class Content::Translation < ActiveRecord::Base
 
   mappings _all: { enabled: false } do
     indexes :text, type: 'multi_field' do
-      indexes :text, type: 'string', similarity: 'my_bm25',
-                     term_vector: 'with_positions_offsets_payloads',
-                     analyzer: 'standard'
-      indexes :stemmed, type: 'string', similarity: 'my_bm25',
-                        term_vector: 'with_positions_offsets_payloads',
-                        analyzer: 'english'
-      indexes :shingles, type: 'string', similarity: 'my_bm25',
-                         term_vector: 'with_positions_offsets_payloads',
-                         analyzer: 'shingle_analyzer'
+      indexes :text,
+        type: 'string',
+        similarity: 'my_bm25',
+        term_vector: 'with_positions_offsets_payloads',
+        analyzer: 'standard'
+      indexes :stemmed,
+        type: 'string',
+        similarity: 'my_bm25',
+        term_vector: 'with_positions_offsets_payloads',
+        analyzer: 'english'
+      indexes :shingles,
+        type: 'string',
+        similarity: 'my_bm25',
+        term_vector: 'with_positions_offsets_payloads',
+        analyzer: 'shingle_analyzer'
     end
   end
 
@@ -61,7 +67,7 @@ class Content::Translation < ActiveRecord::Base
       language_codes_array = Content::Resource.where(language: codes).select(:language_code ).distinct.map { |row| row.language_code }
     end
 
-    Parallel.each(language_codes_array, in_processes: 16, progress: 'Importing translations') do |language_code|
+    Parallel.each(language_codes_array, in_processes: 2, progress: 'Importing translations') do |language_code|
       begin
         tries ||= 3
 
@@ -82,7 +88,8 @@ class Content::Translation < ActiveRecord::Base
           index: "#{index_name}-#{language_code}",
           transform: transform,
           batch_size: 6236,
-          query: query
+          query: query,
+          force: true
         }.merge(options)
 
         importing(options)

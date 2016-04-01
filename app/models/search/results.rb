@@ -59,7 +59,7 @@ module Search
         match = ayah_result['match']['hits']['hits'].map do |hit|
           hash = {
             score: hit['_score'],
-            text: hit['highlight']['text'].first
+            text: hit['highlight'] ? hit['highlight']['text'].first : hit['_source']['text']
           }
 
           hash.merge!(hit['_source']['resource'])
