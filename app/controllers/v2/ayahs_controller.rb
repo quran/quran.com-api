@@ -2,12 +2,17 @@ class V2::AyahsController < ApplicationController
   before_filter :validate_params
   before_filter :get_range
 
+  caches_action :index, cache_path: Proc.new {|a| params_hash}, expires_in: 10.minutes
+
   def index
-    # @ayahs = Rails.cache.fetch("surahs/#{params[:surah_id]}/ayahs/#{params_hash}", expires_in: 12.hours) do
-      @ayahs = Quran::Ayah
-        .includes(:translations).where('translation.resource_id' => params[:content])
-        .get_ayahs_by_range(params[:surah_id], @range[0], @range[1])
-    # end
+    @ayahs = Quran::Ayah
+      .includes(translations: [:resource])
+      .includes(glyphs: {word: [:corpus, :translation, :transliteration, :token]})
+      .includes(audio: :reciter)
+      .includes(:text_tashkeel)
+      .where('translation.resource_id' => params[:content])
+      .where('recitation.reciter_id' => params[:audio])
+      .get_ayahs_by_range(params[:surah_id], @range[0], @range[1])
   end
 
 private
@@ -46,5 +51,9 @@ private
     if (@range.last.to_i - @range.first.to_i) > 50
       return render json: {error: "Range invalid, use a string (maximum 50 ayat per request), e.g. '1-3'"}
     end
+  end
+
+  def params_hash
+    (params[:range] || ("#{params[:from]}-#{params[:to]}")) + "/#{params[:quran]}/#{params[:audio]}/#{params[:content]}"
   end
 end

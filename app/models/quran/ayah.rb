@@ -17,7 +17,6 @@
 # vim: ts=4 sw=4 expandtab
 class Quran::Ayah < ActiveRecord::Base
     extend Quran
-    # # extend Batchelor
 
     self.table_name = 'ayah'
     self.primary_key = 'ayah_key'
@@ -38,6 +37,7 @@ class Quran::Ayah < ActiveRecord::Base
 
     has_many :audio,  class_name: 'Audio::File',     foreign_key: 'ayah_key'
     has_many :texts,  class_name: 'Quran::Text',     foreign_key: 'ayah_key'
+    has_one :text_tashkeel, -> { where(resource_id: 12) }, class_name: 'Quran::Text', foreign_key: 'ayah_key'
     has_many :images, class_name: 'Quran::Image',    foreign_key: 'ayah_key'
     has_many :glyphs, class_name: 'Quran::WordFont', foreign_key: 'ayah_key'
 
