@@ -17,7 +17,7 @@
 # vim: ts=4 sw=4 expandtab
 class Quran::Ayah < ActiveRecord::Base
     extend Quran
-    extend Batchelor
+    # # extend Batchelor
 
     self.table_name = 'ayah'
     self.primary_key = 'ayah_key'

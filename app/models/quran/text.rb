@@ -9,33 +9,63 @@
 
 # vim: ts=4 sw=4 expandtab
 class Quran::Text < ActiveRecord::Base
-    extend Quran
-    extend Batchelor
+  extend Quran
+  # extend Batchelor
 
-    self.table_name = 'text'
-    self.primary_keys = :resource_id, :ayah_key
+  self.table_name = 'text'
+  self.primary_keys = :resource_id, :ayah_key
 
-    # relationships
-    belongs_to :resource, class_name: 'Content::Resource'
-    belongs_to :ayah,     class_name: 'Quran::Ayah', foreign_key: 'ayah_key'
+  # relationships
+  belongs_to :resource, class_name: 'Content::Resource'
+  belongs_to :ayah,     class_name: 'Quran::Ayah', foreign_key: 'ayah_key'
 
-    # scope
-    default_scope { where resource_id: 6 } # limit to Simple Enhanced
+  # scope
+  default_scope { where resource_id: 6 } # limit to Simple Enhanced
 
-    def self.import( options = {} )
-        Quran::Text.connection.cache do
-            transform = lambda do |a|
-                this_data = a.__elasticsearch__.as_indexed_json
-                ayah_data = a.ayah.__elasticsearch__.as_indexed_json
-                this_data.delete( 'ayah_key' )
-                ayah_data.delete( 'text' )
-                { index:  {
-                    _id:  "#{a.resource_id}:#{a.ayah_key}",
-                    data: this_data.merge( { 'ayah' => ayah_data } )
-                } }
-            end
-            options = { transform: transform, batch_size: 6236 }.merge( options )
-            self.importing options
-        end
+  settings YAML.load(
+    File.read(
+      File.expand_path(
+        "#{Rails.root}/config/elasticsearch/settings.yml", __FILE__
+      )
+    )
+  )
+
+  mappings _all: { enabled: false } do
+    indexes :text, type: 'multi_field' do
+      indexes :text,
+        type: 'string',
+        similarity: 'my_bm25',
+        term_vector: 'with_positions_offsets_payloads',
+        analyzer: 'arabic_normalized'
+      indexes :stemmed,
+        type: 'string',
+        similarity: 'my_bm25',
+        term_vector: 'with_positions_offsets_payloads',
+        search_analyzer: 'arabic_normalized',
+        analyzer: 'arabic_ngram'
+      indexes :autocomplete,
+        type: 'string',
+        similarity: 'my_bm25',
+        analyzer: 'autocomplete_arabic',
+        search_analyzer: 'arabic_normalized',
+        index_options: 'offsets'
     end
-end
+  end
+
+  def self.import( options = {} )
+    Quran::Text.connection.cache do
+      transform = lambda do |a|
+        this_data = a.__elasticsearch__.as_indexed_json
+        ayah_data = a.ayah.__elasticsearch__.as_indexed_json
+        this_data.delete( 'ayah_key' )
+        ayah_data.delete( 'text' )
+        { index:  {
+          _id:  "#{a.resource_id}:#{a.ayah_key}",
+          data: this_data.merge( { 'ayah' => ayah_data } )
+          } }
+        end
+        options = { transform: transform, batch_size: 6236 }.merge( options )
+        self.importing options
+      end
+    end
+  end

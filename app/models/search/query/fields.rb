@@ -19,7 +19,11 @@ module Search
             'text.stemmed^2'
           ]
         else
-          ['text^1.6', 'text.stemmed']
+          [
+            'text^2.5',
+            'text.shingles^1.5',
+            'text.stemmed'
+          ]
         end
       end
     end

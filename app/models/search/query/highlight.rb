@@ -6,7 +6,7 @@ module Search
           fields: {
             text: {
               type: 'fvh',
-              matched_fields: ['text.root', 'text.stem_clean', 'text.lemma_clean', 'text.stemmed', 'text'],
+              matched_fields: ['text.root', 'text.stem_clean', 'text.lemma_clean', 'text.stemmed', 'text', 'text.phonetic'],
               ## NOTE this set of commented options highlights up to the first 100 characters only but returns the whole string
               #fragment_size: 100,
               #fragment_offset: 0,

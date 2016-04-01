@@ -32,7 +32,9 @@ module Search
       # Rails.logger.info "params #{ ap params }"
 
       boost_language_code = Hash.new
-      @indices_boost = Hash.new
+      @indices_boost = {
+        transliteration: 3
+      }
 
       # handle the accept-language http header
       if headers[ 'Accept-Language' ]

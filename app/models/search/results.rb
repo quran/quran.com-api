@@ -59,11 +59,11 @@ module Search
         match = ayah_result['match']['hits']['hits'].map do |hit|
           hash = {
             score: hit['_score'],
-            text: hit['highlight']['text'].first
+            text: hit['highlight'] ? hit['highlight']['text'].first : hit['_source']['text']
           }
 
           hash.merge!(hit['_source']['resource'])
-          hash.merge!(hit['_source']['language'])
+          # hash.merge!(hit['_source']['language'])
 
           # This is when it's a word font that's a hit, aka text-font index
           if hash['cardinality_type'] == '1_word'

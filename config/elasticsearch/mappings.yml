@@ -11,7 +11,7 @@ text:
             fields:
                 autocomplete:
                     type: string
-                    index_analyzer: autocomplete_arabic
+                    analyzer: autocomplete_arabic
                     search_analyzer: arabic_normalized
                     index_options: offsets
 
@@ -20,14 +20,14 @@ text:
                     similarity: my_bm25
                     term_vector: with_positions_offsets_payloads
                     search_analyzer: arabic_normalized
-                    index_analyzer: arabic_ngram
+                    analyzer: arabic_ngram
 text-root:
     _all: { enabled: false }
     #_parent: { type: ayah }
     #_routing: { path: ayah_key }
     properties:
-        #text:  { type: string, term_vector: with_positions_offsets_payloads, search_analyzer: arabic_normalized, index_analyzer: arabic_ngram }
-        text: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, fields: { stemmed: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, search_analyzer: arabic_normalized, index_analyzer: arabic_ngram } } }
+        #text:  { type: string, term_vector: with_positions_offsets_payloads, search_analyzer: arabic_normalized, analyzer: arabic_ngram }
+        text: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, fields: { stemmed: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, search_analyzer: arabic_normalized, analyzer: arabic_ngram } } }
 text-token:
     _all:
         enabled: false
@@ -78,7 +78,7 @@ text-token:
                     similarity: my_bm25
                     term_vector: with_positions_offsets_payloads
                     search_analyzer: arabic_normalized
-                    index_analyzer: arabic_ngram
+                    analyzer: arabic_ngram
 
 text-font:
     _all:
@@ -125,7 +125,7 @@ text-font:
                     similarity: my_bm25
                     term_vector: with_positions_offsets_payloads
                     search_analyzer: quran_font_to_token
-                    index_analyzer: quran_font_to_token_to_arabic_ngram
+                    analyzer: quran_font_to_token_to_arabic_ngram
 
 
 
@@ -134,37 +134,37 @@ text-stem:
     #_parent: { type: ayah }
     #_routing: { path: ayah_key }
     properties:
-        #text:  { type: string, term_vector: with_positions_offsets_payloads, search_analyzer: arabic_normalized, index_analyzer: arabic_ngram }
-        text: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, fields: { stemmed: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, search_analyzer: arabic_normalized, index_analyzer: arabic_ngram } } }
+        #text:  { type: string, term_vector: with_positions_offsets_payloads, search_analyzer: arabic_normalized, analyzer: arabic_ngram }
+        text: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, fields: { stemmed: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, search_analyzer: arabic_normalized, analyzer: arabic_ngram } } }
 text-lemma:
     _all: { enabled: false }
     #_parent: { type: ayah }
     #_routing: { path: ayah_key }
     properties:
-        #text:  { type: string, term_vector: with_positions_offsets_payloads, search_analyzer: arabic_normalized, index_analyzer: arabic_ngram }
-        text: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, fields: { stemmed: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, search_analyzer: arabic_normalized, index_analyzer: arabic_ngram } } }
+        #text:  { type: string, term_vector: with_positions_offsets_payloads, search_analyzer: arabic_normalized, analyzer: arabic_ngram }
+        text: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, fields: { stemmed: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, search_analyzer: arabic_normalized, analyzer: arabic_ngram } } }
 #text-font:
 #    _all: { enabled: false }
 #    #_parent: { type: ayah }
 #    #_routing: { path: ayah_key }
 #    properties:
-#        #text:  { type: string, term_vector: with_positions_offsets_payloads, search_analyzer: arabic_normalized, index_analyzer: arabic_ngram }
+#        #text:  { type: string, term_vector: with_positions_offsets_payloads, search_analyzer: arabic_normalized, analyzer: arabic_ngram }
 #        text: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, analyzer: quran_font_to_token, fields: { stemmed: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, analyzer: standard } } }
 
 transliteration:
     _all: { enabled: false }
-    #_parent: { type: ayah }
-    #_routing: { path: ayah_key }
+    # _parent: { type: ayah }
+    # _routing: { path: ayah_key }
     properties:
-        #text: { type: string, term_vector: with_positions_offsets_payloads, analyzer: english }
+        # text: { type: string, term_vector: with_positions_offsets_payloads, analyzer: english }
         text: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, fields: { stemmed: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, analyzer: standard } } }
 tafsir:
     _all: { enabled: false }
     #_parent: { type: ayah }
     #_routing: { path: ayah_key }
     properties:
-        #text: { type: string, term_vector: with_positions_offsets_payloads, search_analyzer: arabic_normalized, index_analyzer: arabic_ngram }
-        text: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, fields: { stemmed: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, search_analyzer: arabic_normalized, index_analyzer: arabic_ngram } } }
+        #text: { type: string, term_vector: with_positions_offsets_payloads, search_analyzer: arabic_normalized, analyzer: arabic_ngram }
+        text: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, fields: { stemmed: { type: string, similarity: my_bm25, term_vector: with_positions_offsets_payloads, search_analyzer: arabic_normalized, analyzer: arabic_ngram } } }
 translation:
     _all: { enabled: false }
     #_parent: { type: ayah }
@@ -182,7 +182,7 @@ translation:
                     analyzer: standard
                 autocomplete:
                     type: string
-                    index_analyzer: autocomplete
+                    analyzer: autocomplete
                     search_analyzer: standard
                     index_options: offsets
 #        ayah:
@@ -202,4 +202,3 @@ translation:
 #                    stemmed:
 #                        type: string
 #                        analyzer: standard
-
