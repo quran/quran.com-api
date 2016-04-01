@@ -21,9 +21,13 @@ json.word_id      glyph.word_id
 json.page_num     glyph.page_num
 json.line_num     glyph.line_num
 json.code_dec     glyph.code_dec
-json.code_hex     glyph.code_hex
 json.char_type_id glyph.char_type_id
 json.class_name   "p#{glyph.char_type_id}"
+json.code_hex     "&#x#{glyph.code_hex}"
 
+<<<<<<< 0daab56b49222b8724395de80f35403847c57888
 json.partial! "word", word: glyph.word
 >>>>>>> WIP
+=======
+json.partial! "v2/ayahs/word", word: glyph.word if glyph.word
+>>>>>>> New api
