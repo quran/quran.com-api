@@ -39,7 +39,7 @@ class Content::TafsirAyah < ActiveRecord::Base
   def as_indexed_json(options = {})
     resource = tafsir.resource
 
-    as_json(include: :tafsir).merge(resource: resource.as_json(include: :language))
+    as_json().merge(resource: resource.as_json(include: :language)).merge(text: tafsir.text)
   end
 
   def self.import(options = {})

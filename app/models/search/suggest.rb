@@ -14,7 +14,7 @@ module Search
       def search_params
         {
           size: 30,
-          _source_include: [ 'ayah.surah_id', 'ayah.ayah_num', 'text' ],
+          _source_include: [ 'ayah_key', 'text' ],
           index: indices,
           body: {
             query: query_object,
@@ -51,9 +51,6 @@ module Search
         if @query.is_arabic?
           indices.push( 'text' ) # "text" is just 6236 records of ayah text without tashkeel (mostly)
         else
-          if @lang == 'en'
-            indices.push( 'translation' )
-          end
           indices.push( "translation-#{@lang}" )
         end
       end
@@ -100,8 +97,8 @@ module Search
 
         result['hits']['hits'].each do |hit|
           text = hit['highlight']['text.autocomplete'][0]
-          ayah = "#{hit['_source']['ayah']['surah_id']}:#{hit['_source']['ayah']['ayah_num']}"
-          href = "/#{hit['_source']['ayah']['surah_id']}/#{hit['_source']['ayah']['ayah_num']}"
+          ayah = "#{hit['_source']['ayah_key'].gsub(/_/,':')}"
+          href = "/#{hit['_source']['ayah_key'].gsub(/_/,'/')}"
           if not seen.key?(ayah)
             seen[ayah] = true
             h = {

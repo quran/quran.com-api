@@ -47,6 +47,11 @@ class Content::Translation < ActiveRecord::Base
         similarity: 'my_bm25',
         term_vector: 'with_positions_offsets_payloads',
         analyzer: 'shingle_analyzer'
+      indexes :autocomplete,
+        type: 'string',
+        analyzer: 'autocomplete',
+        search_analyzer: 'standard',
+        index_options: 'offsets'
     end
   end
 
