@@ -14,7 +14,7 @@ module Search
       def search_params
         {
           size: 30,
-          _source_include: [ 'ayah_key', 'text' ],
+          _source_include: [ 'ayah_key', 'text', 'resource.name' ],
           index: indices,
           body: {
             query: query_object,
@@ -63,7 +63,7 @@ module Search
               number_of_fragments: 0, # just highlight the entire string instead of breaking it down into sentence fragments, that's easier for now
               pre_tags: [ "<b>" ],
               post_tags: [ "</b>" ],
-              type: "postings"
+              type: "plain"
             }
           }
         }
@@ -137,7 +137,8 @@ module Search
               #took: result['took'],
               text: text,
               href: href,
-              ayah: ayah
+              ayah: ayah,
+              resource_name: hit['_source']['resource']['name']
             }
             processed.push( item )
           end
