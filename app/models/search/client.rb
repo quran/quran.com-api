@@ -35,7 +35,7 @@ module Search
     # # Fuzziness describes the distance from the actual word
     # see: https://www.elastic.co/blog/found-fuzzy-search
     attribute :fuzzy_prefix_length, Integer, default: 0, lazy: true
-    attribute :fuzziness, Integer, default: 1, lazy: true
+    attribute :fuzziness, Integer, default: 'AUTO', lazy: true
 
     def initialize(query, options = {})
       @page = options[:page].to_i
@@ -144,7 +144,7 @@ module Search
         simple_query_string: {
           query: @query.query,
           # default_field: "_all",
-          # lenient: true,
+          lenient: true,
           fields: fields_val,
           minimum_should_match: '85%'
         }
@@ -195,11 +195,7 @@ module Search
       bool = {
         bool: {
           must: [
-            multi_match
-          ],
-          should: [
-            multi_match('phrase'),
-            simple_query_string
+            dis_max_query
           ]
         }
       }
@@ -210,19 +206,15 @@ module Search
     end
 
     def dis_max_query
-      queries = [
-        # query_string,
-        multi_match,
-        multi_match('phrase')
-      ]
-
-      queries.push(terms) if hits_query?
-
       {
         dis_max: {
           tie_breaker: 0.7,
           boost: 1,
-          queries: queries
+          queries: [
+            simple_query_string,
+            multi_match,
+            multi_match('phrase')
+          ]
         }
       }
     end
