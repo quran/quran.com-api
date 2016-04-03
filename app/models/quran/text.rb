@@ -54,18 +54,17 @@ class Quran::Text < ActiveRecord::Base
 
   def self.import( options = {} )
     Quran::Text.connection.cache do
-      transform = lambda do |a|
-        this_data = a.__elasticsearch__.as_indexed_json
-        ayah_data = a.ayah.__elasticsearch__.as_indexed_json
-        this_data.delete( 'ayah_key' )
-        ayah_data.delete( 'text' )
-        { index:  {
-          _id:  "#{a.resource_id}:#{a.ayah_key}",
-          data: this_data.merge( { 'ayah' => ayah_data } )
-          } }
-        end
-        options = { transform: transform, batch_size: 6236 }.merge( options )
-        self.importing options
+      transform = lambda do |model|
+        {
+          index: {
+            _id: "#{model.resource_id}_#{model.ayah_key.gsub!(/:/, '_')}",
+            data: model.__elasticsearch__.as_indexed_json
+          }
+        }
       end
+
+      options = { transform: transform, batch_size: 6236 }.merge(options)
+      self.importing options
     end
   end
+end
