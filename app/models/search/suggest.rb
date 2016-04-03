@@ -96,7 +96,11 @@ module Search
         seen = {}
 
         result['hits']['hits'].each do |hit|
-          text = hit['highlight']['text.autocomplete'][0]
+          if hit.key?('highlight')
+            text = hit['highlight']['text.autocomplete'][0]
+          else
+            text = hit['_source']['text']
+          end
           ayah = "#{hit['_source']['ayah_key'].gsub(/_/,':')}"
           href = "/#{hit['_source']['ayah_key'].gsub(/_/,'/')}"
           if not seen.key?(ayah)
