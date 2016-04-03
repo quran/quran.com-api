@@ -14,6 +14,7 @@ json.sajdah         ayah.sajdah
 
 json.set! :words do
   json.partial! "v2/ayahs/glyph", collection: ayah.glyphs.sort, as: :glyph
+<<<<<<< 737f5ee9dd8b6da932707047067785827520f578
 end
 
 json.set! :content do
@@ -39,6 +40,8 @@ json.sajdah         ayah.sajdah
 
 json.set! :words do
   json.partial! "v2/ayahs/glyph", collection: ayah.glyphs, as: :glyph
+=======
+>>>>>>> More changes
 end
 
 json.set! :content do
@@ -50,6 +53,18 @@ json.set! :content do
 end
 
 json.set! :audio do
+<<<<<<< 737f5ee9dd8b6da932707047067785827520f578
   json.partial! "v2/ayahs/audio", collection: ayah.audio, as: :file
 >>>>>>> New api
+=======
+  mp3 = ayah.audio.find{|file| file.format == 'mp3'}
+  ogg = ayah.audio.find{|file| file.format == 'ogg'}
+
+  json.set! :mp3 do
+    json.partial! "v2/ayahs/audio", file: mp3  if mp3
+  end
+  json.set! :ogg do
+    json.partial! "v2/ayahs/audio", file: ogg if ogg
+  end
+>>>>>>> More changes
 end

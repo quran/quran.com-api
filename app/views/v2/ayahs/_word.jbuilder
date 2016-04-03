@@ -1,3 +1,4 @@
+<<<<<<< 737f5ee9dd8b6da932707047067785827520f578
 <<<<<<< 0daab56b49222b8724395de80f35403847c57888
 <<<<<<< 3d98ebc8bca07505f1e721078baf7247c529e1b4
 json.word_id         word.word_id
@@ -23,3 +24,13 @@ json.token       word.token
 json.translation word.translation
 json.translation word.transliteration
 >>>>>>> WIP
+=======
+json.word_id         word.word_id
+json.ayah_key        word.ayah_key
+json.position        word.position
+
+json.corpus          word.corpus
+json.token           word.token.value
+json.translation     word.translation.value
+json.transliteration word.transliteration.value
+>>>>>>> More changes
