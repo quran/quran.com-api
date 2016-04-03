@@ -2,7 +2,7 @@ class V2::AyahsController < ApplicationController
   before_filter :validate_params
   before_filter :get_range
 
-  caches_action :index, cache_path: Proc.new {|a| params_hash}, expires_in: 10.minutes
+  caches_action :index, cache_path: Proc.new {|a| params_hash}, expires_in: 12.hours
 
   def index
     @ayahs = Quran::Ayah
@@ -11,7 +11,7 @@ class V2::AyahsController < ApplicationController
       .includes(audio: :reciter)
       .includes(:text_tashkeel)
       .where('translation.resource_id' => params[:content])
-      .where('recitation.reciter_id' => params[:audio])
+      .where('file.recitation_id' => params[:audio], 'file.is_enabled' => true)
       .get_ayahs_by_range(params[:surah_id], @range[0], @range[1])
   end
 
@@ -54,6 +54,6 @@ private
   end
 
   def params_hash
-    (params[:range] || ("#{params[:from]}-#{params[:to]}")) + "/#{params[:quran]}/#{params[:audio]}/#{params[:content]}"
+    "v2/#{params[:surah_id]}" + (params[:range] || ("#{params[:from]}-#{params[:to]}")) + "/1/#{params[:audio]}/#{params[:content]}"
   end
 end

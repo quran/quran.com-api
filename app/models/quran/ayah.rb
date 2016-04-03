@@ -39,7 +39,7 @@ class Quran::Ayah < ActiveRecord::Base
     has_many :texts,  class_name: 'Quran::Text',     foreign_key: 'ayah_key'
     has_one :text_tashkeel, -> { where(resource_id: 12) }, class_name: 'Quran::Text', foreign_key: 'ayah_key'
     has_many :images, class_name: 'Quran::Image',    foreign_key: 'ayah_key'
-    has_many :glyphs, class_name: 'Quran::WordFont', foreign_key: 'ayah_key'
+    has_many :glyphs, -> {order('position asc') }, class_name: 'Quran::WordFont', foreign_key: 'ayah_key'
 
     # NOTE the relationships below were created as database-side views for use with elasticsearch
     has_many :text_roots,  class_name: 'Quran::TextRoot',  foreign_key: 'ayah_key'
@@ -51,7 +51,7 @@ class Quran::Ayah < ActiveRecord::Base
       where('quran.ayah.surah_id = ?', surah_id)
         .where('quran.ayah.ayah_num >= ?', from)
         .where('quran.ayah.ayah_num <= ?', to)
-        .order('quran.ayah.surah_id, quran.ayah.ayah_num')
+        .order(:surah_id, :ayah_num)
     end
 
     def self.get_ayahs_by_array(ayahs_keys_array)

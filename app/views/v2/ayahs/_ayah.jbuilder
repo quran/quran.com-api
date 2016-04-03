@@ -11,7 +11,7 @@ json.ayah_key       ayah.ayah_key
 json.sajdah         ayah.sajdah
 
 json.set! :words do
-  json.partial! "v2/ayahs/glyph", collection: ayah.glyphs, as: :glyph
+  json.partial! "v2/ayahs/glyph", collection: ayah.glyphs.sort, as: :glyph
 end
 
 json.set! :content do
@@ -19,5 +19,13 @@ json.set! :content do
 end
 
 json.set! :audio do
-  json.partial! "v2/ayahs/audio", collection: ayah.audio, as: :file
+  mp3 = ayah.audio.find{|file| file.format == 'mp3'}
+  ogg = ayah.audio.find{|file| file.format == 'ogg'}
+
+  json.set! :mp3 do
+    json.partial! "v2/ayahs/audio", file: mp3  if mp3
+  end
+  json.set! :ogg do
+    json.partial! "v2/ayahs/audio", file: ogg if ogg
+  end
 end
