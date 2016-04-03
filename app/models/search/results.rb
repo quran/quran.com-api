@@ -43,7 +43,6 @@ module Search
 
     def aggregation_records
       results_buckets = aggregations['by_ayah_key']['buckets']
-
       keys = results_buckets.map{|ayah_result| ayah_result['key'].gsub('_', ':')}
       ayahs = Quran::Ayah.get_ayahs_by_array(keys)
 
@@ -67,9 +66,11 @@ module Search
 
           # This is when it's a word font that's a hit, aka text-font index
           if hash['cardinality_type'] == '1_word'
-            word_ids = hash[:text].scan(/(hlt[0-9]*)..(?!>)([0-9]*)(?=<)/)
+            word_ids = hash[:text].scan(/(hlt\d*)..(?!>)([\d,\s]+).(?!<)/)
             word_ids.each do |word_id_array|
-              ayah[:quran].find{|ayah| ayah[:word][:id] == word_id_array.last.to_i}[:highlight] = word_id_array.first
+              ids = word_id_array.last.split(' ').each do |id|
+                ayah[:quran].find{|ayah| ayah[:word][:id] == id.to_i}[:highlight] = word_id_array.first
+              end
             end
 
             hash[:text] = ayah['text']
