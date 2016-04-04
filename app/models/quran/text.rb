@@ -45,26 +45,34 @@ class Quran::Text < ActiveRecord::Base
         analyzer: 'arabic_ngram'
       indexes :autocomplete,
         type: 'string',
-        similarity: 'my_bm25',
         analyzer: 'autocomplete_arabic',
         search_analyzer: 'arabic_normalized',
         index_options: 'offsets'
     end
   end
 
-  def self.import( options = {} )
-    Quran::Text.connection.cache do
-      transform = lambda do |model|
-        {
-          index: {
-            _id: "#{model.resource_id}_#{model.ayah_key.gsub!(/:/, '_')}",
-            data: model.__elasticsearch__.as_indexed_json
-          }
-        }
-      end
+  def as_indexed_json(options = {})
+    as_json(include: :resource)
+  end
 
-      options = { transform: transform, batch_size: 6236 }.merge(options)
-      self.importing options
+  def self.import( options = {} )
+    transform = lambda do |a|
+      this_data = a.__elasticsearch__.as_indexed_json
+      ayah_data = a.ayah.__elasticsearch__.as_indexed_json
+
+      {
+        index: {
+          _id:  "#{a.resource_id}_#{a.ayah_key.gsub!(/:/, '_')}",
+          data: this_data.merge({
+            ayah_key: ayah_data['ayah_key'].gsub!(/:/, '_'),
+            text: ayah_data['text']
+          })
+        }
+      }
     end
+
+    options = { transform: transform, batch_size: 6236 }.merge(options)
+
+    self.importing options
   end
 end

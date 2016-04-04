@@ -18,6 +18,7 @@ module Search
           index: indices,
           body: {
             query: query_object,
+            # suggest: suggest,
             highlight: highlight
           }
         }
@@ -62,10 +63,36 @@ module Search
               number_of_fragments: 0, # just highlight the entire string instead of breaking it down into sentence fragments, that's easier for now
               pre_tags: [ "<b>" ],
               post_tags: [ "</b>" ],
-              type: "postings"
+              type: "plain"
             }
           }
         }
+      end
+
+      def suggest
+        {
+         text: @query.query,
+         "simple_phrase": {
+           "phrase": {
+             "field": "text",
+             "size": 5,
+             "real_word_error_likelihood": 0.95,
+             "max_errors": 0.5,
+             "gram_size": 2,
+             "direct_generator": [
+               {
+                 "field": "text",
+                 "suggest_mode": "always",
+                 "min_word_length": 1
+               }
+             ],
+             "highlight": {
+               "pre_tag": "<em>",
+               "post_tag": "</em>"
+             }
+           }
+         }
+       }
       end
 
       def query_object
@@ -103,20 +130,20 @@ module Search
           end
           ayah = "#{hit['_source']['ayah_key'].gsub(/_/,':')}"
           href = "/#{hit['_source']['ayah_key'].gsub(/_/,'/')}"
-          if not seen.key?(ayah)
+
+          if !seen.key?(ayah)
             seen[ayah] = true
-            h = {
-              #took: result['took'],
+            item = {
               text: text,
               href: href,
               ayah: ayah
             }
-            processed.push( h )
+            processed.push( item )
           end
         end
+
         return processed[0, @size]
       end
-
     end
   end
 end
