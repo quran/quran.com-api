@@ -64,7 +64,7 @@ class Quran::Text < ActiveRecord::Base
         index: {
           _id:  "#{a.resource_id}_#{a.ayah_key.gsub!(/:/, '_')}",
           data: this_data.merge({
-            ayah_key: this_data['ayah_key'].gsub!(/:/, '_'),
+            ayah_key: ayah_data['ayah_key'].gsub!(/:/, '_'),
             text: ayah_data['text']
           })
         }

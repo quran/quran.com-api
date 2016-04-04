@@ -14,7 +14,7 @@ module Search
       def search_params
         {
           size: 30,
-          _source_include: [ 'ayah_key', 'text', 'resource.name' ],
+          _source_include: [ 'ayah_key', 'text' ],
           index: indices,
           body: {
             query: query_object,
@@ -33,10 +33,10 @@ module Search
 
         self
 
-      # rescue
+      rescue
 
-        # handle_error
-        # self
+        handle_error
+        self
       end
 
       def handle_error
@@ -134,11 +134,9 @@ module Search
           if !seen.key?(ayah)
             seen[ayah] = true
             item = {
-              #took: result['took'],
               text: text,
               href: href,
-              ayah: ayah,
-              resource_name: hit['_source']['resource']['name']
+              ayah: ayah
             }
             processed.push( item )
           end
