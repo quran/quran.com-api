@@ -1,14 +1,11 @@
 Rails.application.routes.draw do
 
-
   namespace :content do
     get 'tafsir/:id', to: 'tafsir#show'
   end
 
   get 'search', to: 'search#query'
   get 'suggest', to: 'search#suggest'
-
-  post 'support', to: 'support#zendesk'
 
   resources :options, only: [], defaults: { format: 'json' } do
     collection do
