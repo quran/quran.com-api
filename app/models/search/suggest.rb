@@ -72,23 +72,23 @@ module Search
       def suggest
         {
          text: @query.query,
-         "simple_phrase": {
-           "phrase": {
-             "field": "text",
-             "size": 5,
-             "real_word_error_likelihood": 0.95,
-             "max_errors": 0.5,
-             "gram_size": 2,
-             "direct_generator": [
+         simple_phrase: {
+           phrase: {
+             field: "text",
+             size: 5,
+             real_word_error_likelihood: 0.95,
+             max_errors: 0.5,
+             gram_size: 2,
+             direct_generator: [
                {
-                 "field": "text",
-                 "suggest_mode": "always",
-                 "min_word_length": 1
+                 field: "text",
+                 suggest_mode: "always",
+                 min_word_length: 1
                }
              ],
-             "highlight": {
-               "pre_tag": "<em>",
-               "post_tag": "</em>"
+             highlight: {
+               pre_tag: "<em>",
+               post_tag: "</em>"
              }
            }
          }
