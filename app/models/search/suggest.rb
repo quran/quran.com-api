@@ -33,10 +33,10 @@ module Search
 
         self
 
-#      rescue
+      rescue
 
-#        handle_error
-#        self
+        handle_error
+        self
       end
 
       def handle_error
