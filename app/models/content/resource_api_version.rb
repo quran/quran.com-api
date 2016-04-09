@@ -5,8 +5,6 @@ class Content::ResourceAPIVersion < ActiveRecord::Base
     self.primary_key = 'resource_id'
 
     belongs_to :resource, class_name: 'Content::Resource'
-
-    
 end
 # notes:
 # - this table was used for migrating from an old database

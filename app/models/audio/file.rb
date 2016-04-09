@@ -19,6 +19,7 @@ class Audio::File < ActiveRecord::Base
 
     belongs_to :ayah,       class_name: 'Quran::Ayah'
     belongs_to :recitation, class_name: 'Audio::Recitation'
+    has_one :reciter, class_name: 'Audio::Reciter', through: :recitation
 
     def self.bucket_audio(audio_id, keys)
         self

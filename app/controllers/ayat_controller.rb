@@ -26,7 +26,7 @@ class AyatController < ApplicationController
 
 private
   def valid_params?
-    valid_surah_id? &&  contains_range? && params.has_key?(:quran)
+    valid_surah_id? && contains_range? && params.has_key?(:quran)
   end
 
   def contains_range?

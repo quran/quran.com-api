@@ -17,13 +17,15 @@ class Quran::Word < ActiveRecord::Base
   belongs_to :ayah, class_name: 'Quran::Ayah'
   belongs_to :token, class_name: 'Quran::Token'
 
-  has_many :translations, class_name: 'Quran::WordTranslation', foreign_key: 'word_id'
-  has_many :transliterations, class_name: 'Quran::WordTransliteration', foreign_key: 'word_id'
-  has_many :glyphs, class_name: 'Quran::WordFont', foreign_key: 'word_id'
+  has_one :corpus, class_name: 'Quran::WordCorpus', foreign_key: :word_id
+  has_one :translation, class_name: 'Quran::WordTranslation', foreign_key: :word_id
+  has_one :transliteration, class_name: 'Quran::WordTransliteration', foreign_key: :word_id
 
-  has_many :_word_lemma, class_name: 'Quran::WordLemma', foreign_key: 'word_id'
-  has_many :_word_root, class_name: 'Quran::WordRoot', foreign_key: 'word_id'
-  has_many :_word_stem, class_name: 'Quran::WordStem', foreign_key: 'word_id'
+  has_many :glyphs, class_name: 'Quran::WordFont', foreign_key: :word_id
+
+  has_many :_word_lemma, class_name: 'Quran::WordLemma', foreign_key: :word_id
+  has_many :_word_root, class_name: 'Quran::WordRoot', foreign_key: :word_id
+  has_many :_word_stem, class_name: 'Quran::WordStem', foreign_key: :word_id
 
   has_many :stems,  class_name: 'Quran::Stem',  through: :_word_stem
   has_many :lemmas, class_name: 'Quran::Lemma', through: :_word_lemma
