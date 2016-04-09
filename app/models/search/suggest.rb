@@ -32,15 +32,6 @@ module Search
         @response = Search.client.search( search_params )
 
         self
-
-      rescue
-
-        handle_error
-        self
-      end
-
-      def handle_error
-        @errored = true
       end
 
       def errored?

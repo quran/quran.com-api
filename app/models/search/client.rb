@@ -86,11 +86,6 @@ module Search
       @delta_time = @end_time - @start_time
 
       self
-
-    rescue
-
-      @errored = true
-      self
     end
 
     def errored?

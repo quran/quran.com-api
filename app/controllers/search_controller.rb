@@ -19,10 +19,6 @@ class SearchController < ApplicationController
 
     search.request
 
-    if search.errored?
-      return render json: {error: 'Something wrong happened'}, status: 400
-    end
-
     render json: {
       query: params[:q],
       total: search.total,
@@ -47,10 +43,6 @@ class SearchController < ApplicationController
     )
 
     search.request
-
-    if search.errored?
-      return render json: {error: 'Something wrong happened'}, status: 400
-    end
 
     render json: search.result
   end
