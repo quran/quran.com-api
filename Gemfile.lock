@@ -212,8 +212,6 @@ GEM
       pry (>= 0.9.11)
     rack (1.6.4)
     rack-cors (0.4.0)
-    rack-mini-profiler (0.9.9.2)
-      rack (>= 1.2.0)
     rack-test (0.6.3)
       rack (>= 1.0)
     rails (4.2.0)
@@ -352,7 +350,6 @@ DEPENDENCIES
   pry-byebug
   pry-rails
   rack-cors
-  rack-mini-profiler
   rails (= 4.2.0)
   rails-perftest
   rb-fsevent
@@ -369,3 +366,6 @@ DEPENDENCIES
   web-console (~> 2.0)
   whatlanguage
   yaml_db!
+
+BUNDLED WITH
+   1.11.2

@@ -1,4 +1,4 @@
-json.surah_id surah.surah_id
+json.id surah.surah_id
 json.ayat surah.ayat
 json.bismillah_pre surah.bismillah_pre
 json.revelation_order surah.revelation_order

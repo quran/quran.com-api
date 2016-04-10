@@ -95,7 +95,6 @@ group :development, :test do
   gem 'ruby-prof'
 
   gem 'web-console', '~> 2.0'
-  gem 'rack-mini-profiler'
 end
 
 gem 'elasticsearch'

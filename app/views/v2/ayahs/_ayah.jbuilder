@@ -6,9 +6,13 @@ json.juz_num        ayah.juz_num
 json.hizb_num       ayah.hizb_num
 json.rub_num        ayah.rub_num
 json.text           ayah.text
+<<<<<<< 4b5c5d1bcf6bb8cc92ed1247f6bfe11b75e09a5a
 <<<<<<< 0daab56b49222b8724395de80f35403847c57888
 <<<<<<< 3d98ebc8bca07505f1e721078baf7247c529e1b4
 json.text_tashkeel  ayah.text_tashkeel if ayah.text_tashkeel
+=======
+json.text_tashkeel  ayah.text_tashkeel.text if ayah.text_tashkeel
+>>>>>>> WIP
 json.ayah_key       ayah.ayah_key
 json.sajdah         ayah.sajdah
 
