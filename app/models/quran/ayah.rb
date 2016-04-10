@@ -17,7 +17,6 @@
 # vim: ts=4 sw=4 expandtab
 class Quran::Ayah < ActiveRecord::Base
     extend Quran
-    # # extend Batchelor
 
     self.table_name = 'ayah'
     self.primary_key = 'ayah_key'
@@ -34,24 +33,25 @@ class Quran::Ayah < ActiveRecord::Base
     has_many :tafsirs,      class_name: 'Content::Tafsir',     through:     :_tafsir_ayah
 
     has_many :translations,     class_name: 'Content::Translation',     foreign_key: 'ayah_key'
-    has_one :transliteration, class_name: 'Content::Transliteration', foreign_key: 'ayah_key'
+    has_one :transliteration,   class_name: 'Content::Transliteration', foreign_key: 'ayah_key'
 
     has_many :audio,  class_name: 'Audio::File',     foreign_key: 'ayah_key'
     has_many :texts,  class_name: 'Quran::Text',     foreign_key: 'ayah_key'
+    has_one :text_tashkeel, -> { where(resource_id: 12) }, class_name: 'Quran::Text', foreign_key: 'ayah_key'
     has_many :images, class_name: 'Quran::Image',    foreign_key: 'ayah_key'
-    has_many :glyphs, class_name: 'Quran::WordFont', foreign_key: 'ayah_key'
+    has_many :glyphs, -> {order('position asc') }, class_name: 'Quran::WordFont', foreign_key: 'ayah_key'
 
     # NOTE the relationships below were created as database-side views for use with elasticsearch
     has_many :text_roots,  class_name: 'Quran::TextRoot',  foreign_key: 'ayah_key'
     has_many :text_lemmas, class_name: 'Quran::TextLemma', foreign_key: 'ayah_key'
     has_many :text_stems,  class_name: 'Quran::TextStem',  foreign_key: 'ayah_key'
-    has_one :text_token, class_name: 'Quran::TextToken', foreign_key: 'ayah_key'
+    has_one :text_token,   class_name: 'Quran::TextToken', foreign_key: 'ayah_key'
 
     def self.get_ayahs_by_range(surah_id, from, to)
       where('quran.ayah.surah_id = ?', surah_id)
         .where('quran.ayah.ayah_num >= ?', from)
         .where('quran.ayah.ayah_num <= ?', to)
-        .order('quran.ayah.surah_id, quran.ayah.ayah_num')
+        .order(:surah_id, :ayah_num)
     end
 
     def self.get_ayahs_by_array(ayahs_keys_array)

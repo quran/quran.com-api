@@ -10,7 +10,6 @@
 # vim: ts=4 sw=4 expandtab
 class Content::Translation < ActiveRecord::Base
   extend Content
-  # # extend Batchelor
 
   self.table_name = 'translation'
   self.primary_keys = :ayah_key, :resource_id # composite primary key which is a combination of ayah_key & resource_id

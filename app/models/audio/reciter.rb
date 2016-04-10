@@ -16,4 +16,5 @@ class Audio::Reciter < ActiveRecord::Base
     self.primary_key = 'reciter_id'
 
     has_many :recitations, class_name: 'Audio::Recitation', foreign_key: 'reciter_id'
+    has_many :files, class_name: 'Audio::File', through: :recitations, source: :audio
 end
