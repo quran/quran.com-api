@@ -21,6 +21,9 @@ class Audio::File < ActiveRecord::Base
     belongs_to :recitation, class_name: 'Audio::Recitation'
     has_one :reciter, class_name: 'Audio::Reciter', through: :recitation
 
+    scope :ogg, -> { where(format: 'ogg') }
+    scope :mp3, -> { where(format: 'mp3') }
+
     def self.bucket_audio(audio_id, keys)
         self
         .joins("join quran.ayah a using ( ayah_key )")
@@ -75,4 +78,13 @@ class Audio::File < ActiveRecord::Base
           }
         end.uniq{|a| a[:ayah_key]}
     end
+
+  def as_json(options = {})
+    surah = ayah_key.split(':')[0]
+    ayah = ayah_key.split(':')[1]
+
+    super(only: [:reciter_id, :format, :duration, mime_type], include: :reciter).merge(
+      url: "http://verses.quran.com/#{reciter.path}/#{format}/#{surah.to_s.rjust(3, "0")}#{ayah.to_s.rjust(3, "0")}.#{format}"
+    )
+  end
 end

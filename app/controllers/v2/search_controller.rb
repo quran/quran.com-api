@@ -4,7 +4,7 @@ class V2::SearchController < ApplicationController
   def index
     indices_boost = Search::LanguageDetection.new(headers, session, query).indices_boost
 
-    @search = Search::Client.new(
+    search = Search::Client.new(
       query,
       page: page,
       size: size,
@@ -13,8 +13,20 @@ class V2::SearchController < ApplicationController
       audio: audio
     )
 
-    @search.request
-    @search
+    search.request
+
+    render json: {
+      query: search.query.query,
+      total: search.total,
+      page: search.page,
+      size: search.size,
+      from: search.from + 1,
+      took: {
+        total: search.delta_time,
+        elasticsearch: search.response.took.to_f / 1000
+      },
+      results: search.response.records
+    }
   end
 
   def suggest

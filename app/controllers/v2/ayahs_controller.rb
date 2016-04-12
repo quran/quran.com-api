@@ -1,18 +1,22 @@
 class V2::AyahsController < ApplicationController
   before_filter :validate_params
-  before_filter :get_range
+  before_filter :validate_range
 
   caches_action :index, cache_path: Proc.new {|a| params_hash}, expires_in: 12.hours
 
   def index
-    @ayahs = Quran::Ayah
-      .includes(translations: [:resource])
-      .includes(glyphs: {word: [:corpus, :translation, :transliteration, :token]})
-      .includes(audio: :reciter)
-      .includes(:text_tashkeel)
-      .where('translation.resource_id' => params[:content])
-      .where('file.recitation_id' => params[:audio], 'file.is_enabled' => true)
-      .get_ayahs_by_range(params[:surah_id], @range[0], @range[1])
+    ayahs = Rails.cache.fetch(params_hash, expires_in: 12.hours) do
+      Quran::Ayah
+        .includes(translations: [:resource])
+        .includes(glyphs: {word: [:corpus, :translation, :transliteration, :token]})
+        .includes(audio: :reciter)
+        .includes(:text_tashkeel)
+        .where('translation.resource_id' => params[:content])
+        .where('file.recitation_id' => params[:audio], 'file.is_enabled' => true)
+        .by_range(params[:surah_id], range[0], range[1])
+    end
+
+    render json: ayahs.map(&:view_json)
   end
 
 private
@@ -39,17 +43,25 @@ private
     end
   end
 
-  def get_range
+  def validate_range
     if params.key?(:range)
-      @range = params[:range].split('-')
+      range = params[:range].split('-')
     elsif params.key?(:from) && params.key?(:to)
-      @range = [params[:from], params[:to]]
-    else
-      @range = ['1', '10']
+      range = [params[:from], params[:to]]
     end
 
-    if (@range.last.to_i - @range.first.to_i) > 50
+    if (range.last.to_i - range.first.to_i) > 50
       return render json: {error: "Range invalid, use a string (maximum 50 ayat per request), e.g. '1-3'"}
+    end
+  end
+
+  def range
+    if params.key?(:range)
+      params[:range].split('-')
+    elsif params.key?(:from) && params.key?(:to)
+      [params[:from], params[:to]]
+    else
+      ['1', '10']
     end
   end
 

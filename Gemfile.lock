@@ -181,6 +181,8 @@ GEM
     notiffany (0.0.8)
       nenv (~> 0.1)
       shellany (~> 0.0)
+    oj (2.15.0)
+    oj_mimic_json (1.0.1)
     parallel (1.8.0)
     passenger (5.0.26)
       rack
@@ -343,6 +345,8 @@ DEPENDENCIES
   jazz_hands!
   jbuilder (~> 2.0)
   kaminari
+  oj
+  oj_mimic_json
   parallel
   passenger
   pg (~> 0.18.2)

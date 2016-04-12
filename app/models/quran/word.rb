@@ -30,4 +30,11 @@ class Quran::Word < ActiveRecord::Base
   has_many :stems,  class_name: 'Quran::Stem',  through: :_word_stem
   has_many :lemmas, class_name: 'Quran::Lemma', through: :_word_lemma
   has_many :roots,  class_name: 'Quran::Root',  through: :_word_root
+
+  def as_json(options = {})
+    super().merge(
+      translation: translation.value,
+      transliteration: transliteration.value
+    )
+  end
 end

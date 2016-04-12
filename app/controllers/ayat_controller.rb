@@ -17,7 +17,7 @@ class AyatController < ApplicationController
     end
 
     @results = Rails.cache.fetch("surahs/#{params[:surah_id]}/ayahs/#{params_hash}", expires_in: 12.hours) do
-      ayahs = Quran::Ayah.get_ayahs_by_range(params[:surah_id], range[0], range[1])
+      ayahs = Quran::Ayah.by_range(params[:surah_id], range[0], range[1])
       Quran::Ayah.merge_resource_with_ayahs(params, ayahs)
     end
 
