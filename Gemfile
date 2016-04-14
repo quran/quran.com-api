@@ -23,6 +23,8 @@ gem 'spring-commands-rspec', group: :development
 gem 'oj'
 gem 'oj_mimic_json'
 
+gem 'rails-api'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
