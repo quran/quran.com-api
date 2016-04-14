@@ -2,8 +2,6 @@ class V2::AyahsController < ApplicationController
   before_filter :validate_params
   before_filter :validate_range
 
-  caches_action :index, cache_path: Proc.new {|a| params_hash}, expires_in: 12.hours
-
   def index
     ayahs = Rails.cache.fetch(params_hash, expires_in: 12.hours) do
       Quran::Ayah
