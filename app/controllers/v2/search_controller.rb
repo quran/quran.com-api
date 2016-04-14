@@ -30,9 +30,22 @@ class V2::SearchController < ApplicationController
   end
 
   def suggest
+    search = Search::Suggest::Client.new(
+      query,
+      lang: language,
+      size: size(5)
+    )
+
+    search.request
+
+    render json: search.result
   end
 
 private
+
+  def language
+    params[:l] || params[:lang] || 'en'
+  end
 
   def content
     params[:content]
@@ -46,8 +59,8 @@ private
     params[:q] || params[:query]
   end
 
-  def size
-    params[:size] || params[:s] || 20
+  def size(default = 20)
+    (params[:size] || params[:s] || default).to_i
   end
 
   def page

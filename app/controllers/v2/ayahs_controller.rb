@@ -12,9 +12,10 @@ class V2::AyahsController < ApplicationController
         .where('translation.resource_id' => params[:content])
         .where('file.recitation_id' => params[:audio], 'file.is_enabled' => true)
         .by_range(params[:surah_id], range[0], range[1])
+        .map(&:view_json)
     end
 
-    render json: ayahs.map(&:view_json)
+    render json: ayahs
   end
 
 private
