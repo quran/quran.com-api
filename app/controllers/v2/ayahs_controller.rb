@@ -48,10 +48,6 @@ private
     elsif params.key?(:from) && params.key?(:to)
       range = [params[:from], params[:to]]
     end
-
-    if (range.last.to_i - range.first.to_i) > 50
-      return render json: {error: "Range invalid, use a string (maximum 50 ayat per request), e.g. '1-3'"}
-    end
   end
 
   def range
