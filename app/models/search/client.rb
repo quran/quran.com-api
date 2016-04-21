@@ -162,7 +162,7 @@ module Search
           fields: fields_val,
           fuzziness: fuzziness,
           phrase_slop: 100,
-          minimum_should_match: '95%'
+          minimum_should_match: '85%'
         }
       }
     end
@@ -175,7 +175,7 @@ module Search
           query: @query.query,
           fields: fields_val,
           fuzziness: fuzziness,
-          minimum_should_match: '65%'
+          minimum_should_match: '85%'
         }
       }
     end
@@ -208,7 +208,7 @@ module Search
     def dis_max_query
       {
         dis_max: {
-          tie_breaker: 0.7,
+          tie_breaker: 1,
           boost: 1,
           queries: [
             simple_query_string,

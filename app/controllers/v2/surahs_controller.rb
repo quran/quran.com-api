@@ -1,11 +1,22 @@
 class V2::SurahsController < ApplicationController
-  caches_action :index, :show, expires_in: 3.days
-
   def index
-    @surahs = Quran::Surah.order('quran.surah.surah_id')
+    surahs = Rails.cache.fetch('surahs', expires_in: 12.hours) do
+      Quran::Surah.order('quran.surah.surah_id').as_json
+    end
+
+    render json: surahs
   end
 
   def show
-    @surah = Quran::Surah.find(params[:id])
+    surah = Rails.cache.fetch("surahs/#{surah_params}", expires_in: 12.hours) do
+      Quran::Surah.find(surah_params).as_json
+    end
+
+    render json: surah
+  end
+
+private
+  def surah_params
+    params.require(:id)
   end
 end

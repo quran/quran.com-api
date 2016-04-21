@@ -14,13 +14,25 @@
 #
 
 class Quran::WordFont < ActiveRecord::Base
-    extend Quran
+  extend Quran
 
-    self.table_name = 'word_font'
-    self.primary_keys = :resource_id, :ayah_key, :position
+  self.table_name = 'word_font'
+  self.primary_keys = :resource_id, :ayah_key, :position
 
-    belongs_to :ayah, class_name: 'Quran::Ayah'
-    belongs_to :char_type, class_name: 'Quran::CharType'
-    belongs_to :resource, class_name: 'Content::Resource'
-    belongs_to :word, class_name: 'Quran::Word'
+  belongs_to :ayah, class_name: 'Quran::Ayah'
+  belongs_to :char_type, class_name: 'Quran::CharType'
+  belongs_to :resource, class_name: 'Content::Resource'
+  belongs_to :word, class_name: 'Quran::Word'
+
+  def class_name
+    "p#{page_num}"
+  end
+
+  def code
+    "&#x#{code_hex}"
+  end
+
+  def as_json(options = {})
+    super(methods: [:class_name, :code]).merge(word.as_json.to_h) # I dont know how I feel about this one.
+  end
 end

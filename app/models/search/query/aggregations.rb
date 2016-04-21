@@ -58,7 +58,7 @@ module Search
                     'language.*'
                   ]
                 },
-                size: 5
+                size: 3
               }
             },
             # Don't need for now.
