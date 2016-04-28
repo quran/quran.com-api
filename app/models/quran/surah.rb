@@ -31,7 +31,14 @@ class Quran::Surah < ActiveRecord::Base
     }
   end
 
+  def revelation
+    {
+      place: revelation_place,
+      order: revelation_order
+    }
+  end
+
   def as_json(options = {})
-    super(methods: :name).merge(id: surah_id)
+    super(methods: [:name, :revelation]).merge(id: surah_id)
   end
 end
