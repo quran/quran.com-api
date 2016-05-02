@@ -34,7 +34,12 @@ class Quran::Word < ActiveRecord::Base
   def as_json(options = {})
     super().merge(
       translation: translation.value,
-      transliteration: transliteration.value
+      transliteration: transliteration.value,
+      corpus: {
+        description: corpus.description,
+        image_src: corpus.image_src,
+        segment: corpus.segment
+      }
     )
   end
 end
