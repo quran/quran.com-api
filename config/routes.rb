@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
-
   namespace :v2 do
+    get 'search' => 'search#index'
+    get 'suggest' => 'search#suggest'
+
     resources :surahs, only: [:index, :show], defaults: { format: 'json' } do
       resources :ayahs, only: [:index], defaults: { format: 'json' }
     end

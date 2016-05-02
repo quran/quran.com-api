@@ -1,11 +1,7 @@
-class SearchController < ApplicationController
-  def query
-    return render json: {message: 'Query param is invalid'}, status: 400 unless search_query?
+class V2::SearchController < ApplicationController
+  before_filter :search_query?
 
-    query = params[:q] || params[:query]
-    page = params[:page] || params[:p] || 1
-    size = params[:size] || params[:s] || 20
-
+  def index
     indices_boost = Search::LanguageDetection.new(headers, session, query).indices_boost
 
     search = Search::Client.new(
@@ -13,33 +9,31 @@ class SearchController < ApplicationController
       page: page,
       size: size,
       indices_boost: indices_boost,
-      content: params[:content],
-      audio: params[:audio]
+      content: content,
+      audio: audio
     )
 
     search.request
 
     render json: {
-      query: params[:q],
+      query: search.query.query,
       total: search.total,
       page: search.page,
       size: search.size,
       from: search.from + 1,
       took: {
         total: search.delta_time,
-        elasticsearch: (search.response.took.to_f / 1000)
+        elasticsearch: search.response.took.to_f / 1000
       },
       results: search.response.records
     }
   end
 
   def suggest
-    return render json: {message: 'Query param is invalid'}, status: 400 unless search_query?
-    query = params[:q] || params[:query]
-
-    search = Search::Suggest::Client.new(query,
-      lang: params[:l] || params[:lang] || 'en', # TODO we need to explicitly pass in lang, this default shouldn't be around forever
-      size: ( params[:s] || params[:size] || '5' ).to_i
+    search = Search::Suggest::Client.new(
+      query,
+      lang: language,
+      size: size(5)
     )
 
     search.request
@@ -49,8 +43,32 @@ class SearchController < ApplicationController
 
 private
 
+  def language
+    params[:l] || params[:lang] || 'en'
+  end
+
+  def content
+    params[:content]
+  end
+
+  def audio
+    params[:audio]
+  end
+
+  def query
+    params[:q] || params[:query]
+  end
+
+  def size(default = 20)
+    (params[:size] || params[:s] || default).to_i
+  end
+
+  def page
+    params[:page] || params[:p] || 1
+  end
+
   def search_query?
-    valid_string?
+    return render json: {message: 'Query param is invalid'}, status: 400 unless valid_string?
   end
 
   def has_query?

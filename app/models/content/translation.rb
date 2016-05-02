@@ -104,4 +104,8 @@ class Content::Translation < ActiveRecord::Base
       end
     end
   end
+
+  def as_json(options = {})
+    super(include: {resource: {only: [:name, :sub_type, :cardinality_type]}}, only: [:text])
+  end
 end
