@@ -1,3 +1,6 @@
 [submodule "db"]
 	path = db
 	url = git@github.com:quran/quran.com-api-rails-db.git
+[submodule ".shh"]
+	path = .shh
+	url = git@github.com:quran/quran.com-shh.git
