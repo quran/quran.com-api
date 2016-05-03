@@ -11,6 +11,9 @@
 #  is_enabled    :boolean          default(TRUE), not null
 #
 
+require 'base64'
+require 'gibberish'
+
 class Audio::File < ActiveRecord::Base
     extend Audio
 
@@ -22,21 +25,7 @@ class Audio::File < ActiveRecord::Base
     has_one :reciter, class_name: 'Audio::Reciter', through: :recitation
 
     def self.bucket_audio(audio_id, keys)
-
-        require 'base64'
-        require 'gibberish'
-        require 'json'
-
-        secret = nil
-        begin
-          json_parse = JSON.parse(File.read(File.expand_path(
-            "#{Rails.root}/.shh/audio-segments.secret.json", __FILE__
-          )))
-          secret = json_parse['secret']
-        rescue
-          Rails.logger.debug("could not load secret")
-          secret = "too bad... :("
-        end
+        secret = ENV['SEGMENTS_KEY'] || '¯\_(ツ)_/¯'
 
         self
         .joins("join quran.ayah a using ( ayah_key )")
@@ -81,7 +70,6 @@ class Audio::File < ActiveRecord::Base
         .order("a.surah_id, a.ayah_num")
         .map do |ayah|
           cipher = Gibberish::AES.new(secret)
-          Base64.encode64(cipher.encrypt((if ayah.ogg_segments then ayah.ogg_segments else '[]' end)))
           {
             ayah_key: ayah.ayah_key,
             ogg:
