@@ -125,6 +125,7 @@ GEM
     foreman (0.78.0)
       thor (~> 0.19.1)
     formatador (0.2.5)
+    gibberish (2.0.0)
     globalid (0.3.6)
       activesupport (>= 4.1.0)
     grit (2.5.0)
@@ -340,6 +341,7 @@ DEPENDENCIES
   execjs
   factory_girl
   foreman
+  gibberish (= 2.0.0)
   guard-rspec
   httparty
   jazz_hands!
@@ -369,3 +371,6 @@ DEPENDENCIES
   web-console (~> 2.0)
   whatlanguage
   yaml_db!
+
+BUNDLED WITH
+   1.11.2
