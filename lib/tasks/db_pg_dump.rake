@@ -19,7 +19,7 @@ namespace :db do
   task load_pg_dump: :environment do
     dir_name = Dir['db/dumps/**'].sort_by{|x| Time.new(x.split('/').last).to_i}.last
     sh "bunzip2 #{dir_name}/quran_dev.psql.bz2"
-    sh "psql quran_dev < #{dir_name}/quran_dev.psql"
+    sh "psql -U quran_dev quran_dev < #{dir_name}/quran_dev.psql"
     sh "bzip2 #{dir_name}/quran_dev.psql"
   end
 end

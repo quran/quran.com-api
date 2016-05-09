@@ -106,3 +106,5 @@ gem 'actionpack-page_caching'
 gem 'actionpack-action_caching'
 
 gem 'redis-rails'
+gem 'gibberish', '2.0.0'
+
