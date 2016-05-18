@@ -1,12 +1,16 @@
 language: ruby
 sudo: false
 
+git:
+  submodules: false
 rvm:
   - 2.2.3
 
 before_install:
   - bundle --version
   - echo -e "machine github.com\n  login mmahalwy\n  password $CI_USER_TOKEN" >> ~/.netrc
+  - git submodule update --init --recursive
+
 
 cache:
   bundler: true
