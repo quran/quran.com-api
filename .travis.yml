@@ -4,6 +4,10 @@ sudo: false
 rvm:
   - 2.2.3
 
+before_install:
+  - bundle --version
+  - echo -e "machine github.com\n  login mmahalwy\n  password $CI_USER_TOKEN" >> ~/.netrc
+
 cache:
   bundler: true
 
@@ -13,10 +17,6 @@ services:
 
 addons:
   postgresql: "9.4"
-
-before_install:
-  - bundle --version
-  - echo -e "machine github.com\n  login mmahalwy\n  password $CI_USER_TOKEN" >> ~/.netrc
 
 before_script:
   - bundle update
