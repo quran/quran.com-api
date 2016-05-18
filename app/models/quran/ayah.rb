@@ -80,14 +80,22 @@ class Quran::Ayah < ActiveRecord::Base
     self.importing( self.import_options( options ) )
   end
 
+  def content
+    translations
+  end
+
+  def audio_by_format
+    current = audio.map(&:attributes)
+    { ogg: current.find{ |file| file['format'] == 'ogg'}, mp3: current.find{ |file| file['format'] == 'mp3'} }
+  end
+
   def view_json
-    as_json
-    .merge(content: translations)
-    .merge(audio: {mp3: audio.find{|file| file.format == 'mp3'}, ogg: audio.find{|file| file.format == 'ogg'} })
+    as_json(methods: [:content])
+    .merge(audio: audio_by_format)
   end
 
   def as_json(options = {})
-    super()
+    super(options)
     .merge(words: glyphs.sort.as_json)
     .merge(text_tashkeel:  text_tashkeel ? text_tashkeel.text : '')
   end

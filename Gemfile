@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 #gem 'rails', '4.1.1'
-gem 'rails', '4.2.0'
+gem 'rails', '4.2.6'
 
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 0.18.2'
@@ -81,6 +81,7 @@ group :development, :test do
   gem 'rspec-rails' # http://betterspecs.org/
   gem 'guard-rspec', require: false
   gem 'parallel_tests'
+  gem 'zeus'
 end
 
 group :development do
