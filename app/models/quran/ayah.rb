@@ -80,48 +80,6 @@ class Quran::Ayah < ActiveRecord::Base
     self.importing( self.import_options( options ) )
   end
 
-  def self.merge_content(content_param = [], ayahs_array = [], keys = nil)
-    keys ||= ayahs_array.map(&:ayah_key)
-
-    Content::Resource.bucket_content(content_param, keys).each_with_index do |ayah_content, index|
-      ayahs_array[index][:content] = ayah_content
-    end
-  end
-
-  def self.merge_quran(quran_param, ayahs_array = [], keys = nil)
-    keys ||= ayahs_array.map(&:ayah_key)
-
-    Content::Resource.bucket_quran(1 || quran_param, keys).each_with_index do |ayah_quran, index|
-      ayahs_array[index][:quran] = ayah_quran
-    end
-  end
-
-  def self.merge_audio(audio_param, ayahs_array = [], keys = nil)
-    keys ||= ayahs_array.map(&:ayah_key)
-
-    Audio::File.bucket_audio(audio_param, keys).each_with_index do |ayah_audio, index|
-      ayahs_array[index][:audio] = ayah_audio
-    end
-  end
-
-  def self.merge_resource_with_ayahs(params = {}, ayahs)
-    keys = ayahs.map(&:ayah_key)
-    ayahs = ayahs.map(&:attributes)
-
-    self.merge_quran(nil, ayahs, keys)
-
-    # # Fetch the content corresponding to the the ayah keys and the content requested.
-    if params[:content].present?
-      self.merge_content(params[:content], ayahs, keys)
-    end
-
-    if params[:audio].present?
-      self.merge_audio(params[:audio], ayahs, keys)
-    end
-
-    ayahs
-  end
-
   def view_json
     as_json
     .merge(content: translations)

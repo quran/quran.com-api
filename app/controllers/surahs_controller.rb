@@ -1,16 +1,9 @@
 class SurahsController < ApplicationController
-  caches_page :index, :show
-  caches_action :index, :show
-
   def index
-    @results = Rails.cache.fetch('surahs', expires_in: 3.days) do
-      Quran::Surah.order("quran.surah.surah_id")
-    end
+    redirect_to v2_surahs_url, status: 301
   end
 
   def show
-    @surah = Rails.cache.fetch("surahs/#{params[:id]}", expires_in: 3.days) do
-      Quran::Surah.find(params[:id])
-    end
+    redirect_to v2_surah_url, status: 301
   end
 end

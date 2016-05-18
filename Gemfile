@@ -76,19 +76,15 @@ gem 'parallel'
 gem 'ruby-progressbar'
 
 group :development, :test do
-  gem 'jazz_hands', github: 'nixme/jazz_hands', branch: 'bring-your-own-debugger'
   gem 'pry-byebug'
   gem 'pry-rails'
   gem 'rspec-rails' # http://betterspecs.org/
-  gem 'factory_girl'
   gem 'guard-rspec', require: false
-  gem 'rb-fsevent'
-  gem 'foreman'
-  gem 'passenger' # the webserver
-  # Performance testing
-  gem 'rails-perftest'
-  gem 'ruby-prof'
+  gem 'parallel_tests'
+end
 
+group :development do
+  gem 'jazz_hands', github: 'nixme/jazz_hands', branch: 'bring-your-own-debugger'
   gem 'web-console', '~> 2.0'
 end
 
@@ -107,4 +103,3 @@ gem 'actionpack-action_caching'
 
 gem 'redis-rails'
 gem 'gibberish', '2.0.0'
-
