@@ -1,16 +1,10 @@
 language: ruby
 sudo: false
-
 git:
   submodules: false
+
 rvm:
   - 2.2.3
-
-before_install:
-  - bundle --version
-  - echo -e "machine github.com\n  login $CI_USER_TOKEN" >> ~/.netrc
-  - cat ~/.netrc
-  - git submodule update --init --recursive
 
 cache:
   bundler: true
@@ -22,7 +16,12 @@ services:
 addons:
   postgresql: "9.4"
 
+before_install:
+  - bundle --version
+  - echo -e "machine github.com\n  login $CI_USER_TOKEN" >> ~/.netrc
+  - git submodule update --init --recursive
+
 before_script:
-  - bundle update
+  - rake db:load_pg_dump
 
 script: "bundle exec rspec"
