@@ -6,8 +6,7 @@ git:
 rvm:
   - 2.2.3
 
-cache:
-  bundler: true
+cache: bundler
 
 services:
   - redis
@@ -22,6 +21,7 @@ before_install:
   - git submodule update --init --recursive
 
 before_script:
+  - psql -c 'create role quran_dev with login createdb;' -U postgres
   - bundle exec rake db:create
   - bundle exec rake db:load_pg_dump
 
