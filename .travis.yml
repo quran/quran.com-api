@@ -1,0 +1,24 @@
+language: ruby
+sudo: false
+
+rvm:
+  - 2.2.3
+
+cache:
+  bundler: true
+
+services:
+  - redis
+  - redis-server
+
+addons:
+  postgresql: "9.4"
+
+before_install:
+  - bundle --version
+  - echo -e "machine github.com\n  login mmahalwy\n  password $CI_USER_TOKEN" >> ~/.netrc
+
+before_script:
+  - bundle update
+
+script: "bundle exec rspec"
