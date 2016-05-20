@@ -18,6 +18,7 @@ addons:
 before_install:
   - bundle --version
   - echo -e "machine github.com\n  login $CI_USER_TOKEN" >> ~/.netrc
+  - rm .gitattributes
   - git submodule update --init --recursive
 
 before_script:
