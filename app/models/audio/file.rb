@@ -6,9 +6,11 @@
 #  recitation_id :integer          not null
 #  ayah_key      :text             not null
 #  format        :text             not null
-#  duration      :float            not null
+#  duration      :float
 #  mime_type     :text             not null
 #  is_enabled    :boolean          default(TRUE), not null
+#  url           :text
+#  segments      :text
 #
 
 class Audio::File < ActiveRecord::Base

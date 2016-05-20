@@ -1,3 +1,13 @@
+# == Schema Information
+#
+# Table name: quran.word_transliteration
+#
+#  transliteration_id :integer          not null, primary key
+#  word_id            :integer
+#  language_code      :string
+#  value              :string
+#
+
 class Quran::WordTransliteration < ActiveRecord::Base
   extend Quran
 

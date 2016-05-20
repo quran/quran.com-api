@@ -6,10 +6,11 @@ class V2::AyahsController < ApplicationController
     ayahs = Rails.cache.fetch(params_hash, expires_in: 12.hours) do
       Quran::Ayah
         .includes(translations: [:resource])
-        .includes(glyphs: {word: [:corpus, :translation, :transliteration, :token]})
+        .includes(glyphs: {word: [:corpus]})
         .includes(audio: :reciter)
         .includes(:text_tashkeel)
-        .where('translation.resource_id' => params[:content])
+        .includes(transliteration: [:resource])
+        .where('translation.resource_id' => params_content? ? params[:content] : [])
         .where('file.recitation_id' => params[:audio], 'file.is_enabled' => true)
         .by_range(params[:surah_id], range[0], range[1])
         .map(&:view_json)
@@ -58,6 +59,10 @@ private
     else
       ['1', '10']
     end
+  end
+
+  def params_content?
+    params.key?(:content)
   end
 
   def params_hash

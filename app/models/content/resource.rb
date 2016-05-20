@@ -156,6 +156,7 @@ class Content::Resource < ActiveRecord::Base
         rows = self.fetch_cardinality_content(params_content)
 
         rows.each do |row|
+            puts row.inspect
             if row.cardinality_type == 'n_ayah'
                 join = "JOIN i18n.language l using ( language_code ) JOIN #{row.type}.#{row.sub_type} c using ( resource_id ) JOIN #{row.type}.#{row.sub_type}_ayah n using ( #{row.sub_type}_id )"
             elsif row.cardinality_type == '1_ayah'
@@ -202,6 +203,6 @@ class Content::Resource < ActiveRecord::Base
                 {}
             )
         end
-        .group_by{|a| a[:ayah_key]}.values
+        # .group_by{|a| a[:ayah_key]}.values
     end
 end
