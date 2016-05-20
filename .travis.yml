@@ -19,8 +19,8 @@ before_install:
   - bundle --version
   - echo -e "machine github.com\n  login $CI_USER_TOKEN" >> ~/.netrc
   - git submodule update --init --recursive
-  - curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash
-  - apt-get install git-lfs=1.0.2
+  - sudo curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash
+  - sudo apt-get install git-lfs=1.0.2
   - git lfs init
   - ls -las db/dumps/2016-05-19_23:37:02
 
