@@ -30,3 +30,6 @@ before_script:
   - bundle exec rake db:load_pg_dump
 
 script: "bundle exec rspec"
+
+notifications:
+  email: false

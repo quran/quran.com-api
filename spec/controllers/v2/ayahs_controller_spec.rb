@@ -64,6 +64,7 @@ RSpec.describe V2::AyahsController, type: :controller do
             expect(response_json.all? { |ayah| ayah['content'].count == 1 }).to be_truthy
             expect(response_json.all? { |ayah| ayah['words'].present? }).to be_truthy
             expect(response_json.all? { |ayah| ayah['audio'].present? }).to be_truthy
+            expect(response_json.all? { |ayah| ayah['content'].any? { |content| content['resource']['name'] == resource.name } }).to be_truthy
           end
         end
       end
