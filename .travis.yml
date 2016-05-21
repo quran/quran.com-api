@@ -3,7 +3,6 @@ sudo: required
 git:
   submodules: false
 
-
 rvm:
   - 2.2.3
 
