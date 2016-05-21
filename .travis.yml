@@ -1,5 +1,5 @@
 language: ruby
-sudo: required
+sudo: false
 git:
   submodules: false
 
@@ -18,11 +18,12 @@ addons:
 before_install:
   - bundle --version
   - echo -e "machine github.com\n  login $CI_USER_TOKEN" >> ~/.netrc
-  - curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash
-  - sudo apt-get install git-lfs
-  - git lfs install
+  - mkdir -p $HOME/bin
+  - wget https://github.com/github/git-lfs/releases/download/v1.1.2/git-lfs-linux-amd64-1.1.2.tar.gz
+  - tar xvfz git-lfs-linux-amd64-1.1.2.tar.gz
+  - mv git-lfs-1.1.2/git-lfs $HOME/bin/git-lfs
+  - export PATH=$PATH:$HOME/bin/
   - git submodule update --init --recursive
-  - ls -las db/dumps/2016-05-19_23:37:02
 
 before_script:
   - psql -c 'create role quran_dev with login createdb;' -U postgres
