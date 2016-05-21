@@ -23,14 +23,6 @@ GIT
       pry-stack_explorer (~> 0.4.9)
       railties (>= 3.0, < 5.0)
 
-GIT
-  remote: git://github.com/sharabash/yaml_db.git
-  revision: 658a29fb97a67e3b2e017d2018eeeaefe0ed568b
-  specs:
-    yaml_db (0.3.0)
-      rails (>= 3.0, < 4.3)
-      rake (>= 0.8.7)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -367,7 +359,6 @@ DEPENDENCIES
   virtus
   web-console (~> 2.0)
   whatlanguage
-  yaml_db!
   zeus
 
 BUNDLED WITH

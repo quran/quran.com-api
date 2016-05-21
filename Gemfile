@@ -60,15 +60,11 @@ gem 'awesome_print'
 gem 'elasticsearch-model'
 gem 'elasticsearch-rails'
 
-
 # This is for batching the Content::Translation, batches based on the string primary keys
 # gem 'batchelor'
 
 # Paging the results
 gem 'kaminari'
-
-# nv 'dir'='/base2' rake db:data:dump_dir
-gem 'yaml_db', github: 'sharabash/yaml_db'
 
 # This is to run the rake task for importing in parallel
 gem 'parallel'
