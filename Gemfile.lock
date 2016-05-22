@@ -68,6 +68,8 @@ GEM
     annotate (2.7.1)
       activerecord (>= 3.2, < 6.0)
       rake (>= 10.4, < 12.0)
+    apipie-rails (0.3.6)
+      json
     arel (6.0.3)
     awesome_print (1.6.1)
     axiom-types (0.1.1)
@@ -325,6 +327,7 @@ DEPENDENCIES
   actionpack-action_caching
   actionpack-page_caching
   annotate
+  apipie-rails
   awesome_print
   composite_primary_keys!
   elasticsearch

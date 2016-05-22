@@ -45,7 +45,7 @@ module Search
       results_buckets = aggregations['by_ayah_key']['buckets']
       keys = results_buckets.map{|ayah_result| ayah_result['key'].gsub('_', ':')}
       ayahs = Quran::Ayah
-        .includes(glyphs: {word: [:corpus, :translation, :transliteration, :token]})
+        .includes(glyphs: {word: [:corpus, :token]})
         .includes(:text_tashkeel)
         .by_array(keys)
 
