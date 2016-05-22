@@ -98,4 +98,35 @@ class Quran::Ayah < ActiveRecord::Base
     .merge(words: glyphs.sort.as_json)
     .merge(text_tashkeel:  text_tashkeel ? text_tashkeel.text : '')
   end
+
+  def self.query(options = {})
+    query = {}
+    includes = {
+      glyphs: {word: [:corpus]}
+    }
+
+    if options[:content]
+      query.merge!(translation: {resource_id: options[:content]})
+      includes.merge!(translations: [:resource])
+    end
+
+    if options[:audio]
+      query.merge!('file.recitation_id' => options[:audio], 'file.is_enabled' => true)
+      includes.merge!(audio_files: :reciter)
+    end
+
+    Quran::Ayah
+      .includes(includes)
+      .includes(:text_tashkeel)
+      .where(query)
+  end
+
+  def view_options(options = {})
+    opts = {methods: []}
+
+    opts[:methods].push(:content) if options[:content]
+    opts[:methods].push(:audio) if options[:audio]
+
+    opts
+  end
 end
