@@ -3,8 +3,8 @@
 # Table name: audio.reciter
 #
 #  reciter_id :integer          not null, primary key
-#  path       :text             not null
-#  slug       :text             not null
+#  path       :text
+#  slug       :text
 #  english    :text             not null
 #  arabic     :text             not null
 #

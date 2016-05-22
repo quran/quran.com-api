@@ -33,11 +33,11 @@ class Quran::Ayah < ActiveRecord::Base
   has_many :tafsirs,      class_name: 'Content::Tafsir',     through:     :_tafsir_ayah
 
   has_many :translations,     class_name: 'Content::Translation',     foreign_key: 'ayah_key'
-  has_one :transliteration,   class_name: 'Content::Transliteration', foreign_key: 'ayah_key'
+  has_one  :transliteration,   class_name: 'Content::Transliteration', foreign_key: 'ayah_key'
 
   has_many :audio,  class_name: 'Audio::File',     foreign_key: 'ayah_key'
   has_many :texts,  class_name: 'Quran::Text',     foreign_key: 'ayah_key'
-  has_one :text_tashkeel, -> { where(resource_id: 12) }, class_name: 'Quran::Text', foreign_key: 'ayah_key'
+  has_one  :text_tashkeel, -> { where(resource_id: 12) }, class_name: 'Quran::Text', foreign_key: 'ayah_key'
   has_many :images, class_name: 'Quran::Image',    foreign_key: 'ayah_key'
   has_many :glyphs, -> {order('position asc') }, class_name: 'Quran::WordFont', foreign_key: 'ayah_key'
 
@@ -45,7 +45,7 @@ class Quran::Ayah < ActiveRecord::Base
   has_many :text_roots,  class_name: 'Quran::TextRoot',  foreign_key: 'ayah_key'
   has_many :text_lemmas, class_name: 'Quran::TextLemma', foreign_key: 'ayah_key'
   has_many :text_stems,  class_name: 'Quran::TextStem',  foreign_key: 'ayah_key'
-  has_one :text_token,   class_name: 'Quran::TextToken', foreign_key: 'ayah_key'
+  has_one  :text_token,   class_name: 'Quran::TextToken', foreign_key: 'ayah_key'
 
   def self.by_range(surah_id, from, to)
     where('quran.ayah.surah_id = ?', surah_id)
@@ -80,56 +80,22 @@ class Quran::Ayah < ActiveRecord::Base
     self.importing( self.import_options( options ) )
   end
 
-  def self.merge_content(content_param = [], ayahs_array = [], keys = nil)
-    keys ||= ayahs_array.map(&:ayah_key)
-
-    Content::Resource.bucket_content(content_param, keys).each_with_index do |ayah_content, index|
-      ayahs_array[index][:content] = ayah_content
-    end
+  def content
+    translations
   end
 
-  def self.merge_quran(quran_param, ayahs_array = [], keys = nil)
-    keys ||= ayahs_array.map(&:ayah_key)
-
-    Content::Resource.bucket_quran(1 || quran_param, keys).each_with_index do |ayah_quran, index|
-      ayahs_array[index][:quran] = ayah_quran
-    end
+  def audio_by_format
+    current = audio.map(&:attributes)
+    { ogg: current.find{ |file| file['format'] == 'ogg'}, mp3: current.find{ |file| file['format'] == 'mp3'} }
   end
 
-  def self.merge_audio(audio_param, ayahs_array = [], keys = nil)
-    keys ||= ayahs_array.map(&:ayah_key)
-
-    Audio::File.bucket_audio(audio_param, keys).each_with_index do |ayah_audio, index|
-      ayahs_array[index][:audio] = ayah_audio
-    end
-  end
-
-  def self.merge_resource_with_ayahs(params = {}, ayahs)
-    keys = ayahs.map(&:ayah_key)
-    ayahs = ayahs.map(&:attributes)
-
-    self.merge_quran(nil, ayahs, keys)
-
-    # # Fetch the content corresponding to the the ayah keys and the content requested.
-    if params[:content].present?
-      self.merge_content(params[:content], ayahs, keys)
-    end
-
-    if params[:audio].present?
-      self.merge_audio(params[:audio], ayahs, keys)
-    end
-
-    ayahs
-  end
-
-  def view_json
-    as_json
-    .merge(content: translations)
-    .merge(audio: {mp3: audio.find{|file| file.format == 'mp3'}, ogg: audio.find{|file| file.format == 'ogg'} })
+  def view_json(options = {})
+    as_json(methods: :content)
+    .merge(audio: audio_by_format)
   end
 
   def as_json(options = {})
-    super()
+    super(options)
     .merge(words: glyphs.sort.as_json)
     .merge(text_tashkeel:  text_tashkeel ? text_tashkeel.text : '')
   end

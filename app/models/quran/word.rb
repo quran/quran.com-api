@@ -2,10 +2,12 @@
 #
 # Table name: quran.word
 #
-#  word_id  :integer          not null, primary key
-#  ayah_key :text             not null
-#  position :integer          not null
-#  token_id :integer          not null
+#  word_id         :integer          not null, primary key
+#  ayah_key        :text             not null
+#  position        :integer          not null
+#  token_id        :integer          not null
+#  translation     :string
+#  transliteration :string
 #
 
 class Quran::Word < ActiveRecord::Base
@@ -18,8 +20,6 @@ class Quran::Word < ActiveRecord::Base
   belongs_to :token, class_name: 'Quran::Token'
 
   has_one :corpus, class_name: 'Quran::WordCorpus', foreign_key: :word_id
-  has_one :translation, class_name: 'Quran::WordTranslation', foreign_key: :word_id
-  has_one :transliteration, class_name: 'Quran::WordTransliteration', foreign_key: :word_id
 
   has_many :glyphs, class_name: 'Quran::WordFont', foreign_key: :word_id
 
@@ -32,14 +32,10 @@ class Quran::Word < ActiveRecord::Base
   has_many :roots,  class_name: 'Quran::Root',  through: :_word_root
 
   def as_json(options = {})
-    super().merge(
-      translation: translation.value,
-      transliteration: transliteration.value,
+    super(include: {
       corpus: {
-        description: corpus.description,
-        image_src: corpus.image_src,
-        segment: corpus.segment
+        only: [:description, :image_src, :segment]
       }
-    )
+    })
   end
 end

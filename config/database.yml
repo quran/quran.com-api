@@ -34,7 +34,8 @@ development:
 
 test:
   <<: *default
-  database: quran_dev_test
+  database: quran_dev
+
 
 #development_remote_readonly:
 #  <<: *default

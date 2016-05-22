@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 #gem 'rails', '4.1.1'
-gem 'rails', '4.2.0'
+gem 'rails', '4.2.6'
 
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 0.18.2'
@@ -60,15 +60,11 @@ gem 'awesome_print'
 gem 'elasticsearch-model'
 gem 'elasticsearch-rails'
 
-
 # This is for batching the Content::Translation, batches based on the string primary keys
 # gem 'batchelor'
 
 # Paging the results
 gem 'kaminari'
-
-# nv 'dir'='/base2' rake db:data:dump_dir
-gem 'yaml_db', github: 'sharabash/yaml_db'
 
 # This is to run the rake task for importing in parallel
 gem 'parallel'
@@ -76,19 +72,16 @@ gem 'parallel'
 gem 'ruby-progressbar'
 
 group :development, :test do
-  gem 'jazz_hands', github: 'nixme/jazz_hands', branch: 'bring-your-own-debugger'
   gem 'pry-byebug'
   gem 'pry-rails'
   gem 'rspec-rails' # http://betterspecs.org/
-  gem 'factory_girl'
   gem 'guard-rspec', require: false
-  gem 'rb-fsevent'
-  gem 'foreman'
-  gem 'passenger' # the webserver
-  # Performance testing
-  gem 'rails-perftest'
-  gem 'ruby-prof'
+  gem 'parallel_tests'
+  gem 'zeus'
+end
 
+group :development do
+  gem 'jazz_hands', github: 'nixme/jazz_hands', branch: 'bring-your-own-debugger'
   gem 'web-console', '~> 2.0'
 end
 
@@ -107,4 +100,3 @@ gem 'actionpack-action_caching'
 
 gem 'redis-rails'
 gem 'gibberish', '2.0.0'
-

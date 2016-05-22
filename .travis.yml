@@ -1,0 +1,35 @@
+language: ruby
+sudo: required
+git:
+  submodules: false
+
+rvm:
+  - 2.2.3
+
+cache: bundler
+
+services:
+  - redis
+  - redis-server
+
+addons:
+  postgresql: "9.4"
+
+before_install:
+  - bundle --version
+  - echo -e "machine github.com\n  login $CI_USER_TOKEN" >> ~/.netrc
+  - curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash
+  - sudo apt-get install git-lfs
+  - git lfs install
+  - git submodule update --init --recursive
+  - ls db/dumps
+
+before_script:
+  - psql -c 'create role quran_dev with login createdb;' -U postgres
+  - bundle exec rake db:create
+  - bundle exec rake db:load_pg_dump
+
+script: "bundle exec rspec"
+
+notifications:
+  email: false
