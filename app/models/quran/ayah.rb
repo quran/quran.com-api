@@ -35,7 +35,7 @@ class Quran::Ayah < ActiveRecord::Base
   has_many :translations,     class_name: 'Content::Translation',     foreign_key: 'ayah_key'
   has_one  :transliteration,   class_name: 'Content::Transliteration', foreign_key: 'ayah_key'
 
-  has_many :audio,  class_name: 'Audio::File',     foreign_key: 'ayah_key'
+  has_many :audio_files,  class_name: 'Audio::File',     foreign_key: 'ayah_key'
   has_many :texts,  class_name: 'Quran::Text',     foreign_key: 'ayah_key'
   has_one  :text_tashkeel, -> { where(resource_id: 12) }, class_name: 'Quran::Text', foreign_key: 'ayah_key'
   has_many :images, class_name: 'Quran::Image',    foreign_key: 'ayah_key'
@@ -84,19 +84,49 @@ class Quran::Ayah < ActiveRecord::Base
     translations
   end
 
-  def audio_by_format
-    current = audio.map(&:attributes)
+  def audio
+    current = audio_files.map(&:attributes)
     { ogg: current.find{ |file| file['format'] == 'ogg'}, mp3: current.find{ |file| file['format'] == 'mp3'} }
   end
 
   def view_json(options = {})
-    as_json(methods: :content)
-    .merge(audio: audio_by_format)
+    as_json(options)
   end
 
   def as_json(options = {})
     super(options)
     .merge(words: glyphs.sort.as_json)
     .merge(text_tashkeel:  text_tashkeel ? text_tashkeel.text : '')
+  end
+
+  def self.query(options = {})
+    query = {}
+    includes = {
+      glyphs: {word: [:corpus]}
+    }
+
+    if options[:content]
+      query.merge!(translation: {resource_id: options[:content]})
+      includes.merge!(translations: [:resource])
+    end
+
+    if options[:audio]
+      query.merge!('file.recitation_id' => options[:audio], 'file.is_enabled' => true)
+      includes.merge!(audio_files: :reciter)
+    end
+
+    Quran::Ayah
+      .includes(includes)
+      .includes(:text_tashkeel)
+      .where(query)
+  end
+
+  def view_options(options = {})
+    opts = {methods: []}
+
+    opts[:methods].push(:content) if options[:content]
+    opts[:methods].push(:audio) if options[:audio]
+
+    opts
   end
 end

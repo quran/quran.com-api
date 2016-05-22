@@ -9,16 +9,10 @@ class V2::PagesController < ApplicationController
   def show
     ayahs = Rails.cache.fetch(page_params, expires_in: 12.hours) do
       Quran::Ayah
-        .includes(translations: [:resource])
-        .includes(glyphs: {word: [:corpus]})
-        .includes(audio: :reciter)
-        .includes(:text_tashkeel)
-        .includes(transliteration: [:resource])
-        .where('translation.resource_id' => params_content? ? params[:content] : [])
-        .where('file.recitation_id' => params[:audio], 'file.is_enabled' => true)
+        .query(params)
         .where(page_num: page_params)
         .order(:surah_id, :ayah_num)
-        .map(&:view_json)
+        .map{ |ayah| ayah.view_json(ayah.view_options(params)) }
     end
 
     render json: ayahs
@@ -32,10 +26,6 @@ private
 
   def page_params
     params.require(:id)
-  end
-
-  def params_content?
-    params.key?(:content)
   end
 
 end

@@ -7,20 +7,14 @@ class V2::AyahsController < ApplicationController
   param :surah_id, :number, required: true
   param :from, :number, desc: 'From ayah'
   param :to, :number, desc: 'To ayah'
-  param :content, Array, desc: 'Content request. See /options/content for list', required: true
-  param :audio, :number, desc: 'Reciter request/ See /options/audio for list', required: true
+  param :content, Array, desc: 'Content request. See /options/content for list'
+  param :audio, :number, desc: 'Reciter request/ See /options/audio for list'
   def index
     ayahs = Rails.cache.fetch(params_hash, expires_in: 12.hours) do
       Quran::Ayah
-        .includes(translations: [:resource])
-        .includes(glyphs: {word: [:corpus]})
-        .includes(audio: :reciter)
-        .includes(:text_tashkeel)
-        .includes(transliteration: [:resource])
-        .where('translation.resource_id' => params_content? ? params[:content] : [])
-        .where('file.recitation_id' => params[:audio], 'file.is_enabled' => true)
+        .query(params)
         .by_range(params[:surah_id], range[0], range[1])
-        .map(&:view_json)
+        .map{ |ayah| ayah.view_json(ayah.view_options(params)) }
     end
 
     render json: ayahs
@@ -66,10 +60,6 @@ private
     else
       ['1', '10']
     end
-  end
-
-  def params_content?
-    params.key?(:content)
   end
 
   def params_hash
