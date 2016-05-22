@@ -1,9 +1,14 @@
 class V2::SearchController < ApplicationController
+  include LanguageDetection
+
   before_filter :search_query?
 
+  api :GET, '/v2/search', 'Quran search'
+  api_version '2.0'
+  param :q, String, desc: 'Query string to search', requred: true
+  param :page, :number, desc: 'Page number'
+  param :size, :number, desc: 'Size of results per page'
   def index
-    indices_boost = Search::LanguageDetection.new(headers, session, query).indices_boost
-
     search = Search::Client.new(
       query,
       page: page,
