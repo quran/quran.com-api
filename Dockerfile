@@ -30,6 +30,8 @@ RUN cp /etc/cron.daily/logrotate /etc/cron.hourly
 
 # redis
 RUN rm /etc/service/redis/down
+RUN sed -i 's/^\(stop-writes-on-bgsave-error .*\)$/stop-writes-on-bgsave-error no/' /etc/redis/redis.conf && \
+echo vm.overcommit_memory = 1 >> /etc/sysctl.conf
 
 # setup gems
 WORKDIR /tmp
