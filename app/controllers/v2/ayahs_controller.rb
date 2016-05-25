@@ -12,15 +12,14 @@ class V2::AyahsController < ApplicationController
   def index
     ayahs = Rails.cache.fetch(params_hash, expires_in: 12.hours) do
       ayahs = Quran::Ayah
-        .query(params)
         .by_range(params[:surah_id], range[0], range[1])
 
       keys = ayahs.map(&:ayah_key)
 
-      words = Quran::WordFont.includes(word: [:corpus]).where(ayah_key: keys).order(:ayah_key).group_by(&:ayah_key)
+      words = Quran::WordFont.preload(word: [:corpus]).where(ayah_key: keys).order(:ayah_key).group_by(&:ayah_key)
       text = Quran::Text.where(ayah_key: keys, resource_id: 12).order(:ayah_key).group_by(&:ayah_key)
-      content = Content::Translation.includes(:resource).where(ayah_key: keys, resource_id: params[:content]).order(:ayah_key).group_by(&:ayah_key)
-      audio = Audio::File.includes(:reciter).where(ayah_key: keys, recitation_id: params[:audio], is_enabled: true).order(:ayah_key).group_by(&:ayah_key)
+      content = Content::Translation.preload(:resource).where(ayah_key: keys, resource_id: params[:content]).order(:ayah_key).group_by(&:ayah_key)
+      audio = Audio::File.preload(:reciter).where(ayah_key: keys, recitation_id: params[:audio], is_enabled: true).order(:ayah_key).group_by(&:ayah_key)
 
       ayahs.map do |ayah|
         ayah_json = ayah.as_json
