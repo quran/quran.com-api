@@ -114,10 +114,9 @@ class Quran::Ayah < ActiveRecord::Base
     end
 
     Quran::Ayah
-      .includes(includes)
+      .preload(includes)
       .preload(glyphs: {word: [:corpus]})
       .preload(:text_tashkeel)
-      .where(query)
   end
 
   def view_options(options = {})
