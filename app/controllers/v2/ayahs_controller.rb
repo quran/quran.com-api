@@ -10,13 +10,25 @@ class V2::AyahsController < ApplicationController
   param :content, Array, desc: 'Content request. See /options/content for list'
   param :audio, :number, desc: 'Reciter request/ See /options/audio for list'
   def index
-    ayahs = Rails.cache.fetch(params_hash, expires_in: 12.hours) do
-      Quran::Ayah
+    response = Rails.cache.fetch(params_hash, expires_in: 12.hours) do
+      ayahs = Quran::Ayah
         .query(params)
         .by_range(params[:surah_id], range[0], range[1])
+
+      keys = ayahs.map(&:ayah_key)
+      content = Content::Translation.preload(:resource).where(ayah_key: keys, resource_id: params[:content]).order(:ayah_key).group_by(&:ayah_key)
+      audio = Audio::File.preload(:reciter).where(ayah_key: keys, recitation_id: params[:audio], is_enabled: true).order(:ayah_key).group_by(&:ayah_key)
+
+      ayahs.map do |ayah|
+        ayah_json = ayah.as_json
+        ayah_json.merge({
+          content: content[ayah.ayah_key],
+          audio: audio[ayah.ayah_key],
+        })
+      end
     end
 
-    render json: ayahs
+    render json: response
   end
 
 private

@@ -113,8 +113,8 @@ class Quran::Ayah < ActiveRecord::Base
       includes.merge!(audio_files: :reciter)
     end
 
+
     Quran::Ayah
-      .preload(includes)
       .preload(glyphs: {word: [:corpus]})
       .preload(:text_tashkeel)
   end

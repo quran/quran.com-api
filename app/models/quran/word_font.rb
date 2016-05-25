@@ -41,6 +41,6 @@ class Quran::WordFont < ActiveRecord::Base
   end
 
   def as_json(options = {})
-    super(methods: [:class_name, :code], methods: [:translation, :transliteration])
+    super(methods: [:class_name, :code, :translation, :transliteration])
   end
 end
