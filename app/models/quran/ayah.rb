@@ -95,15 +95,14 @@ class Quran::Ayah < ActiveRecord::Base
 
   def as_json(options = {})
     super(options)
-    .merge(words: glyphs.sort.as_json)
-    .merge(text_tashkeel:  text_tashkeel ? text_tashkeel.text : '')
   end
 
   def self.query(options = {})
     query = {}
-    includes = {
-      glyphs: {word: [:corpus]}
-    }
+    # includes = {
+    #   glyphs: {word: [:corpus]}
+    # }
+    includes = {}
 
     if options[:content]
       query.merge!(translation: {resource_id: options[:content]})
@@ -117,7 +116,6 @@ class Quran::Ayah < ActiveRecord::Base
 
     Quran::Ayah
       .includes(includes)
-      .includes(:text_tashkeel)
       .where(query)
   end
 

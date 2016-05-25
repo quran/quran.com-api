@@ -11,10 +11,27 @@ class V2::AyahsController < ApplicationController
   param :audio, :number, desc: 'Reciter request/ See /options/audio for list'
   def index
     ayahs = Rails.cache.fetch(params_hash, expires_in: 12.hours) do
-      Quran::Ayah
+      ayahs = Quran::Ayah
         .query(params)
         .by_range(params[:surah_id], range[0], range[1])
-        .map{ |ayah| ayah.view_json(ayah.view_options(params)) }
+
+      keys = ayahs.map(&:ayah_key)
+
+      words = Quran::WordFont.includes(word: [:corpus]).where(ayah_key: keys).order(:ayah_key).group_by(&:ayah_key)
+      text = Quran::Text.where(ayah_key: keys, resource_id: 12).order(:ayah_key).group_by(&:ayah_key)
+      content = Content::Translation.includes(:resource).where(ayah_key: keys, resource_id: params[:content]).order(:ayah_key).group_by(&:ayah_key)
+      audio = Audio::File.includes(:reciter).where(ayah_key: keys, recitation_id: params[:audio], is_enabled: true).order(:ayah_key).group_by(&:ayah_key)
+
+      ayahs.map do |ayah|
+        ayah_json = ayah.as_json
+        ayah_json.merge({
+          content: content[ayah.ayah_key],
+          words: words[ayah.ayah_key],
+          audio: audio[ayah.ayah_key],
+          text_tashkeel: text[ayah.ayah_key]
+        })
+      end
+        # .map{ |ayah| ayah.view_json(ayah.view_options(params)) }
     end
 
     render json: ayahs

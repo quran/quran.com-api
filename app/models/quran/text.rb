@@ -20,7 +20,7 @@ class Quran::Text < ActiveRecord::Base
   belongs_to :ayah,     class_name: 'Quran::Ayah', foreign_key: 'ayah_key'
 
   # scope
-  default_scope { where resource_id: 6 } # limit to Simple Enhanced
+  # default_scope { where resource_id: 6 } # limit to Simple Enhanced
 
   settings YAML.load(
     File.read(
