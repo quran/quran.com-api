@@ -86,9 +86,7 @@ class Quran::Ayah < ActiveRecord::Base
 
   def audio
     current = audio_files.map(&:attributes)
-    result = { ogg: (current.find{ |file| file['format'] == 'ogg'} || {}).except!('segments'), mp3: (current.find{ |file| file['format'] == 'mp3'} || {}).except!('segments') }
-    [:ogg, :mp3].each{ |format| result[format]['segments'] = result[format].delete('segments_encrypted') if result[format]['segments_encrypted'] }
-    result
+    { ogg: current.find{ |file| file['format'] == 'ogg'}, mp3: current.find{ |file| file['format'] == 'mp3'} }
   end
 
   def view_json(options = {})
