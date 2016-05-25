@@ -102,7 +102,6 @@ class Quran::Ayah < ActiveRecord::Base
   def self.query(options = {})
     query = {}
     includes = {
-      glyphs: {word: [:corpus]}
     }
 
     if options[:content]
@@ -117,7 +116,8 @@ class Quran::Ayah < ActiveRecord::Base
 
     Quran::Ayah
       .includes(includes)
-      .includes(:text_tashkeel)
+      .preload(glyphs: {word: [:corpus]})
+      .preload(:text_tashkeel)
       .where(query)
   end
 
