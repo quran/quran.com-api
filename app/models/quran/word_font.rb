@@ -33,6 +33,6 @@ class Quran::WordFont < ActiveRecord::Base
   end
 
   def as_json(options = {})
-    super(methods: [:class_name, :code]).merge(word.as_json.to_h) # I dont know how I feel about this one.
+    super(methods: [:class_name, :code]).merge(word ? word.as_json : {}) # I dont know how I feel about this one.
   end
 end
