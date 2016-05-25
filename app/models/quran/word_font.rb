@@ -32,7 +32,15 @@ class Quran::WordFont < ActiveRecord::Base
     "&#x#{code_hex}"
   end
 
+  def translation
+    word && word.translation
+  end
+
+  def transliteration
+    word && word.transliteration
+  end
+
   def as_json(options = {})
-    super(methods: [:class_name, :code]).merge(word ? word.as_json : {}) # I dont know how I feel about this one.
+    super(methods: [:class_name, :code], methods: [:translation, :transliteration])
   end
 end
