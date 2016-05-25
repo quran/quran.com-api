@@ -101,9 +101,7 @@ class Quran::Ayah < ActiveRecord::Base
 
   def self.query(options = {})
     query = {}
-    includes = {
-      glyphs: {word: [:corpus]}
-    }
+    includes = {}
 
     if options[:content]
       query.merge!(translation: {resource_id: options[:content]})
@@ -116,9 +114,9 @@ class Quran::Ayah < ActiveRecord::Base
     end
 
     Quran::Ayah
-      .includes(includes)
-      .includes(:text_tashkeel)
-      .where(query)
+      .preload(includes)
+      .preload(glyphs: {word: [:corpus]})
+      .preload(:text_tashkeel)
   end
 
   def view_options(options = {})

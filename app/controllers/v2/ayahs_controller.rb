@@ -14,7 +14,6 @@ class V2::AyahsController < ApplicationController
       Quran::Ayah
         .query(params)
         .by_range(params[:surah_id], range[0], range[1])
-        .map{ |ayah| ayah.view_json(ayah.view_options(params)) }
     end
 
     render json: ayahs
