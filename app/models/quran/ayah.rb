@@ -101,8 +101,7 @@ class Quran::Ayah < ActiveRecord::Base
 
   def self.query(options = {})
     query = {}
-    includes = {
-    }
+    includes = {}
 
     if options[:content]
       query.merge!(translation: {resource_id: options[:content]})
