@@ -7,15 +7,17 @@ class V2::PagesController < ApplicationController
   param :content, Array, desc: 'Content request. See /options/content for list', required: true
   param :audio, :number, desc: 'Reciter request/ See /options/audio for list', required: true
   def show
-    ayahs = Rails.cache.fetch(page_params, expires_in: 12.hours) do
-      Quran::Ayah
-        .query(params)
+    response = Rails.cache.fetch(page_params, expires_in: 12.hours) do
+      ayahs = Quran::Ayah
+        .preload(glyphs: {word: [:corpus]})
+        .preload(:text_tashkeel)
         .where(page_num: page_params)
         .order(:surah_id, :ayah_num)
-        .map{ |ayah| ayah.view_json(ayah.view_options(params)) }
+
+      ayahs.as_json_with_resources(ayahs, params)
     end
 
-    render json: ayahs
+    render json: response
   end
 
 private
