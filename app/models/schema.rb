@@ -18,14 +18,14 @@ module Schema
     # Rails.logger.info "#{ inc_mod } included Schema"
     # Then add a callback function `self.extended` to the module that
     # includes schema module
-    # inc_mod.instance_eval do
-    #   # Create method `self.extended` on the child module
-    #   def extended( ext_mod )
-    #     # Rails.logger.info "#{ ext_mod } extended"
-    #     # Include the elasticsearch concern
-    #     ext_mod.include( Searchable )
-    #     ext_mod.extend( Searchable ) # TODO recall why we're both including and extending? was this experimental?
-    #   end
-    # end
+    inc_mod.instance_eval do
+      # Create method `self.extended` on the child module
+      def extended( ext_mod )
+        # Rails.logger.info "#{ ext_mod } extended"
+        # Include the elasticsearch concern
+        ext_mod.include( Searchable )
+        ext_mod.extend( Searchable ) # TODO recall why we're both including and extending? was this experimental?
+      end
+    end
   end
 end
