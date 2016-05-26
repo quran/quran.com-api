@@ -109,7 +109,7 @@ class Quran::Ayah < ActiveRecord::Base
     ayahs.map do |ayah|
       ayah_json = ayah.as_json
       ayah_json.merge({
-        content: content_option ? content[ayah.ayah_key] : [],
+        content: content_option && content[ayah.ayah_key] ? content[ayah.ayah_key] : [],
         audio: audio_option ? {
           ogg: audio[ayah.ayah_key].find{ |file| file['format'] == 'ogg'},
           mp3: audio[ayah.ayah_key].find{ |file| file['format'] == 'mp3'}

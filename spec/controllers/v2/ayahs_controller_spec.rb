@@ -81,7 +81,13 @@ RSpec.describe V2::AyahsController, type: :controller do
         it 'should return empty content' do
           get :index, { surah_id: 2, from: 1, to: 30, content: [], audio: 8 }
 
-          expect(response_json.all? { |ayah| ayah.key?('content') && ayah['content'] == [] }).to be_truthy
+          expect(response_json.all? { |ayah| ayah.key?('content') && ayah['content'].empty? }).to be_truthy
+        end
+
+        it 'should return empty content' do
+          get :index, { surah_id: 2, from: 1, to: 30, audio: 8 }
+
+          expect(response_json.all? { |ayah| ayah.key?('content') && ayah['content'].empty? }).to be_truthy
         end
       end
 
