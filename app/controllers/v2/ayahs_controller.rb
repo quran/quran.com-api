@@ -10,14 +10,16 @@ class V2::AyahsController < ApplicationController
   param :content, Array, desc: 'Content request. See /options/content for list'
   param :audio, :number, desc: 'Reciter request/ See /options/audio for list'
   def index
-    ayahs = Rails.cache.fetch(params_hash, expires_in: 12.hours) do
-      Quran::Ayah
-        .query(params)
+    response = Rails.cache.fetch(params_hash, expires_in: 12.hours) do
+      ayahs = Quran::Ayah
+        .preload(glyphs: {word: [:corpus]})
+        .preload(:text_tashkeel)
         .by_range(params[:surah_id], range[0], range[1])
-        .map{ |ayah| ayah.view_json(ayah.view_options(params)) }
+
+      ayahs.as_json_with_resources(ayahs, params)
     end
 
-    render json: ayahs
+    render json: response
   end
 
 private

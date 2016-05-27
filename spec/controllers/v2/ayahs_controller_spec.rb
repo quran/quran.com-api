@@ -48,10 +48,10 @@ RSpec.describe V2::AyahsController, type: :controller do
       end
 
       context 'when no audio param' do
-        it 'should not return audio' do
+        it 'should return audio empty' do
           get :index, { surah_id: 2, from: 1, to: 30, content: [19] }
 
-          expect(response_json.all? { |ayah| !ayah.key?('audio') }).to be_truthy
+          expect(response_json.all? { |ayah| ayah.key?('audio') && ayah['audio'] == {} }).to be_truthy
         end
       end
     end
@@ -78,10 +78,16 @@ RSpec.describe V2::AyahsController, type: :controller do
       end
 
       context 'no content param' do
-        it 'should not return content' do
+        it 'should return empty content' do
           get :index, { surah_id: 2, from: 1, to: 30, content: [], audio: 8 }
 
-          expect(response_json.all? { |ayah| !ayah.key?('content') }).to be_truthy
+          expect(response_json.all? { |ayah| ayah.key?('content') && ayah['content'].empty? }).to be_truthy
+        end
+
+        it 'should return empty content' do
+          get :index, { surah_id: 2, from: 1, to: 30, audio: 8 }
+
+          expect(response_json.all? { |ayah| ayah.key?('content') && ayah['content'].empty? }).to be_truthy
         end
       end
 
