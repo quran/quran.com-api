@@ -24,8 +24,10 @@ before_install:
   - touch db/.gitattrbutes
   - echo -e "quran_dev.psql.bz2 filter=lfs diff=lfs merge=lfs -text" >> db/.gitattributes
   - sudo apt-get install git-lfs
+  - cd db
   - git lfs install
   - git lfs pull
+  - cd ..
   - ls db/dumps
 
 before_script:
