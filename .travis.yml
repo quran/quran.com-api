@@ -25,6 +25,7 @@ before_install:
   - echo -e "quran_dev.psql.bz2 filter=lfs diff=lfs merge=lfs -text" >> db/.gitattributes
   - sudo apt-get install git-lfs
   - cd db
+  - rm -rf dumps
   - git lfs install
   - git lfs pull
   - cd ..
