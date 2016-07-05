@@ -21,6 +21,7 @@ before_install:
   - curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash
   - git submodule update --init --recursive
   - sudo apt-get install git-lfs
+  - rm -rf db/dumps
   - cd db
   - rm -rf dumps/
   - git lfs install
