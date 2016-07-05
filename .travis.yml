@@ -22,8 +22,10 @@ before_install:
   - git submodule update --init --recursive
   - sudo apt-get install git-lfs
   - rm -rf db/dumps
+  - ls db/dumps
   - cd db
   - rm -rf dumps/
+  - ls dumps
   - git lfs install
   - git lfs pull
   - cd ..
