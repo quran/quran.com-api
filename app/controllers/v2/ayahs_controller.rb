@@ -12,7 +12,7 @@ class V2::AyahsController < ApplicationController
   def index
     response = Rails.cache.fetch(params_hash, expires_in: 12.hours) do
       ayahs = Quran::Ayah
-        .preload(glyphs: {word: [:corpus]})
+        .preload(glyphs: {word: [:corpus, :token]})
         .preload(:text_tashkeel)
         .by_range(params[:surah_id], range[0], range[1])
 
