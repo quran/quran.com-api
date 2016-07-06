@@ -19,9 +19,14 @@ before_install:
   - bundle --version
   - echo -e "machine github.com\n  login $CI_USER_TOKEN" >> ~/.netrc
   - curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash
-  - sudo apt-get install git-lfs
-  - git lfs install
   - git submodule update --init --recursive
+  - sudo apt-get install git-lfs
+  - rm -rf db/dumps
+  - cd db
+  - rm -rf dumps/
+  - git lfs install
+  - git lfs pull
+  - cd ..
   - ls db/dumps
 
 before_script:
