@@ -18,7 +18,6 @@ addons:
 before_install:
   - bundle --version
   - sudo apt-get install sshpass
-  - mkdir db
   - sshpass -p "$TRAVIS_PASSWORD" scp -r travis@staging.quran.com:/db/quran_dev.psql.bz2 /db
 
 before_script:
