@@ -1,4 +1,5 @@
 language: ruby
+sudo: required
 git:
   submodules: false
 
@@ -16,7 +17,7 @@ addons:
 
 before_install:
   - bundle --version
-  - apt-get install sshpass
+  - sudo apt-get install sshpass
   - sshpass -p "$TRAVIS_PASSWORD" scp -o StrictHostKeyChecking=no travis@staging.quran.com:db/quran_dev.psql.bz2 db
 
 before_script:
