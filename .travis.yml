@@ -17,12 +17,10 @@ addons:
 
 before_install:
   - bundle --version
-  - echo -e "machine github.com\n  login $CI_USER_TOKEN" >> ~/.netrc
-  - curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash
-  - sudo apt-get install git-lfs
-  - git lfs install
-  - git submodule update --init --recursive
-  - ls db/dumps
+  - sudo apt-get install sshpass
+  - ls
+  - ls db
+  - sshpass -p "$TRAVIS_PASSWORD" scp travis@staging.quran.com:db/quran_dev.psql.bz2 .
 
 before_script:
   - psql -c 'create role quran_dev with login createdb;' -U postgres
