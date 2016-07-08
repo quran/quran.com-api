@@ -19,7 +19,7 @@ before_install:
   - bundle --version
   - sudo apt-get install sshpass
   - ls
-  - sshpass -p '$TRAVIS_PASSWORD' scp -r travis@staging.quran.com:db/quran_dev.psql.bz2 db/
+  - sudo sshpass -p "$TRAVIS_PASSWORD" scp -r travis@staging.quran.com:db/quran_dev.psql.bz2 db/
 
 before_script:
   - psql -c 'create role quran_dev with login createdb;' -U postgres
