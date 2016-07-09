@@ -40,7 +40,11 @@ class Quran::WordFont < ActiveRecord::Base
     word && word.transliteration
   end
 
+  def arabic
+    word && word.token.value
+  end
+
   def as_json(options = {})
-    super(methods: [:class_name, :code, :translation, :transliteration])
+    super(methods: [:class_name, :code, :translation, :transliteration, :arabic])
   end
 end
