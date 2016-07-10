@@ -285,6 +285,8 @@ GEM
     sdoc (0.4.1)
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
+    sentry-raven (0.15.2)
+      faraday (>= 0.7.6)
     shellany (0.0.1)
     slop (3.6.0)
     spring (1.7.1)
@@ -356,6 +358,7 @@ DEPENDENCIES
   rspec-rails
   ruby-progressbar
   sdoc (~> 0.4.0)
+  sentry-raven
   spring
   spring-commands-rspec
   therubyracer

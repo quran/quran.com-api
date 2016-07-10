@@ -49,6 +49,8 @@ gem 'prose'
 # ActiveModel like for ruby classes
 gem 'virtus'
 
+gem "sentry-raven"
+
 # composite primary keys
 gem 'composite_primary_keys', {
   :git => 'git://github.com/composite-primary-keys/composite_primary_keys.git',
