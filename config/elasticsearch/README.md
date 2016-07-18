@@ -2,7 +2,7 @@
 
 #### Installation
 Install via Homebrew
-`brewi install elasticsearch`. You will then be prompted with this info:
+`brew install elasticsearch`. You will then be prompted with this info:
 ```
 ==> Caveats
 Data:    /usr/local/var/elasticsearch/elasticsearch_mmahalwy/
@@ -31,14 +31,14 @@ Github: https://github.com/mobz/elasticsearch-head
 To run: Open in browser http://localhost:9200/_plugin/head/
 
 #### Starting
-To run elasticsearch, in bash paste: Note: If you brew installed, this is done automatically
+To run elasticsearch, in bash paste: (If you brew installed, this is done automatically)
 
 ```
 elasticsearch --config=/usr/local/opt/elasticsearch/config/elasticsearch.yml
 ```
 
 #### Setup
-copy the 'analysis/' subfolder into your elasticsearch directory (typically /opt/elasticsearch-1.6.0, for example, or /usr/share/elasticsearch), as 'config/analysis'
+Copy the 'analysis/' subfolder into your elasticsearch directory (typically /opt/elasticsearch-1.6.0, for example, or /usr/share/elasticsearch), as 'config/analysis'
 
 #### Indices
 ```
@@ -70,7 +70,7 @@ View mappings: in browser - `http://localhost:9200/quran/_mapping`
     client.indices.put_mapping index: 'quran', type: 'translation', body: { translation: { _parent: { type: 'ayah' }, _routing: { required: true, path: 'ayah_key' }, properties: { text: { type: 'string', term_vector: 'with_positions_offsets_payloads' } } } }
 ```
 
-**Note**: you will run into the problem of not having the arabic_synonyms.txt file in the proper location for elasticsearch. That's fine. The file is located in the public directory and should be placed in `/etc/elasticsearch/analysis` on your server.
+**Note**: You will run into the problem of not having the arabic_synonyms.txt file in the proper location for elasticsearch. That's fine. The file is located in the public directory and should be placed in `/etc/elasticsearch/analysis` on your server.
 
 #### Querying
 
