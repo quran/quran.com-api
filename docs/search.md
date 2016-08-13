@@ -137,11 +137,6 @@ GET /search?content=17,18&audio=1&q=allah%20light
         }
       ],
       "audio": {
-        "ogg": {
-          "url": "http://audio.quran.com:9999/AbdulBaset/Mujawwad/ogg/024035.ogg",
-          "duration": 174.956,
-          "mime_type": "audio/ogg"
-        },
         "mp3": {
           "url": "http://audio.quran.com:9999/AbdulBaset/Mujawwad/mp3/024035.mp3",
           "duration": 174.99,

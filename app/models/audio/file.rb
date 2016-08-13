@@ -24,7 +24,6 @@ class Audio::File < ActiveRecord::Base
   belongs_to :recitation, class_name: 'Audio::Recitation'
   has_one :reciter, class_name: 'Audio::Reciter', through: :recitation
 
-  scope :ogg, -> { where(format: 'ogg') }
   scope :mp3, -> { where(format: 'mp3') }
 
   def as_json(options = {})
