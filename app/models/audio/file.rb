@@ -24,7 +24,6 @@ class Audio::File < ActiveRecord::Base
   belongs_to :recitation, class_name: 'Audio::Recitation'
   has_one :reciter, class_name: 'Audio::Reciter', through: :recitation
 
-  scope :ogg, -> { where(format: 'ogg') }
   scope :mp3, -> { where(format: 'mp3') }
 
   def as_json(options = {})
@@ -32,6 +31,6 @@ class Audio::File < ActiveRecord::Base
     ayah = ayah_key.split(':')[1]
 
 
-    super(only: [:reciter_id, :format, :duration, :mime_type, :url, :encrypted_segments], include: :reciter)
+    super(only: [:duration, :url, :encrypted_segments], include: :reciter)
   end
 end
