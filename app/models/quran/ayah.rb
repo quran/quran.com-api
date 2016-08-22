@@ -92,7 +92,6 @@ class Quran::Ayah < ActiveRecord::Base
     if audio_option = options[:audio]
       audio =
         Audio::File
-        .preload(:reciter)
         .where(ayah_key: keys, recitation_id: audio_option, is_enabled: true)
         .order(:ayah_key)
         .group_by(&:ayah_key)

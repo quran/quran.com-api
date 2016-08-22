@@ -31,6 +31,6 @@ class Audio::File < ActiveRecord::Base
     ayah = ayah_key.split(':')[1]
 
 
-    super(only: [:duration, :url, :encrypted_segments], include: :reciter)
+    super(only: [:duration, :url, :encrypted_segments])
   end
 end
