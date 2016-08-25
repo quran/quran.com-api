@@ -70,12 +70,13 @@ module Search
                 ayah_result[:ayah][:words].find{|word| word['word_id'] == id.to_i}[:highlight] = word_id_array.first
               end
             end
+            nil
+          else
+            hash
           end
-
-          hash
         end
 
-        ayah_result.merge!(match: match)
+        ayah_result.merge!(match: match.compact)
 
         ayah_result
       end
