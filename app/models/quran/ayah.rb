@@ -92,7 +92,6 @@ class Quran::Ayah < ActiveRecord::Base
     if audio_option = options[:audio]
       audio =
         Audio::File
-        .preload(:reciter)
         .where(ayah_key: keys, recitation_id: audio_option, is_enabled: true)
         .order(:ayah_key)
         .group_by(&:ayah_key)
@@ -109,11 +108,9 @@ class Quran::Ayah < ActiveRecord::Base
     ayahs.map do |ayah|
       ayah_json = ayah.as_json
       ayah_json.merge({
-        content: content_option && content[ayah.ayah_key] ? content[ayah.ayah_key] : [],
-        audio: audio_option ? {
-          ogg: audio[ayah.ayah_key].find{ |file| file['format'] == 'ogg'},
-          mp3: audio[ayah.ayah_key].find{ |file| file['format'] == 'mp3'}
-        } : {},
+        content: content_option && content[ayah.ayah_key] ?
+            content[ayah.ayah_key] : [],
+        audio: audio_option ? audio[ayah.ayah_key].first : {},
       })
     end
   end
