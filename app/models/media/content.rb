@@ -5,4 +5,8 @@ class Media::Content < ActiveRecord::Base
 
   belongs_to :resource, class_name: 'Media::Resource'
   belongs_to :ayah,     class_name: 'Quran::Ayah', foreign_key: 'ayah_key'
+
+  def as_json(options = {})
+    super(include: :resource)
+  end
 end
