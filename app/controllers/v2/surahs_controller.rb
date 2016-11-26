@@ -21,6 +21,16 @@ class V2::SurahsController < ApplicationController
     render json: surah
   end
 
+  api :GET, '/v2/surahs/:id/info', 'Get a details of specific Surah'
+  api_version '2.0'
+  param :id, :number
+  def info
+    #We have Surah info only in English for now. So no need to check locals from headers etc
+    surah_info = Quran::Surah.find(surah_params).get_surah_info_for_language('en')
+
+    render json: surah_info.as_json
+  end
+
 private
 
   def surah_params

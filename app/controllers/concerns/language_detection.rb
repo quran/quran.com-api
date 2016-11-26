@@ -22,7 +22,8 @@ module LanguageDetection
     :portuguese => :pt,
     :russian => :ru,
     :spanish => :es,
-    :swedish => :sv
+    :swedish => :sv,
+    :urdu => :ur
   }
 
   def indices_boost

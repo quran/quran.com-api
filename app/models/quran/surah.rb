@@ -21,6 +21,11 @@ class Quran::Surah < ActiveRecord::Base
   self.primary_key = 'surah_id'
 
   has_many :ayahs, class_name: 'Quran::Ayah', foreign_key: 'surah_id'
+  has_many :surah_infos, class_name: 'Content::SurahInfo'
+
+  def get_surah_info_for_language(language_code)
+    surah_infos.where(language_code: language_code)
+  end
 
   def name
     {

@@ -1,3 +1,14 @@
+# == Schema Information
+#
+# Table name: media.content
+#
+#  resource_id :integer          not null, primary key
+#  ayah_key    :string           primary key
+#  url         :string
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#
+
 class Media::Content < ActiveRecord::Base
   extend Media
 
