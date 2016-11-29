@@ -24,7 +24,9 @@ class Quran::Surah < ActiveRecord::Base
   has_many :surah_infos, class_name: 'Content::SurahInfo'
 
   def get_surah_info_for_language(language_code)
-    surah_infos.where(language_code: language_code)
+    language = Locale::Language.find_by_language_code(language_code) || Locale::Language.find('en')
+    
+    surah_infos.where(language: language)
   end
 
   def name

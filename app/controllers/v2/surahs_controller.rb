@@ -25,8 +25,7 @@ class V2::SurahsController < ApplicationController
   api_version '2.0'
   param :id, :number
   def info
-    #We have Surah info only in English for now. So no need to check locals from headers etc
-    surah_info = Quran::Surah.find(surah_params).get_surah_info_for_language('en')
+    surah_info = Quran::Surah.find(surah_params).get_surah_info_for_language(params[:lang])
 
     render json: surah_info.as_json
   end
