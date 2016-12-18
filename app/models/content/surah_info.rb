@@ -8,8 +8,6 @@
 #  surah_id          :integer
 #  content_source    :text
 #  short_description :text
-#  created_at        :datetime         not null
-#  updated_at        :datetime         not null
 #
 
 class Content::SurahInfo < ActiveRecord::Base

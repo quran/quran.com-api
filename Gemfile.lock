@@ -178,7 +178,7 @@ GEM
     parallel (1.8.0)
     parallel_tests (2.5.0)
       parallel
-    pg (0.18.4)
+    pg (0.19.0)
     posix-spawn (0.3.11)
     prose (0.2.2)
     pry (0.9.12.6)
@@ -344,7 +344,7 @@ DEPENDENCIES
   oj_mimic_json
   parallel
   parallel_tests
-  pg (~> 0.18.2)
+  pg (~> 0.19.0)
   prose
   pry-byebug
   pry-rails
@@ -364,5 +364,8 @@ DEPENDENCIES
   whatlanguage
   zeus
 
+RUBY VERSION
+   ruby 2.3.0p0
+
 BUNDLED WITH
-   1.11.2
+   1.13.6
