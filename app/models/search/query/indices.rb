@@ -4,8 +4,7 @@ module Search
       def index_boost
         if @query.is_arabic?
           {
-            'text-font' => 4,
-            'tafsir' => 1
+            'text-font' => 4
           }
         else
           if @indices_boost
@@ -18,7 +17,7 @@ module Search
 
       def indices
         if @query.is_arabic?
-          ['text-font', 'tafsir']
+          ['text-font']
         else
           ['trans*', 'text-font']
         end
