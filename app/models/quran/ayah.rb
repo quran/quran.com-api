@@ -95,7 +95,7 @@ class Quran::Ayah < ActiveRecord::Base
     if audio_option = options[:audio]
       audio =
         Audio::File
-        .where(ayah_key: keys, recitation_id: audio_option, is_enabled: true)
+        .where(ayah_key: keys, recitation_id: audio_option, is_enabled: true, format: 'mp3')
         .order(:ayah_key)
         .group_by(&:ayah_key)
     end
