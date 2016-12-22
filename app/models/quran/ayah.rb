@@ -113,7 +113,7 @@ class Quran::Ayah < ActiveRecord::Base
       ayah_json.merge({
         content: content_option && content[ayah.ayah_key] ?
             content[ayah.ayah_key] : [],
-        audio: audio_option ? audio[ayah.ayah_key].first : {},
+        audio: audio_option && audio[ayah.ayah_key] ? audio[ayah.ayah_key].first : {},
       })
     end
   end
