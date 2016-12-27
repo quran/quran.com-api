@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
-  apipie
+  scope :api do
+    namespace :v3 do
+    end
+  end
 
   namespace :v2 do
     get 'search' => 'search#index'
