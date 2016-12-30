@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: quran.word_transliteration
+# Table name: word_transliteration
 #
 #  transliteration_id :integer          not null, primary key
 #  word_id            :integer

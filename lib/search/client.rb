@@ -14,7 +14,7 @@ module Search
     include Search::Query::Fields
     include Search::Query::Indices
 
-    include Virtus.model
+   # include Virtus.model
 
     attribute :page, Integer, default: 1
     attribute :size, Integer, default: 20

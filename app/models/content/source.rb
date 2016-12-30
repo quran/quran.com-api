@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: content.source
+# Table name: source
 #
 #  source_id :integer          not null, primary key
 #  name      :text             not null

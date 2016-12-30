@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: quran.text_token
+# Table name: text_token
 #
 #  id        :text             primary key
 #  ayah_key  :text
@@ -12,17 +12,17 @@
 
 # vim: ts=4 sw=4 expandtab
 class Quran::TextToken < ActiveRecord::Base
-    extend Quran
+    #extend Quran
 
     self.table_name = 'text_token'
-    self.primary_key = 'id'
+    #self.primary_key = 'id'
 
     belongs_to :ayah, class_name: 'Quran::Ayah', foreign_key: 'ayah_key'
 
     # scope
     # default_scope { where surah_id: -1 }
 
-    index_name 'text-token'
+   # index_name 'text-token'
 
     def self.import( options = {} )
         Quran::TextToken.connection.cache do

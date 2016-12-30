@@ -1,19 +1,17 @@
 # == Schema Information
 #
-# Table name: quran.text
+# Table name: text
 #
-#  resource_id :integer          not null, primary key
-#  ayah_key    :text             not null, primary key
+#  resource_id :integer          not null
+#  ayah_key    :text             not null
 #  text        :text             not null
 #
 
 # vim: ts=4 sw=4 expandtab
 class Quran::Text < ActiveRecord::Base
-  extend Quran
   # extend Batchelor
 
   self.table_name = 'text'
-  self.primary_keys = :resource_id, :ayah_key
 
   # relationships
   belongs_to :resource, class_name: 'Content::Resource'
@@ -22,14 +20,15 @@ class Quran::Text < ActiveRecord::Base
   # scope
   default_scope { where resource_id: 6 } # limit to Simple Enhanced
 
-  settings YAML.load(
-    File.read(
-      File.expand_path(
-        "#{Rails.root}/config/elasticsearch/settings.yml", __FILE__
-      )
-    )
-  )
+  #settings YAML.load(
+  #  File.read(
+  #    File.expand_path(
+  #      "#{Rails.root}/config/elasticsearch/settings.yml", __FILE__
+  #    )
+  #  )
+  #)
 
+=begin
   mappings _all: { enabled: false } do
     indexes :text, type: 'multi_field' do
       indexes :text,
@@ -50,6 +49,7 @@ class Quran::Text < ActiveRecord::Base
         index_options: 'offsets'
     end
   end
+=end
 
   def as_indexed_json(options = {})
     as_json(include: :resource)

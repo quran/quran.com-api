@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: quran.text_lemma
+# Table name: text_lemma
 #
 #  id        :text             primary key
 #  ayah_key  :text

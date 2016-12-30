@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: audio.reciter
+# Table name: reciter
 #
 #  reciter_id :integer          not null, primary key
 #  path       :text

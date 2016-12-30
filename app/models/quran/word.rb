@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: quran.word
+# Table name: word
 #
 #  word_id         :integer          not null, primary key
 #  ayah_key        :text             not null

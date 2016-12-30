@@ -3,11 +3,6 @@ class V2::SearchController < ApplicationController
 
   before_filter :search_query?
 
-  api :GET, '/v2/search', 'Quran search'
-  api_version '2.0'
-  param :q, String, desc: 'Query string to search', required: true
-  param :page, :number, desc: 'Page number'
-  param :size, :number, desc: 'Size of results per page'
   def index
     search = Search::Client.new(
       query,

@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: content.tafsir
+# Table name: tafsir
 #
 #  tafsir_id   :integer          not null, primary key
 #  resource_id :integer          not null

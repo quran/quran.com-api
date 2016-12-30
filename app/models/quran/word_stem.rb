@@ -1,10 +1,10 @@
 # == Schema Information
 #
-# Table name: quran.word_stem
+# Table name: word_stem
 #
-#  word_id  :integer          not null, primary key
-#  stem_id  :integer          not null, primary key
-#  position :integer          default(1), not null, primary key
+#  word_id  :integer          not null
+#  stem_id  :integer          not null
+#  position :integer          default(1), not null
 #
 
 class Quran::WordStem < ActiveRecord::Base

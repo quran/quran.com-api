@@ -11,7 +11,7 @@
 #
 
 class Media::Resource < ActiveRecord::Base
-  extend Media
+  self.table_name = 'media.resource'
 
   has_many :content
 end

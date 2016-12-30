@@ -1,10 +1,11 @@
 # == Schema Information
 #
-# Table name: content.tafsir_ayah
+# Table name: tafsir_ayah
 #
-#  tafsir_id :integer          not null, primary key
-#  ayah_key  :text             not null, primary key
+#  tafsir_id :integer          not null
+#  ayah_key  :text             not null
 #
+
 class Content::TafsirAyah < ActiveRecord::Base
   extend Content
   # extend Batchelor

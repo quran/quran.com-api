@@ -1,6 +1,10 @@
 Rails.application.routes.draw do
   scope :api do
     namespace :v3 do
+      #TODO: fix the routes
+      resources :reciters
+      resources :verses
+      resources :chapters
     end
   end
 

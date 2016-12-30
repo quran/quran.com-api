@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: quran.lemma
+# Table name: lemma
 #
 #  lemma_id :integer          not null, primary key
 #  value    :string(50)       not null

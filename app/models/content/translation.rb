@@ -1,9 +1,9 @@
 # == Schema Information
 #
-# Table name: content.translation
+# Table name: translation
 #
-#  resource_id :integer          not null, primary key
-#  ayah_key    :text             not null, primary key
+#  resource_id :integer          not null
+#  ayah_key    :text             not null
 #  text        :text             not null
 #
 

@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: audio.recitation
+# Table name: recitation
 #
 #  recitation_id :integer          not null, primary key
 #  reciter_id    :integer          not null

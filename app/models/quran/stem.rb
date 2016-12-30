@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: quran.stem
+# Table name: stem
 #
 #  stem_id :integer          not null, primary key
 #  value   :string(50)       not null

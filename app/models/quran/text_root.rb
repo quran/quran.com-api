@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: quran.text_root
+# Table name: text_root
 #
 #  id        :text             primary key
 #  ayah_key  :text

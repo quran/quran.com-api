@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: quran.surah
+# Table name: surah
 #
 #  surah_id         :integer          not null, primary key
 #  ayat             :integer          not null

@@ -41,6 +41,11 @@ gem 'redis-rails'
 # Ruby encryption
 gem 'gibberish', '2.0.0'
 
+gem 'rack-cors'
+
+# Generate embed code and get metadata of video etc
+gem 'video_info'
+
 # This is for batching the Content::Translation, batches based on the string primary keys
 # gem 'batchelor'
 

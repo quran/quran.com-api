@@ -29,7 +29,7 @@ module Search
                 }
               }
             },
-            aggs: {
+            aggs2: {
               average_score: {
                 avg: {
                   script: '_score'

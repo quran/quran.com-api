@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: content.surah_infos
+# Table name: surah_infos
 #
 #  id                :integer          not null, primary key
 #  language_code     :string

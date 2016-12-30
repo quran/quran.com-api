@@ -1,11 +1,12 @@
 # == Schema Information
 #
-# Table name: content.transliteration
+# Table name: transliteration
 #
-#  resource_id :integer          not null, primary key
-#  ayah_key    :text             not null, primary key
+#  resource_id :integer          not null
+#  ayah_key    :text             not null
 #  text        :text             not null
 #
+
 class Content::Transliteration < ActiveRecord::Base
   extend Content
   # extend Batchelor

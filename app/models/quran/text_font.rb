@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: quran.text_font
+# Table name: text_font
 #
 #  id        :text             primary key
 #  ayah_key  :text
@@ -9,6 +9,7 @@
 #  is_hidden :boolean
 #  text      :text
 #
+
 class Quran::TextFont < ActiveRecord::Base
   extend Quran
   # extend Batchelor
@@ -18,16 +19,17 @@ class Quran::TextFont < ActiveRecord::Base
 
   belongs_to :ayah, class_name: 'Quran::Ayah', foreign_key: 'ayah_key'
 
-  index_name 'text-font'
+  #index_name 'text-font'
 
-  settings YAML.load(
-    File.read(
-      File.expand_path(
-        "#{Rails.root}/config/elasticsearch/settings.yml", __FILE__
-      )
-    )
-  )
+  #settings YAML.load(
+  #  File.read(
+  #    File.expand_path(
+  #      "#{Rails.root}/config/elasticsearch/settings.yml", __FILE__
+  #    )
+  #  )
+  #)
 
+=begin
   mappings _all: { enabled: false } do
     indexes :text, type: 'multi_field' do
       indexes :text, type: 'string', similarity: 'my_bm25',
@@ -56,6 +58,7 @@ class Quran::TextFont < ActiveRecord::Base
                       analyzer: 'quran_font_to_token_to_arabic_ngram'
     end
   end
+=end
 
   def as_indexed_json(options = {})
     as_json.merge(resource: Content::Resource.find(1).as_json(include: :language))

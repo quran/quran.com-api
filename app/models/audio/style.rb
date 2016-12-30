@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: audio.style
+# Table name: style
 #
 #  style_id :integer          not null, primary key
 #  path     :text             not null

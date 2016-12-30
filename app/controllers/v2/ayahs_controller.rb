@@ -2,13 +2,6 @@ class V2::AyahsController < ApplicationController
   before_filter :validate_params
   before_filter :validate_range
 
-  api :GET, '/v2/surahs/:surah_id/ayahs', 'Get Ayahs for a given Surah'
-  api_version '2.0'
-  param :surah_id, :number, required: true
-  param :from, :number, desc: 'From ayah'
-  param :to, :number, desc: 'To ayah'
-  param :content, Array, desc: 'Content request. See /options/content for list'
-  param :audio, :number, desc: 'Reciter request/ See /options/audio for list'
   def index
     response = Rails.cache.fetch(params_hash, expires_in: 12.hours) do
       ayahs = Quran::Ayah
