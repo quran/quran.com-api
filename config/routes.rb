@@ -33,6 +33,10 @@ Rails.application.routes.draw do
 
       resources :surahs, only: [:index, :show], defaults: { format: 'json' } do
         resources :ayahs, only: [:index], defaults: { format: 'json' }
+
+        member do
+          get :info
+        end
       end
 
       resources :options, only: [], defaults: { format: 'json' } do

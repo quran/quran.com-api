@@ -9,7 +9,7 @@ RSpec.describe V2::AyahsController, type: :controller do
         context "getting surah #{id}" do
           before { get :index, { surah_id: id, from: 1, to: 30, content: [19], audio: 8 } }
 
-          it 'returns http success and returns corret number of ayahs' do
+          it 'returns http success and returns correct number of ayahs' do
             expect(response).to have_http_status(:success)
 
             if surah.ayat > 30
