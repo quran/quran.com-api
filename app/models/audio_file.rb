@@ -6,7 +6,6 @@
 #  resource_type       :string
 #  resource_id         :integer
 #  url                 :text
-#  resource_content_id :integer
 #  duration            :integer
 #  segments            :text
 #  encrypted_setments  :text
@@ -19,6 +18,7 @@
 
 class AudioFile < ApplicationRecord
   belongs_to :resource, polymorphic: true
-  belongs_to :resource_content, as: :resource
   belongs_to :recitation
+
+  serialize :segments
 end

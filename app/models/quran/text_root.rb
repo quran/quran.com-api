@@ -12,11 +12,7 @@
 
 # vim: ts=4 sw=4 expandtab
 class Quran::TextRoot < ActiveRecord::Base
-    extend Quran
-    # extend Batchelor
-
     self.table_name = 'text_root'
-    self.primary_key = 'id'
 
     # relationships
     belongs_to :ayah, class_name: 'Quran::Ayah', foreign_key: 'ayah_key'
@@ -24,7 +20,7 @@ class Quran::TextRoot < ActiveRecord::Base
     # scope
     # default_scope { where surah_id: -1 }
 
-    index_name 'text-root'
+    #index_name 'text-root'
 
     def self.import( options = {} )
         Quran::TextRoot.connection.cache do

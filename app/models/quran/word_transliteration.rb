@@ -9,10 +9,7 @@
 #
 
 class Quran::WordTransliteration < ActiveRecord::Base
-  extend Quran
-
   self.table_name = 'word_transliteration'
-  self.primary_key = 'transliteration_id'
 
   belongs_to :word, class_name: 'Quran::Word'
   belongs_to :language, class_name: 'Locale::Language'

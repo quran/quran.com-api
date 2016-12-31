@@ -14,7 +14,6 @@ class Quran::Word < ActiveRecord::Base
   extend Quran
 
   self.table_name = 'word'
-  self.primary_key = 'word_id'
 
   belongs_to :ayah, class_name: 'Quran::Ayah'
   belongs_to :token, class_name: 'Quran::Token'

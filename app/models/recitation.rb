@@ -14,7 +14,6 @@
 
 class Recitation < ApplicationRecord
   belongs_to :reciter
-  belongs_to :resource
   belongs_to :resource_content
-  belongs_to :recition_style
+  belongs_to :recitation_style
 end

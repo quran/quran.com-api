@@ -9,10 +9,9 @@
 #  width       :integer          not null
 #
 
-class Quran::Image < ActiveRecord::Base
-    self.table_name = 'image'
-
-    belongs_to :resource, class_name: 'Content::Resource'
-    belongs_to :ayah, class_name: 'Quran::Ayah'
+class Image < ApplicationRecord
+  self.table_name = 'quran.image'
+  belongs_to :resource_content
+  belongs_to :verse
 end
 

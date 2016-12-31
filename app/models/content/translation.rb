@@ -12,7 +12,7 @@ class Content::Translation < ActiveRecord::Base
   extend Content
 
   self.table_name = 'translation'
-  self.primary_keys = :ayah_key, :resource_id # composite primary key which is a combination of ayah_key & resource_id
+  #self.primary_keys = :ayah_key, :resource_id # composite primary key which is a combination of ayah_key & resource_id
 
   # relationships
   belongs_to :resource, class_name: 'Content::Resource'
@@ -21,6 +21,7 @@ class Content::Translation < ActiveRecord::Base
   scope :ordered,     ->              { joins( 'join quran.ayah on translation.ayah_key = ayah.ayah_key' ).order( 'translation.resource_id asc, ayah.surah_id asc, ayah.ayah_num asc' ) }
   scope :resource_id, ->(id_resource) { ordered.where( resource_id: id_resource ) }
 
+=begin
   settings YAML.load(
     File.read(
       File.expand_path(
@@ -53,6 +54,7 @@ class Content::Translation < ActiveRecord::Base
         index_options: 'offsets'
     end
   end
+=end
 
   def as_indexed_json(options = {})
     as_json(include: { resource: { include: :language } })

@@ -8,10 +8,7 @@
 #
 
 class Quran::Stem < ActiveRecord::Base
-    extend Quran
-
     self.table_name = 'stem'
-    self.primary_key = 'stem_id'
 
     has_many :_word_stem, class_name: 'Quran::WordStem', foreign_key: 'stem_id'
 

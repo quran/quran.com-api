@@ -11,11 +11,7 @@
 #
 
 class Quran::TextFont < ActiveRecord::Base
-  extend Quran
-  # extend Batchelor
-
   self.table_name = 'text_font'
-  self.primary_key = 'id'
 
   belongs_to :ayah, class_name: 'Quran::Ayah', foreign_key: 'ayah_key'
 

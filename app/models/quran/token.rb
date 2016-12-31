@@ -8,8 +8,6 @@
 #
 
 class Quran::Token < ActiveRecord::Base
-    extend Quran
-
     self.table_name = 'token'
     #self.primary_key = 'token_id'
 

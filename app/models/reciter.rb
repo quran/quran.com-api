@@ -9,5 +9,5 @@
 #
 
 class Reciter < ApplicationRecord
-  has_many :translated_names#, as: :resource
+  has_many :translated_names, as: :resource
 end

@@ -20,6 +20,8 @@
 
 class Verse < ApplicationRecord
   belongs_to :chapter, inverse_of: :verses, counter_cache: true
-  has_many :tafsirs, as: :resource
+  has_many :tafsirs
   has_many :media_contents, as: :resource
+  has_many :translations, as: :resource
+  has_many :transliterations, as: :resource
 end

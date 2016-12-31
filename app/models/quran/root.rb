@@ -7,11 +7,7 @@
 #
 
 class Quran::Root < ActiveRecord::Base
-    extend Quran
-    # extend Batchelor
-
     self.table_name = 'root'
-    self.primary_key = 'root_id'
 
     has_many :_word_root, class_name: 'Quran::WordRoot', foreign_key: 'root_id'
 
