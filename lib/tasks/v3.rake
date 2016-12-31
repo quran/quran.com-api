@@ -149,7 +149,6 @@ namespace :v3 do
       transliteration = verse.transliterations.where(language: language, resource_content: resource_content).first_or_create(text: trans.text )
 
       puts "ayah transliterations #{transliteration.id}"
-
     end
 
     # create author and resource content for Bayyinah
@@ -193,7 +192,6 @@ namespace :v3 do
 
       audio = AudioFile.where(resource: verse, recitation: recitation).first_or_create
       audio.segments = file.segments
-      audio.encrypted_segments = file.encrypted_segments
       audio.url = file.url
       audio.duration = file.duration
       audio.mime_type = file.mime_type
@@ -204,7 +202,6 @@ namespace :v3 do
     end
   end
 end
-
 
 # Update content resource for image rename table to image
 
