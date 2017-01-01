@@ -173,8 +173,6 @@ namespace :v3 do
       puts "ayah transliterations #{transliteration.id}"
     end
 
-    ###TODO: TEST CharType, add content source for word translation and transliteration
-
     # create author and resource content for Bayyinah
     media_resource = Media::Resource.first
 

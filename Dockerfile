@@ -37,6 +37,7 @@ echo vm.overcommit_memory = 1 >> /etc/sysctl.conf
 WORKDIR /tmp
 ADD Gemfile Gemfile
 ADD Gemfile.lock Gemfile.lock
+#TODO: don't install development group
 RUN bundle install
 
 # setup the app

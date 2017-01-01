@@ -26,7 +26,7 @@ namespace :translation do
       raise("Invalid file, file should have #{Verse.count} lines")
     end
 
-    Verse.order('id asc').each_with_index do |verse, i|
+    Verse.order('verse_index asc').each_with_index do |verse, i|
       verse.translations.where(language: language, resource_content: resource_content).first_or_create(text: lines[i])
     end
   end

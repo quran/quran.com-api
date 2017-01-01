@@ -38,16 +38,11 @@ gem 'elasticsearch-model'
 gem 'elasticsearch-rails'
 
 gem 'redis-rails'
-# Ruby encryption
-gem 'gibberish', '2.0.0'
 
 gem 'rack-cors'
 
 # Generate embed code and get metadata of video etc
 gem 'video_info'
-
-# This is for batching the Content::Translation, batches based on the string primary keys
-# gem 'batchelor'
 
 # Paging the results
 gem 'kaminari'
@@ -67,8 +62,6 @@ group :development, :test do
 end
 
 group :development do
- # gem 'jazz_hands', github: 'nixme/jazz_hands', branch: 'bring-your-own-debugger'
- # gem 'web-console', '~> 2.0'
   gem 'byebug', platform: :mri
   gem 'annotate'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring

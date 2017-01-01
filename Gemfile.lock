@@ -72,7 +72,6 @@ GEM
       multipart-post (>= 1.2, < 3)
     ffi (1.9.14)
     formatador (0.2.5)
-    gibberish (2.0.0)
     globalid (0.3.7)
       activesupport (>= 4.1.0)
     guard (2.14.0)
@@ -266,7 +265,6 @@ DEPENDENCIES
   elasticsearch-model
   elasticsearch-rails
   execjs
-  gibberish (= 2.0.0)
   guard-rspec
   httparty
   kaminari
