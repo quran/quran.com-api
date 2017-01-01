@@ -14,11 +14,10 @@ namespace :v3 do
     language = Language.find_by_iso_code('en')
     arabic_lang = Language.find_by_iso_code('ar')
 
-
     #Migrate resource, authors
-    author = Author.where(name: 'King Fahd Quran Printing Complex',  url: 'http://www.qurancomplex.org/').first_or_create
+    data_source = DataSource.where(name: 'King Fahd Quran Printing Complex',  url: 'http://www.qurancomplex.org/').first_or_create
     r = Quran::WordFont.first.resource
-    ResourceContent.where(name: r.name, author: author, language: language).first_or_create(author_name: author.name, cardinality_type: r.cardinality_type, resource_type: r.type, sub_type: r.sub_type, description: r.description)
+    ResourceContent.where(name: r.name, data_source: data_source, language: language).first_or_create(cardinality_type: r.cardinality_type, resource_type: r.type, sub_type: r.sub_type, description: r.description)
 
     Content::Resource.find_each do |content|
       author = Author.where(name: content.author.name, url: content.author.url).first_or_create if content.author
@@ -26,6 +25,10 @@ namespace :v3 do
       resource_content.description = content.description
       resource_content.language = Language.find_by_iso_code(content.language_code)
       resource_content.author_name = author&.name
+      if content.source
+        data_source = DataSource.where(name: content.source.name,  url: content.source.url).first_or_create
+        resource_content.data_source = data_source
+      end
       resource_content.save
     end
 
@@ -46,10 +49,23 @@ namespace :v3 do
       chapter.translated_names.where(language: Language.find_by_iso_code('en')).first_or_create.update_attributes name: surah.name_english
     end
 
+    #CharType
+    Quran::CharType.find_each do |char|
+      char_type = CharType.where(name: char.name).first_or_create
+
+      if char.parent
+        char_type.parent = CharType.where(name: char.parent.name).first_or_create
+      end
+
+      char_type.description = char.description
+      char_type.save
+    end
+
     #Chapter info
-    author = Author.where(name: "Tafhim al-Qur'an", url: "http://www.tafheem.net/").first_or_create
-    resource_content =  ResourceContent.where(name: "Chapter Info", author: author, language: language).first_or_create(author_name: author.name, cardinality_type: '1_chapter_info', resource_type: 'Quran', sub_type: 'Chapter')
-    resource_content.approved = true
+    source = DataSource.where(name: "Tafhim al-Qur'an", url: "http://www.tafheem.net/").first_or_create
+    author = Author.where(name: "Sayyid Abul Ala Maududi").first_or_create
+    resource_content =  ResourceContent.where(name: "Chapter Info", author: author, language: language).first_or_create(author_name: author.name, cardinality_type: ResourceContent::CardinalityType::OneChapter, resource_type: ResourceContent::ResourceType::Content, sub_type: 'Chapter info')
+    resource_content.data_source = source
     resource_content.description = "Sayyid Abul Ala Maududi - Tafhim al-Qur'an - The Meaning of the Quran"
     resource_content.save
 
@@ -65,6 +81,7 @@ namespace :v3 do
       chapter_info.save
     end
 
+    sajdah_number = 1
     #Migrate verses
     Quran::Ayah.order("surah_id asc, ayah_num asc").each do |ayah|
       verse = Verse.find_or_initialize_by(verse_key: ayah.ayah_key)
@@ -75,24 +92,26 @@ namespace :v3 do
       verse.hizb_number = ayah.hizb_num
       verse.rub_number = ayah.rub_num
       verse.sajdah = ayah.sajdah
+      if ayah.sajdah.present?
+        verse.sajdah_number = sajdah_number
+        sajdah_number += 1
+      end
       verse.verse_number = ayah.ayah_num
-
+      verse.verse_index = ayah.ayah_index
       verse.text_simple = ayah.text
       verse.text_madani = Quran::Text.find_by_ayah_key(ayah.ayah_key).text
       verse.save
       puts "verse #{verse.id}"
     end
 
+    source = DataSource.where(name: 'Quran.com').first
+    word_trans_resource = ResourceContent.where(data_source: source, language: language, cardinality_type: ResourceContent::CardinalityType::OneWord, resource_type: 'content', sub_type: 'translation').first_or_create()
+    word_transliteration_resource = ResourceContent.where(data_source: source, language: language, cardinality_type: ResourceContent::CardinalityType::OneWord, resource_type: 'content', sub_type: 'transliteration').first_or_create()
+
     Verse.order('verse_number asc').each do |verse|
       Quran::WordFont.where(ayah_key: verse.verse_key).order('position asc').each do |word_font|
         word = Word.where(verse_id: verse.id, position: word_font.position).first_or_initialize
         char_type = CharType.where(name: word_font.char_type.name).first_or_create
-
-        if word_font.char_type.parent
-          char_type.parent = CharType.where(name: word_font.char_type.parent.name).first_or_create
-        end
-        char_type.description = word_font.char_type.description
-        char_type.save
 
         word.page_number = word_font.page_num
         word.line_number = word_font.line_num
@@ -102,25 +121,30 @@ namespace :v3 do
         word.verse_key = verse.verse_key
         word.save
         puts "word #{word.id}"
+
         if word_font.word
           if token = word_font.word.token
             word.text_madani =token.value
             word.text_simple =token.clean
           end
 
-          word.translations.where(language: language).first_or_create(text: word_font.word.translation)
-          word.transliterations.where(language: language).first_or_create(text: word_font.word.transliteration)
+          word.translations.where(language: language, resource_content: word_trans_resource).first_or_create(text: word_font.word.translation)
+          word.transliterations.where(language: language, resource_content: word_transliteration_resource).first_or_create(text: word_font.word.transliteration)
         end
+        word.save
       end
     end
 
     #Tafsir
-    Content::TafsirAyah.order('').each do |tafsir|
+    Content::TafsirAyah.includes(:tafsir).order('').each do |tafsir|
       resource = tafsir.tafsir.resource
       language = Language.find_by_iso_code(resource.language_code)
       verse = Verse.find_by_verse_key(tafsir.ayah_key)
+      data_source = DataSource.where(name: resource.source.name, url: resource.source.url).first_or_create if resource.source
 
       resource_content = ResourceContent.where(resource_type: resource.type, sub_type: resource.sub_type, author_name: resource.author&.name, cardinality_type: resource.cardinality_type).first
+      resource_content.data_source = data_source
+      resource_content.save
       taf = verse.tafsirs.where(language: language, resource_content: resource_content).first_or_create(text: tafsir.tafsir.text )
       puts "ayah tafsir #{taf.id}"
     end
@@ -149,11 +173,13 @@ namespace :v3 do
       puts "ayah transliterations #{transliteration.id}"
     end
 
+    ###TODO: TEST CharType, add content source for word translation and transliteration
+
     # create author and resource content for Bayyinah
     media_resource = Media::Resource.first
 
     author = Author.where(name: media_resource.name,  url: media_resource.url).first_or_create
-    resource_content = ResourceContent.where(author: author, language: language).first_or_create(author_name: author.name, cardinality_type: '1_ayah_video', approved: true)
+    resource_content = ResourceContent.where(author: author, language: language, resource_type: 'media', sub_type: 'video').first_or_create(author_name: author.name, cardinality_type: ResourceContent::CardinalityType::OneVerse, approved: true)
     #Migrate media content
     Media::Content.all.each do |media|
       verse = Verse.find_by_verse_key(media.ayah_key)
@@ -174,7 +200,7 @@ namespace :v3 do
     end
 
     Audio::Recitation.find_each do |r|
-      resource_content = ResourceContent.where(language: arabic_lang, author_name: r.reciter.english).first_or_create(cardinality_type: '1_ayah_audio')
+      resource_content = ResourceContent.where(language: arabic_lang, author_name: r.reciter.english, sub_type: 'audio', resource_type: 'media').first_or_create(cardinality_type: ResourceContent::CardinalityType::OneVerse)
       style = RecitationStyle.find_by_style(r.style.english) if r.style
       Recitation.where(resource_content: resource_content, reciter:  Reciter.find_by_name(r.reciter.english), recitation_style: style).first_or_create
 

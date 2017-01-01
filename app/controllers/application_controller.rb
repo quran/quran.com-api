@@ -6,8 +6,11 @@ class ApplicationController < ActionController::API
   rescue_from APIValidation, with: :throw_the_error
 
   private
-
   def throw_the_error(error)
     render :json => {:error => error.message}, :status => :not_found
+  end
+
+  def detect_language
+
   end
 end

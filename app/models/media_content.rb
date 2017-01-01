@@ -25,7 +25,6 @@ class MediaContent < ApplicationRecord
 
   protected
   def update_embed_code_and_metadata
-    ``
     video = VideoInfo.new(self.url.to_s, referer: 'https://quran.com/')
 
     if video.available?

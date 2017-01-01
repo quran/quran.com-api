@@ -15,5 +15,5 @@
 #
 
 class ChapterSerializer < ActiveModel::Serializer
-  attributes :id, :bismillah_pre, :revelation_order, :revelation_place, :name_complex, :name_simple, :verses_count
+  attributes :id, :bismillah_pre, :revelation_order, :revelation_place, :name_complex, :name_arabic, :verses_count
 end

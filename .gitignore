@@ -25,3 +25,5 @@ dump.rdb
 passenger.*
 .idea/*
 .DS_Store
+.ruby-version
+.ruby-gemset

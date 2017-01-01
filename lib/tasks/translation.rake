@@ -6,13 +6,14 @@ namespace :translation do
     author_name = "AbdolMohammad Ayati"
     localized_name="Абдулмуҳаммади Оятӣ"
     language = Language.find(160) #Tajik
+    data_source = DataSource.where(name: 'Tanzil Project').first_or_create
 
     author = Author.create(name: author_name)
     if localized_name
       author.translated_names.where(language: language).first_or_create(name: localized_name)
     end
 
-    resource_content = ResourceContent.where(cardinality_type: '1_ayah', sub_type: 'translation', language: language, author: author, author_name: author.name).first_or_create
+    resource_content = ResourceContent.where(data_source: data_source, cardinality_type: ResourceContent::CardinalityType::OneVerse, sub_type: ResourceContent::SubType::Translation, resource_type: ResourceContent::ResourceType::Content, language: language, author: author, author_name: author.name).first_or_create
     resource_content.approved = false #varify and approve after importing
     resource_content.save
 

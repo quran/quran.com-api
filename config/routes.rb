@@ -1,13 +1,4 @@
 Rails.application.routes.draw do
-  scope :api do
-    namespace :v3 do
-      #TODO: fix the routes
-      resources :reciters
-      resources :verses
-      resources :chapters
-    end
-  end
-
   namespace :v2 do
     get 'search' => 'search#index'
     get 'suggest' => 'search#suggest'
@@ -34,6 +25,18 @@ Rails.application.routes.draw do
   end
 
   scope :api do
+    namespace :v3 do
+      resources :chapters, only: [:index, :show], defaults: { format: 'json' } do
+        member do
+          get :info
+        end
+
+        resources :verses, only: [:index, :show], defaults: { format: 'json' }
+      end
+
+      resources :reciters
+    end
+
     namespace :v2 do
       get 'search' => 'search#index'
       get 'suggest' => 'search#suggest'

@@ -14,6 +14,30 @@
 #
 
 class ResourceContent < ApplicationRecord
+  module CardinalityType
+    OneVerse = '1_ayah'
+    OneWord = '1_word'
+    NVerse = 'n_ayah'
+    OneChapter = '1_chapter'
+  end
+
+  module ResourceType
+    Audio = 'audio'
+    Content = 'content'
+    Quran = 'quran'
+    Media = 'media'
+  end
+
+  module SubType
+    Translation = 'translation'
+    Tafsir = 'tafsir'
+    Transliteration = 'transliteration'
+    Font = 'font'
+    Image = 'image'
+    Info = 'info'
+  end
+
   belongs_to :author
   belongs_to :language
+  belongs_to :data_source
 end

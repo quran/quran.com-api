@@ -1,9 +1,13 @@
 namespace :one_time do
   task import_malayalam_data: :environment do
     language = Language.find_by_name('Malayalam')
-    author = Author.where(name: "Tafhim al-Qur'an", url: "http://www.tafheem.net/").first_or_create
-    resource_content =  ResourceContent.where(name: "Chapter Info", author: author, language: language).first_or_create(author_name: author.name, cardinality_type: '1_chapter_info', resource_type: 'Quran', sub_type: 'Chapter')
+
+    source = DataSource.where(name: "Tafhim al-Qur'an", url: "http://www.tafheem.net/").first_or_create
+    author = Author.where(name: "Sayyid Abul Ala Maududi").first_or_create
+    resource_content =  ResourceContent.where(name: "Chapter Info", author: author, language: language).first_or_create(author_name: author.name, cardinality_type: ResourceContent::CardinalityType::OneChapter, resource_type: ResourceContent::ResourceType::Content, sub_type: 'info')
+    resource_content.data_source = source
     resource_content.description = "Sayyid Abul Ala Maududi - Tafhim al-Qur'an - The Meaning of the Quran"
+    resource_content.save
 
     chapter_names = JSON.parse(HTTParty.get('http://www.thafheem.net/assets/suranames.json').body)
     chapter_names.each do |item|
@@ -24,15 +28,11 @@ namespace :one_time do
       chapter_info.save
     end
 
-
     response = HTTParty.get('http://www.thafheem.net/thaf-api/rootwords/0')
-
 
     #word translitration
     word_trans = HTTParty.get('http://www.thafheem.net/thaf-api/ayawords/1/1-7/E')
-
   end
-
 end
 
 
