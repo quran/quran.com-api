@@ -50,7 +50,7 @@ gem 'kaminari'
 # This is to run the rake task for importing in parallel
 gem 'parallel'
 # Will provide a progress bar as the import happens
-gem 'ruby-progressbar'
+gem "sentry-raven"
 
 group :development, :test do
   gem 'pry-byebug'
@@ -62,12 +62,15 @@ group :development, :test do
 end
 
 group :development do
+  gem 'ruby-progressbar'
   gem 'byebug', platform: :mri
   gem 'annotate'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'spring-commands-rspec'
   gem 'spring-watcher-listen', '~> 2.0.0'
+  gem 'mechanize'
+  gem 'listen'
 end
 
 #gem 'actionpack-page_caching'
