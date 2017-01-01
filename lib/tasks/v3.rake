@@ -29,8 +29,6 @@ namespace :v3 do
       resource_content.save
     end
 
-    ResourceContent.update_all approved: true
-
     #Migrate chapters
     Quran::Surah.order('surah_id asc').each do |surah|
       chapter = Chapter.find_or_initialize_by(chapter_number: surah.id)
@@ -50,7 +48,7 @@ namespace :v3 do
 
     #Chapter info
     author = Author.where(name: "Tafhim al-Qur'an", url: "http://www.tafheem.net/").first_or_create
-    resource_content =  ResourceContent.where(name: "Chapter Info", author: author, language: language).first_or_create(author_name: author.name, cardinality_type: 'chapter-info', resource_type: 'Quran', sub_type: 'Chapter')
+    resource_content =  ResourceContent.where(name: "Chapter Info", author: author, language: language).first_or_create(author_name: author.name, cardinality_type: '1_chapter_info', resource_type: 'Quran', sub_type: 'Chapter')
     resource_content.approved = true
     resource_content.description = "Sayyid Abul Ala Maududi - Tafhim al-Qur'an - The Meaning of the Quran"
     resource_content.save
