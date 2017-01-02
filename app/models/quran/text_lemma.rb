@@ -21,7 +21,7 @@ class Quran::TextLemma < ActiveRecord::Base
     # default_scope { where surah_id: -1 }
 
     # elasticsearch index name
-    index_name "text-lemma"
+    #index_name "text-lemma"
 
     def self.import( options = {} )
         Quran::TextLemma.connection.cache do

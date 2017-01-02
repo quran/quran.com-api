@@ -28,10 +28,21 @@ namespace :one_time do
       chapter_info.save
     end
 
-    response = HTTParty.get('http://www.thafheem.net/thaf-api/rootwords/0')
+    resource_content =  ResourceContent.where(name: "Word translation", author: author, language: language).first_or_create(author_name: author.name, cardinality_type: ResourceContent::CardinalityType::OneWord, resource_type: ResourceContent::ResourceType::Content, sub_type: ResourceContent::SubType::Translation)
+    resource_content.data_source = source
+    resource_content.description = "Word-by-word translation in Malayalam language by Sayyid Abul Ala Maududi"
+    resource_content.save
 
-    #word translitration
-    word_trans = HTTParty.get('http://www.thafheem.net/thaf-api/ayawords/1/1-7/M')
+    #word = CharType.where(name: 'word').first
+    #word translations
+    #Chapter.order('chapter_number asc').each do |chapter|
+    #  word_trans = JSON.parse(HTTParty.get("http://www.thafheem.net/thaf-api/ayawords/1/1-#{chapter.verses_count}/M").to_json)
+
+    #  word_trans.each do |word_m|
+
+
+    #  end
+    #end
   end
 
   task import_urdu_data: :environment do
@@ -46,6 +57,7 @@ namespace :one_time do
 
     chapter_names = JSON.parse(HTTParty.get('http://www.thafheem.net/assets/suranames.json').body)
     chapter_names.each do |item|
+      begin
       chapter = Chapter.find(item['SuraID'])
 
       chapter.translated_names.where(language: language, name: item['MSuraName']).first_or_create
@@ -61,6 +73,10 @@ namespace :one_time do
       chapter_info.source = "www.thafheem.net"
       chapter_info.resource_content = resource_content
       chapter_info.save
+        puts "done #{chapter.id}"
+      rescue Exception => e
+        binding.pry
+        end
     end
 
     response = HTTParty.get('http://www.thafheem.net/thaf-api/rootwords/0')
