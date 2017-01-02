@@ -12,6 +12,6 @@
 #  updated_at          :datetime         not null
 #
 
-class LanguageSerializer < ActiveModel::Serializer
-  attributes :id, :name, :iso_code, :native_name, :direction, :es_analyzer_default
+class V3::LanguageSerializer <  V3::ApplicationSerializer
+  attributes :id, :name, :iso_code, :native_name, :direction
 end

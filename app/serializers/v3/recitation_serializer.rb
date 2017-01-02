@@ -1,20 +1,19 @@
 # == Schema Information
 #
-# Table name: translations
+# Table name: recitations
 #
 #  id                  :integer          not null, primary key
-#  language_id         :integer
-#  text                :string
+#  reciter_id          :integer
 #  resource_content_id :integer
-#  resource_type       :string
-#  resource_id         :integer
+#  recitation_style_id :integer
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
 #
 
-class TranslationSerializer < ActiveModel::Serializer
-  attributes :id, :text
+class V3::RecitationSerializer < V3::ApplicationSerializer
+  attributes :id
+  has_one :reciter
   has_one :resource
-  has_one :language
   has_one :resource_content
+  has_one :recition_style
 end

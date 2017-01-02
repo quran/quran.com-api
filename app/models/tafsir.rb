@@ -3,8 +3,7 @@
 # Table name: tafsirs
 #
 #  id                  :integer          not null, primary key
-#  resource_type       :string
-#  resource_id         :integer
+#  verse_id            :integer
 #  language_id         :integer
 #  text                :text
 #  resource_content_id :integer

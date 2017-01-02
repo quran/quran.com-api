@@ -18,7 +18,7 @@
 #  updated_at   :datetime         not null
 #
 
-class WordSerializer < ActiveModel::Serializer
+class V3::WordSerializer < V3::ApplicationSerializer
   attributes :id, :position, :text_clean, :verse_key, :page_number, :line_number, :code_dec, :code_hex
   has_one :verse
   has_one :char_type

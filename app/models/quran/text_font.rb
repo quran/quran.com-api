@@ -2,7 +2,7 @@
 #
 # Table name: text_font
 #
-#  id        :text             primary key
+#  id        :text
 #  ayah_key  :text
 #  surah_id  :integer
 #  ayah_num  :integer

@@ -2,8 +2,8 @@
 #
 # Table name: media.content
 #
-#  resource_id :integer          not null, primary key
-#  ayah_key    :string           primary key
+#  resource_id :integer          not null
+#  ayah_key    :string
 #  url         :string
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null

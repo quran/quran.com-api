@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: image
+# Table name: quran.image
 #
 #  resource_id :integer          not null
 #  ayah_key    :text             not null

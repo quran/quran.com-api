@@ -10,7 +10,7 @@
 #  updated_at  :datetime         not null
 #
 
-class CharTypeSerializer < ActiveModel::Serializer
+class V3::CharTypeSerializer <  V3::ApplicationSerializer
   attributes :id, :name, :description
   has_one :parent
 end

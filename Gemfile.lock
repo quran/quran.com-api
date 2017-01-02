@@ -49,10 +49,16 @@ GEM
     arel (7.1.4)
     ast (2.3.0)
     builder (3.2.2)
+    bullet (5.5.0)
+      activesupport (>= 3.0.0)
+      uniform_notifier (~> 1.10.0)
     byebug (9.0.6)
+    callsite (0.0.11)
     coderay (1.1.1)
     concurrent-ruby (1.0.4)
     diff-lcs (1.2.5)
+    domain_name (0.5.20161129)
+      unf (>= 0.0.5, < 1.0.0)
     elasticsearch (5.0.0)
       elasticsearch-api (= 5.0.0)
       elasticsearch-transport (= 5.0.0)
@@ -89,6 +95,8 @@ GEM
       guard-compat (~> 1.1)
       rspec (>= 2.99.0, < 4.0)
     hashie (3.4.6)
+    http-cookie (1.0.3)
+      domain_name (~> 0.5)
     httparty (0.14.0)
       multi_xml (>= 0.5.2)
     i18n (0.7.0)
@@ -109,6 +117,19 @@ GEM
     lumberjack (1.0.10)
     mail (2.6.4)
       mime-types (>= 1.16, < 4)
+    mechanize (2.7.5)
+      domain_name (~> 0.5, >= 0.5.1)
+      http-cookie (~> 1.0)
+      mime-types (>= 1.17.2)
+      net-http-digest_auth (~> 1.1, >= 1.1.1)
+      net-http-persistent (~> 2.5, >= 2.5.2)
+      nokogiri (~> 1.6)
+      ntlm-http (~> 0.1, >= 0.1.1)
+      webrobots (>= 0.0.9, < 0.2)
+    meta_request (0.4.0)
+      callsite (~> 0.0, >= 0.0.11)
+      rack-contrib (~> 1.1)
+      railties (>= 3.0.0, < 5.1.0)
     method_source (0.8.2)
     mime-types (3.1)
       mime-types-data (~> 3.2015)
@@ -119,6 +140,8 @@ GEM
     multi_xml (0.6.0)
     multipart-post (2.0.0)
     nenv (0.3.0)
+    net-http-digest_auth (1.4)
+    net-http-persistent (2.9.4)
     net_http_timeout_errors (0.3.0)
     nio4r (1.2.1)
     nokogiri (1.7.0)
@@ -126,6 +149,7 @@ GEM
     notiffany (0.1.1)
       nenv (~> 0.1)
       shellany (~> 0.0)
+    ntlm-http (0.1.1)
     oga (2.7)
       ast
       ruby-ll (~> 2.1)
@@ -146,6 +170,8 @@ GEM
     pry-rails (0.3.4)
       pry (>= 0.9.10)
     rack (2.0.1)
+    rack-contrib (1.2.0)
+      rack (>= 0.9.1)
     rack-cors (0.4.0)
     rack-test (0.6.3)
       rack (>= 1.0)
@@ -220,6 +246,8 @@ GEM
       ast
     ruby-progressbar (1.8.1)
     ruby_dep (1.5.0)
+    sentry-raven (2.2.0)
+      faraday (>= 0.7.6, < 1.0)
     shellany (0.0.1)
     slop (3.6.0)
     spring (2.0.0)
@@ -243,10 +271,15 @@ GEM
     thread_safe (0.3.5)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
+    unf (0.1.4)
+      unf_ext
+    unf_ext (0.0.7.2)
+    uniform_notifier (1.10.0)
     video_info (2.6.1)
       iso8601 (~> 0.9)
       net_http_timeout_errors (~> 0.3.0)
       oga (~> 2.2)
+    webrobots (0.1.2)
     websocket-driver (0.6.4)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.2)
@@ -260,6 +293,7 @@ PLATFORMS
 DEPENDENCIES
   active_model_serializers (~> 0.10.0)
   annotate
+  bullet
   byebug
   elasticsearch
   elasticsearch-model
@@ -268,6 +302,9 @@ DEPENDENCIES
   guard-rspec
   httparty
   kaminari
+  listen
+  mechanize
+  meta_request
   oj
   oj_mimic_json
   parallel
@@ -281,6 +318,7 @@ DEPENDENCIES
   redis-rails
   rspec-rails
   ruby-progressbar
+  sentry-raven
   spring
   spring-commands-rspec
   spring-watcher-listen (~> 2.0.0)

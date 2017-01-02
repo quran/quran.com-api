@@ -7,9 +7,10 @@
 #  revelation_order :integer
 #  revelation_place :string
 #  name_complex     :string
-#  name_simple      :string
-#  page_number      :integer
+#  name_arabic      :string
+#  pages            :string
 #  verses_count     :integer
+#  chapter_number   :integer
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #
@@ -19,10 +20,4 @@ class Chapter < ApplicationRecord
   has_many :translated_names, as: :resource
 
   serialize :pages
-
-  class << self
-    def import_from_v2
-
-    end
-  end
 end

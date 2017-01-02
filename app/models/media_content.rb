@@ -6,6 +6,7 @@
 #  resource_type       :string
 #  resource_id         :integer
 #  url                 :text
+#  duration            :string
 #  embed_text          :text
 #  provider            :string
 #  language_id         :integer

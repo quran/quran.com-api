@@ -1,21 +1,19 @@
 # == Schema Information
 #
-# Table name: chapter_infos
+# Table name: tafsirs
 #
 #  id                  :integer          not null, primary key
-#  chapter_id          :integer
-#  text                :text
-#  source              :string
-#  short_text          :text
+#  verse_id            :integer
 #  language_id         :integer
+#  text                :text
 #  resource_content_id :integer
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
 #
 
-class ChapterInfoSerializer < ActiveModel::Serializer
-  attributes :id, :text, :source, :short_text
-  has_one :chapter
+class V3::TafsirSerializer < V3::ApplicationSerializer
+  attributes :id, :text
+  has_one :resource
   has_one :language
   has_one :resource_content
 end

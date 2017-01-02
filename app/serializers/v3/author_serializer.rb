@@ -1,13 +1,14 @@
 # == Schema Information
 #
-# Table name: reciters
+# Table name: authors
 #
 #  id         :integer          not null, primary key
 #  name       :string
+#  url        :string
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
 
-class ReciterSerializer < ActiveModel::Serializer
-  attributes :id, :name
+class V3::AuthorSerializer <  V3::ApplicationSerializer
+  attributes :id, :name, :url
 end

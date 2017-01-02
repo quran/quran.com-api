@@ -20,8 +20,7 @@
 #  updated_at    :datetime         not null
 #
 
-require 'rails_helper'
-
-RSpec.describe Verse, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+class V3::VerseSerializer < V3::ApplicationSerializer
+  attributes :id, :verse_number, :verse_key, :text_madani, :text_indopak, :text_simple, :juz_num, :hizb_num, :rub_num, :sajdah, :page_number
+  has_one :chapter
 end

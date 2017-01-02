@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: tafsirs
+# Table name: transliterations
 #
 #  id                  :integer          not null, primary key
 #  resource_type       :string
@@ -12,7 +12,7 @@
 #  updated_at          :datetime         not null
 #
 
-class TafsirSerializer < ActiveModel::Serializer
+class V3::TransliterationSerializer < V3::ApplicationSerializer
   attributes :id, :text
   has_one :resource
   has_one :language

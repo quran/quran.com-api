@@ -3,19 +3,15 @@ class V3::ChaptersController < ApplicationController
 
   # GET /chapters
   def index
-    chapters = Chapter.all
+    chapters = Chapter.includes(:translated_names).all
 
-    render json: ChapterSerializer.new(chapters.first).to_json
+    render json: chapters
   end
 
   # GET /chapters/1
   def show
-    render json: @chapter
-  end
+    chapter = Chapter.find(params[:id])
 
-  private
-  # Only allow a trusted parameter "white list" through.
-  def chapter_params
-    params.require(:chapter).permit(:bismillah_pre, :revelation_order, :revelation_place, :name_complex, :name_simple, :verses_count)
+    render json: chapter
   end
 end

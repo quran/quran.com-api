@@ -1,20 +1,21 @@
 # == Schema Information
 #
-# Table name: foot_notes
+# Table name: chapter_infos
 #
 #  id                  :integer          not null, primary key
-#  resource_type       :string
-#  resource_id         :integer
+#  chapter_id          :integer
 #  text                :text
+#  source              :string
+#  short_text          :text
 #  language_id         :integer
 #  resource_content_id :integer
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
 #
 
-class FootNoteSerializer < ActiveModel::Serializer
-  attributes :id, :text
-  has_one :resource
+class V3::ChapterInfoSerializer <  V3::ApplicationSerializer
+  attributes :id, :text, :source, :short_text
+  has_one :chapter
   has_one :language
   has_one :resource_content
 end

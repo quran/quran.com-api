@@ -11,7 +11,10 @@
 #  updated_at    :datetime         not null
 #
 
-class TranslatedNameSerializer < ActiveModel::Serializer
-  attributes :id, :resource, :name
-  has_one :language
+class V3::TranslatedNameSerializer < V3::ApplicationSerializer
+  attributes :language, :name
+
+  def language
+    object.language.name.downcase
+  end
 end

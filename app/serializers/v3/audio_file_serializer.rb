@@ -15,8 +15,9 @@
 #  updated_at    :datetime         not null
 #
 
-require 'rails_helper'
-
-RSpec.describe AudioFile, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+class V3::AudioFileSerializer <  V3::ApplicationSerializer
+  attributes :id, :url, :duration, :setments, :format
+  has_one :resource
+  has_one :resource_content
+  has_one :recitation
 end

@@ -1,21 +1,19 @@
 # == Schema Information
 #
-# Table name: media_contents
+# Table name: translations
 #
 #  id                  :integer          not null, primary key
+#  language_id         :integer
+#  text                :string
+#  resource_content_id :integer
 #  resource_type       :string
 #  resource_id         :integer
-#  url                 :text
-#  embed_text          :text
-#  provider            :string
-#  language_id         :integer
-#  resource_content_id :integer
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
 #
 
-class MediaContentSerializer < ActiveModel::Serializer
-  attributes :id, :url, :embed_text, :provider
+class V3::TranslationSerializer < V3::ApplicationSerializer
+  attributes :id, :text
   has_one :resource
   has_one :language
   has_one :resource_content

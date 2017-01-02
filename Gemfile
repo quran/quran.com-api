@@ -71,6 +71,8 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'mechanize'
   gem 'listen'
+  gem 'bullet'
+  gem 'meta_request'
 end
 
 #gem 'actionpack-page_caching'

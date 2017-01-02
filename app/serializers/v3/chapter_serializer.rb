@@ -15,8 +15,10 @@
 #  updated_at       :datetime         not null
 #
 
-require 'rails_helper'
+class V3::ChapterSerializer < V3::ApplicationSerializer
+  attributes :chapter_number, :bismillah_pre, :revelation_order, :revelation_place, :name_complex, :name_arabic, :verses_count, :pages
 
-RSpec.describe Chapter, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  has_many :translated_names do
+    object.translated_names.where(language: scope)
+  end
 end

@@ -8,6 +8,6 @@
 #  updated_at :datetime         not null
 #
 
-class RecitationStyleSerializer < ActiveModel::Serializer
+class V3::RecitationStyleSerializer < V3::ApplicationSerializer
   attributes :id, :style
 end

@@ -31,7 +31,7 @@ namespace :one_time do
     response = HTTParty.get('http://www.thafheem.net/thaf-api/rootwords/0')
 
     #word translitration
-    word_trans = HTTParty.get('http://www.thafheem.net/thaf-api/ayawords/1/1-7/E')
+    word_trans = HTTParty.get('http://www.thafheem.net/thaf-api/ayawords/1/1-7/M')
   end
 
   task import_urdu_data: :environment do

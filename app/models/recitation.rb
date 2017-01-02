@@ -4,8 +4,6 @@
 #
 #  id                  :integer          not null, primary key
 #  reciter_id          :integer
-#  resource_type       :string
-#  resource_id         :integer
 #  resource_content_id :integer
 #  recitation_style_id :integer
 #  created_at          :datetime         not null
