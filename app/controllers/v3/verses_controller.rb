@@ -1,11 +1,10 @@
-class VersesController < ApplicationController
-  before_action :set_verse, only: [:show, :update, :destroy]
-
+class V3::VersesController < ApplicationController
   # GET /verses
   def index
-    @verses = Verse.all
+    chapter = Chapter.find(params[:chapter_id])
+    verses = chapter.verses.includes(:words).page(params[:page]).per(10)
 
-    render json: @verses
+    render json: verses,  meta: pagination_dict(verses)
   end
 
   # GET /verses/1
@@ -13,39 +12,15 @@ class VersesController < ApplicationController
     render json: @verse
   end
 
-  # POST /verses
-  def create
-    @verse = Verse.new(verse_params)
-
-    if @verse.save
-      render json: @verse, status: :created, location: @verse
-    else
-      render json: @verse.errors, status: :unprocessable_entity
-    end
-  end
-
-  # PATCH/PUT /verses/1
-  def update
-    if @verse.update(verse_params)
-      render json: @verse
-    else
-      render json: @verse.errors, status: :unprocessable_entity
-    end
-  end
-
-  # DELETE /verses/1
-  def destroy
-    @verse.destroy
-  end
-
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_verse
-      @verse = Verse.find(params[:id])
-    end
 
-    # Only allow a trusted parameter "white list" through.
-    def verse_params
-      params.require(:verse).permit(:chapter_id, :verse_number, :verse_key, :text_madani, :text_indopak, :text_simple, :juz_num, :hizb_num, :rub_num, :sajdah, :page_number)
-    end
+  def pagination_dict(object)
+    {
+        current_page: object.current_page,
+        next_page: object.next_page,
+        prev_page: object.prev_page,
+        total_pages: object.total_pages,
+        total_count: object.total_count
+    }
+  end
 end

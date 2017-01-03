@@ -7,6 +7,7 @@
 #  resource_id         :integer
 #  text                :text
 #  language_id         :integer
+#  language_name       :string
 #  resource_content_id :integer
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null

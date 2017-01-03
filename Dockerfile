@@ -37,7 +37,7 @@ echo vm.overcommit_memory = 1 >> /etc/sysctl.conf
 WORKDIR /tmp
 ADD Gemfile Gemfile
 ADD Gemfile.lock Gemfile.lock
-RUN bundle install --without test development
+RUN bundle install --without development test
 
 # setup the app
 RUN mkdir /home/app/quran

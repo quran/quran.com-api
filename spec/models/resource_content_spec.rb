@@ -13,6 +13,7 @@
 #  description      :text
 #  cardinality_type :string
 #  language_id      :integer
+#  language_name    :string
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #

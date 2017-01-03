@@ -74,7 +74,7 @@ GEM
       multi_json
     erubis (2.7.0)
     execjs (2.7.0)
-    faraday (0.10.0)
+    faraday (0.10.1)
       multipart-post (>= 1.2, < 3)
     ffi (1.9.14)
     formatador (0.2.5)
@@ -156,8 +156,11 @@ GEM
     oj (2.18.0)
     oj_mimic_json (1.0.1)
     parallel (1.10.0)
-    parallel_tests (2.11.0)
+    parallel_tests (2.12.0)
       parallel
+    passenger (5.1.1)
+      rack
+      rake (>= 0.8.1)
     pg (0.19.0)
     prose (0.2.2)
     pry (0.10.4)
@@ -302,13 +305,13 @@ DEPENDENCIES
   guard-rspec
   httparty
   kaminari
-  listen
   mechanize
   meta_request
   oj
   oj_mimic_json
   parallel
   parallel_tests
+  passenger
   pg (~> 0.19.0)
   prose
   pry-byebug
@@ -331,4 +334,4 @@ RUBY VERSION
    ruby 2.3.1p112
 
 BUNDLED WITH
-   1.13.6
+   1.13.7

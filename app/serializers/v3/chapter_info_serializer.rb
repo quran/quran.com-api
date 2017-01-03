@@ -14,8 +14,5 @@
 #
 
 class V3::ChapterInfoSerializer <  V3::ApplicationSerializer
-  attributes :id, :text, :source, :short_text
-  has_one :chapter
-  has_one :language
-  has_one :resource_content
+  attributes :chapter_id, :text, :source, :short_text, :language_name
 end

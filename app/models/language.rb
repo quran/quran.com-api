@@ -13,5 +13,8 @@
 #
 
 class Language < ApplicationRecord
+  def self.default
+    Language.find_by_iso_code(:en)
+  end
 end
 

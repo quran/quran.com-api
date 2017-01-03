@@ -21,6 +21,6 @@
 #
 
 class V3::VerseSerializer < V3::ApplicationSerializer
-  attributes :id, :verse_number, :verse_key, :text_madani, :text_indopak, :text_simple, :juz_num, :hizb_num, :rub_num, :sajdah, :page_number
-  has_one :chapter
+  attributes :id, :verse_number, :chapter_id, :verse_key, :text_madani, :text_indopak, :text_simple, :juz_number, :hizb_number, :rub_number, :sajdah, :sajdah_number, :page_number
+  has_many :words
 end

@@ -9,6 +9,7 @@
 #  short_text          :text
 #  language_id         :integer
 #  resource_content_id :integer
+#  language_name       :string
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
 #

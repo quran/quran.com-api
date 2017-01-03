@@ -15,7 +15,7 @@ gem 'pg', '~> 0.19.0'
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 gem 'execjs'
-gem 'therubyracer',  platforms: :ruby
+gem 'therubyracer', platforms: :ruby
 
 gem 'oj'
 gem 'oj_mimic_json'
@@ -52,6 +52,8 @@ gem 'parallel'
 # Will provide a progress bar as the import happens
 gem "sentry-raven"
 
+gem "passenger"
+
 group :development, :test do
   gem 'pry-byebug'
   gem 'pry-rails'
@@ -70,10 +72,6 @@ group :development do
   gem 'spring-commands-rspec'
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'mechanize'
-  gem 'listen'
   gem 'bullet'
   gem 'meta_request'
 end
-
-#gem 'actionpack-page_caching'
-#gem 'actionpack-action_caching'

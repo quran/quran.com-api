@@ -4,6 +4,7 @@
 #
 #  id           :integer          not null, primary key
 #  verse_id     :integer
+#  chapter_id   :integer
 #  position     :integer
 #  text_madani  :text
 #  text_indopak :text

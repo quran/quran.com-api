@@ -19,7 +19,26 @@
 #
 
 class V3::WordSerializer < V3::ApplicationSerializer
-  attributes :id, :position, :text_clean, :verse_key, :page_number, :line_number, :code_dec, :code_hex
-  has_one :verse
-  has_one :char_type
+  attributes :position, :text_madani, :text_indopak, :text_simple, :verse_key, :class_name, :line_number, :code_dec, :code, :char_type
+
+  def char_type
+    object.char_type.name
+  end
+
+  def class_name
+    "p#{object.page_number}"
+  end
+
+  def code
+    "&#x#{object.code_hex}"
+  end
+
+  def translation
+    word && word.translation
+  end
+
+  def transliteration
+    word && word.transliteration
+  end
+
 end
