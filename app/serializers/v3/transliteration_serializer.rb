@@ -13,8 +13,5 @@
 #
 
 class V3::TransliterationSerializer < V3::ApplicationSerializer
-  attributes :id, :text
-  has_one :resource
-  has_one :language
-  has_one :resource_content
+  attributes :language_name, :text
 end

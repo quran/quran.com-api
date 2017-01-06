@@ -24,4 +24,7 @@ class Word < ApplicationRecord
   belongs_to :char_type
   has_many :translations, as: :resource
   has_many :transliterations, as: :resource
+  has_one  :audio, class_name: 'AudioFile', as: :resource
+
+  default_scope {order 'position asc'}
 end

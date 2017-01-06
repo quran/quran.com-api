@@ -16,8 +16,5 @@
 #
 
 class V3::AudioFileSerializer <  V3::ApplicationSerializer
-  attributes :id, :url, :duration, :setments, :format
-  has_one :resource
-  has_one :resource_content
-  has_one :recitation
+  attributes :url, :duration, :segments
 end

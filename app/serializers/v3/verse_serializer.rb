@@ -22,5 +22,27 @@
 
 class V3::VerseSerializer < V3::ApplicationSerializer
   attributes :id, :verse_number, :chapter_id, :verse_key, :text_madani, :text_indopak, :text_simple, :juz_number, :hizb_number, :rub_number, :sajdah, :sajdah_number, :page_number
+  has_one :audio, if: :render_audio?, serializer: V3::AudioFileSerializer
+
+  has_many :translations, if: :render_translations? do
+    object.translations.where(resource_content_id: scope[:translations])
+  end
+
   has_many :words
+
+  def render_audio?
+    scope[:recitation].present?
+  end
+
+  def render_translations?
+    scope[:translations].present?
+  end
+
+  def render_media?
+    scope[:media].present?
+  end
+
+  def audio
+    object.audio_files.find_by(recitation_id: scope[:recitation])
+  end
 end

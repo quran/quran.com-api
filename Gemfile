@@ -41,9 +41,6 @@ gem 'redis-rails'
 
 gem 'rack-cors'
 
-# Generate embed code and get metadata of video etc
-gem 'video_info'
-
 # Paging the results
 gem 'kaminari'
 

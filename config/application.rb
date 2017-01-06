@@ -6,7 +6,7 @@ require "active_model/railtie"
 require "active_record/railtie"
 require "action_controller/railtie"
 #TODO: do we need action view ?
-#require "action_view/railtie"
+require "action_view/railtie"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.

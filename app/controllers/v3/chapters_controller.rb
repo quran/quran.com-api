@@ -1,11 +1,9 @@
 class V3::ChaptersController < ApplicationController
-  before_action :detect_language
-
   # GET /chapters
   def index
     chapters = Chapter.includes(:translated_names).all
 
-    render json: chapters
+    render json: chapters, params: params, a: :b
   end
 
   # GET /chapters/1

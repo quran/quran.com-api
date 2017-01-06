@@ -20,6 +20,13 @@
 
 class V3::WordSerializer < V3::ApplicationSerializer
   attributes :position, :text_madani, :text_indopak, :text_simple, :verse_key, :class_name, :line_number, :code_dec, :code, :char_type
+  has_one  :audio, serializer: V3::AudioFileSerializer
+  has_one :translation do
+    object.transliterations.filter_by_language_or_default scope[:translations]
+  end
+  has_one :transliteration do
+    object.transliterations.filter_by_language_or_default scope[:translations]
+  end
 
   def char_type
     object.char_type.name
@@ -32,13 +39,4 @@ class V3::WordSerializer < V3::ApplicationSerializer
   def code
     "&#x#{object.code_hex}"
   end
-
-  def translation
-    word && word.translation
-  end
-
-  def transliteration
-    word && word.transliteration
-  end
-
 end
