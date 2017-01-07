@@ -10,6 +10,15 @@ Rails.application.routes.draw do
       end
 
       resources :reciters, only: [:index, :show], defaults: {format: 'json'}
+
+      namespace :options, defaults: {format: 'json'} do
+        get :default
+        get :translations
+        get :recitations
+        get :tafisrs
+        get :languages
+        get :media_contents
+      end
     end
 
     namespace :v2 do
