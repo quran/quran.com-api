@@ -18,7 +18,5 @@
 #
 
 class V3::ResourceContentSerializer <  V3::ApplicationSerializer
-  attributes :id, :approved, :cardinality_type
-  has_one :author
-  has_one :language
+  attributes :id, :author_name, :language_name
 end

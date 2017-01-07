@@ -14,4 +14,6 @@ class Recitation < ApplicationRecord
   belongs_to :reciter
   belongs_to :resource_content
   belongs_to :recitation_style
+
+  scope :approved, -> { joins(:resource_content).where('resource_contents.approved = ?', true) }
 end

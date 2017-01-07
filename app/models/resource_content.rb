@@ -19,6 +19,11 @@
 #
 
 class ResourceContent < ApplicationRecord
+  scope :translations, -> { where sub_type: SubType::Translation }
+  scope :tafsirs, -> { where sub_type: SubType::Tafsir }
+  scope :one_verse, -> { where cardinality_type: CardinalityType::OneVerse }
+  scope :approved, -> { where approved: true }
+
   module CardinalityType
     OneVerse = '1_ayah'
     OneWord = '1_word'

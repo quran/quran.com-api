@@ -142,7 +142,7 @@ namespace :v3 do
       verse = Verse.find_by_verse_key(tafsir.ayah_key)
       data_source = DataSource.where(name: resource.source.name, url: resource.source.url).first_or_create if resource.source
 
-      resource_content = ResourceContent.where(resource_type: resource.type, sub_type: resource.sub_type, author_name: resource.author&.name, cardinality_type: resource.cardinality_type).first
+      resource_content = ResourceContent.where(resource_type: resource.type, sub_type: resource.sub_type, author_name: resource.author&.name, cardinality_type: resource.cardinality_type, language: language).first_or_create
       resource_content.data_source = data_source
       resource_content.save
       taf = verse.tafsirs.where(language: language, resource_content: resource_content).first_or_create(text: tafsir.tafsir.text )
@@ -155,7 +155,7 @@ namespace :v3 do
       language = Language.find_by_iso_code(resource.language_code)
       verse = Verse.find_by_verse_key(trans.ayah_key)
 
-      resource_content = ResourceContent.where(resource_type: resource.type, sub_type: resource.sub_type, author_name: resource.author&.name, cardinality_type: resource.cardinality_type).first
+      resource_content = ResourceContent.where(resource_type: resource.type, sub_type: resource.sub_type, author_name: resource.author&.name, cardinality_type: resource.cardinality_type, language: language).first_or_create
       translation = verse.translations.where(language: language, resource_content: resource_content).first_or_create(text: trans.text )
 
       puts "ayah translation #{translation.id}"
@@ -167,11 +167,14 @@ namespace :v3 do
       language = Language.find_by_iso_code(resource.language_code) || language
       verse = Verse.find_by_verse_key(trans.ayah_key)
 
-      resource_content = ResourceContent.where(resource_type: resource.type, sub_type: resource.sub_type, author_name: resource.author&.name, cardinality_type: resource.cardinality_type).first
+      resource_content = ResourceContent.where(resource_type: resource.type, sub_type: resource.sub_type, author_name: resource.author&.name, cardinality_type: resource.cardinality_type, language: language).first_or_create
       transliteration = verse.transliterations.where(language: language, resource_content: resource_content).first_or_create(text: trans.text )
 
       puts "ayah transliterations #{transliteration.id}"
     end
+
+    ## HEre
+
 
     # create author and resource content for Bayyinah
     media_resource = Media::Resource.first
@@ -221,6 +224,29 @@ namespace :v3 do
       audio.save
 
       puts "audio #{audio.id}"
+    end
+
+
+    #last few steps to fix missing attributes
+    MediaContent.find_each do |m|
+      m.language = language
+      m.language_name = language.name
+      m.save
+    end
+
+    ResourceContent.find_each do |m|
+      m.language_name = m.language.name
+      m.save
+    end
+
+    TranslatedName.find_each do |t|
+      t.language_name = t.language.name
+      t.save
+    end
+
+    Recitation.find_each do |r|
+      r.reciter_name = r.reciter.name
+      r.save
     end
   end
 end

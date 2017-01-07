@@ -31,6 +31,7 @@ class V3::VerseSerializer < V3::ApplicationSerializer
   has_many :words
 
   def render_audio?
+    #TODO: confirm scope call isn't creating new objects in each call. If so cache this is most expensive serializer
     scope[:recitation].present?
   end
 

@@ -11,9 +11,5 @@
 #
 
 class V3::RecitationSerializer < V3::ApplicationSerializer
-  attributes :id
-  has_one :reciter
-  has_one :resource
-  has_one :resource_content
-  has_one :recition_style
-end
+  attributes :id, :reciter_name, :style
+ end
