@@ -13,8 +13,5 @@
 #
 
 class V3::FootNoteSerializer <  V3::ApplicationSerializer
-  attributes :id, :text
-  has_one :resource
-  has_one :language
-  has_one :resource_content
+  attributes :id, :text, :language_name
 end

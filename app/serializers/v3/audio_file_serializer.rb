@@ -16,5 +16,5 @@
 #
 
 class V3::AudioFileSerializer <  V3::ApplicationSerializer
-  attributes :url, :duration, :segments
+  attributes :url, :duration, :segments, :format
 end

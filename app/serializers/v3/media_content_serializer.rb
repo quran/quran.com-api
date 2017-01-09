@@ -15,9 +15,6 @@
 #  updated_at          :datetime         not null
 #
 
-class V3::MediaContentSerializer <  V3::ApplicationSerializer
-  attributes :url, :embed_text, :provider
-  has_one :resource
-  has_one :language
-  has_one :resource_content
+class V3::MediaContentSerializer < V3::ApplicationSerializer
+  attributes :url, :embed_text, :provider, :author_name
 end

@@ -20,8 +20,11 @@
 
 class ResourceContent < ApplicationRecord
   scope :translations, -> { where sub_type: SubType::Translation }
+  scope :media, -> { where sub_type: SubType::Video }
   scope :tafsirs, -> { where sub_type: SubType::Tafsir }
+  scope :chapter_info, -> { where sub_type: SubType::Info }
   scope :one_verse, -> { where cardinality_type: CardinalityType::OneVerse }
+  scope :one_chapter, -> { where cardinality_type: CardinalityType::OneChapter }
   scope :approved, -> { where approved: true }
 
   module CardinalityType
@@ -45,6 +48,7 @@ class ResourceContent < ApplicationRecord
     Font = 'font'
     Image = 'image'
     Info = 'info'
+    Video = 'video'
   end
 
   belongs_to :author

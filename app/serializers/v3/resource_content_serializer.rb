@@ -18,5 +18,5 @@
 #
 
 class V3::ResourceContentSerializer <  V3::ApplicationSerializer
-  attributes :id, :author_name, :language_name
+  attributes :id, :author_name, :language_name, :language_id
 end

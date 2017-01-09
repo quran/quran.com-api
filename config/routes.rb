@@ -6,18 +6,19 @@ Rails.application.routes.draw do
           get :info, to: 'chapter_infos#show'
         end
 
-        resources :verses, only: [:index, :show], defaults: {format: 'json'}
+        resources :verses, only: [:index, :show], defaults: {format: 'json'} do
+          resources :tafsirs, only: [:index], defaults: {format: 'json'}
+        end
       end
-
-      resources :reciters, only: [:index, :show], defaults: {format: 'json'}
 
       namespace :options, defaults: {format: 'json'} do
         get :default
         get :translations
         get :recitations
-        get :tafisrs
+        get :tafsirs
         get :languages
-        get :media_contents
+        get :media_content
+        get :chapter_info
       end
     end
 

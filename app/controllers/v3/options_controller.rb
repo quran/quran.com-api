@@ -1,9 +1,10 @@
 class V3::OptionsController < ApplicationController
   # GET /chapters
   def default
-    chapters = Chapter.includes(:translated_names).all
-
-    render json: chapters
+    # Defaults:
+    # Translation: Sahih International(English)
+    # Recitation: Qari Abdul Baset(Mujawwad style)
+    render json: {translations: [21], language: 'en', recitation: 1}
   end
 
   # GET /chapters/1
@@ -16,7 +17,7 @@ class V3::OptionsController < ApplicationController
   def translations
     resources = ResourceContent.translations.one_verse.approved
 
-    render json: resources, key: :translations
+    render json: resources, root: :translations
   end
 
   def recitations
@@ -25,12 +26,21 @@ class V3::OptionsController < ApplicationController
     render json: resources
   end
 
-  def media_content
+  def chapter_info
+    resources = ResourceContent.chapter_info.one_chapter.approved
 
+    render json: resources, root: :chapter_info
+  end
+
+  def media_content
+    resources = ResourceContent.media.one_verse.approved
+
+    render json: resources, root: :media
   end
 
   def tafsirs
+    resources = ResourceContent.tafsirs.one_verse.approved
 
+    render json: resources, root: :tafisrs
   end
-
 end

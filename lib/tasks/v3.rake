@@ -231,6 +231,7 @@ namespace :v3 do
     MediaContent.find_each do |m|
       m.language = language
       m.language_name = language.name
+      m.author_name = m.resource_content&.author_name
       m.save
     end
 
@@ -246,6 +247,7 @@ namespace :v3 do
 
     Recitation.find_each do |r|
       r.reciter_name = r.reciter.name
+      r.style = r.recitation_style&.style
       r.save
     end
   end

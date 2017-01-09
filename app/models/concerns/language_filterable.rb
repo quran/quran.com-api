@@ -7,7 +7,7 @@ module LanguageFilterable
     before_save :update_language_name
 
     def self.filter_by_language_or_default(language)
-      language = Language.find_by_iso_code(language || 'en')
+      language = Language.find_by_id_or_iso_code(language || 'en')
 
       self.find_by(language: language) || self.find_by(language: Language.default)
     end

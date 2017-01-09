@@ -13,7 +13,7 @@
 #
 
 class V3::LanguageSerializer < V3::ApplicationSerializer
-  attributes :name, :iso_code, :native_name, :direction
+  attributes :name, :iso_code, :native_name, :direction, :id
 
   has_one :translated_name, if: :include_translated_names?
 
@@ -22,7 +22,7 @@ class V3::LanguageSerializer < V3::ApplicationSerializer
   end
 
   def translated_name
-    if language = Language.find_by_iso_code(scope[:language])
+    if language = Language.find_by_id_or_iso_code(scope[:language])
       object.translated_names.find_by_language_id(language.id)
     end
   end
