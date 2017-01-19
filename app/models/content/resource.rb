@@ -62,12 +62,6 @@ class Content::Resource < ActiveRecord::Base
     .order("language.language_code")
   end
 
-  def self.trial
-    self.enabled.joins(:language)
-    .group(language: [:language_code])
-    # .order("i18n.language.language_code")
-  end
-
   def view_json
     as_json(only: [:name, :description, :is_available, :slug]).merge(
       language: language_code,

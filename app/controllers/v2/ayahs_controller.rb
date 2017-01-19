@@ -14,6 +14,7 @@ class V2::AyahsController < ApplicationController
       ayahs = Quran::Ayah
         .preload(glyphs: {word: [:corpus, :token]})
         .preload(:text_tashkeel)
+        .preload(:media_content)
         .by_range(params[:surah_id], range[0], range[1])
 
       ayahs.as_json_with_resources(ayahs, params)

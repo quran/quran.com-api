@@ -2,16 +2,16 @@
 #
 # Table name: audio.file
 #
-#  file_id            :integer          not null, primary key
-#  recitation_id      :integer          not null
-#  ayah_key           :text             not null
-#  format             :text             not null
-#  duration           :float
-#  mime_type          :text             not null
-#  is_enabled         :boolean          default(TRUE), not null
-#  url                :text
-#  segments           :text
-#  encrypted_segments :text
+#  file_id        :integer          not null, primary key
+#  recitation_id  :integer          not null
+#  ayah_key       :text             not null
+#  format         :text             not null
+#  duration       :float
+#  mime_type      :text             not null
+#  is_enabled     :boolean          default(TRUE), not null
+#  url            :text
+#  segments       :text             is an Array
+#  segments_stats :json
 #
 
 class Audio::File < ActiveRecord::Base
@@ -31,6 +31,6 @@ class Audio::File < ActiveRecord::Base
     ayah = ayah_key.split(':')[1]
 
 
-    super(only: [:duration, :url, :encrypted_segments])
+    super(only: [:duration, :url, :segments])
   end
 end

@@ -29,6 +29,9 @@ class Quran::Ayah < ActiveRecord::Base
   has_many :lemmas, class_name: 'Quran::Lemma', through:     :words
   has_many :roots,  class_name: 'Quran::Root',  through:     :words
 
+  has_many :media_resources, class_name: 'Media::Resource', through: :media_content, source: :resource
+  has_many :media_content, class_name: 'Media::Content', foreign_key: 'ayah_key'
+
   has_many :_tafsir_ayah, class_name: 'Content::TafsirAyah', foreign_key: 'ayah_key'
   has_many :tafsirs,      class_name: 'Content::Tafsir',     through:     :_tafsir_ayah
 
@@ -92,7 +95,7 @@ class Quran::Ayah < ActiveRecord::Base
     if audio_option = options[:audio]
       audio =
         Audio::File
-        .where(ayah_key: keys, recitation_id: audio_option, is_enabled: true)
+        .where(ayah_key: keys, recitation_id: audio_option, is_enabled: true, format: 'mp3')
         .order(:ayah_key)
         .group_by(&:ayah_key)
     end
@@ -106,11 +109,11 @@ class Quran::Ayah < ActiveRecord::Base
     end
 
     ayahs.map do |ayah|
-      ayah_json = ayah.as_json
+      ayah_json = ayah.as_json(include: {media_content: {include: :resource}})
       ayah_json.merge({
         content: content_option && content[ayah.ayah_key] ?
             content[ayah.ayah_key] : [],
-        audio: audio_option ? audio[ayah.ayah_key].first : {},
+        audio: audio_option && audio[ayah.ayah_key] ? audio[ayah.ayah_key].first : {},
       })
     end
   end

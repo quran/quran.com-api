@@ -1,4 +1,4 @@
-FROM phusion/passenger-customizable:0.9.17
+FROM phusion/passenger-customizable:0.9.19
 
 # set correct environment variables
 ENV HOME /root
@@ -7,14 +7,14 @@ ENV HOME /root
 CMD ["/sbin/my_init"]
 
 # customizing passenger-customizable image
-RUN /pd_build/ruby2.2.sh
+RUN /pd_build/ruby-2.3.*.sh
 RUN /pd_build/redis.sh
 
 ENV RAILS_ENV production
 
 # native passenger
-RUN ruby2.2 -S passenger-config build-native-support
-RUN setuser app ruby2.2 -S passenger-config build-native-support
+RUN ruby2.3 -S passenger-config build-native-support
+RUN setuser app ruby2.3 -S passenger-config build-native-support
 
 # nginx
 RUN rm /etc/service/nginx/down
