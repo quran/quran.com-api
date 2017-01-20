@@ -18,5 +18,9 @@
 #
 
 class V3::ResourceContentSerializer <  V3::ApplicationSerializer
-  attributes :id, :author_name, :language_name, :language_id
+  attributes :id, :author_name
+
+  attribute :language_name do
+    object.language.translated_names.filter_by_language_or_default(scope[:language]).name
+  end
 end

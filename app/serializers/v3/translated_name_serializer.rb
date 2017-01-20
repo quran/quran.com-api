@@ -12,9 +12,5 @@
 #
 
 class V3::TranslatedNameSerializer < V3::ApplicationSerializer
-  attributes :language, :name
-
-  def language
-    object.language.name.downcase
-  end
+  attributes :language_name, :name
 end

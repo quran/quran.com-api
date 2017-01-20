@@ -11,9 +11,12 @@
 #  text_simple  :text
 #  verse_key    :string
 #  page_number  :integer
+#  class_name   :string
 #  line_number  :integer
 #  code_dec     :integer
 #  code_hex     :string
+#  code_hex_v3  :string
+#  code_dec_v3  :integer
 #  char_type_id :integer
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null

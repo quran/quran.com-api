@@ -8,6 +8,7 @@
 #  parent_id    :integer
 #
 
+#DROP
 class Quran::CharType < ActiveRecord::Base
     extend Quran
 

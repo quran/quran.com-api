@@ -16,7 +16,7 @@ class Language < ApplicationRecord
   has_many :translated_names, as: :resource
 
   class << self
-    def self.default
+    def default
       Language.find_by_iso_code(:en)
     end
 

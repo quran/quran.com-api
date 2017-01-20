@@ -10,6 +10,7 @@
 #  segments      :text
 #  mime_type     :string
 #  format        :string
+#  is_enabled    :boolean
 #  recitation_id :integer
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
