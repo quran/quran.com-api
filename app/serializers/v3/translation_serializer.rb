@@ -14,7 +14,4 @@
 
 class V3::TranslationSerializer < V3::ApplicationSerializer
   attributes :language_name, :text
-  attribute :author_name do
-    object.resource_content&.author_name
-  end
 end

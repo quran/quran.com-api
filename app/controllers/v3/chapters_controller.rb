@@ -3,7 +3,7 @@ class V3::ChaptersController < ApplicationController
   def index
     chapters = Chapter.includes(:translated_names).all
 
-    render json: chapters, params: params, a: :b
+    render json: chapters
   end
 
   # GET /chapters/1
