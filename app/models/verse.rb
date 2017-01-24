@@ -44,4 +44,36 @@ class Verse < ApplicationRecord
         methods: [:chapter_name]
     )
   end
+
+
+
+  index_name 'verses'
+
+  mapping dynamic: 'false' do
+    indexes :id, type: 'integer', index: 'no'
+
+    [:text_madani, :text_indopak, :text_simple].each do |text_type|
+      indexes text_type, type: 'text' do
+        indexes :text,
+                type: 'text',
+                similarity: 'my_bm25',
+                term_vector: 'with_positions_offsets_payloads',
+                analyzer: 'arabic_normalized'
+        indexes :stemmed,
+                type: 'text',
+                similarity: 'my_bm25',
+                term_vector: 'with_positions_offsets_payloads',
+                search_analyzer: 'arabic_normalized',
+                analyzer: 'arabic_ngram'
+        indexes :autocomplete,
+                type: 'string',
+                analyzer: 'autocomplete_arabic',
+                search_analyzer: 'arabic_normalized',
+                index_options: 'offsets'
+      end
+    end
+
+    indexes :verse_key
+    indexes :chapter_name
+  end
 end
