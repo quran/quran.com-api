@@ -49,6 +49,9 @@ RUN chown -R app public
 RUN chown app Gemfile
 RUN chown app Gemfile.lock
 
+# let log files for nginx work
+RUN mkdir -p /var/log/nginx/api.quran.com
+
 # cleanup apt
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 

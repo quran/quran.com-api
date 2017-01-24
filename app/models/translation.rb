@@ -19,4 +19,17 @@ class Translation < ApplicationRecord
   belongs_to :resource, polymorphic: true
   belongs_to :resource_content
   has_many :foot_notes, as: :resource
+
+  def as_indexed_json(options)
+    hash = self.as_json(
+        only: [:id, :verse_key, :text_madani, :text_indopak, :text_simple],
+        methods: [:chapter_name]
+    )
+
+    #translations.joins(:language).each do |trans|
+    #  hash["trasn_#{trans.language.iso_code}"] = trans.text
+    #end
+
+    hash
+  end
 end

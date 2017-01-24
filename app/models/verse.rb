@@ -21,6 +21,8 @@
 #
 
 class Verse < ApplicationRecord
+  include Searchable
+
   belongs_to :chapter, inverse_of: :verses, counter_cache: true
   has_many :tafsirs
   has_many :words
@@ -31,4 +33,15 @@ class Verse < ApplicationRecord
   has_many :recitations, through: :audio_files
 
   default_scope {order 'verse_number asc'}
+
+  def chapter_name
+    {arabic: chapter.name_arabic, english: chapter.name_complex}
+  end
+
+  def as_indexed_json(options)
+    self.as_json(
+        only: [:id, :verse_key, :text_madani, :text_indopak, :text_simple],
+        methods: [:chapter_name]
+    )
+  end
 end

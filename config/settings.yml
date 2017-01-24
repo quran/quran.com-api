@@ -136,6 +136,7 @@ index:
                     - arabic_ngram
                     - reverse
                     - unique_tokens
+
             english:
                 tokenizer: standard
                 filter:
