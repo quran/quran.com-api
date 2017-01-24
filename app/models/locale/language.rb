@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: i18n.language
+# Table name: language
 #
 #  language_code       :text             not null, primary key
 #  unicode             :text

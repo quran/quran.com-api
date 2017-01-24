@@ -1,6 +1,6 @@
 namespace :db do
   task import: :environment do
-    if ActiveRecord::Base.connection.tables.length > 28 && Quran::Surah.all.count == 114
+    if ActiveRecord::Base.connection.tables.length > 28 && Chapter.count == 114
         puts "Database says: You are good to go!"
         next
     else

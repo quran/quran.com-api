@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: quran.word_transliteration
+# Table name: word_transliteration
 #
 #  transliteration_id :integer          not null, primary key
 #  word_id            :integer
@@ -9,10 +9,7 @@
 #
 
 class Quran::WordTransliteration < ActiveRecord::Base
-  extend Quran
-
   self.table_name = 'word_transliteration'
-  self.primary_key = 'transliteration_id'
 
   belongs_to :word, class_name: 'Quran::Word'
   belongs_to :language, class_name: 'Locale::Language'

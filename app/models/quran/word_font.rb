@@ -1,10 +1,10 @@
 # == Schema Information
 #
-# Table name: quran.word_font
+# Table name: word_font
 #
-#  resource_id  :integer          not null, primary key
-#  ayah_key     :text             not null, primary key
-#  position     :integer          not null, primary key
+#  resource_id  :integer          not null
+#  ayah_key     :text             not null
+#  position     :integer          not null
 #  word_id      :integer
 #  page_num     :integer          not null
 #  line_num     :integer          not null
@@ -17,7 +17,7 @@ class Quran::WordFont < ActiveRecord::Base
   extend Quran
 
   self.table_name = 'word_font'
-  self.primary_keys = :resource_id, :ayah_key, :position
+  #self.primary_keys = :resource_id, :ayah_key, :position
 
   belongs_to :ayah, class_name: 'Quran::Ayah'
   belongs_to :char_type, class_name: 'Quran::CharType'

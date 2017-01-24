@@ -17,6 +17,4 @@
 
 class Quran::WordCorpus < ActiveRecord::Base
   belongs_to :word
-
-  self.primary_key = 'corpus_id'
 end

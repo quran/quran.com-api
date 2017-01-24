@@ -1,69 +1,45 @@
 source 'https://rubygems.org'
 ruby '2.3.1'
 
+git_source(:github) do |repo_name|
+  repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?("/")
+  "https://github.com/#{repo_name}.git"
+end
+
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 #gem 'rails', '4.1.1'
-gem 'rails', '4.2.6'
+gem 'rails', '~> 5.0.1'
 
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 0.19.0'
+
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 gem 'execjs'
-gem 'therubyracer',  platforms: :ruby
-
-# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 2.0'
-# bundle exec rake doc:rails generates the API under doc/api.
-gem 'sdoc', '~> 0.4.0',          group: :doc
-
-# Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-gem 'spring',        group: :development
-gem 'spring-commands-rspec', group: :development
+gem 'therubyracer', platforms: :ruby
 
 gem 'oj'
 gem 'oj_mimic_json'
 
-gem 'rails-api'
-
-gem 'apipie-rails'
+gem 'active_model_serializers', '~> 0.10.0'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
-
-# Use unicorn as the app server
-# gem 'unicorn'
-
-# Use Capistrano for deployment
-# gem 'capistrano-rails', group: :development
-
-# Use debugger
-# gem 'debugger', group: [:development, :test]
-#
-# Rails console to work
-gem 'rb-readline'
 
 # Detect the language
 gem 'whatlanguage'
 gem 'prose'
 
-# ActiveModel like for ruby classes
-gem 'virtus'
-
-# composite primary keys
-gem 'composite_primary_keys', {
-  :git => 'git://github.com/composite-primary-keys/composite_primary_keys.git',
-  :branch => 'ar_4.2.x'
-}
-
-# Printing in console made easy. Simple run or add Rails.logger.ap #YOUR_VAR
-gem 'awesome_print'
+# Http request
+gem 'httparty', require: false
 
 # Elasticsearch
+gem 'elasticsearch'
 gem 'elasticsearch-model'
 gem 'elasticsearch-rails'
 
-# This is for batching the Content::Translation, batches based on the string primary keys
-# gem 'batchelor'
+gem 'redis-rails'
+
+gem 'rack-cors'
 
 # Paging the results
 gem 'kaminari'
@@ -71,7 +47,9 @@ gem 'kaminari'
 # This is to run the rake task for importing in parallel
 gem 'parallel'
 # Will provide a progress bar as the import happens
-gem 'ruby-progressbar'
+gem "sentry-raven"
+
+gem "passenger"
 
 group :development, :test do
   gem 'pry-byebug'
@@ -83,22 +61,14 @@ group :development, :test do
 end
 
 group :development do
-  gem 'jazz_hands', github: 'nixme/jazz_hands', branch: 'bring-your-own-debugger'
-  gem 'web-console', '~> 2.0'
+  gem 'ruby-progressbar'
+  gem 'byebug', platform: :mri
+  gem 'annotate'
+  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
+  gem 'spring'
+  gem 'spring-commands-rspec'
+  gem 'spring-watcher-listen', '~> 2.0.0'
+  gem 'mechanize'
+  gem 'bullet'
+  gem 'meta_request'
 end
-
-gem 'elasticsearch'
-
-# To allow CORS for the angular project
-# https://github.com/cyu/rack-cors
-gem 'rack-cors', :require => 'rack/cors'
-
-gem 'httparty'
-
-gem 'annotate'
-
-gem 'actionpack-page_caching'
-gem 'actionpack-action_caching'
-
-gem 'redis-rails'
-gem 'gibberish', '2.0.0'

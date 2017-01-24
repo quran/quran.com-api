@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: quran.char_type
+# Table name: char_type
 #
 #  char_type_id :integer          not null, primary key
 #  name         :text             not null
@@ -8,6 +8,7 @@
 #  parent_id    :integer
 #
 
+#DROP
 class Quran::CharType < ActiveRecord::Base
     extend Quran
 

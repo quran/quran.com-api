@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: quran.surah
+# Table name: surah
 #
 #  surah_id         :integer          not null, primary key
 #  ayat             :integer          not null
@@ -15,10 +15,7 @@
 #
 
 class Quran::Surah < ActiveRecord::Base
-  extend Quran
-
   self.table_name = 'surah'
-  self.primary_key = 'surah_id'
 
   has_many :ayahs, class_name: 'Quran::Ayah', foreign_key: 'surah_id'
   has_many :surah_infos, class_name: 'Content::SurahInfo'

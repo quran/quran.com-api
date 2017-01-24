@@ -1,8 +1,8 @@
 # == Schema Information
 #
-# Table name: quran.text_stem
+# Table name: text_stem
 #
-#  id        :text             primary key
+#  id        :text
 #  ayah_key  :text
 #  surah_id  :integer
 #  ayah_num  :integer
@@ -12,18 +12,14 @@
 
 # vim: ts=4 sw=4 expandtab
 class Quran::TextStem < ActiveRecord::Base
-    extend Quran
-    # extend Batchelor
-
     self.table_name = 'text_stem'
-    self.primary_key = 'id'
 
     belongs_to :ayah, class_name: 'Quran::Ayah', foreign_key: 'ayah_key'
 
     # scope
     # default_scope { where surah_id: -1 }
 
-    index_name 'text-stem'
+    #index_name 'text-stem'
 
     def self.import( options = { })
         Quran::TextStem.connection.cache do

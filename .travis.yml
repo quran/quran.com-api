@@ -24,6 +24,7 @@ before_install:
 before_script:
   - psql -c 'create role quran_dev with login createdb;' -U postgres
   - bundle exec rake db:create
+  - bundle exec rake db:migrate
   - bundle exec rake db:load_pg_dump
 
 script: "bundle exec rspec"

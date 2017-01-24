@@ -1,22 +1,21 @@
 # == Schema Information
 #
-# Table name: content.tafsir_ayah
+# Table name: tafsir_ayah
 #
-#  tafsir_id :integer          not null, primary key
-#  ayah_key  :text             not null, primary key
+#  tafsir_id :integer          not null
+#  ayah_key  :text             not null
 #
+
 class Content::TafsirAyah < ActiveRecord::Base
-  extend Content
-  # extend Batchelor
 
   self.table_name = 'tafsir_ayah'
-  self.primary_keys = :tafsir_id, :ayah_key
 
   belongs_to :tafsir, class_name: 'Content::Tafsir'
   belongs_to :ayah,   class_name: 'Quran::Ayah', foreign_key: 'ayah_key'
 
-  index_name 'tafsir' # NOTE we're overriding the index name from tafsir_ayah to tafsir
+ # index_name 'tafsir' # NOTE we're overriding the index name from tafsir_ayah to tafsir
 
+=begin
   settings YAML.load(
     File.read(
       File.expand_path(
@@ -35,6 +34,7 @@ class Content::TafsirAyah < ActiveRecord::Base
                         analyzer: 'arabic_ngram'
     end
   end
+=end
 
   def as_indexed_json(options = {})
     resource = tafsir.resource

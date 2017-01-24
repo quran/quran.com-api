@@ -44,9 +44,6 @@ index:
             arabic_stemmer:
                 type: stemmer
                 language: arabic
-            quran_font_to_token_synonym:
-                type: synonym
-                synonyms_path: analysis/synonym.text-font.to.text-token.txt
             quran_token_to_lemma_synonym:
                 type: synonym
                 synonyms_path: analysis/synonym.text-token.to.text-lemma.txt
@@ -139,83 +136,6 @@ index:
                     - arabic_ngram
                     - reverse
                     - unique_tokens
-
-
-            quran_font_to_token:
-                tokenizer: whitespace
-                filter:
-                    - quran_font_to_token_synonym
-                    - arabic_normalization
-                    - arabic_keywords
-                    - icu_folding
-                    - icu_normalizer
-
-            quran_font_to_token_to_lemma:
-                tokenizer: whitespace
-                filter:
-                    - quran_font_to_token_synonym
-                    - quran_token_to_lemma_synonym
-                    - quran_token_to_lemma_stop
-            quran_font_to_token_to_lemma_normalized:
-                tokenizer: whitespace
-                filter:
-                    - quran_font_to_token_synonym
-                    - quran_token_to_lemma_synonym
-                    - quran_token_to_lemma_stop
-                    - arabic_normalization
-                    - arabic_keywords
-                    - icu_folding
-                    - icu_normalizer
-
-            quran_font_to_token_to_stem:
-                tokenizer: whitespace
-                filter:
-                    - quran_font_to_token_synonym
-                    - quran_token_to_stem_synonym
-
-            quran_font_to_token_to_stem_normalized:
-                tokenizer: whitespace
-                filter:
-                    - quran_font_to_token_synonym
-                    - quran_token_to_stem_synonym
-                    - arabic_normalization
-                    - arabic_keywords
-                    - icu_folding
-                    - icu_normalizer
-
-            quran_font_to_token_to_root:
-                tokenizer: whitespace
-                filter:
-                    - quran_font_to_token_synonym
-                    - quran_token_to_root_synonym
-                    - quran_token_to_root_stop
-
-            quran_font_to_token_to_arabic_stemmed:
-                tokenizer: whitespace
-                filter:
-                    - quran_font_to_token_synonym
-                    - arabic_normalization
-                    - arabic_keywords
-                    - icu_folding
-                    - icu_normalizer
-                    - arabic_stemmer
-            quran_font_to_token_to_arabic_ngram:
-                tokenizer: whitespace
-                filter:
-                    - quran_font_to_token_synonym
-                    - arabic_normalization
-                    - arabic_keywords
-                    - icu_folding
-                    - icu_normalizer
-                    - arabic_ngram
-                    - reverse
-                    - arabic_ngram
-                    - reverse
-                    - unique_tokens
-
-
-
-
             english:
                 tokenizer: standard
                 filter:

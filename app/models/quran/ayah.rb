@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: quran.ayah
+# Table name: ayah
 #
 #  ayah_index :integer          not null
 #  surah_id   :integer

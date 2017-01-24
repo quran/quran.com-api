@@ -1,3 +1,4 @@
+#TODO: Really what's going on here :) Need to rewrite
 module LanguageDetection
   extend ActiveSupport::Concern
 

@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: quran.token
+# Table name: token
 #
 #  token_id :integer          not null, primary key
 #  value    :string(50)       not null
@@ -8,10 +8,8 @@
 #
 
 class Quran::Token < ActiveRecord::Base
-    extend Quran
-
     self.table_name = 'token'
-    self.primary_key = 'token_id'
+    #self.primary_key = 'token_id'
 
     has_many :words, class_name: 'Quran::Word', foreign_key: 'token_id'
     has_many :stems, class_name: 'Quran::Stem', through: :words

@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: content.surah_infos
+# Table name: surah_infos
 #
 #  id                :integer          not null, primary key
 #  language_code     :string
@@ -11,10 +11,7 @@
 #
 
 class Content::SurahInfo < ActiveRecord::Base
-  extend Content
-
   self.table_name = 'surah_infos'
-  self.primary_key = 'id'
 
   belongs_to :language, class_name: 'Locale::Language', foreign_key: 'language_code'
   belongs_to :surah, class_name: 'Quran::Surah'

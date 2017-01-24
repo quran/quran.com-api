@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: quran.stem
+# Table name: stem
 #
 #  stem_id :integer          not null, primary key
 #  value   :string(50)       not null
@@ -8,10 +8,7 @@
 #
 
 class Quran::Stem < ActiveRecord::Base
-    extend Quran
-
     self.table_name = 'stem'
-    self.primary_key = 'stem_id'
 
     has_many :_word_stem, class_name: 'Quran::WordStem', foreign_key: 'stem_id'
 

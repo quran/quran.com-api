@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: content.author
+# Table name: author
 #
 #  author_id :integer          not null, primary key
 #  url       :text             is an Array

@@ -1,5 +1,0 @@
-rails generate controller Experiments
-rails generate controller Experiments model
-rails destroy controller Experiments model
-rails generate model Quran::Ayah
-rails generate controller Bucket::Ayat

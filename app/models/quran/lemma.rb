@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: quran.lemma
+# Table name: lemma
 #
 #  lemma_id :integer          not null, primary key
 #  value    :string(50)       not null
@@ -8,13 +8,9 @@
 #
 
 class Quran::Lemma < ActiveRecord::Base
-    extend Quran
-
     self.table_name = 'lemma'
-    self.primary_key = 'lemma_id'
 
     has_many :_word_lemma, class_name: 'Quran::WordLemma', foreign_key: 'lemma_id'
-
     has_many :words, class_name: 'Quran::Word', through: :_word_lemma
     has_many :tokens, class_name: 'Quran::Token', through: :words
     has_many :stems, class_name: 'Quran::Stem', through: :words

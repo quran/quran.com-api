@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: content.tafsir
+# Table name: tafsir
 #
 #  tafsir_id   :integer          not null, primary key
 #  resource_id :integer          not null
@@ -8,10 +8,7 @@
 #
 
 class Content::Tafsir < ActiveRecord::Base
-    extend Content
-
     self.table_name = 'tafsir'
-    self.primary_key = 'tafsir_id'
 
     # relationships
     belongs_to :resource,  class_name: 'Content::Resource'

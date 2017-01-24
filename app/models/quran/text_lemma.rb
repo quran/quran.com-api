@@ -1,8 +1,8 @@
 # == Schema Information
 #
-# Table name: quran.text_lemma
+# Table name: text_lemma
 #
-#  id        :text             primary key
+#  id        :text
 #  ayah_key  :text
 #  surah_id  :integer
 #  ayah_num  :integer
@@ -12,11 +12,8 @@
 
 # vim: ts=4 sw=4 expandtab
 class Quran::TextLemma < ActiveRecord::Base
-    extend Quran
-    # extend Batchelor
 
     self.table_name = 'text_lemma'
-    self.primary_key = 'id'
 
     belongs_to :ayah, class_name: 'Quran::Ayah', foreign_key: 'ayah_key'
 
@@ -24,7 +21,7 @@ class Quran::TextLemma < ActiveRecord::Base
     # default_scope { where surah_id: -1 }
 
     # elasticsearch index name
-    index_name "text-lemma"
+    #index_name "text-lemma"
 
     def self.import( options = {} )
         Quran::TextLemma.connection.cache do
