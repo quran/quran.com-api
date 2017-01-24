@@ -1,10 +1,6 @@
-Before you begin
-----------------
-You must note that while we would like to be eager with upgrading to the latest Rails version, our biggest contingency is compositive-primary-keys gem which is playing catch up with the Rails versions especially that every new update does something to ActiveRecord and breaks CPK! So make sure CPK is happy with the Rails version first before jumping.
-
 #### Requirements
-- Rails 4+
-- Elasticsearch
+- Rails 5.0.1
+- Elasticsearch 5.0.1
 - Redis
 
 #### Installations
@@ -58,8 +54,13 @@ git submodule update --init --recursive
 ### Usage
 
 ```
-http://localhost:3000/surahs/1/ayat?audio=1&content=21&from=1&quran=1&to=10
+http://localhost:3000/api/v3/chapters/1/verses
 ```
+
+### Documentation
+
+https://quran.api-docs.io/v3
+
 
 Redis
 -------------
