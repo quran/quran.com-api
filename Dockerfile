@@ -48,6 +48,8 @@ RUN chown -R app log
 RUN chown -R app public
 RUN chown app Gemfile
 RUN chown app Gemfile.lock
+RUN mkdir tmp
+RUN chown -R app tmp
 
 # let log files for nginx work
 RUN mkdir -p /var/log/nginx/api.quran.com
