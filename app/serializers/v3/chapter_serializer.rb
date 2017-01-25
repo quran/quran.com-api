@@ -16,7 +16,7 @@
 #
 
 class V3::ChapterSerializer < V3::ApplicationSerializer
-  attributes :chapter_number, :bismillah_pre, :revelation_order, :revelation_place, :name_complex, :name_arabic, :verses_count, :pages
+  attributes :chapter_number, :bismillah_pre, :revelation_order, :revelation_place, :name_complex, :name_arabic, :name_simple, :verses_count, :pages
 
   has_many :translated_names do
     object.translated_names.filter_by_language_or_default(scope[:language])
