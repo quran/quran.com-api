@@ -6,6 +6,7 @@ class CreateChapters < ActiveRecord::Migration[5.0]
       t.string :revelation_place
       t.string :name_complex
       t.string :name_arabic
+      t.string :name_simple
       t.string :pages
       t.integer :verses_count
       t.integer :chapter_number, index: true

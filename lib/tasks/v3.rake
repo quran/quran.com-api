@@ -1,4 +1,13 @@
 namespace :v3 do
+  task remove_v2_tables: :environment do
+    ['file', 'recitation', 'reciter', 'style', 'author', 'resource', 'resource_api_version', 'source', 'surah_infos', 'tafsir',
+     'tafsir_ayah', 'translation', 'transliteration', 'language', 'media.content', 'media.resource',
+     'ayah', 'char_type', 'surah', 'text', 'text_font', 'word_font', 'word_transliteration', 'word_translation',
+    ].each do |table|
+      ActiveRecord::Migration.drop_table table
+    end
+  end
+
   task import_from_v2: :environment do
     #Migrate languages
     Locale::Language.find_each do |l|
@@ -15,6 +24,10 @@ namespace :v3 do
     arabic_lang = Language.find_by_iso_code('ar')
 
     #Migrate resource, authors
+    Content::Author.find_each do |a|
+      Author.where(name: a.name, url: a.url).first_or_create
+    end
+
     data_source = DataSource.where(name: 'King Fahd Quran Printing Complex',  url: 'http://www.qurancomplex.org/').first_or_create
     r = Quran::WordFont.first.resource
     ResourceContent.where(name: r.name, data_source: data_source, language: language).first_or_create(cardinality_type: r.cardinality_type, resource_type: r.type, sub_type: r.sub_type, description: r.description)
@@ -42,6 +55,8 @@ namespace :v3 do
       chapter.pages = surah.page
       chapter.name_complex = surah.name_complex
       chapter.name_arabic = surah.name_arabic
+      chapter.name_simple = surah.name_simple
+
       chapter.save
 
       puts "chapter #{chapter.id}"
