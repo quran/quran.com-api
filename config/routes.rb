@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   scope :api do
     namespace :v3 do
+      get '/ping', to: 'ping#ping'
+
       resources :chapters, only: [:index, :show], defaults: {format: 'json'} do
         member do
           get :info, to: 'chapter_infos#show'

@@ -16,7 +16,7 @@
 /tmp
 .*.sw*
 .tmp/
-
+data/*
 config/deploy.rb
 vendor/cache
 vendor/bundle/
