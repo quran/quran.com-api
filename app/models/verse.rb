@@ -32,46 +32,5 @@ class Verse < ApplicationRecord
   has_many :audio_files, as: :resource
   has_many :recitations, through: :audio_files
 
-  default_scope {order 'verse_number asc'}
-
-  def chapter_name
-    {arabic: chapter.name_arabic, english: chapter.name_complex}
-  end
-
-  def as_indexed_json(options)
-    self.as_json(
-        only: [:id, :verse_key, :text_madani, :text_indopak, :text_simple],
-        methods: [:chapter_name]
-    )
-  end
-
-  index_name 'verses'
-
-  mapping dynamic: 'false' do
-    indexes :id, type: 'integer', index: 'no'
-
-    [:text_madani, :text_indopak, :text_simple].each do |text_type|
-      indexes text_type, type: 'text' do
-        indexes :text,
-                type: 'text',
-                similarity: 'my_bm25',
-                term_vector: 'with_positions_offsets_payloads',
-                analyzer: 'arabic_normalized'
-        indexes :stemmed,
-                type: 'text',
-                similarity: 'my_bm25',
-                term_vector: 'with_positions_offsets_payloads',
-                search_analyzer: 'arabic_normalized',
-                analyzer: 'arabic_ngram'
-        indexes :autocomplete,
-                type: 'string',
-                analyzer: 'autocomplete_arabic',
-                search_analyzer: 'arabic_normalized',
-                index_options: 'offsets'
-      end
-    end
-
-    indexes :verse_key
-    indexes :chapter_name
-  end
+  default_scope { order 'verse_number asc' }
 end

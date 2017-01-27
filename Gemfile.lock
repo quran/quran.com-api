@@ -46,6 +46,10 @@ GEM
       activerecord (>= 3.2, < 6.0)
       rake (>= 10.4, < 12.0)
     arel (7.1.4)
+    axiom-types (0.1.1)
+      descendants_tracker (~> 0.0.4)
+      ice_nine (~> 0.11.0)
+      thread_safe (~> 0.3, >= 0.3.1)
     builder (3.2.2)
     bullet (5.5.0)
       activesupport (>= 3.0.0)
@@ -53,7 +57,11 @@ GEM
     byebug (9.0.6)
     callsite (0.0.11)
     coderay (1.1.1)
+    coercible (1.0.0)
+      descendants_tracker (~> 0.0.1)
     concurrent-ruby (1.0.4)
+    descendants_tracker (0.0.4)
+      thread_safe (~> 0.3, >= 0.3.1)
     diff-lcs (1.2.5)
     domain_name (0.5.20161129)
       unf (>= 0.0.5, < 1.0.0)
@@ -70,6 +78,7 @@ GEM
     elasticsearch-transport (5.0.0)
       faraday
       multi_json
+    equalizer (0.0.11)
     erubis (2.7.0)
     execjs (2.7.0)
     faraday (0.10.1)
@@ -98,6 +107,7 @@ GEM
     httparty (0.14.0)
       multi_xml (>= 0.5.2)
     i18n (0.7.0)
+    ice_nine (0.11.2)
     json (1.8.3)
     jsonapi (0.1.1.beta2)
       json (~> 1.8)
@@ -268,6 +278,11 @@ GEM
       unf_ext
     unf_ext (0.0.7.2)
     uniform_notifier (1.10.0)
+    virtus (1.0.5)
+      axiom-types (~> 0.1)
+      coercible (~> 1.0)
+      descendants_tracker (~> 0.0, >= 0.0.3)
+      equalizer (~> 0.0, >= 0.0.9)
     webrobots (0.1.2)
     websocket-driver (0.6.4)
       websocket-extensions (>= 0.1.0)
@@ -312,6 +327,7 @@ DEPENDENCIES
   spring-commands-rspec
   spring-watcher-listen (~> 2.0.0)
   therubyracer
+  virtus
   whatlanguage
   zeus
 

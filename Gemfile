@@ -50,6 +50,7 @@ gem 'parallel'
 gem "sentry-raven"
 
 gem "passenger"
+gem 'virtus'
 
 group :development, :test do
   gem 'pry-byebug'
