@@ -16,11 +16,11 @@
 /tmp
 .*.sw*
 .tmp/
-
+data/*
 config/deploy.rb
 vendor/cache
 vendor/bundle/
-db
+dumps
 dump.rdb
 passenger.*
 .idea/*
