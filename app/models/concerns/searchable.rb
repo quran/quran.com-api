@@ -25,12 +25,14 @@ module Searchable
     def as_indexed_json(options={})
       hash = self.as_json(
           only: [:id, :verse_key, :text_madani, :text_indopak, :text_simple],
-          methods: :chapter_names,
-          include: {transliterations: {only: :text}}
+          methods: :chapter_names
       )
 
-      translations.joins(:language).each do |trans|
-        hash["trasn_#{trans.language.iso_code}"] = trans.text
+      hash[:transliterations] = transliterations.first.try(:text)
+
+      translations.includes(:language).each do |trans|
+        hash["trasn_#{trans.language.iso_code}"] ||= []
+        hash["trasn_#{trans.language.iso_code}"] << {text: trans.text, author: trans.resource_content.author_name }
       end
 
       hash
@@ -38,8 +40,9 @@ module Searchable
 
     index_name 'verses'
 
-    mapping dynamic: 'false' do
-      indexes :id, type: 'integer', index: 'no'
+    mapping do
+      #TODO: add words in mapping for highlighting
+      indexes :id, type: 'integer'
 
       [:text_madani, :text_indopak, :text_simple].each do |text_type|
         indexes text_type, type: 'text' do
@@ -62,8 +65,12 @@ module Searchable
         end
       end
 
-      indexes :verse_key, type: 'text'
+      indexes :verse_key, type: 'text' do
+        indexes :keyword, type: 'keyword'
+      end
+
       indexes :chapter_names
+      indexes :transliterations
 
       languages = Translation.where(resource_type: 'Verse').pluck(:language_id).uniq
       available_languages = Language.where(id: languages)

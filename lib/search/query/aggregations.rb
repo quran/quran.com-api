@@ -8,11 +8,11 @@ module Search
         hash = {
           by_ayah_key: {
             terms: {
-              field: 'ayah_key',
+              field: 'verse_key.keyword',
               size: 6236,
-              order: {
-                average_score: 'desc'
-              }
+              #order: {
+               # average_score: 'desc'
+              #}
             },
             aggs: {
               top_query_hits: {
@@ -28,18 +28,18 @@ module Search
                   size: 10
                 }
               }
-            },
-            aggs2: {
-              average_score: {
-                avg: {
-                  script: '_score'
-                }
-              }
-            }
+            }#,
+            #aggs2: {
+            #  average_score: {
+            #    avg: {
+            #      script: '_score'
+            #    }
+            #  }
+            #}
           }
         }
 
-        if hits_query?
+        if false && hits_query?
           hash[:by_ayah_key][:aggs].merge!(
             match: {
               top_hits: {

@@ -88,7 +88,7 @@ namespace :one_time do
 
     [['Chinese', 'chinese.json'], ['French', 'france.json'], ['Urdu', 'urdu.json'], ['Azeri', 'azirbijan.json'],
      ['Bosnian', 'bonski.json'], ['Dutch', 'neatherland.json'], ['Russian', 'ru.json'], ['Spanish', 'spanish.json'],
-     ['Swedish', 'swedish.json']
+     ['Swedish', 'swedish.json'], ['Indonesian', 'id.json']
     ].each do |item|
       lang, file_name = item
       language = Language.find_by_name(lang)

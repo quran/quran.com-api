@@ -50,7 +50,7 @@ module Search
       def highlight
         {
           fields: {
-            "text.autocomplete" => {
+            "text_madani" => {
               number_of_fragments: 0, # just highlight the entire string instead of breaking it down into sentence fragments, that's easier for now
               pre_tags: [ "<b>" ],
               post_tags: [ "</b>" ],

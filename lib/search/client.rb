@@ -52,8 +52,8 @@ module Search
     def search_params
       params = {
         index: indices,
-        type: :data,
-        explain: explain,
+        type: :verse,
+        explain: true,
         body: {
           indices_boost: index_boost,
           highlight: highlight,
@@ -119,7 +119,7 @@ module Search
 
     def source
       if self.hits_query?
-        ['text', 'resource.*', 'language.*']
+        ['verse']
       else
         []
       end
@@ -169,7 +169,7 @@ module Search
           slop: 50,
           query: @query.query,
           fields: fields_val,
-          fuzziness: fuzziness,
+         # fuzziness: fuzziness,
           minimum_should_match: '85%'
         }
       }
