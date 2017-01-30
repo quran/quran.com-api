@@ -10,5 +10,5 @@
 #
 
 class V3::AuthorSerializer <  V3::ApplicationSerializer
-  attributes :name, :url
+  attributes :name, :url, :id
 end
