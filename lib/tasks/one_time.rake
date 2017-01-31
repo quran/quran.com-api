@@ -1,5 +1,6 @@
 namespace :one_time do
   task import_malayalam_data: :environment do
+    require 'httparty'
     language = Language.find_by_name('Malayalam')
 
     source = DataSource.where(name: "Tafhim al-Qur'an", url: "http://www.tafheem.net/").first_or_create
@@ -88,7 +89,7 @@ namespace :one_time do
 
     [['Chinese', 'chinese.json'], ['French', 'france.json'], ['Urdu', 'urdu.json'], ['Azeri', 'azirbijan.json'],
      ['Bosnian', 'bonski.json'], ['Dutch', 'neatherland.json'], ['Russian', 'ru.json'], ['Spanish', 'spanish.json'],
-     ['Swedish', 'swedish.json']
+     ['Swedish', 'swedish.json'], ['Indonesian', 'id.json']
     ].each do |item|
       lang, file_name = item
       language = Language.find_by_name(lang)
