@@ -1,1 +1,0 @@
-json.extract! @results, :content, :audio, :quran, :url

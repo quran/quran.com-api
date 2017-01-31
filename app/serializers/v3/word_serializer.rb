@@ -19,7 +19,7 @@
 #
 
 class V3::WordSerializer < V3::ApplicationSerializer
-  attributes :id, :position, :text_madani, :text_indopak, :text_simple, :verse_key, :class_name, :line_number, :code_dec, :code, :char_type
+  attributes :id, :position, :text_madani, :text_indopak, :text_simple, :verse_key, :class_name, :line_number, :code, :char_type
 
   #ON HOLD: Actually we don't have word audio for now
   #has_one  :audio, serializer: V3::AudioFileSerializer
