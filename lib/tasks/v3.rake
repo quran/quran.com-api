@@ -90,6 +90,7 @@ namespace :v3 do
       chapter_info.text = info.description
       chapter_info.source = info.content_source
       chapter_info.resource_content = resource_content
+      chapter_info.language_name = language.name.downcase
 
       puts "verse info #{chapter_info.id}"
 
@@ -143,8 +144,8 @@ namespace :v3 do
             word.text_simple =token.clean
           end
 
-          word.translations.where(language: language, resource_content: word_trans_resource).first_or_create(text: word_font.word.translation)
-          word.transliterations.where(language: language, resource_content: word_transliteration_resource).first_or_create(text: word_font.word.transliteration)
+          word.translations.where(language: language, resource_content: word_trans_resource).first_or_create(text: word_font.word.translation, language_name: language.name.downcase)
+          word.transliterations.where(language: language, resource_content: word_transliteration_resource).first_or_create(text: word_font.word.transliteration, language_name: language.name.downcase)
         end
         word.save
       end
@@ -171,7 +172,7 @@ namespace :v3 do
       verse = Verse.find_by_verse_key(trans.ayah_key)
 
       resource_content = ResourceContent.where(resource_type: resource.type, sub_type: resource.sub_type, author_name: resource.author&.name, cardinality_type: resource.cardinality_type, language: language).first_or_create
-      translation = verse.translations.where(language: language, resource_content: resource_content).first_or_create(text: trans.text )
+      translation = verse.translations.where(language: language, resource_content: resource_content).first_or_create(text: trans.text, language_name: language.name.downcase )
 
       puts "ayah translation #{translation.id}"
     end
@@ -241,7 +242,6 @@ namespace :v3 do
       puts "audio #{audio.id}"
     end
 
-
     #last few steps to fix missing attributes
     MediaContent.find_each do |m|
       m.language = language
@@ -251,12 +251,12 @@ namespace :v3 do
     end
 
     ResourceContent.find_each do |m|
-      m.language_name = m.language.name
+      m.language_name = m.language.name.downcase
       m.save
     end
 
     TranslatedName.find_each do |t|
-      t.language_name = t.language.name
+      t.language_name = t.language.name.downcase
       t.save
     end
 
