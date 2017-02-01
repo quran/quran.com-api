@@ -13,6 +13,7 @@
 #  char_type_id :integer          not null
 #
 
+#TODO: marked for deletion
 class Quran::WordFont < ActiveRecord::Base
   extend Quran
 

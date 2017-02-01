@@ -170,8 +170,8 @@ namespace :v3 do
       language = Language.find_by_iso_code(resource.language_code)
       verse = Verse.find_by_verse_key(trans.ayah_key)
 
-      resource_content = ResourceContent.where(resource_type: resource.type, sub_type: resource.sub_type, author_name: resource.author&.name, cardinality_type: resource.cardinality_type, language: language).first_or_create
-      translation = verse.translations.where(language: language, resource_content: resource_content).first_or_create(text: trans.text )
+      resource_content = ResourceContent.where(resource_type: resource.type, sub_type: resource.sub_type, author_name: resource.slug || resource.author&.name, cardinality_type: resource.cardinality_type, language: language).first_or_create
+      translation = verse.translations.where(language: language, resource_content: resource_content, text: trans.text).first_or_create
 
       puts "ayah translation #{translation.id}"
     end
@@ -187,9 +187,6 @@ namespace :v3 do
 
       puts "ayah transliterations #{transliteration.id}"
     end
-
-    ## HEre
-
 
     # create author and resource content for Bayyinah
     media_resource = Media::Resource.first

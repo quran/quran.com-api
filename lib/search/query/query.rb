@@ -9,7 +9,7 @@ module Search
         to_escape = %w_+ - = & | > < ! ( ) { } [ ] ^ " ~ * ? : \ /_
         re = Regexp.union(to_escape)
 
-        @query = query.force_encoding('ASCII-8BIT').force_encoding('UTF-8').gsub(re) { |m| "\\#{m}" }
+        @query = query.to_s.force_encoding('ASCII-8BIT').force_encoding('UTF-8').gsub(re) { |m| "\\#{m}" }
       end
 
       def language_match

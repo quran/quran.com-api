@@ -20,6 +20,8 @@ Rails.application.routes.draw do
         get :media_content
         get :chapter_info
       end
+
+      get 'search', to: 'search#index'
     end
   end
 
