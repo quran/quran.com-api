@@ -1,7 +1,7 @@
 class V3::ChaptersController < ApplicationController
   # GET /chapters
   def index
-    chapters = Chapter.includes(:translated_names).all
+    chapters = Chapter.all
 
     render json: chapters
   end

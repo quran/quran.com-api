@@ -81,6 +81,7 @@ ActiveRecord::Schema.define(version: 20170101154110) do
     t.string   "revelation_place"
     t.string   "name_complex"
     t.string   "name_arabic"
+    t.string   "name_simple"
     t.string   "pages"
     t.integer  "verses_count"
     t.integer  "chapter_number"
@@ -113,15 +114,15 @@ ActiveRecord::Schema.define(version: 20170101154110) do
   end
 
   create_table "file", primary_key: "file_id", id: :integer, default: -> { "nextval('_file_file_id_seq'::regclass)" }, force: :cascade do |t|
-    t.integer "recitation_id",                     null: false
-    t.text    "ayah_key",                          null: false
-    t.text    "format",                            null: false
+    t.integer "recitation_id",                 null: false
+    t.text    "ayah_key",                      null: false
+    t.text    "format",                        null: false
     t.float   "duration"
-    t.text    "mime_type",                         null: false
-    t.boolean "is_enabled",         default: true, null: false
+    t.text    "mime_type",                     null: false
+    t.boolean "is_enabled",     default: true, null: false
     t.text    "url"
-    t.text    "segments"
-    t.text    "encrypted_segments"
+    t.json    "segments_stats"
+    t.text    "segments",                                   array: true
     t.index ["ayah_key"], name: "index_audio.file_on_ayah_key", using: :btree
     t.index ["recitation_id", "ayah_key", "format"], name: "_file_recitation_id_ayah_key_format_key", unique: true, using: :btree
   end

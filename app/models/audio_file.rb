@@ -20,5 +20,5 @@ class AudioFile < ApplicationRecord
   belongs_to :resource, polymorphic: true
   belongs_to :recitation
 
-  serialize :segments
+  serialize :segments, Array
 end
