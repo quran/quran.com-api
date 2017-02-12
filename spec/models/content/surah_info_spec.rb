@@ -1,13 +1,13 @@
 # == Schema Information
 #
-# Table name: content.surah_details
+# Table name: surah_infos
 #
-#  id            :integer          not null
-#  language_code :string
-#  description   :text
-#  surah_id      :integer
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
+#  id                :integer          not null, primary key
+#  language_code     :string
+#  description       :text
+#  surah_id          :integer
+#  content_source    :text
+#  short_description :text
 #
 
 require 'rails_helper'
