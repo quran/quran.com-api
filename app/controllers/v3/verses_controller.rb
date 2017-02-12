@@ -4,7 +4,7 @@ class V3::VersesController < ApplicationController
     chapter = Chapter.find(params[:chapter_id])
     verses = chapter.verses.includes(words: [:char_type, :audio]).page(page).per(per_page).offset(offset)
 
-    render json: verses,  meta: pagination_dict(verses), include: '**'
+    render json: verses, meta: pagination_dict(verses), include: '**'
   end
 
   # GET /verses/1
