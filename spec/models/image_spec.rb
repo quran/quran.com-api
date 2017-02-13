@@ -12,7 +12,8 @@
 #  updated_at          :datetime         not null
 #
 
-class Image < ApplicationRecord
-  belongs_to :verse
-  belongs_to :resource_content
+require 'rails_helper'
+
+RSpec.describe Image, type: :model do
+  pending "add some examples to (or delete) #{__FILE__}"
 end
