@@ -45,10 +45,10 @@ class Quran::Ayah < ActiveRecord::Base
   has_many :glyphs, -> {order('position asc') }, class_name: 'Quran::WordFont', foreign_key: 'ayah_key'
 
   # NOTE the relationships below were created as database-side views for use with elasticsearch
-  has_many :text_roots,  class_name: 'Quran::TextRoot',  foreign_key: 'ayah_key'
-  has_many :text_lemmas, class_name: 'Quran::TextLemma', foreign_key: 'ayah_key'
-  has_many :text_stems,  class_name: 'Quran::TextStem',  foreign_key: 'ayah_key'
-  has_one  :text_token,   class_name: 'Quran::TextToken', foreign_key: 'ayah_key'
+  has_one :text_root,  class_name: 'Quran::TextRoot',  foreign_key: 'ayah_key'
+  has_one :text_lemma, class_name: 'Quran::TextLemma', foreign_key: 'ayah_key'
+  has_one :text_stem,  class_name: 'Quran::TextStem',  foreign_key: 'ayah_key'
+  has_one :text_token, class_name: 'Quran::TextToken', foreign_key: 'ayah_key'
 
   def self.by_range(surah_id, from, to)
     where('quran.ayah.surah_id = ?', surah_id)

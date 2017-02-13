@@ -4,9 +4,16 @@ class CreateWords < ActiveRecord::Migration[5.0]
       t.references :verse
       t.references :chapter
       t.integer :position, index: true
+
       t.text :text_madani
       t.text :text_indopak
       t.text :text_simple
+      t.text :text_root
+      t.text :text_stem
+      t.text :text_lemma
+      t.text :text_token
+      t.json :corpus
+
       t.string :verse_key, index: true
       t.integer :page_number
       t.string :class_name

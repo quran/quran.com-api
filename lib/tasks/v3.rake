@@ -3,9 +3,7 @@ namespace :v3 do
     ['file', 'recitation', 'reciter', 'style', 'author', 'resource', 'resource_api_version', 'source', 'surah_infos', 'tafsir',
      'tafsir_ayah', 'translation', 'transliteration', 'language', 'media.content', 'media.resource',
      'ayah', 'char_type', 'surah', 'text', 'text_font', 'word_font', 'word_transliteration', 'word_translation',
-    ].each do |table|
-      ActiveRecord::Migration.drop_table table
-    end
+   ].each { |table| ActiveRecord::Migration.drop_table(table) }
   end
 
   task import_from_v2: :environment do
@@ -37,7 +35,7 @@ namespace :v3 do
       resource_content = ResourceContent.where(author: author, resource_type: content.type, sub_type: content.sub_type, name: content.name, cardinality_type: content.cardinality_type).first_or_create
       resource_content.description = content.description
       resource_content.language = Language.find_by_iso_code(content.language_code)
-      resource_content.author_name = author&.name
+      resource_content.author_name = author.name
       if content.source
         data_source = DataSource.where(name: content.source.name,  url: content.source.url).first_or_create
         resource_content.data_source = data_source
@@ -116,6 +114,12 @@ namespace :v3 do
       verse.verse_index = ayah.ayah_index
       verse.text_simple = ayah.text
       verse.text_madani = Quran::Text.find_by_ayah_key(ayah.ayah_key).text
+      verse.text_root = ayah.text_root.text
+      verse.text_stem = ayah.text_stem.text
+      verse.text_token = ayah.text_token.text
+      verse.text_lemma = ayah.text_lemma.text
+      verse.image_url = ayah.images.first.url
+
       verse.save
       puts "verse #{verse.id}"
     end
@@ -135,6 +139,19 @@ namespace :v3 do
         word.code_hex = word_font.code_hex
         word.char_type_id = char_type.id
         word.verse_key = verse.verse_key
+
+        word.text_stem = word_font.word.stems.first.value
+        word.text_lemma = word_font.word.lemmas.first.value
+        word.text_root = word_font.word.roots.first.value
+        word.text_token = word_font.word.token.value
+        corpus = word_font.word.corpus
+
+        word.corpus = {
+          description: corpus.description,
+          image_src: corpus.image_src,
+          segment: corpus.segment
+        }
+
         word.save
         puts "word #{word.id}"
 
@@ -147,6 +164,7 @@ namespace :v3 do
           word.translations.where(language: language, resource_content: word_trans_resource).first_or_create(text: word_font.word.translation, language_name: language.name.downcase)
           word.transliterations.where(language: language, resource_content: word_transliteration_resource).first_or_create(text: word_font.word.transliteration, language_name: language.name.downcase)
         end
+
         word.save
       end
     end
@@ -158,7 +176,7 @@ namespace :v3 do
       verse = Verse.find_by_verse_key(tafsir.ayah_key)
       data_source = DataSource.where(name: resource.source.name, url: resource.source.url).first_or_create if resource.source
 
-      resource_content = ResourceContent.where(resource_type: resource.type, sub_type: resource.sub_type, author_name: resource.author&.name, cardinality_type: resource.cardinality_type, language: language).first_or_create
+      resource_content = ResourceContent.where(resource_type: resource.type, sub_type: resource.sub_type, author_name: resource.author.name, cardinality_type: resource.cardinality_type, language: language).first_or_create
       resource_content.data_source = data_source
       resource_content.save
       taf = verse.tafsirs.where(language: language, resource_content: resource_content).first_or_create(text: tafsir.tafsir.text )
@@ -171,7 +189,7 @@ namespace :v3 do
       language = Language.find_by_iso_code(resource.language_code)
       verse = Verse.find_by_verse_key(trans.ayah_key)
 
-      resource_content = ResourceContent.where(resource_type: resource.type, sub_type: resource.sub_type, author_name: resource.author&.name, cardinality_type: resource.cardinality_type, language: language).first_or_create
+      resource_content = ResourceContent.where(resource_type: resource.type, sub_type: resource.sub_type, author_name: resource.author.name, cardinality_type: resource.cardinality_type, language: language).first_or_create
       translation = verse.translations.where(language: language, resource_content: resource_content).first_or_create(text: trans.text, language_name: language.name.downcase )
 
       puts "ayah translation #{translation.id}"
@@ -183,7 +201,7 @@ namespace :v3 do
       language = Language.find_by_iso_code(resource.language_code) || language
       verse = Verse.find_by_verse_key(trans.ayah_key)
 
-      resource_content = ResourceContent.where(resource_type: resource.type, sub_type: resource.sub_type, author_name: resource.author&.name, cardinality_type: resource.cardinality_type, language: language).first_or_create
+      resource_content = ResourceContent.where(resource_type: resource.type, sub_type: resource.sub_type, author_name: resource.author.name, cardinality_type: resource.cardinality_type, language: language).first_or_create
       transliteration = verse.transliterations.where(language: language, resource_content: resource_content).first_or_create(text: trans.text )
 
       puts "ayah transliterations #{transliteration.id}"
@@ -246,7 +264,7 @@ namespace :v3 do
     MediaContent.find_each do |m|
       m.language = language
       m.language_name = language.name
-      m.author_name = m.resource_content&.author_name
+      m.author_name = m.resource_content.author_name
       m.save
     end
 
@@ -262,11 +280,10 @@ namespace :v3 do
 
     Recitation.find_each do |r|
       r.reciter_name = r.reciter.name
-      r.style = r.recitation_style&.style
+      r.style = r.recitation_style.style
       r.save
     end
   end
 end
 
 # Update content resource for image rename table to image
-
