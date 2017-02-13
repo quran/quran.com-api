@@ -1,5 +1,6 @@
 namespace :one_time do
   task import_malayalam_data: :environment do
+    require 'httparty'
     language = Language.find_by_name('Malayalam')
 
     source = DataSource.where(name: "Tafhim al-Qur'an", url: "http://www.tafheem.net/").first_or_create

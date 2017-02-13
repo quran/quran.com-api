@@ -30,27 +30,27 @@ class ResourceContent < ApplicationRecord
   scope :approved, -> { where approved: true }
 
   module CardinalityType
-    OneVerse = '1_ayah'
-    OneWord = '1_word'
-    NVerse = 'n_ayah'
-    OneChapter = '1_chapter'
+    OneVerse = '1_ayah'.freeze
+    OneWord = '1_word'.freeze
+    NVerse = 'n_ayah'.freeze
+    OneChapter = '1_chapter'.freeze
   end
 
   module ResourceType
-    Audio = 'audio'
-    Content = 'content'
-    Quran = 'quran'
-    Media = 'media'
+    Audio = 'audio'.freeze
+    Content = 'content'.freeze
+    Quran = 'quran'.freeze
+    Media = 'media'.freeze
   end
 
   module SubType
-    Translation = 'translation'
-    Tafsir = 'tafsir'
-    Transliteration = 'transliteration'
-    Font = 'font'
-    Image = 'image'
-    Info = 'info'
-    Video = 'video'
+    Translation = 'translation'.freeze
+    Tafsir = 'tafsir'.freeze
+    Transliteration = 'transliteration'.freeze
+    Font = 'font'.freeze
+    Image = 'image'.freeze
+    Info = 'info'.freeze
+    Video = 'video'.freeze
   end
 
   belongs_to :author
