@@ -10,7 +10,7 @@ class V3::VersesController < ApplicationController
              .offset(offset)
 
     render json: verses,
-           meta: pagination_dict(verses),
+           meta: pagination_hash(verses),
            include: '**'
   end
 
@@ -27,7 +27,7 @@ class V3::VersesController < ApplicationController
 
   private
 
-  def pagination_dict(object)
+  def pagination_hash(object)
     {
       current_page: object.current_page,
       next_page: object.next_page,
