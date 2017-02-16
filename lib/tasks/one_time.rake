@@ -112,7 +112,7 @@ agent = Mechanize.new
 1.upto(114).each do |chapter_number|
   chapter_number = chapter_number.to_s.rjust(3, '0')
   url = "http://www.tafheemulquran.net/1_Tafheem/Suraes/#{chapter_number}/S#{chapter_number}.html"
-  info = agent.get(url).search("#intro td p").inner_html
+  info = agent.get(url).search-v2("#intro td p").inner_html
   File.open("data/urdu_info/#{chapter_number}.html", 'wb') do |file|
     file << info
   end
@@ -156,7 +156,7 @@ frag.css('.style24').each do |node|
 end
 
 #replace all tag expect span.style24
-frag.search('//*/*').each do |node|
+frag.search-v2('//*/*').each do |node|
   next if ['a', 'body'].include?(node.name) || (node.name == 'span' && ['style24', 'style41'].include?(node.attr("class")))
 
   puts "replacing #{node.name}"
@@ -182,12 +182,12 @@ frag.css("p").find_all{|p| all_children_are_blank?(p) }.each do |p|
   p.remove
 end
 
-File.open "data/urdu_fixed6/#{n}.html", 'wb' do |file| file << frag.search('body').children.to_html end
+File.open "data/urdu_fixed6/#{n}.html", 'wb' do |file| file << frag.search-v2('body').children.to_html end
 end
 
 #Tamil
 1.upto(114) do |number|
-      content = agent.get("http://truevisionmedia.org/ift-chennai/tafheem-tamil/intro/intro3.htm").search("body p")[1].to_html
+      content = agent.get("http://truevisionmedia.org/ift-chennai/tafheem-tamil/intro/intro3.htm").search-v2("body p")[1].to_html
 
       File.open("data/tamil_info/#{number}.html", 'wb') do |file| file << content
       end

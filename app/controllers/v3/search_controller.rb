@@ -2,26 +2,32 @@ class V3::SearchController < ApplicationController
   include LanguageDetection
 
   def index
-    search = Search::Client.new(
+    client = Search::Client.new(
         query,
-        page: page,
-        size: size
+        {page: page,
+        size: size}
     )
 
-    search.request
-
+    response = client.search
     render json: {
-        query: search.query.query,
-        total: search.total,
-        page: search.page,
-        size: search.size,
-        from: search.from + 1,
-        took: {
-            total: search.delta_time,
-            elasticsearch: search.response.took.to_f / 1000
-        },
-        results: search.response.records
+        query: client.query,
+        total: response.total,
+        took: response.took,
+        results: response.results
     }
+
+    # render json: {
+    #     query: search.query.query,
+    #     total: search.total,
+    #     page: search.page,
+    #     size: search.size,
+    #     from: search.from + 1,
+    #     took: {
+    #         total: search.delta_time,
+    #         elasticsearch: search.response.took.to_f / 1000
+    #     },
+    #     results: search.response.records
+    # }
   end
 
   protected
@@ -39,6 +45,6 @@ class V3::SearchController < ApplicationController
   end
 
   def page
-    params[:page] || params[:p] || 1
+    params[:page] || params[:p] || 0
   end
 end
