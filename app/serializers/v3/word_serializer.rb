@@ -29,6 +29,7 @@ class V3::WordSerializer < V3::ApplicationSerializer
              :line_number,
              :page_number,
              :code,
+             :code_v3
              :char_type
 
   has_one :audio, serializer: V3::AudioFileSerializer
@@ -51,5 +52,9 @@ class V3::WordSerializer < V3::ApplicationSerializer
 
   def code
     "&#x#{object.code_hex};"
+  end
+
+  def code_v3
+    "&#x#{object.code_hex_v3};"
   end
 end

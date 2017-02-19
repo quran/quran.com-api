@@ -32,7 +32,6 @@ class Verse < ApplicationRecord
   has_many :transliterations, as: :resource
   has_many :audio_files, as: :resource
   has_many :recitations, through: :audio_files
-  has_one :image
 
   default_scope { order 'verse_number asc' }
 end
