@@ -54,6 +54,7 @@ class V3::VerseSerializer < V3::ApplicationSerializer
   has_many :media_contents
 
   has_many :words, unless: :render_images?
+
   attribute :image, key: :image, if: :render_images? do
     {url: object.image_url, width: object.image_width}
   end

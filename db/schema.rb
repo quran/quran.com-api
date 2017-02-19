@@ -149,18 +149,6 @@ ActiveRecord::Schema.define(version: 20170219222537) do
     t.integer "width",       null: false
   end
 
-  create_table "images", force: :cascade do |t|
-    t.integer  "verse_id"
-    t.integer  "resource_content_id"
-    t.integer  "width"
-    t.string   "url"
-    t.text     "alt"
-    t.datetime "created_at",          null: false
-    t.datetime "updated_at",          null: false
-    t.index ["resource_content_id"], name: "index_images_on_resource_content_id", using: :btree
-    t.index ["verse_id"], name: "index_images_on_verse_id", using: :btree
-  end
-
   create_table "language", primary_key: "language_code", id: :text, force: :cascade do |t|
     t.text    "unicode"
     t.text    "english",                             null: false

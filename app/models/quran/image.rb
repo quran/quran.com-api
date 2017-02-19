@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: quran.image
+# Table name: image
 #
 #  resource_id :integer          not null
 #  ayah_key    :text             not null
@@ -9,9 +9,9 @@
 #  width       :integer          not null
 #
 
-class Image < ApplicationRecord
-  self.table_name = 'quran.image'
-  belongs_to :resource_content
-  belongs_to :verse
-end
+class Quran::Image < ActiveRecord::Base
+  self.table_name = 'image'
 
+  belongs_to :resource, class_name: 'Content::Resource'
+  belongs_to :ayah, class_name: 'Quran::Ayah'
+end
