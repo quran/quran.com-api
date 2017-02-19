@@ -8,6 +8,7 @@
 #  revelation_place :string
 #  name_complex     :string
 #  name_arabic      :string
+#  name_simple      :string
 #  pages            :string
 #  verses_count     :integer
 #  chapter_number   :integer
