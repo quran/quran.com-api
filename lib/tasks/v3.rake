@@ -265,8 +265,15 @@ namespace :v3 do
       r.style = r.recitation_style&.style
       r.save
     end
+
+    image_resource = ResourceContent.find_by_sub_type 'image'
+    Quran::Image.all.each do |img|
+      verse = Verse.find_by_verse_key(img.ayah_key)
+
+      verse.image_url = img.url.gsub("http:", '')
+      verse.image_width = img.width
+      verse.save
+    end
   end
 end
-
-# Update content resource for image rename table to image
 

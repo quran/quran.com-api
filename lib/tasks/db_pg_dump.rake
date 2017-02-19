@@ -6,7 +6,7 @@ namespace :db do
     sh "mv db/quran_dev.psql.bz2 db/dumps/#{previous_version}"
     sh "touch db/dumps/#{previous_version}/CHANGES.md"
     sh "pg_dump quran_dev -U quran_dev > db/quran_dev_v3.psql"
-    sh "bzip2 db/quran_dev.psql"
+    sh "bzip2 db/quran_dev_v3.psql"
   end
 
   task load_pg_dump: :environment do
