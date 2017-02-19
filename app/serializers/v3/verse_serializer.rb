@@ -46,7 +46,6 @@ class V3::VerseSerializer < V3::ApplicationSerializer
 
   # TODO: Should always return media
   # has_many :media_contents, if: :render_media? do
-  #   # TODO: Need to remove the `eval`! That is really bad
   #   object
   #     .media_contents
   #     .joins(:resource_content)
@@ -55,7 +54,10 @@ class V3::VerseSerializer < V3::ApplicationSerializer
   has_many :media_contents
 
   has_many :words, unless: :render_images?
-  has_one :image, if: :render_images?
+
+  attribute :image, key: :image, if: :render_images? do
+    {url: object.image_url, width: object.image_width}
+  end
 
   def render_images?
     scope[:text_type] == 'image'

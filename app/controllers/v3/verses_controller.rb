@@ -2,7 +2,12 @@ class V3::VersesController < ApplicationController
   # GET /verses
   def index
     chapter = Chapter.find(params[:chapter_id])
-    verses = chapter.verses.includes(words: [:char_type, :audio]).page(page).per(per_page).offset(offset)
+    verses = chapter
+             .verses
+             .includes(:media_contents, words: [:char_type, :audio])
+             .page(page)
+             .per(per_page)
+             .offset(offset)
 
     render json: verses,
            meta: pagination_dict(verses),
@@ -12,7 +17,10 @@ class V3::VersesController < ApplicationController
   # GET /verses/1
   def show
     chapter = Chapter.find(params[:chapter_id])
-    verse = chapter.verses.includes(words: [:char_type, :audio]).find(params[:id])
+    verse = chapter
+            .verses
+            .includes(words: [:char_type, :audio])
+            .find(params[:id])
 
     render json: verse, include: '**'
   end

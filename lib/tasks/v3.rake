@@ -270,12 +270,9 @@ namespace :v3 do
     Quran::Image.all.each do |img|
       verse = Verse.find_by_verse_key(img.ayah_key)
 
-      image = verse.image || verse.build_image
-      image.url = img.url
-      image.resource_content = image_resource
-      image.width = img.width
-      image.alt = img.alt
-      image.save
+      verse.image_url = img.url.gsub("http:", '')
+      verse.image_width = img.width
+      verse.save
     end
   end
 end
