@@ -11,6 +11,7 @@ server {
     passenger_ruby /usr/bin/ruby2.3;
     passenger_app_env production;
     passenger_max_request_queue_size 200;
+    passenger_ruby /usr/local/rvm/rubies/ruby-2.3.1/bin/ruby;
     root   /home/app/quran/public;
     index  index.html index.htm;
   }
