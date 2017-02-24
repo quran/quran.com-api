@@ -25,7 +25,7 @@ default: &default
   # For details on connection pooling, see rails configuration guide
   # http://guides.rubyonrails.org/configuring.html#database-pooling
   pool: 5
-  schema_search_path: quran,"$user",content,audio,i18n,public
+  schema_search_path: public,quran,"$user",content,audio,i18n
 
 development:
   <<: *default

@@ -35,7 +35,7 @@ namespace :v3 do
       resource_content = ResourceContent.where(author: author, resource_type: content.type, sub_type: content.sub_type, name: content.name, cardinality_type: content.cardinality_type).first_or_create
       resource_content.description = content.description
       resource_content.language = Language.find_by_iso_code(content.language_code)
-      resource_content.author_name = author.name
+      resource_content.author_name = author.try(:name)
       if content.source
         data_source = DataSource.where(name: content.source.name,  url: content.source.url).first_or_create
         resource_content.data_source = data_source
@@ -77,7 +77,7 @@ namespace :v3 do
     #Chapter info
     source = DataSource.where(name: "Tafhim al-Qur'an", url: "http://www.tafheem.net/").first_or_create
     author = Author.where(name: "Sayyid Abul Ala Maududi").first_or_create
-    resource_content =  ResourceContent.where(name: "Chapter Info", author: author, language: language).first_or_create(author_name: author.name, cardinality_type: ResourceContent::CardinalityType::OneChapter, resource_type: ResourceContent::ResourceType::Content, sub_type: 'Chapter info')
+    resource_content =  ResourceContent.where(name: "Chapter Info", author: author, language: language).first_or_create(author_name: author.try(:name), cardinality_type: ResourceContent::CardinalityType::OneChapter, resource_type: ResourceContent::ResourceType::Content, sub_type: 'Chapter info')
     resource_content.data_source = source
     resource_content.description = "Sayyid Abul Ala Maududi - Tafhim al-Qur'an - The Meaning of the Quran"
     resource_content.save
@@ -114,11 +114,11 @@ namespace :v3 do
       verse.verse_index = ayah.ayah_index
       verse.text_simple = ayah.text
       verse.text_madani = Quran::Text.find_by_ayah_key(ayah.ayah_key).text
-      verse.text_root = ayah.text_root.text
-      verse.text_stem = ayah.text_stem.text
-      verse.text_token = ayah.text_token.text
-      verse.text_lemma = ayah.text_lemma.text
-      verse.image_url = ayah.images.first.url
+      verse.text_root = ayah.try(:text_root).try(:text)
+      verse.text_stem = ayah.try(:text_stem).try(:text)
+      verse.text_token = ayah.try(:text_token).try(:text)
+      verse.text_lemma = ayah.try(:text_lemma).try(:text)
+      verse.image_url = ayah.try(:images).try(:first).try(:url)
 
       verse.save
       puts "verse #{verse.id}"
@@ -140,17 +140,19 @@ namespace :v3 do
         word.char_type_id = char_type.id
         word.verse_key = verse.verse_key
 
-        word.text_stem = word_font.word.stems.first.value
-        word.text_lemma = word_font.word.lemmas.first.value
-        word.text_root = word_font.word.roots.first.value
-        word.text_token = word_font.word.token.value
-        corpus = word_font.word.corpus
+        word.text_stem = word_font.try(:word).try(:stems).try(:first).try(:value)
+        word.text_lemma = word_font.try(:word).try(:lemmas).try(:first).try(:value)
+        word.text_root = word_font.try(:word).try(:roots).try(:first).try(:value)
+        word.text_token = word_font.try(:word).try(:token).try(:value)
+        corpus = word_font.try(:word).try(:corpus)
 
-        word.corpus = {
-          description: corpus.description,
-          image_src: corpus.image_src,
-          segment: corpus.segment
-        }
+        if corpus.present?
+          word.corpus = {
+            description: corpus.description,
+            image_src: corpus.image_src,
+            segment: corpus.segment
+          }
+        end
 
         word.save
         puts "word #{word.id}"
@@ -176,7 +178,7 @@ namespace :v3 do
       verse = Verse.find_by_verse_key(tafsir.ayah_key)
       data_source = DataSource.where(name: resource.source.name, url: resource.source.url).first_or_create if resource.source
 
-      resource_content = ResourceContent.where(resource_type: resource.type, sub_type: resource.sub_type, author_name: resource.author.name, cardinality_type: resource.cardinality_type, language: language).first_or_create
+      resource_content = ResourceContent.where(resource_type: resource.type, sub_type: resource.sub_type, author_name: resource.author.try(:name), cardinality_type: resource.cardinality_type, language: language).first_or_create
       resource_content.data_source = data_source
       resource_content.save
       taf = verse.tafsirs.where(language: language, resource_content: resource_content).first_or_create(text: tafsir.tafsir.text )
@@ -189,7 +191,7 @@ namespace :v3 do
       language = Language.find_by_iso_code(resource.language_code)
       verse = Verse.find_by_verse_key(trans.ayah_key)
 
-      resource_content = ResourceContent.where(resource_type: resource.type, sub_type: resource.sub_type, author_name: resource.author.name, cardinality_type: resource.cardinality_type, language: language).first_or_create
+      resource_content = ResourceContent.where(resource_type: resource.type, sub_type: resource.sub_type, author_name: resource.author.try(:name), cardinality_type: resource.cardinality_type, language: language).first_or_create
       translation = verse.translations.where(language: language, resource_content: resource_content).first_or_create(text: trans.text, language_name: language.name.downcase )
 
       puts "ayah translation #{translation.id}"
@@ -201,7 +203,7 @@ namespace :v3 do
       language = Language.find_by_iso_code(resource.language_code) || language
       verse = Verse.find_by_verse_key(trans.ayah_key)
 
-      resource_content = ResourceContent.where(resource_type: resource.type, sub_type: resource.sub_type, author_name: resource.author.name, cardinality_type: resource.cardinality_type, language: language).first_or_create
+      resource_content = ResourceContent.where(resource_type: resource.type, sub_type: resource.sub_type, author_name: resource.author.try(:name), cardinality_type: resource.cardinality_type, language: language).first_or_create
       transliteration = verse.transliterations.where(language: language, resource_content: resource_content).first_or_create(text: trans.text )
 
       puts "ayah transliterations #{transliteration.id}"
@@ -214,7 +216,7 @@ namespace :v3 do
     media_resource = Media::Resource.first
 
     author = Author.where(name: media_resource.name,  url: media_resource.url).first_or_create
-    resource_content = ResourceContent.where(author: author, language: language, resource_type: 'media', sub_type: 'video').first_or_create(author_name: author.name, cardinality_type: ResourceContent::CardinalityType::OneVerse, approved: true)
+    resource_content = ResourceContent.where(author: author, language: language, resource_type: 'media', sub_type: 'video').first_or_create(author_name: author.try(:name), cardinality_type: ResourceContent::CardinalityType::OneVerse, approved: true)
     #Migrate media content
     Media::Content.all.each do |media|
       verse = Verse.find_by_verse_key(media.ayah_key)
