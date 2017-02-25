@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   scope :api do
     namespace :v3 do
+      resources :foot_notes, only: :show, defaults: {format: 'json'}
+
       resources :chapters, only: [:index, :show], defaults: {format: 'json'} do
         member do
           get :info, to: 'chapter_infos#show'

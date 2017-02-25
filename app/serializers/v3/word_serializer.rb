@@ -29,17 +29,17 @@ class V3::WordSerializer < V3::ApplicationSerializer
              :line_number,
              :page_number,
              :code,
-             :code_v3
+             :code_v3,
              :char_type
 
   has_one :audio, serializer: V3::AudioFileSerializer
 
   has_one :translation do
-    object.translations.filter_by_language_or_default scope[:translations]
+    object.translations.filter_by_language_or_default scope[:language]
   end
 
   has_one :transliteration do
-    object.transliterations.filter_by_language_or_default scope[:translations]
+    object.transliterations.filter_by_language_or_default scope[:language]
   end
 
   def char_type
