@@ -21,7 +21,8 @@
 #
 
 class Verse < ApplicationRecord
-  include Searchable
+  # include Searchable
+  searchkick highlight: [:text_simple, :text_madani, 'translations.text']
 
   belongs_to :chapter, inverse_of: :verses, counter_cache: true
   has_many :tafsirs
@@ -33,4 +34,8 @@ class Verse < ApplicationRecord
   has_many :recitations, through: :audio_files
 
   default_scope { order 'verse_number asc' }
+
+  def search_data
+    attributes.merge(translations: translations)
+  end
 end

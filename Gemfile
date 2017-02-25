@@ -52,6 +52,8 @@ gem "sentry-raven"
 gem "passenger"
 gem 'virtus'
 
+gem 'searchkick'
+
 group :development, :test do
   gem 'pry-byebug'
   gem 'pry-rails'

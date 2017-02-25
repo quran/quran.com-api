@@ -30,6 +30,16 @@ class V3::SearchController < ApplicationController
     # }
   end
 
+  def new
+    results = Verse.search query,
+                    fields: [:text_simple, :text_madani, 'translations.text'],
+                    highlight: true,
+                    includes: [{ words: [:char_type] }, :media_contents]
+
+    render json: results
+
+  end
+
   protected
 
   def language

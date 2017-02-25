@@ -23,19 +23,23 @@ module Searchable
     end
 
     def as_indexed_json(options={})
-      hash = self.as_json(
-          only: [:id, :verse_key, :text_madani, :text_indopak, :text_simple],
-          methods: :chapter_names
+      hash = as_json(
+        only: [:id, :verse_key, :text_madani, :text_indopak, :text_simple],
+        methods: :chapter_names
       )
 
       hash[:transliterations] = transliterations.first.try(:text)
       hash[:words] = words.map do |w|
-        {id: w.id, madani: w.text_madani, simple: w.text_simple}
+        { id: w.id, madani: w.text_madani, simple: w.text_simple }
       end
 
       translations.includes(:language).each do |trans|
         hash["trans_#{trans.language.iso_code}"] ||= []
-        hash["trans_#{trans.language.iso_code}"] << {id: trans.id, text: trans.text, author: trans.resource_content.author_name}
+        hash["trans_#{trans.language.iso_code}"] << {
+          id: trans.id,
+          text: trans.text,
+          author: trans.resource_content.author_name
+        }
       end
 
       hash
@@ -59,11 +63,11 @@ module Searchable
           #         term_vector: 'with_positions_offsets',
           #         search_analyzer: 'arabic_normalized',
           #         analyzer: 'arabic_ngram'
-           indexes :autocomplete,
-                   type: 'string',
-                   analyzer: 'autocomplete_arabic',
-                   search_analyzer: 'arabic_normalized',
-                   index_options: 'offsets'
+          indexes :autocomplete,
+                  type: 'string',
+                  analyzer: 'autocomplete_arabic',
+                  search_analyzer: 'arabic_normalized',
+                  index_options: 'offsets'
         end
       end
 
@@ -72,12 +76,13 @@ module Searchable
       end
 
       indexes :chapter_names
-      indexes :transliterations, type: 'text',
+      indexes :transliterations,
+              type: 'text',
               similarity: 'my_bm25',
               term_vector: 'with_positions_offsets',
               analyzer: 'standard'
 
-      indexes "words", type: 'nested' do
+      indexes 'words', type: 'nested' do
         indexes :madani,
                 type: 'text',
                 term_vector: 'with_positions_offsets',
@@ -90,10 +95,15 @@ module Searchable
                 similarity: 'my_bm25'
       end
 
-      languages = Translation.where(resource_type: 'Verse').pluck(:language_id).uniq
+      languages = Translation
+                  .where(resource_type: 'Verse')
+                  .pluck(:language_id)
+                  .uniq
       available_languages = Language.where(id: languages)
       available_languages.each do |lang|
-        es_analyzer = lang.es_analyzer_default.present? ? lang.es_analyzer_default : nil
+        es_analyzer = lang.es_analyzer_default.present? ?
+                      lang.es_analyzer_default :
+                      nil
 
         indexes "trans_#{lang.iso_code}", type: 'nested' do
           indexes :text,
