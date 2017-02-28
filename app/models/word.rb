@@ -25,9 +25,14 @@
 class Word < ApplicationRecord
   belongs_to :verse
   belongs_to :char_type
+
   has_many :translations, as: :resource
   has_many :transliterations, as: :resource
+  has_many :word_topics
+  has_many :topics, through: :word_topics
+
   has_one  :audio, class_name: 'AudioFile', as: :resource
+  has_one :word_corpus
 
   default_scope {order 'position asc'}
 end

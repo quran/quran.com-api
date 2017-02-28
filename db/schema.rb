@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170225055000) do
+ActiveRecord::Schema.define(version: 20170227072336) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -104,6 +104,14 @@ ActiveRecord::Schema.define(version: 20170225055000) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
     t.index ["parent_id"], name: "index_char_types_on_parent_id", using: :btree
+  end
+
+  create_table "concepts", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "parent_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["parent_id"], name: "index_concepts_on_parent_id", using: :btree
   end
 
   create_table "data_sources", force: :cascade do |t|
@@ -365,6 +373,7 @@ ActiveRecord::Schema.define(version: 20170225055000) do
     t.integer  "resource_content_id"
     t.datetime "created_at",          null: false
     t.datetime "updated_at",          null: false
+    t.string   "resource_name"
     t.index ["language_id"], name: "index_tafsirs_on_language_id", using: :btree
     t.index ["resource_content_id"], name: "index_tafsirs_on_resource_content_id", using: :btree
     t.index ["verse_id"], name: "index_tafsirs_on_verse_id", using: :btree
@@ -380,6 +389,23 @@ ActiveRecord::Schema.define(version: 20170225055000) do
     t.string "value", limit: 50, null: false
     t.string "clean", limit: 50, null: false
     t.index ["value"], name: "token_value_key", unique: true, using: :btree
+  end
+
+  create_table "tokens", force: :cascade do |t|
+    t.string   "text_madani"
+    t.string   "text_clean"
+    t.string   "text_indopak"
+    t.string   "transliteration"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+  create_table "topics", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "parent_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["parent_id"], name: "index_topics_on_parent_id", using: :btree
   end
 
   create_table "translated_names", force: :cascade do |t|
@@ -482,6 +508,17 @@ ActiveRecord::Schema.define(version: 20170225055000) do
     t.index ["word_id"], name: "index_quran.word_corpus_on_word_id", using: :btree
   end
 
+  create_table "word_corpuses", force: :cascade do |t|
+    t.integer  "word_id"
+    t.string   "location"
+    t.text     "description"
+    t.string   "image_src"
+    t.json     "segments"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.index ["word_id"], name: "index_word_corpuses_on_word_id", using: :btree
+  end
+
   create_table "word_font", primary_key: ["resource_id", "ayah_key", "position"], force: :cascade do |t|
     t.integer "resource_id",  null: false
     t.text    "ayah_key",     null: false
@@ -511,6 +548,15 @@ ActiveRecord::Schema.define(version: 20170225055000) do
     t.integer "word_id",              null: false
     t.integer "stem_id",              null: false
     t.integer "position", default: 1, null: false
+  end
+
+  create_table "word_topics", force: :cascade do |t|
+    t.integer  "word_id"
+    t.integer  "topic_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["topic_id"], name: "index_word_topics_on_topic_id", using: :btree
+    t.index ["word_id"], name: "index_word_topics_on_word_id", using: :btree
   end
 
   create_table "word_translation", primary_key: "translation_id", id: :integer, default: -> { "nextval('translation_translation_id_seq1'::regclass)" }, force: :cascade do |t|
@@ -549,8 +595,10 @@ ActiveRecord::Schema.define(version: 20170225055000) do
     t.string   "audio_url"
     t.text     "image_blob"
     t.string   "image_url"
+    t.string   "location"
     t.index ["chapter_id"], name: "index_words_on_chapter_id", using: :btree
     t.index ["char_type_id"], name: "index_words_on_char_type_id", using: :btree
+    t.index ["location"], name: "index_words_on_location", using: :btree
     t.index ["position"], name: "index_words_on_position", using: :btree
     t.index ["verse_id"], name: "index_words_on_verse_id", using: :btree
     t.index ["verse_key"], name: "index_words_on_verse_key", using: :btree
