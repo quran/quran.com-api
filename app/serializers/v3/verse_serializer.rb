@@ -38,16 +38,14 @@ class V3::VerseSerializer < V3::ApplicationSerializer
   has_one :audio, if: :render_audio?, serializer: V3::AudioFileSerializer
 
   has_many :translations, if: :render_translations? do
-    # TODO: Need to remove the `eval`! That is really bad
     object
       .translations
       .joins(:resource_content)
-      .where(resource_content_id: eval(scope[:translations]))
+      .where(resource_content_id: scope[:translations])
   end
 
   # TODO: Should always return media
   # has_many :media_contents, if: :render_media? do
-  #   # TODO: Need to remove the `eval`! That is really bad
   #   object
   #     .media_contents
   #     .joins(:resource_content)
@@ -55,7 +53,15 @@ class V3::VerseSerializer < V3::ApplicationSerializer
   # end
   has_many :media_contents
 
-  has_many :words
+  has_many :words, unless: :render_images?
+
+  attribute :image, key: :image, if: :render_images? do
+    {url: object.image_url, width: object.image_width}
+  end
+
+  def render_images?
+    scope[:text_type] == 'image'
+  end
 
   def render_audio?
     scope[:recitation].present?

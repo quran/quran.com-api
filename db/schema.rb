@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170101154110) do
+ActiveRecord::Schema.define(version: 20170225055000) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -147,6 +147,18 @@ ActiveRecord::Schema.define(version: 20170101154110) do
     t.text    "url",         null: false
     t.text    "alt",         null: false
     t.integer "width",       null: false
+  end
+
+  create_table "images", force: :cascade do |t|
+    t.integer  "verse_id"
+    t.integer  "resource_content_id"
+    t.integer  "width"
+    t.string   "url"
+    t.text     "alt"
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+    t.index ["resource_content_id"], name: "index_images_on_resource_content_id", using: :btree
+    t.index ["verse_id"], name: "index_images_on_verse_id", using: :btree
   end
 
   create_table "language", primary_key: "language_code", id: :text, force: :cascade do |t|
@@ -398,6 +410,7 @@ ActiveRecord::Schema.define(version: 20170101154110) do
     t.string   "language_name"
     t.datetime "created_at",          null: false
     t.datetime "updated_at",          null: false
+    t.string   "resource_name"
     t.index ["language_id"], name: "index_translations_on_language_id", using: :btree
     t.index ["resource_content_id"], name: "index_translations_on_resource_content_id", using: :btree
     t.index ["resource_type", "resource_id"], name: "index_translations_on_resource_type_and_resource_id", using: :btree
@@ -439,6 +452,8 @@ ActiveRecord::Schema.define(version: 20170101154110) do
     t.integer  "page_number"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
+    t.text     "image_url"
+    t.integer  "image_width"
     t.index ["chapter_id"], name: "index_verses_on_chapter_id", using: :btree
     t.index ["verse_index"], name: "index_verses_on_verse_index", using: :btree
     t.index ["verse_key"], name: "index_verses_on_verse_key", using: :btree
@@ -530,6 +545,10 @@ ActiveRecord::Schema.define(version: 20170101154110) do
     t.integer  "char_type_id"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
+    t.string   "pause_name"
+    t.string   "audio_url"
+    t.text     "image_blob"
+    t.string   "image_url"
     t.index ["chapter_id"], name: "index_words_on_chapter_id", using: :btree
     t.index ["char_type_id"], name: "index_words_on_char_type_id", using: :btree
     t.index ["position"], name: "index_words_on_position", using: :btree
