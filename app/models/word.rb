@@ -30,6 +30,12 @@ class Word < ApplicationRecord
   has_many :transliterations, as: :resource
   has_many :word_topics
   has_many :topics, through: :word_topics
+  has_many :word_lemmas
+  has_many :lemmas, through: :word_lemmas
+  has_many :word_stems
+  has_many :stems, through: :word_stems
+
+
 
   has_one  :audio, class_name: 'AudioFile', as: :resource
   has_one :word_corpus

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170227072336) do
+ActiveRecord::Schema.define(version: 20170228084936) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -195,6 +195,13 @@ ActiveRecord::Schema.define(version: 20170227072336) do
     t.index ["value"], name: "lemma_value_key", unique: true, using: :btree
   end
 
+  create_table "lemmas", force: :cascade do |t|
+    t.string   "text_madani"
+    t.string   "text_clean"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
   create_table "media_contents", force: :cascade do |t|
     t.string   "resource_type"
     t.integer  "resource_id"
@@ -320,6 +327,13 @@ ActiveRecord::Schema.define(version: 20170227072336) do
     t.string "value", limit: 50, null: false
     t.string "clean", limit: 50, null: false
     t.index ["value"], name: "stem_value_key", unique: true, using: :btree
+  end
+
+  create_table "stems", force: :cascade do |t|
+    t.string   "text_madani"
+    t.string   "text_clean"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   create_table "style", primary_key: "style_id", id: :integer, default: -> { "nextval('_style_style_id_seq'::regclass)" }, force: :cascade do |t|
@@ -538,6 +552,15 @@ ActiveRecord::Schema.define(version: 20170227072336) do
     t.integer "position", default: 1, null: false
   end
 
+  create_table "word_lemmas", force: :cascade do |t|
+    t.integer  "word_id"
+    t.integer  "lemma_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["lemma_id"], name: "index_word_lemmas_on_lemma_id", using: :btree
+    t.index ["word_id"], name: "index_word_lemmas_on_word_id", using: :btree
+  end
+
   create_table "word_root", primary_key: ["word_id", "root_id", "position"], force: :cascade do |t|
     t.integer "word_id",              null: false
     t.integer "root_id",              null: false
@@ -548,6 +571,15 @@ ActiveRecord::Schema.define(version: 20170227072336) do
     t.integer "word_id",              null: false
     t.integer "stem_id",              null: false
     t.integer "position", default: 1, null: false
+  end
+
+  create_table "word_stems", force: :cascade do |t|
+    t.integer  "word_id"
+    t.integer  "stem_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["stem_id"], name: "index_word_stems_on_stem_id", using: :btree
+    t.index ["word_id"], name: "index_word_stems_on_word_id", using: :btree
   end
 
   create_table "word_topics", force: :cascade do |t|
@@ -633,10 +665,14 @@ ActiveRecord::Schema.define(version: 20170227072336) do
   add_foreign_key "word_font", "word", primary_key: "word_id", name: "word_font_word_id_fkey", on_update: :cascade, on_delete: :nullify
   add_foreign_key "word_lemma", "lemma", primary_key: "lemma_id", name: "word_lemma_lemma_id_fkey", on_update: :cascade, on_delete: :cascade
   add_foreign_key "word_lemma", "word", primary_key: "word_id", name: "word_lemma_word_id_fkey", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "word_lemmas", "lemmas"
+  add_foreign_key "word_lemmas", "words"
   add_foreign_key "word_root", "root", primary_key: "root_id", name: "word_root_root_id_fkey", on_update: :cascade, on_delete: :cascade
   add_foreign_key "word_root", "word", primary_key: "word_id", name: "word_root_word_id_fkey", on_update: :cascade, on_delete: :cascade
   add_foreign_key "word_stem", "stem", primary_key: "stem_id", name: "word_stem_stem_id_fkey", on_update: :cascade, on_delete: :cascade
   add_foreign_key "word_stem", "word", primary_key: "word_id", name: "word_stem_word_id_fkey", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "word_stems", "stems"
+  add_foreign_key "word_stems", "words"
   add_foreign_key "word_translation", "language", column: "language_code", primary_key: "language_code", name: "translation_language_code_fkey", on_update: :cascade, on_delete: :cascade
   add_foreign_key "word_translation", "word", primary_key: "word_id", name: "translation_word_id_fkey", on_update: :cascade, on_delete: :cascade
 end
