@@ -2,16 +2,16 @@
 #
 # Table name: file
 #
-#  file_id            :integer          not null, primary key
-#  recitation_id      :integer          not null
-#  ayah_key           :text             not null
-#  format             :text             not null
-#  duration           :float
-#  mime_type          :text             not null
-#  is_enabled         :boolean          default(TRUE), not null
-#  url                :text
-#  segments           :text
-#  encrypted_segments :text
+#  file_id        :integer          not null, primary key
+#  recitation_id  :integer          not null
+#  ayah_key       :text             not null
+#  format         :text             not null
+#  duration       :float
+#  mime_type      :text             not null
+#  is_enabled     :boolean          default(TRUE), not null
+#  url            :text
+#  segments_stats :json
+#  segments       :text             is an Array
 #
 
 class Audio::File < ActiveRecord::Base

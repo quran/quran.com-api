@@ -13,5 +13,5 @@
 #
 
 class V3::TranslationSerializer < V3::ApplicationSerializer
-  attributes :language_name, :text
+  attributes :language_name, :text, :resource_name
 end
