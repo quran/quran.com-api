@@ -16,5 +16,6 @@
 #
 
 class Quran::WordCorpus < ActiveRecord::Base
+  self.table_name = 'word_corpus'
   belongs_to :word
 end

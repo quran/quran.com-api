@@ -1,12 +1,9 @@
-class TafsirsController < ApplicationController
+class V3::TafsirsController < ApplicationController
   def index
-    tafsir = Tafsir.includes(:foot_notes).where(verse_id: params[:verse_id])
+    chapter = Chapter.find(params[:chapter_id])
+    verse   = chapter.verses.find(params[:verse_id])
+    tafsirs = verse.tafsirs.where(resource_content_id: params[:tafsirs])
 
-    if params[:id]
-      #Filter by resource content, in case client want tafsir of specific author
-      tafsir = tafsir.where(resource_content_id: params[:id])
-    end
-
-    render json: tafsir
+    render json: tafsirs
   end
 end

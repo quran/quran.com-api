@@ -17,6 +17,7 @@ class CreateWords < ActiveRecord::Migration[5.0]
       t.string :code_hex_v3
       t.integer :code_dec_v3
       t.references :char_type
+      t.string :location, index: true
 
       t.timestamps
     end
