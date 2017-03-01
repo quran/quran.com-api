@@ -16,8 +16,6 @@
 
 class Translation < ApplicationRecord
   include LanguageFilterable
-  # TODO: figure out es
-  # include Searchable
 
   belongs_to :resource, polymorphic: true
   belongs_to :resource_content

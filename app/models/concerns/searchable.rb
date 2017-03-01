@@ -25,12 +25,17 @@ module Searchable
     def as_indexed_json(options={})
       hash = self.as_json(
           only: [:id, :verse_key, :text_madani, :text_indopak, :text_simple],
-          methods: :chapter_names,
-          include: {transliterations: {only: :text}}
+          methods: :chapter_names
       )
 
-      translations.joins(:language).each do |trans|
-        hash["trasn_#{trans.language.iso_code}"] = trans.text
+      hash[:transliterations] = transliterations.first.try(:text)
+      hash[:words] = words.map do |w|
+        {id: w.id, madani: w.text_madani, simple: w.text_simple}
+      end
+
+      translations.includes(:language).each do |trans|
+        hash["trans_#{trans.language.iso_code}"] ||= []
+        hash["trans_#{trans.language.iso_code}"] << {id: trans.id, text: trans.text, author: trans.resource_content.author_name}
       end
 
       hash
@@ -38,49 +43,70 @@ module Searchable
 
     index_name 'verses'
 
-    mapping dynamic: 'false' do
-      indexes :id, type: 'integer', index: 'no'
+    mapping do
+      indexes :id, type: 'integer'
 
       [:text_madani, :text_indopak, :text_simple].each do |text_type|
         indexes text_type, type: 'text' do
           indexes :text,
                   type: 'text',
                   similarity: 'my_bm25',
-                  term_vector: 'with_positions_offsets_payloads',
+                  term_vector: 'with_positions_offsets',
                   analyzer: 'arabic_normalized'
-          indexes :stemmed,
-                  type: 'text',
-                  similarity: 'my_bm25',
-                  term_vector: 'with_positions_offsets_payloads',
-                  search_analyzer: 'arabic_normalized',
-                  analyzer: 'arabic_ngram'
-          indexes :autocomplete,
-                  type: 'string',
-                  analyzer: 'autocomplete_arabic',
-                  search_analyzer: 'arabic_normalized',
-                  index_options: 'offsets'
+          # indexes :stemmed,
+          #         type: 'text',
+          #         similarity: 'my_bm25',
+          #         term_vector: 'with_positions_offsets',
+          #         search_analyzer: 'arabic_normalized',
+          #         analyzer: 'arabic_ngram'
+           indexes :autocomplete,
+                   type: 'string',
+                   analyzer: 'autocomplete_arabic',
+                   search_analyzer: 'arabic_normalized',
+                   index_options: 'offsets'
         end
       end
 
-      indexes :verse_key, type: 'text'
+      indexes :verse_key, type: 'text' do
+        indexes :keyword, type: 'keyword'
+      end
+
       indexes :chapter_names
+      indexes :transliterations, type: 'text',
+              similarity: 'my_bm25',
+              term_vector: 'with_positions_offsets',
+              analyzer: 'standard'
+
+      indexes "words", type: 'nested' do
+        indexes :madani,
+                type: 'text',
+                term_vector: 'with_positions_offsets',
+                analyzer: 'arabic_normalized',
+                similarity: 'my_bm25'
+        indexes :simple,
+                type: 'text',
+                term_vector: 'with_positions_offsets',
+                analyzer: 'arabic_normalized',
+                similarity: 'my_bm25'
+      end
 
       languages = Translation.where(resource_type: 'Verse').pluck(:language_id).uniq
       available_languages = Language.where(id: languages)
       available_languages.each do |lang|
         es_analyzer = lang.es_analyzer_default.present? ? lang.es_analyzer_default : nil
 
-        indexes "trasn_#{lang.iso_code}", type: 'nested' do
+        indexes "trans_#{lang.iso_code}", type: 'nested' do
           indexes :text,
                   type: 'text',
                   similarity: 'my_bm25',
-                  term_vector: 'with_positions_offsets_payloads',
+                  term_vector: 'with_positions_offsets',
                   analyzer: es_analyzer || 'standard'
-          indexes :stemmed,
-                  type: 'text',
-                  similarity: 'my_bm25',
-                  term_vector: 'with_positions_offsets_payloads',
-                  analyzer: es_analyzer || 'english'
+          #   indexes :stemmed,
+          #           type: 'text',
+          #           similarity: 'my_bm25',
+          #           term_vector: 'with_positions_offsets_payloads',
+          #           analyzer: es_analyzer || 'english'
+          # end
         end
       end
     end

@@ -1,97 +1,70 @@
 module Search
   class Results
-    include Virtus.model
-
-    attribute :options, Hash
-    attribute :aggregations, Hash
-    attribute :hits, Hash
-    attribute :took, Integer
-    attribute :time_out, Boolean
-    attribute :_shards, Hash
-    attribute :type, Symbol
-
-    def initialize(results, type)
-      results.each do |key, value|
-        # So that we can access the methods quickly and easily.
-        name = key.to_s.include?('.') ? key.split('.').last : key
-        self.class.send(:attr_accessor, key)
-        instance_variable_set("@#{name}", value)
-      end
-
-      @type = type
-    end
-
-    def total_size
-      if self.aggregations?
-        aggregations['by_ayah_key']['buckets'].count
-      else
-        hits['total']
-      end
-    end
-
-    def total_length
-      size
+    def initialize(search)
+      @search = search
+      @search_result = search.results.results
     end
 
     def results
-      hits['hits']
-    end
-
-    def find_in_aggregations(ayah_key)
-      aggregations['by_ayah_key']['buckets'].find{|bucket| bucket['key'] == ayah_key}
-    end
-
-    def aggregation_records
-      results_buckets = aggregations['by_ayah_key']['buckets']
-      keys = results_buckets.map{|ayah_result| ayah_result['key'].gsub('_', ':')}
-      ayahs = Quran::Ayah
-        .includes(glyphs: {word: [:corpus, :token]})
-        .includes(:text_tashkeel)
-        .by_array(keys)
-
-      results_buckets.map.with_index do |ayah_result, index|
-        ayah_result.merge!(ayah: ayahs[index].as_json)
-
-        ayah_result.merge!(score: ayah_result['average_score']['value'], hits: ayah_result['match']['hits']['hits'].count)
-
-        match = ayah_result['match']['hits']['hits'].map do |hit|
-          hash = {
-            score: hit['_score'],
-            text: hit['highlight'] ? hit['highlight']['text'].first : hit['_source']['text']
-          }
-
-          hash.merge!(hit['_source']['resource'])
-
-          # This is when it's a word font that's a hit, aka text-font index
-          if hash['cardinality_type'] == '1_word'
-            word_ids = hash[:text].scan(/(hlt\d*)..(?!>)([\d,\s]+).(?!<)/)
-            word_ids.each do |word_id_array|
-              ids = word_id_array.last.split(' ').each do |id|
-                ayah_result[:ayah][:words].find{|word| word['word_id'] == id.to_i}[:highlight] = word_id_array.first
-              end
-            end
-            nil
-          else
-            hash
-          end
-        end
-
-        ayah_result.merge!(match: match.compact)
-
-        ayah_result
+      @search_result.map do |res|
+        prepare_result res
       end
     end
 
-    def aggregations?
-      self.instance_variable_defined? :@aggregations
+    def total
+      @search.response['hits']['total']
     end
 
-    def records
-      return self.aggregation_records if self.aggregations?
+    def took
+      @search.took
     end
 
-    def keys
-      aggregations['by_ayah_key']['buckets'].map { |bucket| bucket['key'] }
+    protected
+    def prepare_result(result)
+      verse = Verse.find(result['_source']['id'])
+      translations = []
+      matched_words = {}
+      words = result['inner_hits'].delete('words')
+
+      words['hits']['hits'].map do |hit|
+        word_id = hit['_source']['id']
+        matched_words[word_id] = word_hightlight_class(hit)
+      end
+
+      result['inner_hits'].each_pair do |key, val|
+        if val['hits']['total'] > 0
+          val['hits']['hits'].each do |trans|
+            translations << prepare_translation(trans, key)
+          end
+        end
+      end
+
+      {id: verse.id, verse_key: verse.verse_key, text_madani: verse.text_madani, words: prepare_words(verse, matched_words), translations: translations}
+    end
+
+    def prepare_translation(trans, key)
+      author = trans['_source']['author']
+      text = trans['highlight']["#{key}.text"].first
+
+      {author: author, text: text}
+    end
+
+    def word_hightlight_class(hit)
+      highlight = hit['highlight'].values.first.first
+
+      if matched = highlight.match(/(hlt\ds*)/)
+        matched[0]
+      else
+        ''
+      end
+    end
+
+    def prepare_words(verse, matched)
+      words = verse.words
+      words.map do |w|
+        serializer = V3::WordSerializer.new(w, {scope: {}})
+        serializer.as_json.merge(highlight: matched[w.id])
+      end
     end
   end
 end
