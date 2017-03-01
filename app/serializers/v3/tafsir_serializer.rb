@@ -12,6 +12,5 @@
 #
 
 class V3::TafsirSerializer < V3::ApplicationSerializer
-  attributes :id, :text, :verse_id, :language_name
-  has_many :foot_notes
+  attributes :id, :text, :verse_id, :language_name, :resource_name
 end

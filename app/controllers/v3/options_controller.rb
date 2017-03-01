@@ -47,6 +47,6 @@ class V3::OptionsController < ApplicationController
   def tafsirs
     resources = ResourceContent.includes(:language).tafsirs.one_verse.approved
 
-    render json: resources, root: :tafisrs
+    render json: resources, root: :tafsirs
   end
 end
