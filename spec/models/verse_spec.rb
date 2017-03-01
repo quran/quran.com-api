@@ -18,6 +18,9 @@
 #  page_number   :integer
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
+#  image_url     :text
+#  image_width   :integer
+#  verse_root_id :integer
 #
 
 require 'rails_helper'

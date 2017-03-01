@@ -20,22 +20,27 @@
 #  char_type_id :integer
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
+#  pause_name   :string
+#  audio_url    :string
+#  image_blob   :text
+#  image_url    :string
+#  location     :string
 #
 
 class Word < ApplicationRecord
   belongs_to :verse
   belongs_to :char_type
+  belongs_to :topic
+  belongs_to :token
 
   has_many :translations, as: :resource
   has_many :transliterations, as: :resource
-  has_many :word_topics
-  has_many :topics, through: :word_topics
   has_many :word_lemmas
   has_many :lemmas, through: :word_lemmas
   has_many :word_stems
   has_many :stems, through: :word_stems
-
-
+  has_many :word_roots
+  has_many :roots, through: :word_roots
 
   has_one  :audio, class_name: 'AudioFile', as: :resource
   has_one :word_corpus

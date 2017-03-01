@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170228084936) do
+ActiveRecord::Schema.define(version: 20170301004755) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -318,6 +318,12 @@ ActiveRecord::Schema.define(version: 20170228084936) do
     t.index ["value"], name: "root_value_key", unique: true, using: :btree
   end
 
+  create_table "roots", force: :cascade do |t|
+    t.string   "value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "source", primary_key: "source_id", id: :integer, force: :cascade do |t|
     t.text "name", null: false
     t.text "url"
@@ -476,6 +482,26 @@ ActiveRecord::Schema.define(version: 20170228084936) do
     t.index ["resource_type", "resource_id"], name: "index_transliterations_on_resource_type_and_resource_id", using: :btree
   end
 
+  create_table "verse_lemmas", force: :cascade do |t|
+    t.string   "text_madani"
+    t.string   "text_clean"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  create_table "verse_roots", force: :cascade do |t|
+    t.text     "value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "verse_stems", force: :cascade do |t|
+    t.string   "text_madani"
+    t.string   "text_clean"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
   create_table "verses", force: :cascade do |t|
     t.integer  "chapter_id"
     t.integer  "verse_number"
@@ -490,14 +516,20 @@ ActiveRecord::Schema.define(version: 20170228084936) do
     t.string   "sajdah"
     t.integer  "sajdah_number"
     t.integer  "page_number"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
     t.text     "image_url"
     t.integer  "image_width"
+    t.integer  "verse_root_id"
+    t.integer  "verse_lemma_id"
+    t.integer  "verse_stem_id"
     t.index ["chapter_id"], name: "index_verses_on_chapter_id", using: :btree
     t.index ["verse_index"], name: "index_verses_on_verse_index", using: :btree
     t.index ["verse_key"], name: "index_verses_on_verse_key", using: :btree
+    t.index ["verse_lemma_id"], name: "index_verses_on_verse_lemma_id", using: :btree
     t.index ["verse_number"], name: "index_verses_on_verse_number", using: :btree
+    t.index ["verse_root_id"], name: "index_verses_on_verse_root_id", using: :btree
+    t.index ["verse_stem_id"], name: "index_verses_on_verse_stem_id", using: :btree
   end
 
   create_table "view", primary_key: "view_id", force: :cascade do |t|
@@ -567,6 +599,15 @@ ActiveRecord::Schema.define(version: 20170228084936) do
     t.integer "position", default: 1, null: false
   end
 
+  create_table "word_roots", force: :cascade do |t|
+    t.integer  "word_id"
+    t.integer  "root_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["root_id"], name: "index_word_roots_on_root_id", using: :btree
+    t.index ["word_id"], name: "index_word_roots_on_word_id", using: :btree
+  end
+
   create_table "word_stem", primary_key: ["word_id", "stem_id", "position"], force: :cascade do |t|
     t.integer "word_id",              null: false
     t.integer "stem_id",              null: false
@@ -580,15 +621,6 @@ ActiveRecord::Schema.define(version: 20170228084936) do
     t.datetime "updated_at", null: false
     t.index ["stem_id"], name: "index_word_stems_on_stem_id", using: :btree
     t.index ["word_id"], name: "index_word_stems_on_word_id", using: :btree
-  end
-
-  create_table "word_topics", force: :cascade do |t|
-    t.integer  "word_id"
-    t.integer  "topic_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["topic_id"], name: "index_word_topics_on_topic_id", using: :btree
-    t.index ["word_id"], name: "index_word_topics_on_word_id", using: :btree
   end
 
   create_table "word_translation", primary_key: "translation_id", id: :integer, default: -> { "nextval('translation_translation_id_seq1'::regclass)" }, force: :cascade do |t|
@@ -628,10 +660,14 @@ ActiveRecord::Schema.define(version: 20170228084936) do
     t.text     "image_blob"
     t.string   "image_url"
     t.string   "location"
+    t.integer  "topic_id"
+    t.integer  "token_id"
     t.index ["chapter_id"], name: "index_words_on_chapter_id", using: :btree
     t.index ["char_type_id"], name: "index_words_on_char_type_id", using: :btree
     t.index ["location"], name: "index_words_on_location", using: :btree
     t.index ["position"], name: "index_words_on_position", using: :btree
+    t.index ["token_id"], name: "index_words_on_token_id", using: :btree
+    t.index ["topic_id"], name: "index_words_on_topic_id", using: :btree
     t.index ["verse_id"], name: "index_words_on_verse_id", using: :btree
     t.index ["verse_key"], name: "index_words_on_verse_key", using: :btree
   end

@@ -20,6 +20,11 @@
 #  char_type_id :integer
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
+#  pause_name   :string
+#  audio_url    :string
+#  image_blob   :text
+#  image_url    :string
+#  location     :string
 #
 
 require 'rails_helper'

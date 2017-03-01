@@ -1,15 +1,14 @@
 # == Schema Information
 #
-# Table name: word_lemmas
+# Table name: verse_roots
 #
 #  id         :integer          not null, primary key
-#  word_id    :integer
-#  lemma_id   :integer
+#  value      :text
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
 
-class WordLemma < ApplicationRecord
-  belongs_to :word
-  belongs_to :lemma
+class VerseRoot < ApplicationRecord
+  has_many :verses
+  has_many :words, through: :verses
 end

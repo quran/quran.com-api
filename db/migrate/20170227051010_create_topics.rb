@@ -1,4 +1,4 @@
-class CreateConcepts < ActiveRecord::Migration[5.0]
+class CreateTopics < ActiveRecord::Migration[5.0]
   def change
     create_table :topics do |t|
       t.string :name
@@ -6,5 +6,8 @@ class CreateConcepts < ActiveRecord::Migration[5.0]
 
       t.timestamps
     end
+
+    add_column :words, :topic_id, :integer
+    add_index :words, :topic_id
   end
 end

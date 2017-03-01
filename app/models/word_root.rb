@@ -1,15 +1,15 @@
 # == Schema Information
 #
-# Table name: word_lemmas
+# Table name: word_roots
 #
 #  id         :integer          not null, primary key
 #  word_id    :integer
-#  lemma_id   :integer
+#  root_id    :integer
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
 
-class WordLemma < ApplicationRecord
+class WordRoot < ApplicationRecord
   belongs_to :word
-  belongs_to :lemma
+  belongs_to :root
 end
