@@ -25,6 +25,8 @@
 #  image_blob   :text
 #  image_url    :string
 #  location     :string
+#  topic_id     :integer
+#  token_id     :integer
 #
 
 require 'rails_helper'
