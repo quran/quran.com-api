@@ -1,29 +1,14 @@
 namespace :elasticsearch do
-  @models = [
-    'Content::Translation',
-    'Content::Transliteration',
-    'Content::TafsirAyah',
-    'Quran::Text',
-    'Quran::TextFont'
-  ]
 
   desc 'deletes all elasticsearch indices'
   task delete_indices: :environment do
-    ActiveRecord::Base.logger = Logger.new(STDOUT)
-
-    @models.each do |model|
-      model = Kernel.const_get(model)
-      model.delete_index
-    end
+    Verse.__elasticsearch__.delete_index!
   end
 
-  desc 'setup all elasticsearch indices'
-  task setup_indices: :environment do
+  desc 'reindex elasticsearch'
+  task re_index: :environment do
     ActiveRecord::Base.logger = Logger.new(STDOUT)
-    Parallel.each(@models, in_processes: 4, progress: 'Importing models') do |model|
-      model = Kernel.const_get(model)
-      model.setup_index
-    end
+    Verse.__elasticsearch__.import force: true
   end
 
   desc 'setup elasticsearch files'
