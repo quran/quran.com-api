@@ -28,9 +28,13 @@ module Search
       #         available_languages = Language.find(ids).pluck(:iso_code)
       #         available_languages.map {|lang| trans_query(lang, @query.query)}
       #       end
+      #ids = Translation.where(resource_type: 'Verse').pluck(:language_id).uniq.first(10)
+      #available_languages = Language.find(ids).pluck(:iso_code)
 
-      ids = Translation.where(resource_type: 'Verse').pluck(:language_id).uniq
-      available_languages = Language.find(ids).pluck(:iso_code)
+      available_languages = [ "ml", "en", "bs", "az", "cs", "fr", "hi", "es", "fi", "id", "it", "ko", "dv", "bn", "ku",
+                               "de", "am", "al", "fa", "ha", "mrn", "ms", "pl", "ja", "nl", "tr", "ur", "th", "no", "tg",
+                               "ug", "ru", "pt", "ro", "sq", "sw", "so", "sv", "ta", "uz", "zh", "tt"
+                            ]
 
       trans = available_languages.map {|lang| trans_query(lang, @query.query)}
       words = [verse_query(@query.query), words_query(@query.query)]
