@@ -27,7 +27,7 @@
 
 class Verse < ApplicationRecord
   # TODO: figure out ES
-  # include Searchable
+  include Searchable
 
   belongs_to :chapter, inverse_of: :verses, counter_cache: true
   belongs_to :verse_root
