@@ -1,19 +1,33 @@
 class V3::VersesController < ApplicationController
   # GET /verses
   def index
+    word_includes = [
+      :char_type,
+      :audio,
+      eager_language('translations'),
+      eager_language('transliterations')
+    ]
+
     verses = Verse
              .where(chapter_id: params[:chapter_id])
-             .includes(:media_contents, words: [
-               :char_type,
-               :audio,
-               eager_language('translations'),
-               eager_language('transliterations')
-              ])
+             .preload(:media_contents, words: word_includes)
              .page(page)
              .per(per_page)
 
     verses = verses.offset(offset) if offset.present?
     verses = verses.padding(padding) if padding.present?
+
+    if render_audio?
+      verses = verses
+               .where('audio_files.recitation_id = ?', params[:recitation])
+               .eager_load(:audio_files)
+    end
+
+    if render_translations?
+      verses = verses
+               .where(translations: { resource_content_id: params[:translations] })
+               .eager_load(:translations)
+    end
 
     render json: verses,
            meta: pagination_dict(verses),
@@ -62,5 +76,17 @@ class V3::VersesController < ApplicationController
 
   def eager_language(type)
     "#{params[:language] || 'en'}_#{type}".to_sym
+  end
+
+  def render_audio?
+    params[:recitation].present?
+  end
+
+  def render_translations?
+    params[:translations].present?
+  end
+
+  def render_media?
+    params[:media].present?
   end
 end

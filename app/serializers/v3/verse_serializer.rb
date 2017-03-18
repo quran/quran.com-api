@@ -38,10 +38,7 @@ class V3::VerseSerializer < V3::ApplicationSerializer
   has_one :audio, if: :render_audio?, serializer: V3::AudioFileSerializer
 
   has_many :translations, if: :render_translations? do
-    object
-      .translations
-      .joins(:resource_content)
-      .where(resource_content_id: scope[:translations])
+    object.translations
   end
 
   # TODO: Should always return media
@@ -77,7 +74,6 @@ class V3::VerseSerializer < V3::ApplicationSerializer
 
   def audio
     object
-      .audio_files
-      .find_by(recitation_id: scope[:recitation])
+      .audio_files.first
   end
 end
