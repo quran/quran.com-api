@@ -47,5 +47,10 @@ class Word < ApplicationRecord
   has_one  :audio, class_name: 'AudioFile', as: :resource
   has_one :word_corpus
 
-  default_scope {order 'position asc'}
+  default_scope { order 'position asc' }
+
+  Language.all.each do |language|
+    has_many "#{language.iso_code}_translations".to_sym, -> { where(language: language) }, class_name: 'Translation', as: :resource
+    has_many "#{language.iso_code}_transliterations".to_sym, -> { where(language: language) }, class_name: 'Transliteration', as: :resource
+  end
 end

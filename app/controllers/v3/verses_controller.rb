@@ -3,7 +3,12 @@ class V3::VersesController < ApplicationController
   def index
     verses = Verse
              .where(chapter_id: params[:chapter_id])
-             .includes(:media_contents, words: [:char_type, :audio])
+             .includes(:media_contents, words: [
+               :char_type,
+               :audio,
+               eager_language('translations'),
+               eager_language('transliterations')
+              ])
              .page(page)
              .per(per_page)
 
@@ -53,5 +58,9 @@ class V3::VersesController < ApplicationController
 
   def padding
     params[:padding] ? params[:padding].to_i.abs : nil
+  end
+
+  def eager_language(type)
+    "#{params[:language] || 'en'}_#{type}".to_sym
   end
 end
