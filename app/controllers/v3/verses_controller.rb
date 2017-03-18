@@ -1,13 +1,14 @@
 class V3::VersesController < ApplicationController
   # GET /verses
   def index
-    chapter = Chapter.find(params[:chapter_id])
-    verses = chapter
-             .verses
+    verses = Verse
+             .where(chapter_id: params[:chapter_id])
              .includes(:media_contents, words: [:char_type, :audio])
              .page(page)
              .per(per_page)
-             .offset(offset)
+
+    verses = verses.offset(offset) if offset.present?
+    verses = verses.padding(padding) if padding.present?
 
     render json: verses,
            meta: pagination_dict(verses),
@@ -47,6 +48,10 @@ class V3::VersesController < ApplicationController
   end
 
   def offset
-    params[:offset].to_i.abs
+    params[:offset] ? params[:offset].to_i.abs : nil
+  end
+
+  def padding
+    params[:padding] ? params[:padding].to_i.abs : nil
   end
 end
