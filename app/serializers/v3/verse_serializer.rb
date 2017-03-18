@@ -37,9 +37,7 @@ class V3::VerseSerializer < V3::ApplicationSerializer
 
   has_one :audio, if: :render_audio?, serializer: V3::AudioFileSerializer
 
-  has_many :translations, if: :render_translations? do
-    object.translations
-  end
+  has_many :translations, if: :render_translations?
 
   # TODO: Should always return media
   # has_many :media_contents, if: :render_media? do
@@ -53,7 +51,7 @@ class V3::VerseSerializer < V3::ApplicationSerializer
   has_many :words, unless: :render_images?
 
   attribute :image, key: :image, if: :render_images? do
-    {url: object.image_url, width: object.image_width}
+    { url: object.image_url, width: object.image_width }
   end
 
   def render_images?
@@ -73,7 +71,6 @@ class V3::VerseSerializer < V3::ApplicationSerializer
   end
 
   def audio
-    object
-      .audio_files.first
+    object.audio_files.first
   end
 end
