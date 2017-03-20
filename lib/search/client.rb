@@ -80,7 +80,7 @@ module Search
         lang_boost = 2
       end
 
-      return {
+      {
         nested: {
           path: "trans_#{lang}",
             query: {
