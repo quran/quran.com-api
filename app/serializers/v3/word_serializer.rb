@@ -35,17 +35,15 @@ class V3::WordSerializer < V3::ApplicationSerializer
   has_one :audio, serializer: V3::AudioFileSerializer
 
   has_one :translation do
-    # object.translations.filter_by_language_or_default scope[:language]
-    # object.translations.public_send("#{scope[:language] || 'en'}_language")
-    object.public_send("#{scope[:language] || 'en'}_translations").first
-    # object.translations
+    translation = object.public_send("#{scope[:language] || 'en'}_translations").first
+
+    translation.present? ? translation : object.en_translations.first
   end
 
   has_one :transliteration do
-    # object.transliterations.filter_by_language_or_default scope[:language]
-    # object.transliterations.public_send("#{scope[:language] || 'en'}_language")
-    object.public_send("#{scope[:language] || 'en'}_transliterations").first
-    # object.transliterations
+    transliteration = object.public_send("#{scope[:language] || 'en'}_transliterations").first
+
+    transliteration.present? ? transliteration : object.en_transliterations.first
   end
 
   def char_type
