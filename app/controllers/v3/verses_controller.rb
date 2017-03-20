@@ -5,7 +5,9 @@ class V3::VersesController < ApplicationController
       :char_type,
       :audio,
       eager_language('translations'),
-      eager_language('transliterations')
+      eager_language('transliterations'),
+      :en_translations,
+      :en_transliterations
     ]
 
     verses = Verse
