@@ -3,17 +3,17 @@ class V3::SearchController < ApplicationController
 
   def index
     client = Search::Client.new(
-        query,
-        {page: page,
-        size: size}
+      query,
+      page: page, size: size
     )
 
     response = client.search
+
     render json: {
-        query: client.query,
-        total: response.total,
-        took: response.took,
-        results: response.results
+      query: client.query,
+      total: response.total,
+      took: response.took,
+      results: response.results
     }
 
     # render json: {
