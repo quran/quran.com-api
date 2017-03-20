@@ -2,12 +2,11 @@ source 'https://rubygems.org'
 ruby '2.3.3'
 
 git_source(:github) do |repo_name|
-  repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?("/")
+  repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?('/')
   "https://github.com/#{repo_name}.git"
 end
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-#gem 'rails', '4.1.1'
 gem 'rails', '~> 5.0.1'
 
 # Use postgresql as the database for Active Record
@@ -27,7 +26,6 @@ gem 'active_model_serializers', '~> 0.10.0'
 
 # Detect the language
 gem 'whatlanguage'
-gem 'prose'
 
 # Http request
 gem 'httparty', require: false
@@ -37,6 +35,10 @@ gem 'elasticsearch'
 gem 'elasticsearch-model'
 gem 'elasticsearch-rails'
 
+gem 'parallel'
+gem 'passenger'
+gem 'prose'
+
 gem 'redis-rails'
 
 gem 'rack-cors'
@@ -45,31 +47,31 @@ gem 'rack-cors'
 gem 'kaminari'
 
 # This is to run the rake task for importing in parallel
-gem 'parallel'
-# Will provide a progress bar as the import happens
-gem "sentry-raven"
 
-gem "passenger"
+# Will provide a progress bar as the import happens
+gem 'sentry-raven'
+
 gem 'virtus'
 
 group :development, :test do
+  gem 'guard-rspec', require: false
+  gem 'parallel_tests'
   gem 'pry-byebug'
   gem 'pry-rails'
   gem 'rspec-rails' # http://betterspecs.org/
-  gem 'guard-rspec', require: false
-  gem 'parallel_tests'
   gem 'zeus'
 end
 
 group :development do
   gem 'annotate'
-  gem 'ruby-progressbar'
+  gem 'bullet'
   gem 'byebug', platform: :mri
-  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
+  gem 'mechanize'
+  gem 'meta_request'
+  gem 'pre-commit', require: false
+  gem 'rubocop', require: false
+  gem 'ruby-progressbar'
   gem 'spring'
   gem 'spring-commands-rspec'
   gem 'spring-watcher-listen', '~> 2.0.0'
-  gem 'mechanize'
-  gem 'bullet'
-  gem 'meta_request'
 end
