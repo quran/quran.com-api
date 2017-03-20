@@ -1,38 +1,13 @@
 class V3::VersesController < ApplicationController
   # GET /verses
   def index
-    word_includes = [
-      :char_type,
-      :audio,
-      eager_language('translations'),
-      eager_language('transliterations'),
-      :en_translations,
-      :en_transliterations
-    ]
+    verses_index
+    set_offset_and_padding
+    load_audio
+    load_translations
 
-    verses = Verse
-             .where(chapter_id: params[:chapter_id])
-             .preload(:media_contents, words: word_includes)
-             .page(page)
-             .per(per_page)
-
-    verses = verses.offset(offset) if offset.present?
-    verses = verses.padding(padding) if padding.present?
-
-    if render_audio?
-      verses = verses
-               .where('audio_files.recitation_id = ?', params[:recitation])
-               .eager_load(:audio_files)
-    end
-
-    if render_translations?
-      verses = verses
-               .where(translations: { resource_content_id: params[:translations] })
-               .eager_load(:translations)
-    end
-
-    render json: verses,
-           meta: pagination_dict(verses),
+    render json: @verses,
+           meta: pagination_dict(@verses),
            include: '**'
   end
 
@@ -76,10 +51,6 @@ class V3::VersesController < ApplicationController
     params[:padding] ? params[:padding].to_i.abs : nil
   end
 
-  def eager_language(type)
-    "#{params[:language] || 'en'}_#{type}".to_sym
-  end
-
   def render_audio?
     params[:recitation].present?
   end
@@ -90,5 +61,45 @@ class V3::VersesController < ApplicationController
 
   def render_media?
     params[:media].present?
+  end
+
+  def word_includes
+    [
+      :char_type,
+      :audio,
+      eager_language('translations'),
+      eager_language('transliterations')
+    ]
+  end
+
+  def verses_index
+    @verses = Verse
+              .where(chapter_id: params[:chapter_id])
+              .preload(:media_contents, words: word_includes)
+              .page(page)
+              .per(per_page)
+  end
+
+  def set_offset_and_padding
+    @verses = @verses.offset(offset) if offset.present?
+    @verses = @verses.padding(padding) if padding.present?
+  end
+
+  def load_audio
+    return unless render_audio?
+    @verses = @verses
+              .where('audio_files.recitation_id = ?', params[:recitation])
+              .eager_load(:audio_files)
+  end
+
+  def load_translations
+    return unless render_translations?
+    translations = {
+      resource_content_id: params[:translations]
+    }
+
+    @verses = @verses
+              .where(translations: translations)
+              .eager_load(:translations)
   end
 end
