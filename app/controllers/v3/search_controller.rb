@@ -4,7 +4,7 @@ class V3::SearchController < ApplicationController
   def index
     client = Search::Client.new(
       query,
-      page: page, size: size
+      page: page, size: size, lanugage: language
     )
 
     response = client.search

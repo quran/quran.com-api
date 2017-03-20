@@ -5,6 +5,7 @@ module Search
     def initialize(query, options={})
       @query = Search::Query.new(query)
       @page = options[:page].to_i.abs
+      @language = options[:language]
     end
 
     def search
@@ -73,12 +74,21 @@ module Search
     end
 
     def trans_query(lang, query)
+      # We boost the results if the query matched a translation of the same language as the user requested
+      lang_boost = 1
+      if lang == @language
+        lang_boost = 2
+      end
+
       {
         nested: {
           path: "trans_#{lang}",
             query: {
               match: {
-                "trans_#{lang}.text": query
+                "trans_#{lang}.text": {
+                    query: query,
+                    boost: lang_boost
+                }
               }
             },
             inner_hits: nested_highlight("trans_#{lang}.text")
