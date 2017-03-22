@@ -10,4 +10,8 @@ class ApplicationController < ActionController::API
   def throw_the_error(error)
     render json: { error: error.message }, status: :not_found
   end
+
+  def eager_language(type)
+    "#{params[:language] || 'en'}_#{type}".to_sym
+  end
 end
