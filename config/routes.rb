@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  namespace :v3 do
+    get 'audio_files/index'
+  end
+
   scope :api do
     namespace :v3 do
       resources :foot_notes, only: :show, defaults: { format: 'json' }
@@ -10,6 +14,7 @@ Rails.application.routes.draw do
 
         resources :verses, only: [:index, :show], defaults: { format: 'json' } do
           resources :tafsirs, only: [:index], defaults: { format: 'json' }
+          resources :audio_files, only: [:index], defaults: { format: 'json' }
         end
       end
 
