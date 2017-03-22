@@ -29,6 +29,8 @@ gem 'active_model_serializers', '~> 0.10.0'
 gem 'whatlanguage'
 gem 'prose'
 
+gem 'puma', '~> 3.0'
+
 # Http request
 gem 'httparty', require: false
 
