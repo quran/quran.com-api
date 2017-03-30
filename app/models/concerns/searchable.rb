@@ -22,20 +22,24 @@ module Searchable
       names + chapter.translated_names.pluck(:name)
     end
 
+    def verse_path
+      "#{chapter_id}/#{verse_number}"
+    end
+
     def as_indexed_json(options={})
       hash = self.as_json(
           only: [:id, :verse_key, :text_madani, :text_indopak, :text_simple],
-          methods: :chapter_names
+          methods: :verse_path #chapter_names
       )
 
       hash[:transliterations] = transliterations.first.try(:text)
-      hash[:words] = words.map do |w|
+      hash[:words] = words.where.not(text_madani: nil).map do |w|
         {id: w.id, madani: w.text_madani, simple: w.text_simple}
       end
 
       translations.includes(:language).each do |trans|
         hash["trans_#{trans.language.iso_code}"] ||= []
-        hash["trans_#{trans.language.iso_code}"] << {id: trans.id, text: trans.text, author: trans.resource_content.author_name}
+        hash["trans_#{trans.language.iso_code}"] << {id: trans.id, text: trans.text, author: trans.resource_content.author_name, language_name: trans.language_name.downcase}
       end
 
       hash
@@ -71,7 +75,9 @@ module Searchable
         indexes :keyword, type: 'keyword'
       end
 
-      indexes :chapter_names
+      indexes :verse_path, type: 'keyword' # allow user to search by path e.g 1/2, 2/29 etc
+
+      # indexes :chapter_names
       indexes :transliterations, type: 'text',
               similarity: 'my_bm25',
               term_vector: 'with_positions_offsets',
