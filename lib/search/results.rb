@@ -11,8 +11,20 @@ module Search
       end
     end
 
-    def total
+    def total_count
       @search.response['hits']['total']
+    end
+
+    def current_page
+      @search.current_page
+    end
+
+    def total_pages
+      @search.total_pages
+    end
+
+    def per_page
+      @search.limit_value
     end
 
     def took
@@ -46,7 +58,7 @@ module Search
       author = trans['_source']['author']
       text = trans['highlight']["#{key}.text"].first
 
-      {author: author, text: text}
+      {resource_name: author, text: text, id: trans['_source']['id'], language_name: trans['_source']['language_name']}
     end
 
     def word_hightlight_class(hit)
@@ -60,7 +72,8 @@ module Search
     end
 
     def prepare_words(verse, matched)
-      words = verse.words
+      words = verse.words.preload(:audio)
+
       words.map do |w|
         serializer = V3::WordSerializer.new(w, {scope: {}})
         serializer.as_json.merge(highlight: matched[w.id])

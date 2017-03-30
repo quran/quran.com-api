@@ -34,13 +34,13 @@ class V3::WordSerializer < V3::ApplicationSerializer
 
   has_one :audio, serializer: V3::AudioFileSerializer
 
-  has_one :translation do
+  has_one :translation, serializer: V3::TranslationSerializer do
     translation = object.public_send("#{scope[:language] || 'en'}_translations").first
 
     translation.present? ? translation : object.en_translations.first
   end
 
-  has_one :transliteration do
+  has_one :transliteration, serializer: V3::TransliterationSerializer do
     transliteration = object.public_send("#{scope[:language] || 'en'}_transliterations").first
 
     transliteration.present? ? transliteration : object.en_transliterations.first

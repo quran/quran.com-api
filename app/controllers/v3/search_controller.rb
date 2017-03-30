@@ -10,9 +10,12 @@ class V3::SearchController < ApplicationController
     response = client.search
 
     render json: {
-      query: client.query,
-      total: response.total,
+      query: query,
+      total_count: response.total_count,
       took: response.took,
+      current_page: response.current_page,
+      total_pages: response.total_pages,
+      per_page: response.per_page,
       results: response.results
     }
 
@@ -45,6 +48,8 @@ class V3::SearchController < ApplicationController
   end
 
   def page
-    params[:page] || params[:p] || 0
+    p = (params[:page] || params[:p]).to_i
+
+    p.zero? ? 1 : p
   end
 end

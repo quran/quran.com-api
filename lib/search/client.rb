@@ -9,7 +9,7 @@ module Search
     end
 
     def search
-      Search::Results.new(Verse.search(search_defination).page(@page))
+      Search::Results.new(Verse.search(search_defination).page(@page).per(20))
     end
 
     protected
@@ -32,15 +32,20 @@ module Search
       #ids = Translation.where(resource_type: 'Verse').pluck(:language_id).uniq.first(10)
       #available_languages = Language.find(ids).pluck(:iso_code)
 
-      available_languages = [ "ml", "en", "bs", "az", "cs", "fr", "hi", "es", "fi", "id", "it", "ko", "dv", "bn", "ku",
-                               "de", "am", "al", "fa", "ha", "mrn", "ms", "pl", "ja", "nl", "tr", "ur", "th", "no", "tg",
-                               "ug", "ru", "pt", "ro", "sq", "sw", "so", "sv", "ta", "uz", "zh", "tt"
-                            ]
+      trans_query = []
 
-      trans = available_languages.map {|lang| trans_query(lang, @query.query)}
+      unless /[:\/]/.match(@query.query)
+        available_languages = [ "ml", "en", "bs", "az", "cs", "fr", "hi", "es", "fi", "id", "it", "ko", "dv", "bn", "ku",
+                                "de", "am", "al", "fa", "ha", "mrn", "ms", "pl", "ja", "nl", "tr", "ur", "th", "no", "tg",
+                                "ug", "ru", "pt", "ro", "sq", "sw", "so", "sv", "ta", "uz", "zh", "tt"
+        ]
+
+        trans_query = available_languages.map {|lang| trans_query(lang, @query.query)}
+      end
+
       words = [verse_query(@query.query), words_query(@query.query)]
 
-      {bool: {should: trans + words }}
+      {bool: {should: trans_query + words }}
     end
 
     def verse_query(query)
@@ -49,7 +54,7 @@ module Search
           query: query,
             fields: [
               'verse_key',
-              'chapter_names',
+              'verse_path',
               'transliterations',
               'text_madani.text',
               'text_madani.simple',
