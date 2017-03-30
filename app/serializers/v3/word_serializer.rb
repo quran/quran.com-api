@@ -29,8 +29,9 @@ class V3::WordSerializer < V3::ApplicationSerializer
              :line_number,
              :page_number,
              :code,
-             :code_v3,
-             :char_type
+             :code_v3
+
+  attribute :char_type_name, key: :char_type
 
   has_one :audio, serializer: V3::AudioFileSerializer
 
@@ -44,10 +45,6 @@ class V3::WordSerializer < V3::ApplicationSerializer
     transliteration = object.public_send("#{scope[:language] || 'en'}_transliterations").first
 
     transliteration.present? ? transliteration : object.en_transliterations.first
-  end
-
-  def char_type
-    object.char_type.name
   end
 
   def class_name

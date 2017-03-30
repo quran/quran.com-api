@@ -1,4 +1,10 @@
 namespace :v3 do
+  task fix_char_type_name: :environment do
+    CharType.all.each do |char_type|
+      Word.where(char_type: char_type).update_all char_type_name: char_type.name
+    end
+  end
+
   task remove_v2_tables: :environment do
     ['file', 'recitation', 'reciter', 'style', 'author', 'resource', 'resource_api_version', 'source', 'surah_infos', 'tafsir',
      'tafsir_ayah', 'translation', 'transliteration', 'language', 'media.content', 'media.resource',

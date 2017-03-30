@@ -4,6 +4,7 @@ class ApplicationController < ActionController::API
   class APIValidation < StandardError; end
 
   rescue_from APIValidation, with: :throw_the_error
+  before_action :set_cache_headers
 
   private
 
@@ -13,5 +14,9 @@ class ApplicationController < ActionController::API
 
   def eager_language(type)
     "#{params[:language] || 'en'}_#{type}".to_sym
+  end
+
+  def set_cache_headers
+    expires_in 1.day, public: true
   end
 end
