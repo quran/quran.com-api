@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170301004755) do
+ActiveRecord::Schema.define(version: 20170326214632) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -653,8 +653,8 @@ ActiveRecord::Schema.define(version: 20170301004755) do
     t.string   "code_hex_v3"
     t.integer  "code_dec_v3"
     t.integer  "char_type_id"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
     t.string   "pause_name"
     t.string   "audio_url"
     t.text     "image_blob"
@@ -662,6 +662,7 @@ ActiveRecord::Schema.define(version: 20170301004755) do
     t.string   "location"
     t.integer  "topic_id"
     t.integer  "token_id"
+    t.string   "char_type_name"
     t.index ["chapter_id"], name: "index_words_on_chapter_id", using: :btree
     t.index ["char_type_id"], name: "index_words_on_char_type_id", using: :btree
     t.index ["location"], name: "index_words_on_location", using: :btree

@@ -16,7 +16,7 @@ class V3::VersesController < ApplicationController
     chapter = Chapter.find(params[:chapter_id])
     verse = chapter
             .verses
-            .includes(words: [:char_type, :audio])
+            .includes(words: [:audio])
             .find(params[:id])
 
     render json: verse, include: '**'
@@ -65,7 +65,6 @@ class V3::VersesController < ApplicationController
 
   def word_includes
     [
-      :char_type,
       :audio,
       eager_language('translations'),
       eager_language('transliterations')
