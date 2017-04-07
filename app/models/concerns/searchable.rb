@@ -78,11 +78,6 @@ module Searchable
       indexes :verse_path, type: 'keyword' # allow user to search by path e.g 1/2, 2/29 etc
 
       # indexes :chapter_names
-      indexes :transliterations, type: 'text',
-              similarity: 'my_bm25',
-              term_vector: 'with_positions_offsets',
-              analyzer: 'standard'
-
       indexes "words", type: 'nested' do
         indexes :madani,
                 type: 'text',

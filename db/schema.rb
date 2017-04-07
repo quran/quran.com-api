@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170326214632) do
+ActiveRecord::Schema.define(version: 20170407025623) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -304,12 +304,14 @@ ActiveRecord::Schema.define(version: 20170326214632) do
     t.string   "language_name"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
+    t.string   "slug"
     t.index ["approved"], name: "index_resource_contents_on_approved", using: :btree
     t.index ["author_id"], name: "index_resource_contents_on_author_id", using: :btree
     t.index ["cardinality_type"], name: "index_resource_contents_on_cardinality_type", using: :btree
     t.index ["data_source_id"], name: "index_resource_contents_on_data_source_id", using: :btree
     t.index ["language_id"], name: "index_resource_contents_on_language_id", using: :btree
     t.index ["resource_type"], name: "index_resource_contents_on_resource_type", using: :btree
+    t.index ["slug"], name: "index_resource_contents_on_slug", using: :btree
     t.index ["sub_type"], name: "index_resource_contents_on_sub_type", using: :btree
   end
 

@@ -21,7 +21,7 @@
 class ResourceContent < ApplicationRecord
   include LanguageFilterable
 
-  scope :translations, -> { where sub_type: SubType::Translation }
+  scope :translations, -> { where sub_type: [SubType::Translation, SubType::Transliteration] }
   scope :media, -> { where sub_type: SubType::Video }
   scope :tafsirs, -> { where sub_type: SubType::Tafsir }
   scope :chapter_info, -> { where sub_type: SubType::Info }
