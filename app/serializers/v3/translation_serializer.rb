@@ -14,4 +14,5 @@
 
 class V3::TranslationSerializer < V3::ApplicationSerializer
   attributes :id, :language_name, :text, :resource_name
+  attribute :resource_content_id, key: :resource_id
 end
