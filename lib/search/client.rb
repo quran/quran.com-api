@@ -108,9 +108,6 @@ module Search
     def highlight
       {
         fields: {
-          transliterations: {
-            type: 'fvh'.freeze
-          },
           "text_madani.text"  => {
             type: 'fvh'.freeze
           }
