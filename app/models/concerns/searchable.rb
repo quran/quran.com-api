@@ -32,14 +32,18 @@ module Searchable
           methods: :verse_path #chapter_names
       )
 
-      hash[:transliterations] = transliterations.first.try(:text)
       hash[:words] = words.where.not(text_madani: nil).map do |w|
         {id: w.id, madani: w.text_madani, simple: w.text_simple}
       end
 
       translations.includes(:language).each do |trans|
         hash["trans_#{trans.language.iso_code}"] ||= []
-        hash["trans_#{trans.language.iso_code}"] << {id: trans.id, text: trans.text, author: trans.resource_content.author_name, language_name: trans.language_name.downcase}
+        hash["trans_#{trans.language.iso_code}"] << {id: trans.id,
+                                                     text: trans.text,
+                                                     author: trans.resource_content.author_name,
+                                                     language_name: trans.language_name.downcase,
+                                                     resource_content_id: trans.resource_content_id
+        }
       end
 
       hash
