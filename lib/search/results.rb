@@ -51,14 +51,14 @@ module Search
         end
       end
 
-      {id: verse.id, verse_key: verse.verse_key, text_madani: verse.text_madani, words: prepare_words(verse, matched_words), translations: translations}
+      {id: verse.id, verse_number: verse.verse_number, chapter_id: verse.chapter_id, verse_key: verse.verse_key, text_madani: verse.text_madani, words: prepare_words(verse, matched_words), translations: translations}
     end
 
     def prepare_translation(trans, key)
       author = trans['_source']['author']
       text = trans['highlight']["#{key}.text"].first
 
-      {resource_name: author, text: text, id: trans['_source']['id'], language_name: trans['_source']['language_name']}
+      {resource_name: author, text: text, id: trans['_source']['id'], language_name: trans['_source']['language_name'], resource_id: trans['_source']['resource_content_id']}
     end
 
     def word_hightlight_class(hit)

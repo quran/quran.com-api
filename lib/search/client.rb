@@ -55,9 +55,7 @@ module Search
             fields: [
               'verse_key',
               'verse_path',
-              'transliterations',
-              'text_madani.text',
-              'text_madani.simple',
+              'text_madani.text'
             ]
         }
       }
