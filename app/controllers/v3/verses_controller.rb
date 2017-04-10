@@ -65,7 +65,6 @@ class V3::VersesController < ApplicationController
 
   def word_includes
     [
-      :audio,
       eager_language('translations'),
       eager_language('transliterations')
     ]
