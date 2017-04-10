@@ -104,6 +104,7 @@ module Search
 
     def nested_highlight(filed)
       {
+        size: 9999, # make sure all words are returned for an Ayah to make highlighting on frontend work
         highlight: {
           fields: {
             filed => { type: 'fvh'.freeze }
