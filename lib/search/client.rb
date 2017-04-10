@@ -22,23 +22,11 @@ module Search
     end
 
     def search_query
-      #hash = if @query.is_arabic?
-      #         [verse_query(@query.query), words_query(@query.query)]
-      #       else
-      #         ids = Translation.where(resource_type: 'Verse').pluck(:language_id).uniq
-      #         available_languages = Language.find(ids).pluck(:iso_code)
-      #         available_languages.map {|lang| trans_query(lang, @query.query)}
-      #       end
-      #ids = Translation.where(resource_type: 'Verse').pluck(:language_id).uniq.first(10)
-      #available_languages = Language.find(ids).pluck(:iso_code)
-
       trans_query = []
 
       unless /[:\/]/.match(@query.query)
-        available_languages = [ "ml", "en", "bs", "az", "cs", "fr", "hi", "es", "fi", "id", "it", "ko", "dv", "bn", "ku",
-                                "de", "am", "al", "fa", "ha", "mrn", "ms", "pl", "ja", "nl", "tr", "ur", "th", "no", "tg",
-                                "ug", "ru", "pt", "ro", "sq", "sw", "so", "sv", "ta", "uz", "zh", "tt"
-        ]
+        available_languages = %w[ml en bs az cs fr hi es fi id it ko dv bn ku de am al fa ha mrn ms pl ja nl tr ur th
+                                 no tg ug ru pt ro sq sw so sv ta uz zh tt]
 
         trans_query = available_languages.map {|lang| trans_query(lang, @query.query)}
       end
@@ -116,6 +104,7 @@ module Search
 
     def nested_highlight(filed)
       {
+        size: 9999, # make sure all words are returned for an Ayah to make highlighting on frontend work
         highlight: {
           fields: {
             filed => { type: 'fvh'.freeze }
