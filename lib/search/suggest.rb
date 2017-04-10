@@ -23,48 +23,48 @@ module Search
 
     def search_params
       {
-          size: @size,
-          query: query_dict,
-          highlight: highlight
+        size: @size,
+        query: query_dict,
+        highlight: highlight
       }
     end
 
     def query_dict
       if @query.is_arabic?
         base_query = {
-            match_phrase_prefix: {
-                translation_text_field_name => @query.query,
-            }
+          match_phrase_prefix: {
+            translation_text_field_name => @query.query,
+          }
         }
       else
         base_query = {
-            match_phrase: {
-                translation_text_field_name => {
-                    query: @query.query,
-                    operator: 'and'
-                }
+          match_phrase: {
+            translation_text_field_name => {
+              query: @query.query,
+              operator: 'and'
             }
+          }
         }
       end
 
       {
-          nested: {
-              path: translation_path,
-              query: base_query
-          }
+        nested: {
+          path: translation_path,
+          query: base_query
+        }
       }
     end
 
     def highlight
       {
-          fields: {
-              translation_text_field_name => {
-                  number_of_fragments: 0, # just highlight the entire string instead of breaking it down into sentence fragments, that's easier for now
-                  pre_tags: [ '<b>' ],
-                  post_tags: [ '</b>' ],
-                  type: 'plain'
-              }
+        fields: {
+          translation_text_field_name => {
+            number_of_fragments: 0, # just highlight the entire string instead of breaking it down into sentence fragments, that's easier for now
+            pre_tags: [ '<b>' ],
+            post_tags: [ '</b>' ],
+            type: 'plain'
           }
+        }
       }
     end
 
@@ -84,9 +84,9 @@ module Search
         unless seen.key?(ayah)
           seen[ayah] = true
           item = {
-              text: text,
-              href: href,
-              ayah: ayah
+            text: text,
+            href: href,
+            ayah: ayah
           }
           processed.push( item )
         end
