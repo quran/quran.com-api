@@ -33,7 +33,9 @@ class V3::WordSerializer < V3::ApplicationSerializer
 
   attribute :char_type_name, key: :char_type
 
-  has_one :audio, serializer: V3::AudioFileSerializer
+  attribute :audio do
+    {url: object.audio_url}
+  end
 
   has_one :translation, serializer: V3::TranslationSerializer do
     translation = object.public_send("#{scope[:language] || 'en'}_translations").first

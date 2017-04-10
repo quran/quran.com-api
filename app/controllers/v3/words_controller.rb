@@ -7,8 +7,6 @@ class V3::WordsController < ApplicationController
 
   def word_includes
     [
-      :char_type,
-      :audio,
       eager_language('translations'),
       eager_language('transliterations')
     ]
