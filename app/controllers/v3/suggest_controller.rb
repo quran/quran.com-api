@@ -1,9 +1,7 @@
 class V3::SuggestController < ApplicationController
   def index
     if query.nil?
-      render status: 400, json: {
-          'message': 'No query parameter provided'
-      }
+      render status: 400, json: [].to_json
     else
       render json: get_suggestions
     end
