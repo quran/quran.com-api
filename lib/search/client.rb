@@ -16,8 +16,8 @@ module Search
     def search_defination
       {
        _source: source_attributes,
-       query: search_query,
-       highlight: highlight
+       query: search_query #,
+       # highlight: highlight
       }
     end
 
@@ -110,7 +110,7 @@ module Search
           },
           tags_schema: 'styled'.freeze
         },
-        size: 200
+        size: 500
       }
     end
   end
