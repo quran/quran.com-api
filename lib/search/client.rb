@@ -109,7 +109,8 @@ module Search
             filed => { type: 'fvh'.freeze }
           },
           tags_schema: 'styled'.freeze
-        }
+        },
+        size: 200
       }
     end
   end
