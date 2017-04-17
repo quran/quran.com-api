@@ -62,6 +62,8 @@ module Search
     end
 
     def word_hightlight_class(hit)
+      return 'hlt1' unless hit['highlight']
+
       highlight = hit['highlight'].values.first.first
 
       if matched = highlight.match(/(hlt\ds*)/)

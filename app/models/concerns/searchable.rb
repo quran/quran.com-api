@@ -29,7 +29,7 @@ module Searchable
     def as_indexed_json(options={})
       hash = self.as_json(
           only: [:id, :verse_key, :text_madani, :text_indopak, :text_simple],
-          methods: :verse_path #chapter_names
+          methods: [:verse_path, :chapter_names]
       )
 
       hash[:words] = words.where.not(text_madani: nil).map do |w|
@@ -81,7 +81,7 @@ module Searchable
 
       indexes :verse_path, type: 'keyword' # allow user to search by path e.g 1/2, 2/29 etc
 
-      # indexes :chapter_names
+      indexes :chapter_names
       indexes "words", type: 'nested' do
         indexes :madani,
                 type: 'text',
