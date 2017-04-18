@@ -1,5 +1,6 @@
 class V3::VersesController < ApplicationController
   before_action :fix_resource_content
+  
   # GET /verses
   def index
     verses_index
@@ -107,7 +108,7 @@ class V3::VersesController < ApplicationController
     if render_translations?
       translation = params[:translations]
       
-      params[:translations] = ResourceContent.where(id: translation).or(ResourceContent.where(slug: translation)).first&.id
+      params[:translations] = ResourceContent.where(id: translation).or(ResourceContent.where(slug: translation)).pluck(:id)
     end
   end
 end
