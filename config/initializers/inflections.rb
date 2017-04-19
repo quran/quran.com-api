@@ -15,6 +15,7 @@
 #   inflect.acronym 'RESTful'
 # end
 
-ActiveSupport::Inflector.inflections do |inflect|
-  inflect.irregular 'word_corpus', 'word_corpuses'
+
+ActiveSupport::Inflector.inflections(:en) do |inflect|
+  inflect.plural 'corpus', 'corpuses'
 end

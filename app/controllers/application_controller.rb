@@ -1,19 +1,22 @@
-class ApplicationController < ActionController::Base
+class ApplicationController < ActionController::API
+  serialization_scope :params
 
-  class APIValidation < StandardError
-  end
+  class APIValidation < StandardError; end
 
-  rescue_from APIValidation, :with => :throw_the_error
-
-  rescue_from Apipie::Error, with: :throw_apipie_error
+  rescue_from APIValidation, with: :throw_the_error
+  before_action :set_cache_headers
 
   private
 
-  def throw_apipie_error(error)
-    render json: {error: error.as_json.slice('param', 'value', 'error')}, status: :bad_request
+  def throw_the_error(error)
+    render json: { error: error.message }, status: :not_found
   end
 
-  def throw_the_error(error)
-    render :json => {:error => error.message}, :status => :not_found
+  def eager_language(type)
+    "#{params[:language] || 'en'}_#{type}".to_sym
+  end
+
+  def set_cache_headers
+    expires_in 1.day, public: true
   end
 end

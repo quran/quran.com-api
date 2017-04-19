@@ -1,3 +1,5 @@
+namespace :segments do
+  task import: :environment do
 # May need this if @cpfair changes the files.
 # files = [
 #   { recitation_id: 1, filename: 'Abdul_Basit_Mujawwad_128kbps.json' },
@@ -19,11 +21,13 @@
 #   begin
 #     puts file[:filename]
 #     json = Oj.load_file("../quran-align-data/#{file[:filename]}")
-#     audio_files = Audio::File.where(recitation_id: file[:recitation_id], segments: nil)
+#     audio_files = AudioFile.where(recitation_id: file[:recitation_id], segments: nil)
 #
 #     json.each do |ayah_json|
-#       record = audio_files.find_by(ayah_key: "#{ayah_json['surah']}:#{ayah_json['ayah']}")
-#       record.update(segments: ayah_json["segments"], segments_stats: ayah_json["stats"])
+#       next if ayah_json["segments"].blank?
+#       verse = Verse.find_by_verse_key("#{ayah_json['surah']}:#{ayah_json['ayah']}")
+#       record = audio_files.find_by(resource: verse)
+#       record.update_attribute(:segments, ayah_json["segments"])
 #   end
 #
 #   rescue Exception => e
@@ -31,3 +35,5 @@
 #     puts e.backtrace.inspect
 #   end
 # end
+  end
+end

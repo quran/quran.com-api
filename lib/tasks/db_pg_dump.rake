@@ -1,7 +1,7 @@
 namespace :db do
   desc 'Dump the database'
   task pg_dump: :environment do
-    previous_version = Dir['db/dumps/**'].map{ |dir| dir.split('/').last }.sort_by{|version| version.to_i}.last.to_i + 1
+    previous_version = Dir['dumps/**'].map{ |dir| dir.split('/').last }.sort_by{|version| version.to_i}.last.to_i + 1
     sh "mkdir db/dumps/#{previous_version}"
     sh "mv db/quran_dev.psql.bz2 db/dumps/#{previous_version}"
     sh "touch db/dumps/#{previous_version}/CHANGES.md"

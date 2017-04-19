@@ -1,72 +1,42 @@
 Rails.application.routes.draw do
-  apipie
-
-  namespace :v2 do
-    get 'search' => 'search#index'
-    get 'suggest' => 'search#suggest'
-
-    resources :surahs, only: [:index, :show], defaults: { format: 'json' } do
-      resources :ayahs, only: [:index], defaults: { format: 'json' }
-
-      member do
-        get :info
-      end
-    end
-
-    resources :options, only: [], defaults: { format: 'json' } do
-      collection do
-        get :default
-        get :language
-        get :quran
-        get :content
-        get :audio
-      end
-    end
-
-    resources :pages, only: [:show]
+  namespace :v3 do
+    get 'audio_files/index'
   end
 
   scope :api do
-    namespace :v2 do
-      get 'search' => 'search#index'
-      get 'suggest' => 'search#suggest'
+    namespace :v3 do
+      resources :foot_notes, only: :show, defaults: { format: 'json' }
 
-      resources :surahs, only: [:index, :show], defaults: { format: 'json' } do
-        resources :ayahs, only: [:index], defaults: { format: 'json' }
-
+      resources :chapters, only: [:index, :show], defaults: { format: 'json' } do
         member do
-          get :info
+          get :info, to: 'chapter_infos#show'
+        end
+
+        resources :verses, only: [:index, :show], defaults: { format: 'json' } do
+          resources :tafsirs, only: [:index], defaults: { format: 'json' }
+          resources :audio_files, only: [:index], defaults: { format: 'json' }
         end
       end
 
-      resources :options, only: [], defaults: { format: 'json' } do
-        collection do
-          get :default
-          get :language
-          get :quran
-          get :content
-          get :audio
-        end
+      resources :juz, only: [:show], defaults: { format: 'json' }
+      resources :pages, only: [:show], defaults: { format: 'json' }
+      resources :words, only: [:show], defaults: { format: 'json' }
+
+      namespace :options, defaults: { format: 'json' } do
+        get :default
+        get :translations
+        get :recitations
+        get :tafsirs
+        get :languages
+        get :media_content
+        get :chapter_info
       end
 
-      resources :pages, only: [:show]
+      get 'search', to: 'search#index'
+      get 'suggest', to: 'suggest#index'
     end
   end
 
-  namespace :content do
-    get 'tafsir/:id', to: 'tafsir#show'
-  end
-
-  get 'search', to: 'search#query'
-  get 'suggest', to: 'search#suggest'
-
-  resources :options, only: [], defaults: { format: 'json' } do
-    collection do
-      get :default
-      get :language
-      get :quran
-      get :content
-      get :audio
-    end
-  end
+  root to: 'v3/ping#ping'
+  get '/ping', to: 'v3/ping#ping'
 end

@@ -1,4 +1,4 @@
-FROM phusion/passenger-customizable:0.9.19
+FROM phusion/passenger-customizable:0.9.20
 
 # set correct environment variables
 ENV HOME /root
@@ -37,7 +37,7 @@ echo vm.overcommit_memory = 1 >> /etc/sysctl.conf
 WORKDIR /tmp
 ADD Gemfile Gemfile
 ADD Gemfile.lock Gemfile.lock
-RUN bundle install
+RUN bundle install --without development test
 
 # setup the app
 RUN mkdir /home/app/quran
@@ -48,6 +48,11 @@ RUN chown -R app log
 RUN chown -R app public
 RUN chown app Gemfile
 RUN chown app Gemfile.lock
+RUN mkdir tmp
+RUN chown -R app tmp
+
+# let log files for nginx work
+RUN mkdir -p /var/log/nginx/api.quran.com
 
 # cleanup apt
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*

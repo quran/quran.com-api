@@ -1,1 +1,0 @@
-json.text @result.text
