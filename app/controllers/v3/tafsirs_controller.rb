@@ -11,21 +11,18 @@ class V3::TafsirsController < ApplicationController
     render json: tafsirs
   end
   
-  def show
-    tafisr = @verse.tafsirs.find(params[:id])
-
-    render json: tafsir
-  end
-  
   protected
   def find_verse
-    @verse  = Verse.find(params[:verse_id])
+    @verse  = Verse.where(chapter_id: params[:chapter_id]).
+                   where(id: params[:verse_id]).
+                   or(Verse.where(verse_key: params[:verse_id])).first
   end
   
   def tafirs_filter
     if params[:tafsirs].present?
       tafsirs = params[:tafsirs]
-      params[:tafsirs] = ResourceContent.where(id: tafsirs).or(ResourceContent.where(slug: tafsirs)).pluck(:id)
+      params[:tafsirs] = ResourceContent.where(id: tafsirs).
+                         or(ResourceContent.where(slug: tafsirs)).pluck(:id)
     end
     
     params[:tafsirs]

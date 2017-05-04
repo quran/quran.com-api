@@ -13,8 +13,8 @@ Rails.application.routes.draw do
         end
 
         resources :verses, only: [:index, :show], defaults: { format: 'json' } do
-          resources :tafsirs, only: [:index, :show], defaults: { format: 'json' }
-          resources :translations, only: [:index, :show], defaults: { format: 'json' }
+          resources :tafsirs, only: [:index], defaults: { format: 'json' }
+          resources :translations, only: [:index], defaults: { format: 'json' }
           resources :audio_files, only: [:index], defaults: { format: 'json' }
         end
       end
