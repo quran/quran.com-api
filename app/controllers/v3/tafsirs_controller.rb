@@ -1,30 +1,31 @@
 class V3::TafsirsController < ApplicationController
-  before_action :find_verse
+  before_action :set_verse
   
   def index
     tafsirs = @verse.tafsirs
     
-    if(filter = tafirs_filter).present?
-      tafsirs = tafsirs.where(resource_content_id: filter)
+    if tafirs_filter.present?
+      tafsirs = tafsirs.where(resource_content_id: tafirs_filter)
     end
     
     render json: tafsirs
   end
   
   protected
-  def find_verse
-    @verse  = Verse.where(chapter_id: params[:chapter_id])
-                   .where(id: params[:verse_id])
-                   .or(Verse.where(verse_key: params[:verse_id])).first
+
+  def chapter
+    Chapter.find(params[:chapter_id])
+  end
+
+  def set_verse
+    @verse = chapter.verses.find_by_id_or_key(params[:verse_id])
   end
   
   def tafirs_filter
-    if params[:tafsirs].present?
-      tafsirs = params[:tafsirs]
-      params[:tafsirs] = ResourceContent.where(id: tafsirs)
-                                        .or(ResourceContent.where(slug: tafsirs)).pluck(:id)
-    end
-    
-    params[:tafsirs]
+    return nil unless params[:tafsirs].present?
+
+    ResourceContent.where(id: params[:tafsirs])
+                   .or(ResourceContent.where(slug: tafsirs))
+                   .pluck(:id)
   end
 end
