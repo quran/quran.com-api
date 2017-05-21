@@ -1,6 +1,7 @@
 class V3::TafsirsController < ApplicationController
   before_action :set_verse
   
+  # GET /chapter_id/verses/verse_number/tafsirs
   def index
     tafsirs = @verse.tafsirs
     
@@ -18,14 +19,14 @@ class V3::TafsirsController < ApplicationController
   end
 
   def set_verse
-    @verse = chapter.verses.find_by_id_or_key(params[:verse_id])
+    @verse = chapter.verses.find_by_verse_number(params[:verse_id])
   end
   
   def tafirs_filter
     return nil unless params[:tafsirs].present?
 
     ResourceContent.where(id: params[:tafsirs])
-                   .or(ResourceContent.where(slug: tafsirs))
+                   .or(ResourceContent.where(slug: params[:tafsirs]))
                    .pluck(:id)
   end
 end

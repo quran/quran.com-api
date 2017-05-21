@@ -46,6 +46,6 @@ class Verse < ApplicationRecord
   default_scope { order 'verse_number asc' }
 
   def self.find_by_id_or_key(id)
-    where(id: id).or(verse_key: id).first
+    where(id: id).or(where(verse_key: id)).first
   end
 end
