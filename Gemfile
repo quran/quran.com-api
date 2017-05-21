@@ -74,4 +74,5 @@ group :development do
   gem 'mechanize'
   gem 'bullet'
   gem 'meta_request'
+  gem 'rubocop', require: false
 end

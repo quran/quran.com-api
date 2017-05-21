@@ -12,5 +12,5 @@
 #
 
 class V3::TafsirSerializer < V3::ApplicationSerializer
-  attributes :id, :text, :verse_id, :language_name, :resource_name
+  attributes :id, :text, :verse_id, :language_name, :resource_name, :verse_key
 end
