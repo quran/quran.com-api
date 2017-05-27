@@ -10,7 +10,7 @@ server {
     passenger_user app;
     passenger_ruby /usr/bin/ruby2.3;
     passenger_app_env production;
-    passenger_max_request_queue_size 200;
+    passenger_max_request_queue_size 1024;
     root   /home/app/quran/public;
     index  index.html index.htm;
   }
