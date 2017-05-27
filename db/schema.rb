@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170407025623) do
+ActiveRecord::Schema.define(version: 20170504112803) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -396,9 +396,11 @@ ActiveRecord::Schema.define(version: 20170407025623) do
     t.datetime "created_at",          null: false
     t.datetime "updated_at",          null: false
     t.string   "resource_name"
+    t.string   "verse_key"
     t.index ["language_id"], name: "index_tafsirs_on_language_id", using: :btree
     t.index ["resource_content_id"], name: "index_tafsirs_on_resource_content_id", using: :btree
     t.index ["verse_id"], name: "index_tafsirs_on_verse_id", using: :btree
+    t.index ["verse_key"], name: "index_tafsirs_on_verse_key", using: :btree
   end
 
   create_table "text", primary_key: ["resource_id", "ayah_key"], force: :cascade do |t|
