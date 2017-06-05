@@ -53,6 +53,7 @@ gem "sentry-raven"
 
 gem "passenger"
 gem 'virtus'
+gem 'sitemap_generator'
 
 group :development, :test do
   gem 'pry-byebug'
