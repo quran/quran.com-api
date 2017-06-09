@@ -42,7 +42,7 @@ Rails.application.routes.draw do
   get '/ping', to: 'v3/ping#ping'
   
   ['sitemap.xml.gz', 'sitemap:number.xml.gz'].each do |path|
-    get path => proc { |req|
+    get "/sitemaps/#{path}" => proc { |req|
       filename = req['PATH_INFO'].gsub('sitemaps', '').gsub(/\//, '')
       
       [
