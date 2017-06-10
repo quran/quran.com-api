@@ -27,16 +27,6 @@ SitemapGenerator::Sitemap.create do
   #     add article_path(article), :lastmod => article.updated_at
   #   end
   
-  Chapter.find_each do |chapter|
-    add "/#{chapter.chapter_number}", priority: 1
-    
-    # Add chapter info for available languages
-    ['en', 'ur', 'ml', 'ta'].each do |local|
-      add "/#{chapter.chapter_number}/info/#{local}", priority: 1
-    end
-  end
-
-
   # Add all chapters
   Chapter.find_each do |chapter|
     add "/#{chapter.chapter_number}", priority: 1
