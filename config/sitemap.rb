@@ -1,6 +1,6 @@
 # Set the host name for URL creation
 SitemapGenerator::Sitemap.default_host = "https://quran.com"
-SitemapGenerator::Sitemap.sitemaps_host = "http://staging.quran.com:3000/"
+SitemapGenerator::Sitemap.sitemaps_host = "http://staging.quran.com/"
 SitemapGenerator::Sitemap.sitemaps_path = 'sitemaps/'
 
 SitemapGenerator::Sitemap.create do
