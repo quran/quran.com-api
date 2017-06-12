@@ -176,6 +176,7 @@ ActiveRecord::Schema.define(version: 20170612002119) do
     t.text     "verse_mapping"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
+    t.index ["juz_number"], name: "index_juzs_on_juz_number", using: :btree
   end
 
   create_table "language", primary_key: "language_code", id: :text, force: :cascade do |t|
