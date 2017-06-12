@@ -19,7 +19,7 @@ Rails.application.routes.draw do
         end
       end
       
-      resources :juz, only: [:show], defaults: { format: 'json' }
+      resources :juzs, only: [:show, :index], defaults: { format: 'json' }
       resources :pages, only: [:show], defaults: { format: 'json' }
       resources :words, only: [:show], defaults: { format: 'json' }
       

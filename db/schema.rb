@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170504112803) do
+ActiveRecord::Schema.define(version: 20170612002119) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -167,6 +167,15 @@ ActiveRecord::Schema.define(version: 20170504112803) do
     t.datetime "updated_at",          null: false
     t.index ["resource_content_id"], name: "index_images_on_resource_content_id", using: :btree
     t.index ["verse_id"], name: "index_images_on_verse_id", using: :btree
+  end
+
+  create_table "juzs", force: :cascade do |t|
+    t.integer  "juz_number"
+    t.string   "name_simple"
+    t.string   "name_arabic"
+    t.text     "verse_mapping"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
   end
 
   create_table "language", primary_key: "language_code", id: :text, force: :cascade do |t|
