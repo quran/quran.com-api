@@ -36,5 +36,13 @@ Types::WordType = GraphQL::ObjectType.define do
     has_many_array :stems
     has_many_array :word_roots
     has_many_array :roots
+    
+    field :otherVerses, types[types.String] do
+      resolve ->(word, _args, _ctx) { Word.where(text_simple: word.text_simple).pluck(:verse_key) }
+    end
+
+    field :occurance, types.Int do
+      resolve ->(word, _args, _ctx) { Word.where(text_simple: word.text_simple).count }
+    end
   end
 end
