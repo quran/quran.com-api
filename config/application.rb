@@ -5,6 +5,7 @@ require "rails"
 require "active_model/railtie"
 require "active_record/railtie"
 require "action_controller/railtie"
+require "sprockets/railtie"
 #TODO: do we need action view ?
 require "action_view/railtie"
 

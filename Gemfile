@@ -49,11 +49,17 @@ gem 'kaminari'
 # This is to run the rake task for importing in parallel
 gem 'parallel'
 # Will provide a progress bar as the import happens
-gem "sentry-raven"
 
-gem "passenger"
-gem 'virtus'
+gem 'graphiql-rails'
+
+gem 'graphql'
+gem 'graphql-activerecord'
+gem 'graphql-batch'
+
+gem 'passenger'
+gem 'sentry-raven'
 gem 'sitemap_generator'
+gem 'virtus'
 
 gem 'tzinfo-data'
 
