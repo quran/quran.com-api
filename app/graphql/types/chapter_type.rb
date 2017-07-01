@@ -13,7 +13,7 @@ Types::ChapterType = GraphQL::ObjectType.define do
     attr :verses_count
     attr :chapter_number
 
-    has_many_array :verses
+    has_many_connection :verses
     has_many_array :chapter_infos
   end
 end

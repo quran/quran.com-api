@@ -26,4 +26,4 @@ GraphQL::Models.model_to_graphql_type = -> (model_class) { "Types::#{model_class
 GraphQL::Models::DatabaseTypes.register(:text, GraphQL::STRING_TYPE)
 # GraphQL::Models::DatabaseTypes.register(:uuid, GraphQL::ID_TYPE)
 # GraphQL::Models::DatabaseTypes.register(:datetime, Types::DateTimeType)
-# GraphQL::Models::DatabaseTypes.register(:json, Types::JSONType)
+GraphQL::Models::DatabaseTypes.register(:json, Types::JSONType)

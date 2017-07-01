@@ -28,5 +28,13 @@ Types::WordType = GraphQL::ObjectType.define do
     attr :char_type_name
 
     has_one :verse
+    has_one :word_corpus
+
+    has_many_array :word_lemmas
+    has_many_array :lemmas
+    has_many_array :word_stems
+    has_many_array :stems
+    has_many_array :word_roots
+    has_many_array :roots
   end
 end
