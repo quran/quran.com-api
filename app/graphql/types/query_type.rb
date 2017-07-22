@@ -10,9 +10,37 @@ Types::QueryType = GraphQL::ObjectType.define do
     resolve ->(_obj, args, _ctx) { Chapter.find(args[:id]) }
   end
 
+  field :chapterInfo, Types::ChapterInfoType do
+    argument :chapterId, !types.ID
+    argument :language, types.String, default_value: 'en'
+    resolve ->(_obj, args, _ctx) { 
+      ChapterInfo.where(chapter_id: args[:chapterId]).filter_by_language_or_default(args[:language])
+    }
+  end
+
   field :verses, types[Types::VerseType] do
-    argument :chapter_id, !types.ID
-    resolve ->(_obj, args, _ctx) { Verse.where(chapter_id: args[:chapter_id]) }
+    argument :chapterId, !types.ID
+    argument :language, types.String, default_value: 'en'
+    argument :offset, types.Int, default_value: 0
+    argument :padding, types.Int, default_value: 0
+    argument :page, types.Int, default_value: 1
+    argument :limit, types.Int, default_value: 10, prepare: ->(limit, ctx) {
+      limit <= 50 ? limit : 50
+    }
+    resolve ->(_obj, args, _ctx) {
+      eager_words = [
+        "#{args[:language]}_translations".to_sym,
+        "#{args[:language]}_transliterations".to_sym
+      ]
+
+      Verse
+      .where(chapter_id: args[:chapterId])
+      .preload(:media_contents, words: eager_words)
+      .page(args[:page])
+      .per(args[:limit])
+      .offset(args[:offset])
+      .padding(args[:padding])
+    }
   end
 
   field :verse, Types::VerseType do
@@ -26,8 +54,8 @@ Types::QueryType = GraphQL::ObjectType.define do
   end
 
   field :tafsirs, types[Types::TafsirType] do
-    argument :verse_id, types.ID
-    argument :verse_key, types.String
+    argument :verseId, types.ID
+    argument :verseKey, types.String
     resolve lambda { |_obj, args, _ctx|
       return Tafsir.where(verse_id: args[:verse_id]) if args[:verse_id]
 
@@ -41,8 +69,8 @@ Types::QueryType = GraphQL::ObjectType.define do
   end
 
   field :words, types[Types::WordType] do
-    argument :verse_id, types.ID
-    argument :verse_key, types.String
+    argument :verseId, types.ID
+    argument :verseKey, types.String
     resolve lambda { |_obj, args, _ctx|
       return Word.where(verse_id: args[:verse_id]) if args[:verse_id]
 

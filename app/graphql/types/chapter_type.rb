@@ -15,5 +15,12 @@ Types::ChapterType = GraphQL::ObjectType.define do
 
     has_many_connection :verses
     has_many_array :chapter_infos
+
+    field :translatedName, Types::TranslatedNameType do
+      argument :language, types.String, default_value: 'en'
+      resolve ->(chapter, args, _ctx) { 
+        chapter.translated_names.filter_by_language_or_default(args[:language])
+      }
+    end
   end
 end

@@ -11,7 +11,6 @@ Types::WordType = GraphQL::ObjectType.define do
     attr :text_simple
     attr :verse_key
     attr :page_number
-    attr :class_name
     attr :line_number
     attr :code_dec
     attr :code_hex
@@ -36,13 +35,43 @@ Types::WordType = GraphQL::ObjectType.define do
     has_many_array :stems
     has_many_array :word_roots
     has_many_array :roots
-    
+
     field :otherVerses, types[types.String] do
       resolve ->(word, _args, _ctx) { Word.where(text_simple: word.text_simple).pluck(:verse_key) }
     end
 
     field :occurance, types.Int do
       resolve ->(word, _args, _ctx) { Word.where(text_simple: word.text_simple).count }
+    end
+
+    field :code, types.String do
+      resolve ->(word, _args, _ctx) { "&#x#{word.code_hex};" }
+    end
+
+    field :codeV3, types.String do
+      resolve ->(word, _args, _ctx) { "&#x#{word.code_hex};" }
+    end
+
+    field :className, types.String do
+      resolve ->(word, _args, _ctx) { "p#{word.page_number}" }
+    end
+
+    field :translation, Types::TranslationType do
+      argument :language, types.String, default_value: 'en'
+      resolve ->(word, args, _ctx) {
+        translation = word.public_send("#{args[:language]}_translations").first
+
+        translation.present? ? translation : word.en_translations.first
+      }
+    end
+
+    field :transliteration, Types::TranslationType do
+      argument :language, types.String, default_value: 'en'
+      resolve ->(word, args, _ctx) {
+        transliteration = word.public_send("#{args[:language]}_transliterations").first
+
+        transliteration.present? ? transliteration : word.en_transliterations.first 
+      }
     end
   end
 end

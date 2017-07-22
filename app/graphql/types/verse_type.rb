@@ -31,7 +31,7 @@ Types::VerseType = GraphQL::ObjectType.define do
     has_many_array :recitations
 
 
-    field :audio_files, types[Types::AudioFileType] do
+    field :audioFiles, types[Types::AudioFileType] do
       argument :recitation, !types.ID
       resolve ->(verse, args, _ctx) { verse.where('audio_files.recitation_id = ?', args[:recitation]) }
     end
