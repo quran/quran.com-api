@@ -2,7 +2,8 @@ Types::QueryType = GraphQL::ObjectType.define do
   name 'Query'
   
   field :chapters, types[Types::ChapterType] do
-    resolve ->(_obj, _args, _ctx) { Chapter.all }
+    argument :language, types.String, default_value: 'en'
+    resolve ->(_obj, args, _ctx) { Chapter.includes("#{args[:language]}_translated_names".to_sym).all }
   end
 
   field :chapter, Types::ChapterType do
@@ -82,4 +83,55 @@ Types::QueryType = GraphQL::ObjectType.define do
     argument :id, !types.ID
     resolve ->(_obj, args, _ctx) { Word.find(args[:id]) }
   end
+
+  field :audioFiles, types[Types::AudioFileType] do
+    argument :recitationId, !types.ID
+    argument :resourceIds, !types[types.ID]
+    argument :resourceType, types.String, default_value: 'Verse'
+    resolve ->(obj, args, _ctx) {
+      AudioFile.where(
+        resource_id: args[:resourceIds],
+        resource_type: args[:resourceType],
+        recitation_id: args[:recitationId]
+      )
+    }
+  end
+
+  field :audioFile, Types::AudioFileType do
+    argument :recitationId, !types.ID
+    argument :resourceId, !types.ID
+    argument :resourceType, types.String, default_value: 'Verse'
+    resolve ->(obj, args, _ctx) {
+      AudioFile.where(
+        resource_id: args[:resourceId],
+        resource_type: args[:resourceType],
+        recitation_id: args[:recitationId]
+      ).first
+    }
+  end
+
+  # field :search, [Types::VerseType] do
+  #   argument :q, !types.String
+  #   argument :page, types.Int, default_value: 1
+  #   argument :size, types.Int, default_value: 20
+  #   argument :lanugage, types.String, default_value: 'en'
+  #   resolve ->(_obj, args, _ctx) {
+  #     client = Search::Client.new(
+  #       query,
+  #       page: page, size: size, lanugage: language
+  #     )
+
+  #     response = client.search
+
+  #     {
+  #       query: query,
+  #       total_count: response.total_count,
+  #       took: response.took,
+  #       current_page: response.current_page,
+  #       total_pages: response.total_pages,
+  #       per_page: response.per_page,
+  #       results: response.results
+  #     }
+  #   }
+  # end
 end
