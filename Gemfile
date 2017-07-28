@@ -62,6 +62,7 @@ group :development, :test do
   gem 'guard-rspec', require: false
   gem 'parallel_tests'
   gem 'zeus'
+  gem 'simplecov', :require => false
 end
 
 group :development do
