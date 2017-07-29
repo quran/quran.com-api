@@ -53,6 +53,7 @@ gem "sentry-raven"
 
 gem "passenger"
 gem 'virtus'
+gem 'sitemap_generator'
 
 group :development, :test do
   gem 'pry-byebug'
@@ -61,6 +62,7 @@ group :development, :test do
   gem 'guard-rspec', require: false
   gem 'parallel_tests'
   gem 'zeus'
+  gem 'simplecov', :require => false
 end
 
 group :development do

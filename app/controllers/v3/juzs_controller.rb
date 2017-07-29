@@ -1,4 +1,10 @@
-class V3::JuzController < ApplicationController
+class V3::JuzsController < ApplicationController
+  def index
+    juzs = Juz.all
+
+    render json: juzs
+  end
+  
   def show
     verses = Verse
              .where(juz_number: params[:id])

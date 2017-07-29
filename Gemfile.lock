@@ -64,6 +64,7 @@ GEM
     descendants_tracker (0.0.4)
       thread_safe (~> 0.3, >= 0.3.1)
     diff-lcs (1.2.5)
+    docile (1.1.5)
     domain_name (0.5.20161129)
       unf (>= 0.0.5, < 1.0.0)
     elasticsearch (5.0.0)
@@ -264,6 +265,13 @@ GEM
     sentry-raven (2.2.0)
       faraday (>= 0.7.6, < 1.0)
     shellany (0.0.1)
+    simplecov (0.14.1)
+      docile (~> 1.1.0)
+      json (>= 1.8, < 3)
+      simplecov-html (~> 0.10.0)
+    simplecov-html (0.10.1)
+    sitemap_generator (5.3.1)
+      builder (~> 3.0)
     slop (3.6.0)
     spring (2.0.0)
       activesupport (>= 4.2)
@@ -338,6 +346,8 @@ DEPENDENCIES
   rubocop
   ruby-progressbar
   sentry-raven
+  simplecov
+  sitemap_generator
   spring
   spring-commands-rspec
   spring-watcher-listen (~> 2.0.0)
@@ -350,4 +360,4 @@ RUBY VERSION
    ruby 2.3.3
 
 BUNDLED WITH
-   1.14.6
+   1.15.3

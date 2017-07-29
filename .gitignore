@@ -27,3 +27,4 @@ passenger.*
 .DS_Store
 .ruby-version
 .ruby-gemset
+coverage/
