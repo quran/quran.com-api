@@ -58,11 +58,13 @@ gem 'sitemap_generator'
 group :development, :test do
   gem 'pry-byebug'
   gem 'pry-rails'
-  gem 'rspec-rails' # http://betterspecs.org/
+  gem 'rspec-rails', '~> 3.5'
+  gem 'factory_girl_rails', '~> 4.8', require: false
   gem 'guard-rspec', require: false
   gem 'parallel_tests'
   gem 'zeus'
   gem 'simplecov', :require => false
+  gem 'database_cleaner'
 end
 
 group :development do
