@@ -55,6 +55,8 @@ gem "passenger"
 gem 'virtus'
 gem 'sitemap_generator'
 
+gem 'tzinfo-data'
+
 group :development, :test do
   gem 'pry-byebug'
   gem 'pry-rails'
