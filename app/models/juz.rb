@@ -13,9 +13,9 @@
 
 class Juz < ApplicationRecord
   validates :juz_number, uniqueness: true
-  
+
   has_many :verses, foreign_key: :juz_number
   has_many :chapters, through: :verses
-  
-  serialize :verse_mapping
+
+  serialize :verse_mapping, Hash
 end

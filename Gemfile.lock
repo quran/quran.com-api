@@ -89,6 +89,17 @@ GEM
     formatador (0.2.5)
     globalid (0.3.7)
       activesupport (>= 4.1.0)
+    graphiql-rails (1.4.2)
+      rails
+    graphql (1.6.4)
+    graphql-activerecord (0.12.3)
+      activerecord (>= 4.2, < 6)
+      activesupport (>= 4.2, < 6)
+      graphql (>= 1.5.10, < 2)
+      graphql-batch (>= 0.2.4)
+    graphql-batch (0.3.3)
+      graphql (>= 0.8, < 2)
+      promise.rb (~> 0.7.2)
     guard (2.14.0)
       formatador (>= 0.2.4)
       listen (>= 2.7, < 4.0)
@@ -165,11 +176,9 @@ GEM
       parallel
     parser (2.4.0.0)
       ast (~> 2.2)
-    passenger (5.1.1)
-      rack
-      rake (>= 0.8.1)
     pg (0.19.0)
     powerpack (0.1.1)
+    promise.rb (0.7.3)
     prose (0.2.2)
     pry (0.10.4)
       coderay (~> 1.1.0)
@@ -326,6 +335,10 @@ DEPENDENCIES
   elasticsearch-model
   elasticsearch-rails
   execjs
+  graphiql-rails
+  graphql
+  graphql-activerecord
+  graphql-batch
   guard-rspec
   httparty
   kaminari
@@ -335,7 +348,6 @@ DEPENDENCIES
   oj_mimic_json
   parallel
   parallel_tests
-  passenger
   pg (~> 0.19.0)
   prose
   pry-byebug
