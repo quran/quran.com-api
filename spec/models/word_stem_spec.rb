@@ -12,5 +12,15 @@
 require 'rails_helper'
 
 RSpec.describe WordStem, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe 'associations' do
+    it 'belongs_to word' do
+      word = described_class.reflect_on_association(:word)
+      expect(word.macro).to eq :belongs_to
+    end
+
+    it 'belongs_to stem' do
+      stem = described_class.reflect_on_association(:stem)
+      expect(stem.macro).to eq :belongs_to
+    end
+  end
 end
