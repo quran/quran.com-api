@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170612002119) do
+ActiveRecord::Schema.define(version: 20170918194555) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -173,9 +173,9 @@ ActiveRecord::Schema.define(version: 20170612002119) do
     t.integer  "juz_number"
     t.string   "name_simple"
     t.string   "name_arabic"
-    t.text     "verse_mapping"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
+    t.json     "verse_mapping"
     t.index ["juz_number"], name: "index_juzs_on_juz_number", using: :btree
   end
 
@@ -448,9 +448,11 @@ ActiveRecord::Schema.define(version: 20170612002119) do
     t.integer  "language_id"
     t.string   "name"
     t.string   "language_name"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.integer  "language_priority"
     t.index ["language_id"], name: "index_translated_names_on_language_id", using: :btree
+    t.index ["language_priority"], name: "index_translated_names_on_language_priority", using: :btree
     t.index ["resource_type", "resource_id"], name: "index_translated_names_on_resource_type_and_resource_id", using: :btree
   end
 
@@ -471,7 +473,9 @@ ActiveRecord::Schema.define(version: 20170612002119) do
     t.datetime "created_at",          null: false
     t.datetime "updated_at",          null: false
     t.string   "resource_name"
+    t.integer  "language_priority"
     t.index ["language_id"], name: "index_translations_on_language_id", using: :btree
+    t.index ["language_priority"], name: "index_translations_on_language_priority", using: :btree
     t.index ["resource_content_id"], name: "index_translations_on_resource_content_id", using: :btree
     t.index ["resource_type", "resource_id"], name: "index_translations_on_resource_type_and_resource_id", using: :btree
   end

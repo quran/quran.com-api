@@ -3,21 +3,37 @@ Types::QueryType = GraphQL::ObjectType.define do
   
   field :chapters, types[Types::ChapterType] do
     argument :language, types.String, default_value: 'en'
-    resolve ->(_obj, args, _ctx) { Chapter.includes("#{args[:language]}_translated_names".to_sym).all }
-  end
+    
+    resolve ->(_obj, args, _ctx) do
+      language = Language.find_by_id_or_iso_code(args[:language])
+      chapters = Chapter.includes(:translated_name)
 
+      #eager load translated names to avoid n+1 queries
+      chapters.
+        where(translated_names: {language_id: language.id}).
+        or(
+          chapters.
+            where(translated_names: {language_id: Language.default.id})
+        ).
+        order('translated_names.language_priority DESC').
+        all
+    end
+  end
+  
   field :juzs, types[Types::JuzType] do
     resolve ->(_obj, _args, _ctx) { Juz.all }
   end
 
   field :chapter, Types::ChapterType do
     argument :id, !types.ID
+    
     resolve ->(_obj, args, _ctx) { Chapter.find(args[:id]) }
   end
 
   field :chapterInfo, Types::ChapterInfoType do
     argument :chapterId, !types.ID
     argument :language, types.String, default_value: 'en'
+    
     resolve ->(_obj, args, _ctx) { 
       ChapterInfo.where(chapter_id: args[:chapterId]).filter_by_language_or_default(args[:language])
     }
@@ -29,18 +45,27 @@ Types::QueryType = GraphQL::ObjectType.define do
     argument :offset, types.Int, default_value: 0
     argument :padding, types.Int, default_value: 0
     argument :page, types.Int, default_value: 1
+    
     argument :limit, types.Int, default_value: 10, prepare: ->(limit, ctx) {
       limit <= 50 ? limit : 50
     }
+    
     resolve ->(_obj, args, _ctx) {
+      language = Language.find_by_id_or_iso_code(args[:language])
+  
       eager_words = [
-        "#{args[:language]}_translations".to_sym,
-        "#{args[:language]}_transliterations".to_sym
+        :translation,
+        :transliteration
       ]
 
-      Verse
-      .where(chapter_id: args[:chapterId])
-      .preload(:media_contents, words: eager_words)
+      verses = Verse
+                 .where(chapter_id: args[:chapterId])
+                 .includes(words: eager_words)
+      
+      verses
+      .where(translations: {language_id: language.id})
+      .or(verses.where(translations: {language_id: Language.default.id}))
+      .order('translations.language_priority DESC')
       .page(args[:page])
       .per(args[:limit])
       .offset(args[:offset])
@@ -51,6 +76,7 @@ Types::QueryType = GraphQL::ObjectType.define do
   field :verse, Types::VerseType do
     argument :id, types.ID
     argument :verseKey, types.String
+    
     resolve lambda { |_obj, args, _ctx|
       return Verse.find_by_verse_key(args[:verseKey]) if args[:verseKey].present?
       Verse.find(args[id])
@@ -60,6 +86,7 @@ Types::QueryType = GraphQL::ObjectType.define do
   field :tafsirs, types[Types::TafsirType] do
     argument :verseId, types.ID
     argument :verseKey, types.String
+    
     resolve lambda { |_obj, args, _ctx|
       return Tafsir.where(verse_id: args[:verse_id]) if args[:verse_id]
 
@@ -69,12 +96,14 @@ Types::QueryType = GraphQL::ObjectType.define do
 
   field :tafsir, Types::TafsirType do
     argument :id, !types.ID
+    
     resolve ->(_obj, args, _ctx) { Tafsir.find(args[:id]) }
   end
 
   field :verseTafsir, Types::TafsirType do
     argument :verseKey, !types.String
     argument :tafsirId, !types.ID
+    
     resolve lambda { |_obj, args, _ctx| 
       resource_id = ResourceContent
                     .where(id: args[:tafsirId])
@@ -90,6 +119,7 @@ Types::QueryType = GraphQL::ObjectType.define do
   field :words, types[Types::WordType] do
     argument :verseId, types.ID
     argument :verseKey, types.String
+    
     resolve lambda { |_obj, args, _ctx|
       return Word.where(verse_id: args[:verse_id]) if args[:verse_id]
 
@@ -99,6 +129,7 @@ Types::QueryType = GraphQL::ObjectType.define do
 
   field :word, Types::WordType do
     argument :id, !types.ID
+    
     resolve ->(_obj, args, _ctx) { Word.find(args[:id]) }
   end
 
@@ -106,6 +137,7 @@ Types::QueryType = GraphQL::ObjectType.define do
     argument :recitationId, !types.ID
     argument :resourceIds, !types[types.ID]
     argument :resourceType, types.String, default_value: 'Verse'
+    
     resolve ->(obj, args, _ctx) {
       AudioFile.where(
         resource_id: args[:resourceIds],
@@ -119,6 +151,7 @@ Types::QueryType = GraphQL::ObjectType.define do
     argument :recitationId, !types.ID
     argument :resourceId, !types.ID
     argument :resourceType, types.String, default_value: 'Verse'
+    
     resolve ->(obj, args, _ctx) {
       AudioFile.where(
         resource_id: args[:resourceId],
@@ -153,3 +186,6 @@ Types::QueryType = GraphQL::ObjectType.define do
   #   }
   # end
 end
+
+
+#cc=chapters.joins("LEFT OUTER JOIN(select resource_id, resource_type, language_id, language_name, name from translated_names where(translated_names.language_id = #{language.id} OR translated_names.language_id = #{Language.default.id}) limit 1) c ON c.resource_id = chapters.id AND c.resource_type = 'Chapter'")

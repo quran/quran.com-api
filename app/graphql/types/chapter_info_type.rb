@@ -10,7 +10,5 @@ Types::ChapterInfoType = GraphQL::ObjectType.define do
     attr :language_id
     attr :resource_content_id
     attr :language_name
-
-    has_one :chapter
   end
 end

@@ -3,8 +3,6 @@ Types::JuzType = GraphQL::ObjectType.define do
 
   backed_by_model :juz do
     attr :juz_number
-    attr :name_simple
-    attr :name_arabic
   end
 
   field :verseMapping, Types::JSONType do

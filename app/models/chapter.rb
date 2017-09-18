@@ -21,11 +21,10 @@ class Chapter < ApplicationRecord
   has_many :translated_names, as: :resource
   has_many :chapter_infos
 
+  # Used for preloading
+  has_one :translated_name, as: :resource, class_name: 'TranslatedName'
+
   serialize :pages
 
   default_scope { order 'chapter_number asc' }
-
-  Language.all.each do |language|
-    has_many "#{language.iso_code}_translated_names".to_sym, -> { where(language: language) }, class_name: 'TranslatedName', as: :resource
-  end
 end

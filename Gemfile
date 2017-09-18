@@ -83,4 +83,5 @@ group :development do
   gem 'bullet'
   gem 'meta_request'
   gem 'rubocop', require: false
+  gem 'benchmark-ips', require: false
 end

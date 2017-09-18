@@ -51,6 +51,7 @@ GEM
       descendants_tracker (~> 0.0.4)
       ice_nine (~> 0.11.0)
       thread_safe (~> 0.3, >= 0.3.1)
+    benchmark-ips (2.7.2)
     builder (3.2.2)
     bullet (5.5.0)
       activesupport (>= 3.0.0)
@@ -329,6 +330,7 @@ PLATFORMS
 DEPENDENCIES
   active_model_serializers (~> 0.10.0)
   annotate
+  benchmark-ips
   bullet
   byebug
   elasticsearch

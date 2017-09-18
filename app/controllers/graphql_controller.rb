@@ -18,7 +18,7 @@ class GraphqlController < ApplicationController
     case ambiguous_param
     when String
       if ambiguous_param.present?
-        ensure_hash(JSON.parse(ambiguous_param))
+        Oj.load(ambiguous_param)
       else
         {}
       end

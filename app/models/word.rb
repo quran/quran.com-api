@@ -38,6 +38,7 @@ class Word < ApplicationRecord
 
   has_many :translations, as: :resource
   has_many :transliterations, as: :resource
+
   has_many :word_lemmas
   has_many :lemmas, through: :word_lemmas
   has_many :word_stems
@@ -47,8 +48,12 @@ class Word < ApplicationRecord
 
   has_one  :audio, class_name: 'AudioFile', as: :resource
   has_one :word_corpus
+  
+  # Used for preloading
+  has_one :translation, as: :resource, class_name: 'Translation'
+  has_one :transliteration, as: :resource, class_name: 'Transliteration'
 
-  default_scope { order 'position asc' }
+  default_scope -> { order 'position asc' }
 
   Language.all.each do |language|
     has_many "#{language.iso_code}_translations".to_sym, -> { where(language: language) }, class_name: 'Translation', as: :resource

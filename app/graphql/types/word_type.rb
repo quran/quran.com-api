@@ -12,18 +12,9 @@ Types::WordType = GraphQL::ObjectType.define do
     attr :verse_key
     attr :page_number
     attr :line_number
-    attr :code_dec
-    attr :code_hex
-    attr :code_hex_v3
-    attr :code_dec_v3
-    attr :char_type_id
-    attr :pause_name
     attr :audio_url
-    attr :image_blob
-    attr :image_url
     attr :location
     attr :topic_id
-    attr :token_id
     attr :char_type_name
 
     has_one :verse
@@ -49,7 +40,7 @@ Types::WordType = GraphQL::ObjectType.define do
     end
 
     field :codeV3, types.String do
-      resolve ->(word, _args, _ctx) { "&#x#{word.code_hex};" }
+      resolve ->(word, _args, _ctx) { "&#x#{word.code_hex_v3};" }
     end
 
     field :className, types.String do
@@ -58,19 +49,17 @@ Types::WordType = GraphQL::ObjectType.define do
 
     field :translation, Types::TranslationType do
       argument :language, types.String, default_value: 'en'
+      
       resolve ->(word, args, _ctx) {
-        translation = word.public_send("#{args[:language]}_translations").first
-
-        translation.present? ? translation : word.en_translations.first
+        word.translation
       }
     end
 
     field :transliteration, Types::TranslationType do
       argument :language, types.String, default_value: 'en'
+      
       resolve ->(word, args, _ctx) {
-        transliteration = word.public_send("#{args[:language]}_transliterations").first
-
-        transliteration.present? ? transliteration : word.en_transliterations.first 
+        word.transliteration
       }
     end
   end

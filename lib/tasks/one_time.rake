@@ -1,4 +1,12 @@
 namespace :one_time do
+  task update_language_priorities: :environment do
+    Translation.where.not(language_id: Language.default.id).update_all language_priority: 2
+    Translation.where(language_id: Language.default.id).update_all language_priority: 1
+
+    TranslatedName.where.not(language_id: Language.default.id).update_all language_priority: 2
+    TranslatedName.where(language_id: Language.default.id).update_all language_priority: 2
+  end
+  
   task fix_tafsir: :environment do
     Tafsir.includes(:verse).each do |tafsir|
       tafsir.update_attribute :verse_key, tafsir.verse.verse_key
