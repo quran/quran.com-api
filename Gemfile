@@ -22,17 +22,14 @@ gem 'oj_mimic_json'
 
 gem 'active_model_serializers', '~> 0.10.0'
 
-# Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
-
-# Detect the language
-gem 'whatlanguage'
-gem 'prose'
-
-gem 'puma', '~> 3.0'
-
 # Http request
 gem 'httparty', require: false
+
+gem 'graphiql-rails'
+
+gem 'graphql'
+gem 'graphql-activerecord'
+gem 'graphql-batch'
 
 # Elasticsearch
 gem 'elasticsearch'
@@ -50,18 +47,19 @@ gem 'kaminari'
 gem 'parallel'
 # Will provide a progress bar as the import happens
 
-gem 'graphiql-rails'
+gem 'prose'
 
-gem 'graphql'
-gem 'graphql-activerecord'
-gem 'graphql-batch'
+gem 'puma', '~> 3.0'
 
-gem 'passenger'
+
 gem 'sentry-raven'
 gem 'sitemap_generator'
 gem 'virtus'
 
 gem 'tzinfo-data'
+
+# Detect the language
+gem 'whatlanguage'
 
 group :development, :test do
   gem 'pry-byebug'

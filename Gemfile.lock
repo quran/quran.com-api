@@ -176,9 +176,6 @@ GEM
       parallel
     parser (2.4.0.0)
       ast (~> 2.2)
-    passenger (5.1.1)
-      rack
-      rake (>= 0.8.1)
     pg (0.19.0)
     powerpack (0.1.1)
     promise.rb (0.7.3)
@@ -351,7 +348,6 @@ DEPENDENCIES
   oj_mimic_json
   parallel
   parallel_tests
-  passenger
   pg (~> 0.19.0)
   prose
   pry-byebug
