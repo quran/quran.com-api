@@ -1,8 +1,8 @@
 Types::JSONType = GraphQL::ScalarType.define do
-  name "JSON"
+  name "JSONType"
 
   description "Parsing JSON"
 
   coerce_input ->(value, _ctx) { JSON.parse(value) }
-  coerce_result ->(value, _ctx) { value.to_json }
+  coerce_result ->(value, _ctx) { JSON.parse(value) }
 end

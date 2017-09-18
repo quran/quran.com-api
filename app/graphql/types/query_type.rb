@@ -6,6 +6,10 @@ Types::QueryType = GraphQL::ObjectType.define do
     resolve ->(_obj, args, _ctx) { Chapter.includes("#{args[:language]}_translated_names".to_sym).all }
   end
 
+  field :juzs, types[Types::JuzType] do
+    resolve ->(_obj, _args, _ctx) { Juz.all }
+  end
+
   field :chapter, Types::ChapterType do
     argument :id, !types.ID
     resolve ->(_obj, args, _ctx) { Chapter.find(args[:id]) }
@@ -46,11 +50,10 @@ Types::QueryType = GraphQL::ObjectType.define do
 
   field :verse, Types::VerseType do
     argument :id, types.ID
-    argument :key, types.String
+    argument :verseKey, types.String
     resolve lambda { |_obj, args, _ctx|
-      return Verse.find(args[:id]) if args[:id]
-
-      Verse.find_by_verse_key(args[:key])
+      return Verse.find_by_verse_key(args[:verseKey]) if args[:verseKey].present?
+      Verse.find(args[id])
     }
   end
 
@@ -67,6 +70,21 @@ Types::QueryType = GraphQL::ObjectType.define do
   field :tafsir, Types::TafsirType do
     argument :id, !types.ID
     resolve ->(_obj, args, _ctx) { Tafsir.find(args[:id]) }
+  end
+
+  field :verseTafsir, Types::TafsirType do
+    argument :verseKey, !types.String
+    argument :tafsirId, !types.ID
+    resolve lambda { |_obj, args, _ctx| 
+      resource_id = ResourceContent
+                    .where(id: args[:tafsirId])
+                    .or(ResourceContent
+                    .where(slug: args[:tafsirId]))
+                    .pluck(:id)
+
+      verse = Verse.find_by_id_or_key(args[:verseKey])
+      verse.tafsirs.where(resource_content_id: resource_id).first
+    }
   end
 
   field :words, types[Types::WordType] do
