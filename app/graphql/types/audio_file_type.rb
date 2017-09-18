@@ -10,7 +10,6 @@ Types::AudioFileType = GraphQL::ObjectType.define do
     attr :segments
     attr :mime_type
     attr :format
-    attr :is_enabled
     attr :recitation_id
   end
 end
