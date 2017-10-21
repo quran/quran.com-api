@@ -64,10 +64,13 @@ gem 'whatlanguage'
 group :development, :test do
   gem 'pry-byebug'
   gem 'pry-rails'
+  gem 'zeus'
+end
+
+group :test do
   gem 'rspec-rails' # http://betterspecs.org/
   gem 'guard-rspec', require: false
   gem 'parallel_tests'
-  gem 'zeus'
   gem 'simplecov', :require => false
 end
 
