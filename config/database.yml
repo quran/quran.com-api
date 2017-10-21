@@ -14,14 +14,12 @@
 # Configure Using Gemfile
 # gem 'pg'
 #
+
+
+# DATABASE_URL environment variable should determine connection params
+
 default: &default
-  adapter: postgresql
   encoding: unicode
-  database: quran_dev
-  username: quran_dev
-  password: dev_quran
-  # username: quran
-  # password: quran
   # For details on connection pooling, see rails configuration guide
   # http://guides.rubyonrails.org/configuring.html#database-pooling
   pool: 5
@@ -32,13 +30,6 @@ development:
 
 test:
   <<: *default
-  database: quran_dev
 
 production:
   <<: *default
-  host: <%= ENV['POSTGRES_PORT_5432_TCP_ADDR'] %>
-  port: <%= ENV['POSTGRES_PORT_5432_TCP_PORT'] %>
-#  database: quran_production
-#  username: quran
-#  password: <%= ENV['QURAN_DATABASE_PASSWORD'] %>
-#  dsn: dbi:Pg:dbname=quran
