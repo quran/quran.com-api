@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170612002119) do
+ActiveRecord::Schema.define(version: 20170828070719) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -106,14 +106,6 @@ ActiveRecord::Schema.define(version: 20170612002119) do
     t.index ["parent_id"], name: "index_char_types_on_parent_id", using: :btree
   end
 
-  create_table "concepts", force: :cascade do |t|
-    t.string   "name"
-    t.integer  "parent_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["parent_id"], name: "index_concepts_on_parent_id", using: :btree
-  end
-
   create_table "data_sources", force: :cascade do |t|
     t.string   "name"
     t.string   "url"
@@ -173,9 +165,9 @@ ActiveRecord::Schema.define(version: 20170612002119) do
     t.integer  "juz_number"
     t.string   "name_simple"
     t.string   "name_arabic"
-    t.text     "verse_mapping"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
+    t.json     "verse_mapping"
     t.index ["juz_number"], name: "index_juzs_on_juz_number", using: :btree
   end
 
@@ -429,9 +421,8 @@ ActiveRecord::Schema.define(version: 20170612002119) do
     t.string   "text_madani"
     t.string   "text_clean"
     t.string   "text_indopak"
-    t.string   "transliteration"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
   end
 
   create_table "topics", force: :cascade do |t|
@@ -673,9 +664,9 @@ ActiveRecord::Schema.define(version: 20170612002119) do
     t.string   "audio_url"
     t.text     "image_blob"
     t.string   "image_url"
-    t.string   "location"
-    t.integer  "topic_id"
     t.integer  "token_id"
+    t.integer  "topic_id"
+    t.string   "location"
     t.string   "char_type_name"
     t.index ["chapter_id"], name: "index_words_on_chapter_id", using: :btree
     t.index ["char_type_id"], name: "index_words_on_char_type_id", using: :btree
