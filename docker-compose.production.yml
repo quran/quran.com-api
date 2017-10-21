@@ -7,5 +7,5 @@ services:
         - env=production
         - bundle_opts=--without development test --deployment --clean
     environment:
-      - SENTRY_DSN=https://www.google.com
       - SECRET_KEY_BASE=abcdefa
+
