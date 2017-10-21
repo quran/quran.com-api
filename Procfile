@@ -1,3 +1,1 @@
-web: rails s
-elasticsearch: elasticsearch
-redis: redis-server
+web: puma -C config/puma.rb
