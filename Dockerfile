@@ -9,10 +9,25 @@ RUN apt-get update -qq && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+ARG env=development
+
 WORKDIR /app
-COPY / /app/
+COPY /app /app/app
+COPY /bin /app/bin
+COPY /config /app/config
+COPY /db /app/db
+COPY /lib /app/lib
+COPY /public /app/public
+COPY /spec /app/spec
+COPY /config.ru /app/
+COPY /Gemfile /app/
+COPY /Gemfile.lock /app/
+COPY /Rakefile /app/
 # files could be mounted in dev for realtime code changes without rebuild
 # typically that would be: .:/app
+
+# copy build cache for the requested environment only
+COPY /build-cache/$env/bundle/ /usr/local/bundle/
 
 RUN mkdir /var/www && \
     chown -R www-data /app /var/www /usr/local/bundle
@@ -23,7 +38,6 @@ USER www-data
 RUN gem install bundler -v 1.15.3
 
 # install all gems
-ARG env=development
 ARG bundle_opts=
 
 ENV RAILS_ENV $env

@@ -28,3 +28,4 @@ passenger.*
 .ruby-version
 .ruby-gemset
 coverage/
+build-cache

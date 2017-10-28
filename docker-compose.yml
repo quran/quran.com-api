@@ -6,8 +6,10 @@ services:
     environment:
       - DATABASE_URL=postgres://quran_dev:quran_password@postgres:5432/quran_db
       - ELASTICSEARCH_HOST=elasticsearch
+      - SENTRY_DSN=
+      - SECRET_KEY_BASE=abcdefa
   postgres:
-    image: qurandb:v101
+    image: qurandb:v102
     ports:
       - "5342:5432"
   elasticsearch:

@@ -6,6 +6,7 @@ services:
       args:
         - env=development
         - bundle_opts=--without test
+    image: qurancomapi_api:dev-latest
     volumes:
       - .:/app
     depends_on:

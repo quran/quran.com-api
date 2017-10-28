@@ -4,7 +4,13 @@
 
 build the image:
 
-    docker-compose build
+To build the image in development:
+
+    ./build.sh
+
+This invokes `docker-compose build` then saves build artificats.
+Subsequent builds are much faster because gems are cached.
+It also copies back `Gemfile.lock` so that it is properly checked in git.
 
 run it:
 
@@ -24,8 +30,8 @@ modify `docker-compose.override.yml` to include build instructions.
 
 ## Production
 
-You need to rebuild the image for production by invoking differnt compose files:
+To rebuild the image for production:
 
-    docker-compose -f docker-compose.yml -f docker-compose.production.yml up --build
+    RAILS_ENV=production ./build.sh    
 
 Push the resulting image to a registry so that a `docker stack deploy` finds it.
