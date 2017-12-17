@@ -37,7 +37,7 @@ class V3::WordSerializer < V3::ApplicationSerializer
     {url: object.audio_url}
   end
 
-  has_one :translation, serializer: V3::TranslationSerializer do
+  has_one :translation, serializer: V3::TransliterationSerializer do
     # translation = object.public_send("#{scope[:language] || 'en'}_translations").first
 
     #translation.present? ? translation : object.en_translations.first
