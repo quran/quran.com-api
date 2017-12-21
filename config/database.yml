@@ -27,6 +27,9 @@ default: &default
 
 development:
   <<: *default
+  adapter: postgresql
+  encoding: unicode
+  database: quran_dev
 
 test:
   <<: *default
