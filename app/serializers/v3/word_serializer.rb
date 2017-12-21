@@ -43,8 +43,8 @@ class V3::WordSerializer < V3::ApplicationSerializer
      translation.present? ? translation : object.en_translations.first
   end
 
-  has_one :transliteration, serializer: V3::TransliterationSerializer do
-    object.en_transliterations.first
+  has_one :transliteration, serializer: V3::TranslationSerializer do
+    object.en_translations.first
   end
 
   def class_name
