@@ -33,7 +33,7 @@ RUN echo "Running \"bundle install $bundle_opts\" with environment set to \"$env
     bundle install $bundle_opts
 
 # generate sitemap
-RUN bundle exec rake sitemap:refresh
+RUN bundle exec sitemap:refresh:no_ping
 
 EXPOSE 3000
 
