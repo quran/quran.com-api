@@ -1,6 +1,14 @@
 version: '3'
 services:
   api:
+    build:
+      context: .
+      args:
+        - env=development
+        - bundle_opts=--without test
+    image: qurancomapi_api:dev-latest
+    volumes:
+      - .:/app
     ports:
       - "3000:3000"
     environment:
@@ -8,6 +16,9 @@ services:
       - ELASTICSEARCH_HOST=elasticsearch
       - SENTRY_DSN=
       - SECRET_KEY_BASE=abcdefa
+    depends_on:
+      - postgres
+      - elasticsearch
   postgres:
     image: qurandb:v102
     ports:

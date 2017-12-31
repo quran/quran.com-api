@@ -34,4 +34,4 @@ To rebuild the image for production:
 
     RAILS_ENV=production ./build.sh    
 
-Push the resulting image to a registry so that a `docker stack deploy` finds it.
+Then tag and push the resulting image to a registry so that a `docker stack deploy` finds it.

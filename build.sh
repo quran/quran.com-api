@@ -8,5 +8,5 @@ if [ "$environment" == "development" ]; then
   docker-compose build #--no-cache
   ./save-artifacts.sh $artifacts
 else
-  docker-compose -f docker-compose.yml -f docker-compose.$environment.yml build
+  docker-compose -f docker-compose.$environment.yml build
 fi
