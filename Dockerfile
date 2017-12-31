@@ -23,6 +23,7 @@ COPY /config.ru /app/
 COPY /Gemfile /app/
 COPY /Gemfile.lock /app/
 COPY /Rakefile /app/
+COPY /gen-sitemaps-and-run.sh /app/gen-sitemaps-and-run.sh
 # files could be mounted in dev for realtime code changes without rebuild
 # typically that would be: .:/app
 
@@ -46,10 +47,7 @@ ENV RACK_ENV $env
 RUN echo "Running \"bundle install $bundle_opts\" with environment set to \"$env\"..." && \
     bundle install $bundle_opts
 
-# generate sitemap
-RUN bundle exec sitemap:refresh:no_ping
-
 EXPOSE 3000
 
 ENTRYPOINT ["bundle", "exec"]
-CMD ["puma", "-C", "config/puma.rb"]
+CMD ["./gen-sitemaps-and-run.sh"]

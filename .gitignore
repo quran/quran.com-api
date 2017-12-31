@@ -29,3 +29,4 @@ passenger.*
 .ruby-gemset
 coverage/
 build-cache
+public/sitemaps
