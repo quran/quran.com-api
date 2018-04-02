@@ -85,15 +85,15 @@ group :development do
 end
 
 group :test, :development do
-  gem 'annotate', '= 2.6.5'
-  gem 'guard-rspec', '= 4.7.3'
-  gem 'guard-spork'
-  gem 'rspec-rails', '= 3.7.2'
+  gem "annotate", "= 2.6.5"
+  gem "guard-rspec", "= 4.7.3"
+  gem "guard-spork"
+  gem "rspec-rails", "= 3.7.2"
   gem "shoulda-matchers", "~> 3.1.2"
   gem "simplecov", require: false
 
   gem "rubocop-rails", "= 1.2.2"
   gem "rubocop-rspec"
-  gem 'spork'
-  gem 'watchr'
+  gem "spork"
+  gem "watchr"
 end
