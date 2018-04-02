@@ -1,23 +1,32 @@
 # frozen_string_literal: true
 
-# == Schema Information
-#
-# Table name: chapter_infos
-#
-#  id                  :integer          not null, primary key
-#  chapter_id          :integer
-#  text                :text
-#  source              :string
-#  short_text          :text
-#  language_id         :integer
-#  resource_content_id :integer
-#  language_name       :string
-#  created_at          :datetime         not null
-#  updated_at          :datetime         not null
-#
-
 require "rails_helper"
 
-RSpec.describe ChapterInfo, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+RSpec.describe ChapterInfo do
+  context "#associations" do
+    it { is_expected.to belong_to :language }
+    it { is_expected.to belong_to :chapter }
+    it { is_expected.to belong_to :resource_content }
+  end
+
+  context "#columns and indexes" do
+    columns = {
+      chapter_id:          :integer,
+      text:                :text,
+      source:              :string,
+      short_text:          :text,
+      language_id:         :integer,
+      resource_content_id: :integer,
+      language_name:       :string
+    }
+
+    indexes = [
+      ["chapter_id"],
+      ["language_id"],
+      ["resource_content_id"]
+    ]
+
+    it_behaves_like "modal with column", columns
+    it_behaves_like "modal have indexes on column", indexes
+  end
 end

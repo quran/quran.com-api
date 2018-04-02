@@ -51,9 +51,6 @@ gem "puma", "~> 3.0"
 gem "redis-rails"
 
 gem "rack-cors"
-
-gem "sentry-raven"
-
 gem "sitemap_generator"
 
 gem "virtus"
@@ -63,6 +60,8 @@ gem "tzinfo-data"
 # Detect the language
 gem "whatlanguage"
 
+gem "sentry-raven", group: [:development, :production]
+
 group :development, :test do
   gem "pry-byebug"
   gem "pry-rails"
@@ -70,7 +69,6 @@ group :development, :test do
 end
 
 group :development do
-  gem "annotate"
   gem "byebug", platform: :mri
   gem "ruby-progressbar"
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
@@ -80,19 +78,22 @@ group :development do
   gem "mechanize"
   gem "meta_request"
   gem "pre-commit"
-  gem "rubocop-rails", "= 1.2.2"
-  gem "rubocop-rspec"
   gem "spring"
   gem "spring-commands-rspec"
   gem "spring-watcher-listen", "~> 2.0.0"
   gem "stackprof"
 end
 
-group :test do
-  gem "guard-rspec", require: false
-  gem "parallel_tests"
-  gem "regressor", "~> 0.6.2"
-  gem "rspec-rails" # http://betterspecs.org/
-  gem "shoulda-matchers", "~> 3.1"
+group :test, :development do
+  gem 'annotate', '= 2.6.5'
+  gem 'guard-rspec', '= 4.7.3'
+  gem 'guard-spork'
+  gem 'rspec-rails', '= 3.7.2'
+  gem "shoulda-matchers", "~> 3.1.2"
   gem "simplecov", require: false
+
+  gem "rubocop-rails", "= 1.2.2"
+  gem "rubocop-rspec"
+  gem 'spork'
+  gem 'watchr'
 end

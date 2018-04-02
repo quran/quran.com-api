@@ -16,7 +16,7 @@ module Searchable
     )
 
     # Initial the paging gem, Kaminari
-    Kaminari::Hooks.init
+    # Kaminari::Hooks.init
     Elasticsearch::Model::Response::Response.__send__ :include, Elasticsearch::Model::Response::Pagination::Kaminari
 
     def chapter_names

@@ -2,7 +2,7 @@
 
 module ResponseJSON
   def response_json
-    JSON.parse(response.body)
+    Oj.load(response.body)
   rescue Oj::ParseError
     response.body
   end
