@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class V3::AudioFilesController < ApplicationController
   def index
     chapter = Chapter.find(params[:chapter_id])
@@ -10,7 +12,7 @@ class V3::AudioFilesController < ApplicationController
 
   private
 
-  def recitation
-    params[:recitation]
-  end
+    def recitation
+      params[:recitation]
+    end
 end

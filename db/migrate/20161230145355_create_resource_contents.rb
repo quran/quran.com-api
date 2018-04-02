@@ -4,7 +4,7 @@ class CreateResourceContents < ActiveRecord::Migration[5.0]
       t.boolean :approved, index: true
       t.references :author
       t.references :data_source
-      t.string :author_name #avoide extra join
+      t.string :author_name # avoide extra join
 
       t.string :resource_type, index: true
       t.string :sub_type, index: true
@@ -12,7 +12,7 @@ class CreateResourceContents < ActiveRecord::Migration[5.0]
       t.text :description
       t.string :cardinality_type, index: true
       t.references :language
-      t.string :language_name #cache
+      t.string :language_name # cache
 
       t.timestamps
     end

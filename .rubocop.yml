@@ -3,6 +3,14 @@ inherit_gem:
   rubocop-rails:
     - config/rails.yml
 
+# apply rails specific cops
+Rails:
+  Enabled: true
+
+# apply bundler specific cops
+Bundler:
+  Enabled: true
+
 # override ruby version to 2.3.3
 AllCops:
   TargetRubyVersion: 2.3.3

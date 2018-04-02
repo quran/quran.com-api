@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 Types::AudioFileType = GraphQL::ObjectType.define do
-  name 'AudioFile'
+  name "AudioFile"
 
   backed_by_model :audio_file do
     attr :id

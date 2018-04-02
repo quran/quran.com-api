@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 Types::TranslationType = GraphQL::ObjectType.define do
-  name 'Translation'
+  name "Translation"
 
   backed_by_model :translation do
     attr :id

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: char_types
@@ -11,6 +13,6 @@
 #
 
 class CharType < ApplicationRecord
-  belongs_to :parent, class_name: 'CharType'
-  has_many :children, class_name: 'CharType', foreign_key: 'parent_id'
+  belongs_to :parent, class_name: "CharType"
+  has_many :children, class_name: "CharType", foreign_key: "parent_id"
 end

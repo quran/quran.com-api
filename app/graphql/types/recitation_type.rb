@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 Types::RecitationType = GraphQL::ObjectType.define do
-  name 'Recitation'
+  name "Recitation"
 
   backed_by_model :recitation do
     attr :id

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Types::WordLemmaType = GraphQL::ObjectType.define do
   name "WordLemma"
 

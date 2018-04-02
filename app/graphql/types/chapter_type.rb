@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 Types::ChapterType = GraphQL::ObjectType.define do
-  name 'Chapter'
+  name "Chapter"
 
   backed_by_model :chapter do
     attr :id
@@ -20,7 +22,7 @@ Types::ChapterType = GraphQL::ObjectType.define do
     end
 
     field :translatedName, Types::TranslatedNameType do
-      argument :language, types.String, default_value: 'en'
+      argument :language, types.String, default_value: "en"
       resolve ->(chapter, args, _ctx) do
         chapter.public_send("#{args[:language]}_translated_names".to_sym).first
       end

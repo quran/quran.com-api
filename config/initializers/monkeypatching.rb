@@ -1,13 +1,15 @@
+# frozen_string_literal: true
+
 class ActiveSupport::Logger::SimpleFormatter
-  SEVERITY_TO_TAG_MAP     = {'DEBUG'=>'Debug', 'INFO'=>'Info', 'WARN'=>'Warn', 'ERROR'=>'Error', 'FATAL'=>'Shit', 'UNKNOWN'=>'???'}
-  SEVERITY_TO_COLOR_MAP   = {'DEBUG'=>'34', 'INFO'=>'32', 'WARN'=>'33', 'ERROR'=>'31', 'FATAL'=>'31', 'UNKNOWN'=>'37'}
+  SEVERITY_TO_TAG_MAP     = { "DEBUG" => "Debug", "INFO" => "Info", "WARN" => "Warn", "ERROR" => "Error", "FATAL" => "Shit", "UNKNOWN" => "???" }
+  SEVERITY_TO_COLOR_MAP   = { "DEBUG" => "34", "INFO" => "32", "WARN" => "33", "ERROR" => "31", "FATAL" => "31", "UNKNOWN" => "37" }
   USE_HUMOROUS_SEVERITIES = true
 
   def call(severity, time, progname, msg)
     if USE_HUMOROUS_SEVERITIES
-      formatted_severity = sprintf("%-3s",SEVERITY_TO_TAG_MAP[severity])
+      formatted_severity = sprintf("%-3s", SEVERITY_TO_TAG_MAP[severity])
     else
-      formatted_severity = sprintf("%-5s",severity)
+      formatted_severity = sprintf("%-5s", severity)
     end
 
 

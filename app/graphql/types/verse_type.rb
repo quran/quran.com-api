@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 Types::VerseType = GraphQL::ObjectType.define do
-  name 'Verse'
+  name "Verse"
 
   backed_by_model :verse do
     attr :id
@@ -33,7 +35,7 @@ Types::VerseType = GraphQL::ObjectType.define do
 
     field :audioFiles, types[Types::AudioFileType] do
       argument :recitation, !types.ID
-      resolve ->(verse, args, _ctx) { verse.where('audio_files.recitation_id = ?', args[:recitation]) }
+      resolve ->(verse, args, _ctx) { verse.where("audio_files.recitation_id = ?", args[:recitation]) }
     end
 
     field :translations, types[Types::TranslationType] do

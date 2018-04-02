@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 Types::ChapterInfoType = GraphQL::ObjectType.define do
-  name 'ChapterInfo'
+  name "ChapterInfo"
 
   backed_by_model :chapter_info do
     attr :id

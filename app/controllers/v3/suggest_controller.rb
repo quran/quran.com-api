@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class V3::SuggestController < ApplicationController
   def index
     if query.nil?
@@ -12,7 +14,7 @@ class V3::SuggestController < ApplicationController
   end
 
   def language
-    params[:l] || params[:language] || 'en'
+    params[:l] || params[:language] || "en"
   end
 
   def query

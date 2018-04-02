@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # This proc takes a Relay global ID, and returns the Active Record model. It can be the same as
 # the `object_to_id` proc that you use for global node identification:
 GraphQL::Models.model_from_id = -> (id, context) {
@@ -14,7 +16,7 @@ GraphQL::Models.id_for_model = -> (model_type_name, model_id) {
 GraphQL::Models.authorize = -> (context, action, model) {
   # Action will be either :create, :update, or :destroy
   # Raise an exception if the action should not proceed
-  user = context['user']
+  user = context["user"]
   model.authorize_changes!(action, user)
 }
 

@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 Types::LemmaType = GraphQL::ObjectType.define do
-  name 'Lemma'
+  name "Lemma"
 
   backed_by_model :lemma do
     attr :id

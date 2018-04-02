@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Types::StemType = GraphQL::ObjectType.define do
   name "Stem"
 

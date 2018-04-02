@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: words
@@ -30,7 +32,7 @@
 #  char_type_name :string
 #
 
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Word, type: :model do
   pending "add some examples to (or delete) #{__FILE__}"

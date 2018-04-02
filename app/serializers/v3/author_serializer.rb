@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: authors
@@ -9,6 +11,6 @@
 #  updated_at :datetime         not null
 #
 
-class V3::AuthorSerializer <  V3::ApplicationSerializer
+class V3::AuthorSerializer < V3::ApplicationSerializer
   attributes :name, :url, :id
 end

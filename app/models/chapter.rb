@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: chapters
@@ -23,9 +25,9 @@ class Chapter < ApplicationRecord
 
   serialize :pages
 
-  default_scope { order 'chapter_number asc' }
+  default_scope { order "chapter_number asc" }
 
   Language.all.each do |language|
-    has_many "#{language.iso_code}_translated_names".to_sym, -> { where(language: language) }, class_name: 'TranslatedName', as: :resource
+    has_many "#{language.iso_code}_translated_names".to_sym, -> { where(language: language) }, class_name: "TranslatedName", as: :resource
   end
 end

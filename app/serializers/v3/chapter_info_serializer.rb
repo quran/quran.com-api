@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: chapter_infos
@@ -13,6 +15,6 @@
 #  updated_at          :datetime         not null
 #
 
-class V3::ChapterInfoSerializer <  V3::ApplicationSerializer
+class V3::ChapterInfoSerializer < V3::ApplicationSerializer
   attributes :chapter_id, :text, :source, :short_text, :language_name
 end

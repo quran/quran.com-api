@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class V3::ChapterInfosController < ApplicationController
   # GET /chapters/1/info
   def show

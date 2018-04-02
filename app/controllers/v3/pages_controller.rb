@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class V3::PagesController < ApplicationController
   def show
     verses = Verse

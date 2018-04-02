@@ -4,7 +4,7 @@ class CreateRecitations < ActiveRecord::Migration[5.0]
       t.references :reciter
       t.references :resource_content
       t.references :recitation_style
-      t.string :reciter_name #cache
+      t.string :reciter_name # cache
       t.string :style
 
       t.timestamps

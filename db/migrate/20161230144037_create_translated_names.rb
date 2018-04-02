@@ -5,7 +5,7 @@ class CreateTranslatedNames < ActiveRecord::Migration[5.0]
       t.references :language
 
       t.string :name
-      t.string :language_name #cache
+      t.string :language_name # cache
 
       t.timestamps
     end

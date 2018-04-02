@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 Types::WordRootType = GraphQL::ObjectType.define do
-  name 'WordRoot'
+  name "WordRoot"
 
   backed_by_model :word_root do
     attr :id

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: languages
@@ -12,7 +14,7 @@
 #  updated_at          :datetime         not null
 #
 
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Language, type: :model do
   pending "add some examples to (or delete) #{__FILE__}"

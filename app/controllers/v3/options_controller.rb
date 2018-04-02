@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class V3::OptionsController < ApplicationController
   # GET options/default
   def default
@@ -5,7 +7,7 @@ class V3::OptionsController < ApplicationController
     # Translation: Sahih International(English)
     # Recitation: Qari Abdul Baset(Mujawwad style)
     # Media: Bayyinah ( 61 )
-    render json: { translations: [21], language: 'en', recitation: 1, media: 61 }
+    render json: { translations: [21], language: "en", recitation: 1, media: 61 }
   end
 
   # GET options/languages

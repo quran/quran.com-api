@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 Types::CharTypeType = GraphQL::ObjectType.define do
-  name 'CharType'
+  name "CharType"
 
   backed_by_model :char_type do
     attr :id

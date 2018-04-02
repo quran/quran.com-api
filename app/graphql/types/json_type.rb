@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Types::JSONType = GraphQL::ScalarType.define do
   name "JSONType"
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: words
@@ -34,13 +36,13 @@ class V3::WordSerializer < V3::ApplicationSerializer
   attribute :char_type_name, key: :char_type
 
   attribute :audio do
-    {url: object.audio_url}
+    { url: object.audio_url }
   end
 
   has_one :translation, serializer: V3::TranslationSerializer do
-     translation = object.public_send("#{scope[:language] || 'en'}_translations").first
+    translation = object.public_send("#{scope[:language] || 'en'}_translations").first
 
-     translation.present? ? translation : object.en_translations.first
+    translation.present? ? translation : object.en_translations.first
   end
 
   has_one :transliteration, serializer: V3::TranslationSerializer do

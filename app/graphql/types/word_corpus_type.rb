@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Types::WordCorpusType = GraphQL::ObjectType.define do
   name "WordCorpus"
 

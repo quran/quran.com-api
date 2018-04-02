@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: resource_contents
@@ -19,7 +21,7 @@
 #  slug             :string
 #
 
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe ResourceContent, type: :model do
   pending "add some examples to (or delete) #{__FILE__}"
