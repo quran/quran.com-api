@@ -67,13 +67,6 @@ group :development, :test do
   gem 'zeus'
 end
 
-group :test do
-  gem 'rspec-rails' # http://betterspecs.org/
-  gem 'guard-rspec', require: false
-  gem 'parallel_tests'
-  gem 'simplecov', :require => false
-end
-
 group :development do
   gem 'annotate'
   gem 'ruby-progressbar'
@@ -85,5 +78,19 @@ group :development do
   gem 'mechanize'
   gem 'bullet'
   gem 'meta_request'
-  gem 'rubocop', require: false
+  gem "rubocop-rails", '= 1.2.2'
+  gem 'rubocop-rspec'
+  gem 'pre-commit'
+  gem 'derailed_benchmarks'
+  gem 'benchmark-ips', require: false
+  gem 'stackprof'
+end
+
+group :test do
+  gem 'shoulda-matchers', '~> 3.1'
+  gem 'simplecov', require: false
+  gem 'regressor', '~> 0.6.2'
+  gem 'rspec-rails' # http://betterspecs.org/
+  gem 'guard-rspec', require: false
+  gem 'parallel_tests'
 end

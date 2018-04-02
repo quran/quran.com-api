@@ -1,0 +1,8 @@
+# Use official rails's rubocop configuration
+inherit_gem:
+  rubocop-rails:
+    - config/rails.yml
+
+# override ruby version to 2.3.3
+AllCops:
+  TargetRubyVersion: 2.3.3
