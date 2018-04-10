@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 Types::VerseStemType = GraphQL::ObjectType.define do
-  name "VerseStem"
+  name 'VerseStem'
 
   backed_by_model :verse_stem do
     attr :id

@@ -1,4 +1,5 @@
 # Use official rails's rubocop configuration
+require: rubocop-rspec
 inherit_gem:
   rubocop-rails:
     - config/rails.yml
@@ -16,3 +17,7 @@ Bundler:
 # override ruby version to 2.3.3
 AllCops:
   TargetRubyVersion: 2.3.3
+
+Style/StringLiterals:
+  Enabled: true
+  EnforcedStyle: single_quotes

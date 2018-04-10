@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 Types::TafsirType = GraphQL::ObjectType.define do
-  name "Tafsir"
+  name 'Tafsir'
 
   backed_by_model :tafsir do
     attr :id

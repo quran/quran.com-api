@@ -14,7 +14,7 @@ class V3::SuggestController < ApplicationController
   end
 
   def language
-    params[:l] || params[:language] || "en"
+    params[:l] || params[:language] || 'en'
   end
 
   def query

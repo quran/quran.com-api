@@ -43,9 +43,9 @@ module Search
           multi_match: {
             query: query,
               fields: [
-                "verse_key",
-                "verse_path",
-                "text_madani.text"
+                'verse_key',
+                'verse_path',
+                'text_madani.text'
               ]
           }
         }
@@ -54,14 +54,14 @@ module Search
       def words_query(query)
         {
           nested: {
-            path: "words",
+            path: 'words',
               query: {
                 multi_match: {
                   query: query,
-                  fields: ["words.madani^2", "words.simple"]
+                  fields: ['words.madani^2', 'words.simple']
                 }
               },
-              inner_hits: nested_highlight("words.madani")
+              inner_hits: nested_highlight('words.madani')
             }
         }
       end
@@ -90,17 +90,17 @@ module Search
       end
 
       def source_attributes
-        ["verse_key", "id"]
+        ['verse_key', 'id']
       end
 
       def highlight
         {
           fields: {
-            "text_madani.text" => {
-              type: "fvh".freeze
+            'text_madani.text' => {
+              type: 'fvh'.freeze
             }
           },
-          tags_schema: "styled".freeze
+          tags_schema: 'styled'.freeze
         }
       end
 
@@ -108,9 +108,9 @@ module Search
         {
           highlight: {
             fields: {
-              filed => { type: "fvh".freeze }
+              filed => { type: 'fvh'.freeze }
             },
-            tags_schema: "styled".freeze
+            tags_schema: 'styled'.freeze
           },
           size: 500
         }

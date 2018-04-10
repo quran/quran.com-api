@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 Types::VerseLemmaType = GraphQL::ObjectType.define do
-  name "VerseLemma"
+  name 'VerseLemma'
 
   backed_by_model :verse_lemma do
     attr :id

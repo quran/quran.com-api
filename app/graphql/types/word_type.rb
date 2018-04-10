@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 Types::WordType = GraphQL::ObjectType.define do
-  name "Word"
+  name 'Word'
 
   backed_by_model :word do
     attr :id
@@ -59,7 +59,7 @@ Types::WordType = GraphQL::ObjectType.define do
     end
 
     field :translation, Types::TranslationType do
-      argument :language, types.String, default_value: "en"
+      argument :language, types.String, default_value: 'en'
       resolve ->(word, args, _ctx) {
         translation = word.public_send("#{args[:language]}_translations").first
 
@@ -68,7 +68,7 @@ Types::WordType = GraphQL::ObjectType.define do
     end
 
     field :transliteration, Types::TranslationType do
-      argument :language, types.String, default_value: "en"
+      argument :language, types.String, default_value: 'en'
       resolve ->(word, args, _ctx) {
         transliteration = word.public_send("#{args[:language]}_transliterations").first
 

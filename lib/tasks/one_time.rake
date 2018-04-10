@@ -2,10 +2,10 @@
 
 namespace :one_time do
   task replace_wbw_translation: :environment do
-    require "csv"
+    require 'csv'
     changed = []
 
-    data = CSV.open("final_wbw_translation.csv").read
+    data = CSV.open('final_wbw_translation.csv').read
 
     data[1..data.size].each do |row|
       word = Word.find(row[0])
@@ -16,7 +16,7 @@ namespace :one_time do
       word.en_translations.first.update_column :text, row[2].to_s.strip
     end
 
-    File.open("wbw_report", "wb") do |file|
+    File.open('wbw_report', 'wb') do |file|
       file << changed.to_json
     end
   end
@@ -33,7 +33,7 @@ namespace :one_time do
 
       map = {}
       juz.chapters.each do |chapter|
-        juz_verses = chapter.verses.where(juz_number: juz_number).order("verse_number asc")
+        juz_verses = chapter.verses.where(juz_number: juz_number).order('verse_number asc')
         map[chapter.chapter_number] = "#{juz_verses.first.verse_number}-#{juz_verses.last.verse_number}"
       end
 

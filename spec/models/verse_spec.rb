@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
 RSpec.describe Verse do
 
-  context "#associations" do
+  context 'with associations' do
     it {
       is_expected.to belong_to(:chapter)
                        .counter_cache(true)
@@ -24,7 +24,7 @@ RSpec.describe Verse do
     it { is_expected.to have_many(:roots).through(:words) }
   end
 
-  context "#columns and indexes" do
+  context 'with columns and indexes' do
     columns = {
       chapter_id:     :integer,
       verse_number:   :integer,
@@ -47,17 +47,17 @@ RSpec.describe Verse do
     }
 
     indexes = [
-      ["chapter_id"],
-      ["verse_index"],
-      ["verse_key"],
-      ["verse_lemma_id"],
-      ["verse_number"],
-      ["verse_root_id"],
-      ["verse_stem_id"]
+      ['chapter_id'],
+      ['verse_index'],
+      ['verse_key'],
+      ['verse_lemma_id'],
+      ['verse_number'],
+      ['verse_root_id'],
+      ['verse_stem_id']
     ]
 
-    it_behaves_like "modal with column", columns
-    it_behaves_like "modal have indexes on column", indexes
+    it_behaves_like 'modal with column', columns
+    it_behaves_like 'modal have indexes on column', indexes
   end
 
 end

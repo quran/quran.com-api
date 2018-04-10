@@ -23,15 +23,4 @@ class AudioFile < ApplicationRecord
   belongs_to :recitation
 
   serialize :segments, Array
-
-  def att(model)
-    map = {}
-    model.columns.each do |c|
-      next if ["id", "created_at", "updated_at"].include?(c.name)
-
-      map[c.name] = c.type
-    end
-
-    map.to_json.gsub(/[\\"]/, "").gsub(":", ": :")
-  end
 end

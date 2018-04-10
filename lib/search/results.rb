@@ -14,7 +14,7 @@ module Search
     end
 
     def total_count
-      @search.response["hits"]["total"]
+      @search.response['hits']['total']
     end
 
     def current_page
@@ -35,19 +35,19 @@ module Search
 
     protected
       def prepare_result(result)
-        verse = Verse.find(result["_source"]["id"])
+        verse = Verse.find(result['_source']['id'])
         translations = []
         matched_words = {}
-        words = result["inner_hits"].delete("words")
+        words = result['inner_hits'].delete('words')
 
-        words["hits"]["hits"].map do |hit|
-          word_id = hit["_source"]["id"]
+        words['hits']['hits'].map do |hit|
+          word_id = hit['_source']['id']
           matched_words[word_id] = word_hightlight_class(hit)
         end
 
-        result["inner_hits"].each_pair do |key, val|
-          if val["hits"]["total"] > 0
-            val["hits"]["hits"].each do |trans|
+        result['inner_hits'].each_pair do |key, val|
+          if val['hits']['total'] > 0
+            val['hits']['hits'].each do |trans|
               translations << prepare_translation(trans, key)
             end
           end
@@ -57,21 +57,21 @@ module Search
       end
 
       def prepare_translation(trans, key)
-        author = trans["_source"]["author"]
-        text = trans["highlight"]["#{key}.text"].first
+        author = trans['_source']['author']
+        text = trans['highlight']["#{key}.text"].first
 
-        { resource_name: author, text: text, id: trans["_source"]["id"], language_name: trans["_source"]["language_name"], resource_id: trans["_source"]["resource_content_id"] }
+        { resource_name: author, text: text, id: trans['_source']['id'], language_name: trans['_source']['language_name'], resource_id: trans['_source']['resource_content_id'] }
       end
 
       def word_hightlight_class(hit)
-        return "hlt1" unless hit["highlight"]
+        return 'hlt1' unless hit['highlight']
 
-        highlight = hit["highlight"].values.first.first
+        highlight = hit['highlight'].values.first.first
 
         if matched = highlight.match(/(hlt\ds*)/)
           matched[0]
         else
-          ""
+          ''
         end
       end
 

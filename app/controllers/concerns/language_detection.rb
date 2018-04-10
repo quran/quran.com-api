@@ -35,9 +35,9 @@ module LanguageDetection
     }
 
     # handle the accept-language http header
-    if headers[ "Accept-Language" ]
+    if headers[ 'Accept-Language' ]
       # e.g. "en-US,en;q=0.8,ar;q=0.6"
-      headers[ "Accept-Language" ].split(/,/).map { |str| str.split(/;/)[0].split(/-/)[0] }.each do |lc|
+      headers[ 'Accept-Language' ].split(/,/).map { |str| str.split(/;/)[0].split(/-/)[0] }.each do |lc|
         if not boost_language_code[ lc ]
           boost_language_code[ lc ] = 4
         else
@@ -47,17 +47,17 @@ module LanguageDetection
     end
 
     # handle the country code determined from their geolocation
-    if session[ "country_code" ]
+    if session[ 'country_code' ]
       # TODO this is NOT how we're going to do thiاللَّهُ نُورُs
       country_to_language_code = {}
-      File.open("/usr/share/i18n/SUPPORTED").each do |line|
-        line.gsub! /[ .@].*/, ""
+      File.open('/usr/share/i18n/SUPPORTED').each do |line|
+        line.gsub! /[ .@].*/, ''
         lc, cc = line.split(/_/)
         country_to_language_code[ cc ] = lc if not country_to_language_code[ cc ]
       end
 
-      if country_to_language_code.key? session[ "country_code" ]
-        lc = country_to_language_code[ session[ "country_code" ] ]
+      if country_to_language_code.key? session[ 'country_code' ]
+        lc = country_to_language_code[ session[ 'country_code' ] ]
         if not boost_language_code[ lc ]
           boost_language_code[ lc ] = 4
         else
@@ -68,8 +68,8 @@ module LanguageDetection
 
     # handle the language code if say sometime in the future we allow users
     # to specify their preferred language directly in their settings
-    if session[ "language_code" ]
-      lc = session[ "language_code" ]
+    if session[ 'language_code' ]
+      lc = session[ 'language_code' ]
       if boost_language_code.keys.length > 0
         # just give it double score because they chose it explicitly
         boost_language_code[ lc ] = boost_language_code.values.max * 2

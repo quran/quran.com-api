@@ -4,7 +4,7 @@ module Search
   class Suggest
     attr_accessor :query, :lang, :size
 
-    def initialize(query, lang: "en", size: 10)
+    def initialize(query, lang: 'en', size: 10)
       @query = Search::Query.new(query)
       @lang  = lang
       @size  = size
@@ -43,12 +43,12 @@ module Search
           multi_match: {
             query:  query,
             fields: [
-                      "verse_key",
-                      "verse_path",
-                      "text_madani.text",
-                      "text_simple.text",
-                      "text_indopak.text",
-                      "chapter_names"
+                      'verse_key',
+                      'verse_path',
+                      'text_madani.text',
+                      'text_simple.text',
+                      'text_indopak.text',
+                      'chapter_names'
                     ]
           }
         }
@@ -78,17 +78,17 @@ module Search
       end
 
       def source_attributes
-        ["verse_key", "id"]
+        ['verse_key', 'id']
       end
 
       def highlight
         {
           fields:      {
-            "text_madani.text" => {
-              type: "fvh".freeze
+            'text_madani.text' => {
+              type: 'fvh'.freeze
             }
           },
-          tags_schema: "styled".freeze
+          tags_schema: 'styled'.freeze
         }
       end
 
@@ -96,13 +96,13 @@ module Search
         {
           highlight: {
             fields:              {
-              filed => { type: "plain".freeze },
+              filed => { type: 'plain'.freeze },
             },
-            tags_schema:         "styled".freeze,
+            tags_schema:         'styled'.freeze,
             number_of_fragments: 1, # Don't highlight entire translation
             fragment_size:       90, # return 90 chars around matched word
-            pre_tags:            ["<b>"],
-            post_tags:           ["</b>"]
+            pre_tags:            ['<b>'],
+            post_tags:           ['</b>']
           }
         }
       end
@@ -113,17 +113,17 @@ module Search
         results = es_response.results.results
 
         results.map do |hit|
-          matched_values = if hit["highlight"].present?
-            [hit["highlight"]["text_madani.text"].first]
+          matched_values = if hit['highlight'].present?
+            [hit['highlight']['text_madani.text'].first]
           else
-            trans = hit["inner_hits"].detect do |key, value|
-              value["hits"]["total"] > 0
+            trans = hit['inner_hits'].detect do |key, value|
+              value['hits']['total'] > 0
             end
 
             next unless trans
-            trans.last["hits"]["hits"].map do |trans_match|
-              text = trans_match["highlight"].first.last.last
-              translation_id = trans_match["_source"]["resource_content_id"]
+            trans.last['hits']['hits'].map do |trans_match|
+              text = trans_match['highlight'].first.last.last
+              translation_id = trans_match['_source']['resource_content_id']
 
               [text, translation_id]
             end

@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 # Set the host name for URL creation
-SitemapGenerator::Sitemap.default_host = "https://quran.com"
-SitemapGenerator::Sitemap.sitemaps_host = "https://quran.com/"
-SitemapGenerator::Sitemap.sitemaps_path = "sitemaps/"
+SitemapGenerator::Sitemap.default_host = 'https://quran.com'
+SitemapGenerator::Sitemap.sitemaps_host = 'https://quran.com/'
+SitemapGenerator::Sitemap.sitemaps_path = 'sitemaps/'
 
 SitemapGenerator::Sitemap.create do
   # Put links creation logic here.
@@ -34,7 +34,7 @@ SitemapGenerator::Sitemap.create do
     add "/#{chapter.chapter_number}", priority: 1
 
     # Add chapter info for available languages
-    ["en", "ur", "ml", "ta"].each do |local|
+    ['en', 'ur', 'ml', 'ta'].each do |local|
       add "/#{chapter.chapter_number}/info/#{local}", priority: 1
     end
   end
@@ -44,7 +44,7 @@ SitemapGenerator::Sitemap.create do
 
   # Add all verses
   Verse.find_each do |verse|
-    verse_path = verse.verse_key.tr(":", "/")
+    verse_path = verse.verse_key.tr(':', '/')
 
     add "/#{verse_path}",  priority: 0.8
 
@@ -69,5 +69,5 @@ SitemapGenerator::Sitemap.create do
     add "/?local=#{local}", priority: 0.3
   end
 
-  add "/ayatul-kursi", priority: 1
+  add '/ayatul-kursi', priority: 1
 end

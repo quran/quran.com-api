@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
 RSpec.describe Tafsir do
 
-  context "#associations" do
+  context 'with associations' do
     it { is_expected.to belong_to :verse }
     it { is_expected.to belong_to :language }
     it { is_expected.to belong_to :resource_content }
@@ -12,7 +12,7 @@ RSpec.describe Tafsir do
     it { is_expected.to have_many :foot_notes }
   end
 
-  context "#columns and indexes" do
+  context 'with columns and indexes' do
     columns = {
       verse_id:            :integer,
       language_id:         :integer,
@@ -24,13 +24,13 @@ RSpec.describe Tafsir do
     }
 
     indexes = [
-      ["language_id"],
-      ["resource_content_id"],
-      ["verse_id"],
-      ["verse_key"]
+      ['language_id'],
+      ['resource_content_id'],
+      ['verse_id'],
+      ['verse_key']
     ]
 
-    it_behaves_like "modal with column", columns
-    it_behaves_like "modal have indexes on column", indexes
+    it_behaves_like 'modal with column', columns
+    it_behaves_like 'modal have indexes on column', indexes
   end
 end

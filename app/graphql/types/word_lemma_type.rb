@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 Types::WordLemmaType = GraphQL::ObjectType.define do
-  name "WordLemma"
+  name 'WordLemma'
 
   backed_by_model :word_lemma do
     attr :id

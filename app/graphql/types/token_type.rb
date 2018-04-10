@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 Types::TokenType = GraphQL::ObjectType.define do
-  name "Token"
+  name 'Token'
 
   backed_by_model :token do
     attr :id

@@ -19,5 +19,5 @@
 
 
 ActiveSupport::Inflector.inflections(:en) do |inflect|
-  inflect.plural "corpus", "corpuses"
+  inflect.plural 'corpus', 'corpuses'
 end

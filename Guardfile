@@ -34,8 +34,8 @@
 #  * zeus: 'zeus rspec' (requires the server to be started separately)
 #  * 'just' rspec: 'rspec'
 
-guard :rspec, cmd: "bundle exec rspec" do
-  require "guard/rspec/dsl"
+guard :rspec, cmd: 'bundle exec rspec' do
+  require 'guard/rspec/dsl'
   dsl = Guard::RSpec::Dsl.new(self)
 
   # Feel free to open issues for suggestions and improvements
@@ -74,6 +74,6 @@ guard :rspec, cmd: "bundle exec rspec" do
   # Turnip features and steps
   watch(%r{^spec/acceptance/(.+)\.feature$})
   watch(%r{^spec/acceptance/steps/(.+)_steps\.rb$}) do |m|
-    Dir[File.join("**/#{m[1]}.feature")][0] || "spec/acceptance"
+    Dir[File.join("**/#{m[1]}.feature")][0] || 'spec/acceptance'
   end
 end

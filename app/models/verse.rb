@@ -45,7 +45,7 @@ class Verse < ApplicationRecord
   has_many :recitations, through: :audio_files
   has_many :roots, through: :words
 
-  default_scope { order "verse_number asc" }
+  default_scope { order 'verse_number asc' }
 
   def self.find_by_id_or_key(id)
     where(verse_key: id).or(where(id: id)).first

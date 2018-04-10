@@ -9,8 +9,8 @@ class V3::WordsController < ApplicationController
 
   def word_includes
     [
-      eager_language("translations"),
-      eager_language("transliterations")
+      eager_language('translations'),
+      eager_language('transliterations')
     ]
   end
 end

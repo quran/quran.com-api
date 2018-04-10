@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 Types::StemType = GraphQL::ObjectType.define do
-  name "Stem"
+  name 'Stem'
 
   backed_by_model :stem do
     attr :id

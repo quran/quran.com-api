@@ -51,18 +51,18 @@ module Searchable
       hash
     end
 
-    index_name "verses"
+    index_name 'verses'
 
     mapping do
-      indexes :id, type: "integer"
+      indexes :id, type: 'integer'
 
       [:text_madani, :text_indopak, :text_simple].each do |text_type|
-        indexes text_type, type: "text" do
+        indexes text_type, type: 'text' do
           indexes :text,
-                  type: "text",
-                  similarity: "my_bm25",
-                  term_vector: "with_positions_offsets",
-                  analyzer: "arabic_normalized"
+                  type: 'text',
+                  similarity: 'my_bm25',
+                  term_vector: 'with_positions_offsets',
+                  analyzer: 'arabic_normalized'
           # indexes :stemmed,
           #         type: 'text',
           #         similarity: 'my_bm25',
@@ -70,44 +70,44 @@ module Searchable
           #         search_analyzer: 'arabic_normalized',
           #         analyzer: 'arabic_ngram'
           indexes :autocomplete,
-                  type: "string",
-                  analyzer: "autocomplete_arabic",
-                  search_analyzer: "arabic_normalized",
-                  index_options: "offsets"
+                  type: 'string',
+                  analyzer: 'autocomplete_arabic',
+                  search_analyzer: 'arabic_normalized',
+                  index_options: 'offsets'
         end
       end
 
-      indexes :verse_key, type: "text" do
-        indexes :keyword, type: "keyword"
+      indexes :verse_key, type: 'text' do
+        indexes :keyword, type: 'keyword'
       end
 
-      indexes :verse_path, type: "keyword" # allow user to search by path e.g 1/2, 2/29 etc
+      indexes :verse_path, type: 'keyword' # allow user to search by path e.g 1/2, 2/29 etc
 
       indexes :chapter_names
-      indexes "words", type: "nested" do
+      indexes 'words', type: 'nested' do
         indexes :madani,
-                type: "text",
-                term_vector: "with_positions_offsets",
-                analyzer: "arabic_normalized",
-                similarity: "my_bm25"
+                type: 'text',
+                term_vector: 'with_positions_offsets',
+                analyzer: 'arabic_normalized',
+                similarity: 'my_bm25'
         indexes :simple,
-                type: "text",
-                term_vector: "with_positions_offsets",
-                analyzer: "arabic_normalized",
-                similarity: "my_bm25"
+                type: 'text',
+                term_vector: 'with_positions_offsets',
+                analyzer: 'arabic_normalized',
+                similarity: 'my_bm25'
       end
 
-      languages = Translation.where(resource_type: "Verse").pluck(:language_id).uniq
+      languages = Translation.where(resource_type: 'Verse').pluck(:language_id).uniq
       available_languages = Language.where(id: languages)
       available_languages.each do |lang|
         es_analyzer = lang.es_analyzer_default.present? ? lang.es_analyzer_default : nil
 
-        indexes "trans_#{lang.iso_code}", type: "nested" do
+        indexes "trans_#{lang.iso_code}", type: 'nested' do
           indexes :text,
-                  type: "text",
-                  similarity: "my_bm25",
-                  term_vector: "with_positions_offsets",
-                  analyzer: es_analyzer || "standard"
+                  type: 'text',
+                  similarity: 'my_bm25',
+                  term_vector: 'with_positions_offsets',
+                  analyzer: es_analyzer || 'standard'
           #   indexes :stemmed,
           #           type: 'text',
           #           similarity: 'my_bm25',

@@ -57,7 +57,7 @@ class V3::VerseSerializer < V3::ApplicationSerializer
   end
 
   def render_images?
-    scope[:text_type] == "image"
+    scope[:text_type] == 'image'
   end
 
   def render_audio?

@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 Types::QueryType = GraphQL::ObjectType.define do
-  name "Query"
+  name 'Query'
 
   field :chapters, types[Types::ChapterType] do
-    argument :language, types.String, default_value: "en"
+    argument :language, types.String, default_value: 'en'
     resolve ->(_obj, args, _ctx) { Chapter.includes("#{args[:language]}_translated_names".to_sym).all }
   end
 
@@ -19,7 +19,7 @@ Types::QueryType = GraphQL::ObjectType.define do
 
   field :chapterInfo, Types::ChapterInfoType do
     argument :chapterId, !types.ID
-    argument :language, types.String, default_value: "en"
+    argument :language, types.String, default_value: 'en'
     resolve ->(_obj, args, _ctx) {
       ChapterInfo.where(chapter_id: args[:chapterId]).filter_by_language_or_default(args[:language])
     }
@@ -27,7 +27,7 @@ Types::QueryType = GraphQL::ObjectType.define do
 
   field :verses, types[Types::VerseType] do
     argument :chapterId, !types.ID
-    argument :language, types.String, default_value: "en"
+    argument :language, types.String, default_value: 'en'
     argument :offset, types.Int, default_value: 0
     argument :padding, types.Int, default_value: 0
     argument :page, types.Int, default_value: 1
@@ -107,7 +107,7 @@ Types::QueryType = GraphQL::ObjectType.define do
   field :audioFiles, types[Types::AudioFileType] do
     argument :recitationId, !types.ID
     argument :resourceIds, !types[types.ID]
-    argument :resourceType, types.String, default_value: "Verse"
+    argument :resourceType, types.String, default_value: 'Verse'
     resolve ->(obj, args, _ctx) {
       AudioFile.where(
         resource_id: args[:resourceIds],
@@ -120,7 +120,7 @@ Types::QueryType = GraphQL::ObjectType.define do
   field :audioFile, Types::AudioFileType do
     argument :recitationId, !types.ID
     argument :resourceId, !types.ID
-    argument :resourceType, types.String, default_value: "Verse"
+    argument :resourceType, types.String, default_value: 'Verse'
     resolve ->(obj, args, _ctx) {
       AudioFile.where(
         resource_id: args[:resourceId],

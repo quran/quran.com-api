@@ -2,6 +2,6 @@
 
 class V3::PingController < ApplicationController
   def ping
-    render json: "pong", status: :ok
+    render json: 'pong', status: :ok
   end
 end

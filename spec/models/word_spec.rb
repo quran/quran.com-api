@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
 RSpec.describe Word do
 
-  context "#associations" do
+  context 'with associations' do
     it { is_expected.to belong_to :verse }
     it { is_expected.to belong_to :char_type }
     it { is_expected.to belong_to :topic }
     it { is_expected.to belong_to :token }
-    it { is_expected.to have_one(:audio).class_name("AudioFile") }
+    it { is_expected.to have_one(:audio).class_name('AudioFile') }
     it { is_expected.to have_one :word_corpus }
     it { is_expected.to have_many :translations }
     it { is_expected.to have_many :transliterations }
@@ -20,13 +20,13 @@ RSpec.describe Word do
     it { is_expected.to have_many :word_roots }
     it { is_expected.to have_many :roots }
 
-    it "should order by position" do
-      expect(Word.default_scoped.to_sql)
-        .to include("ORDER BY position asc")
+    it 'orders by position' do
+      expect(described_class.default_scoped.to_sql)
+        .to include('ORDER BY position asc')
     end
   end
 
-  context "#columns and indexes" do
+  context 'with columns and indexes' do
     columns = {
       verse_id: :integer,
       chapter_id: :integer,
@@ -52,17 +52,17 @@ RSpec.describe Word do
     }
 
     indexes = [
-      ["chapter_id"],
-      ["char_type_id"],
-      ["location"],
-      ["position"],
-      ["token_id"],
-      ["topic_id"],
-      ["verse_id"],
-      ["verse_key"]
+      ['chapter_id'],
+      ['char_type_id'],
+      ['location'],
+      ['position'],
+      ['token_id'],
+      ['topic_id'],
+      ['verse_id'],
+      ['verse_key']
     ]
 
-    it_behaves_like "modal with column", columns
-    it_behaves_like "modal have indexes on column", indexes
+    it_behaves_like 'modal with column', columns
+    it_behaves_like 'modal have indexes on column', indexes
   end
 end

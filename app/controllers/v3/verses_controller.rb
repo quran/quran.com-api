@@ -12,7 +12,7 @@ class V3::VersesController < ApplicationController
 
     render json: @verses,
            meta: pagination_dict(@verses),
-           include: "**"
+           include: '**'
   end
 
   # GET /verses/1
@@ -23,7 +23,7 @@ class V3::VersesController < ApplicationController
             .includes(words: [:audio])
             .find(params[:id])
 
-    render json: verse, include: "**"
+    render json: verse, include: '**'
   end
 
   private
@@ -69,8 +69,8 @@ class V3::VersesController < ApplicationController
 
     def word_includes
       [
-        eager_language("translations"),
-        eager_language("transliterations")
+        eager_language('translations'),
+        eager_language('transliterations')
       ]
     end
 
@@ -90,7 +90,7 @@ class V3::VersesController < ApplicationController
     def load_audio
       return unless render_audio?
       @verses = @verses
-                .where("audio_files.recitation_id = ?", params[:recitation])
+                .where('audio_files.recitation_id = ?', params[:recitation])
                 .eager_load(:audio_files)
     end
 
