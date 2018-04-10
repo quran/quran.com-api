@@ -28,89 +28,89 @@ class V3::VersesController < ApplicationController
 
   private
 
-    def pagination_dict(object)
-      {
-        current_page: object.current_page,
-        next_page: object.next_page,
-        prev_page: object.prev_page,
-        total_pages: object.total_pages,
-        total_count: object.total_count
-      }
+  def pagination_dict(object)
+    {
+      current_page: object.current_page,
+      next_page: object.next_page,
+      prev_page: object.prev_page,
+      total_pages: object.total_pages,
+      total_count: object.total_count
+    }
+  end
+
+  def page
+    params[:page].to_i.abs
+  end
+
+  def per_page
+    limit = (params[:limit] || 10).to_i.abs
+    limit <= 50 ? limit : 50
+  end
+
+  def offset
+    params[:offset] ? params[:offset].to_i.abs : nil
+  end
+
+  def padding
+    params[:padding] ? params[:padding].to_i.abs : nil
+  end
+
+  def render_audio?
+    params[:recitation].present?
+  end
+
+  def render_translations?
+    params[:translations].present?
+  end
+
+  def render_media?
+    params[:media].present?
+  end
+
+  def word_includes
+    [
+      eager_language('translations'),
+      eager_language('transliterations')
+    ]
+  end
+
+  def verses_index
+    @verses = Verse
+              .where(chapter_id: params[:chapter_id])
+              .preload(:media_contents, words: word_includes)
+              .page(page)
+              .per(per_page)
+  end
+
+  def set_offset_and_padding
+    @verses = @verses.offset(offset) if offset.present?
+    @verses = @verses.padding(padding) if padding.present?
+  end
+
+  def load_audio
+    return unless render_audio?
+    @verses = @verses
+              .where('audio_files.recitation_id = ?', params[:recitation])
+              .eager_load(:audio_files)
+  end
+
+  def load_translations
+    return unless render_translations?
+    translations = {
+      resource_content_id: params[:translations]
+    }
+
+    @verses = @verses
+              .where(translations: translations)
+              .eager_load(:translations)
+  end
+
+  def fix_resource_content
+    # user can get translation using ID or Slug
+    if render_translations?
+      translation = params[:translations]
+
+      params[:translations] = ResourceContent.where(id: translation).or(ResourceContent.where(slug: translation)).pluck(:id)
     end
-
-    def page
-      params[:page].to_i.abs
-    end
-
-    def per_page
-      limit = (params[:limit] || 10).to_i.abs
-      limit <= 50 ? limit : 50
-    end
-
-    def offset
-      params[:offset] ? params[:offset].to_i.abs : nil
-    end
-
-    def padding
-      params[:padding] ? params[:padding].to_i.abs : nil
-    end
-
-    def render_audio?
-      params[:recitation].present?
-    end
-
-    def render_translations?
-      params[:translations].present?
-    end
-
-    def render_media?
-      params[:media].present?
-    end
-
-    def word_includes
-      [
-        eager_language('translations'),
-        eager_language('transliterations')
-      ]
-    end
-
-    def verses_index
-      @verses = Verse
-                .where(chapter_id: params[:chapter_id])
-                .preload(:media_contents, words: word_includes)
-                .page(page)
-                .per(per_page)
-    end
-
-    def set_offset_and_padding
-      @verses = @verses.offset(offset) if offset.present?
-      @verses = @verses.padding(padding) if padding.present?
-    end
-
-    def load_audio
-      return unless render_audio?
-      @verses = @verses
-                .where('audio_files.recitation_id = ?', params[:recitation])
-                .eager_load(:audio_files)
-    end
-
-    def load_translations
-      return unless render_translations?
-      translations = {
-        resource_content_id: params[:translations]
-      }
-
-      @verses = @verses
-                .where(translations: translations)
-                .eager_load(:translations)
-    end
-
-    def fix_resource_content
-      # user can get translation using ID or Slug
-      if render_translations?
-        translation = params[:translations]
-
-        params[:translations] = ResourceContent.where(id: translation).or(ResourceContent.where(slug: translation)).pluck(:id)
-      end
-    end
+  end
 end

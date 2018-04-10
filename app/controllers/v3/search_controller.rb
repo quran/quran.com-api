@@ -37,21 +37,21 @@ class V3::SearchController < ApplicationController
 
   protected
 
-    def language
-      params[:language] || 'en'
-    end
+  def language
+    params[:language] || 'en'
+  end
 
-    def query
-      params[:q] || params[:query]
-    end
+  def query
+    params[:q] || params[:query]
+  end
 
-    def size(default = 20)
-      (params[:size] || params[:s] || default).to_i
-    end
+  def size(default = 20)
+    (params[:size] || params[:s] || default).to_i
+  end
 
-    def page
-      p = (params[:page] || params[:p]).to_i
+  def page
+    p = (params[:page] || params[:p]).to_i
 
-      p.zero? ? 1 : p
-    end
+    p.zero? ? 1 : p
+  end
 end

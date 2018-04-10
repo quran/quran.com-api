@@ -21,3 +21,6 @@ AllCops:
 Style/StringLiterals:
   Enabled: true
   EnforcedStyle: single_quotes
+Layout/IndentationConsistency:
+  Enabled: true
+  EnforcedStyle: normal

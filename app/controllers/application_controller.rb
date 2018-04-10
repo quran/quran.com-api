@@ -10,15 +10,15 @@ class ApplicationController < ActionController::API
 
   private
 
-    def throw_the_error(error)
-      render json: { error: error.message }, status: :not_found
-    end
+  def throw_the_error(error)
+    render json: { error: error.message }, status: :not_found
+  end
 
-    def eager_language(type)
-      "#{params[:language] || 'en'}_#{type}".to_sym
-    end
+  def eager_language(type)
+    "#{params[:language] || 'en'}_#{type}".to_sym
+  end
 
-    def set_cache_headers
-      expires_in 1.day, public: true
-    end
+  def set_cache_headers
+    expires_in 1.day, public: true
+  end
 end

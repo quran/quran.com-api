@@ -12,7 +12,7 @@ class V3::AudioFilesController < ApplicationController
 
   private
 
-    def recitation
-      params[:recitation]
-    end
+  def recitation
+    params[:recitation]
+  end
 end

@@ -34,54 +34,54 @@ module Search
     end
 
     protected
-      def prepare_result(result)
-        verse = Verse.find(result['_source']['id'])
-        translations = []
-        matched_words = {}
-        words = result['inner_hits'].delete('words')
+    def prepare_result(result)
+      verse = Verse.find(result['_source']['id'])
+      translations = []
+      matched_words = {}
+      words = result['inner_hits'].delete('words')
 
-        words['hits']['hits'].map do |hit|
-          word_id = hit['_source']['id']
-          matched_words[word_id] = word_hightlight_class(hit)
-        end
+      words['hits']['hits'].map do |hit|
+        word_id = hit['_source']['id']
+        matched_words[word_id] = word_hightlight_class(hit)
+      end
 
-        result['inner_hits'].each_pair do |key, val|
-          if val['hits']['total'] > 0
-            val['hits']['hits'].each do |trans|
-              translations << prepare_translation(trans, key)
-            end
+      result['inner_hits'].each_pair do |key, val|
+        if val['hits']['total'] > 0
+          val['hits']['hits'].each do |trans|
+            translations << prepare_translation(trans, key)
           end
         end
-
-        { id: verse.id, verse_number: verse.verse_number, chapter_id: verse.chapter_id, verse_key: verse.verse_key, text_madani: verse.text_madani, words: prepare_words(verse, matched_words), translations: translations }
       end
 
-      def prepare_translation(trans, key)
-        author = trans['_source']['author']
-        text = trans['highlight']["#{key}.text"].first
+      { id: verse.id, verse_number: verse.verse_number, chapter_id: verse.chapter_id, verse_key: verse.verse_key, text_madani: verse.text_madani, words: prepare_words(verse, matched_words), translations: translations }
+    end
 
-        { resource_name: author, text: text, id: trans['_source']['id'], language_name: trans['_source']['language_name'], resource_id: trans['_source']['resource_content_id'] }
+    def prepare_translation(trans, key)
+      author = trans['_source']['author']
+      text = trans['highlight']["#{key}.text"].first
+
+      { resource_name: author, text: text, id: trans['_source']['id'], language_name: trans['_source']['language_name'], resource_id: trans['_source']['resource_content_id'] }
+    end
+
+    def word_hightlight_class(hit)
+      return 'hlt1' unless hit['highlight']
+
+      highlight = hit['highlight'].values.first.first
+
+      if matched = highlight.match(/(hlt\ds*)/)
+        matched[0]
+      else
+        ''
       end
+    end
 
-      def word_hightlight_class(hit)
-        return 'hlt1' unless hit['highlight']
+    def prepare_words(verse, matched)
+      words = verse.words.preload(:audio)
 
-        highlight = hit['highlight'].values.first.first
-
-        if matched = highlight.match(/(hlt\ds*)/)
-          matched[0]
-        else
-          ''
-        end
+      words.map do |w|
+        serializer = V3::WordSerializer.new(w, scope: {})
+        serializer.as_json.merge(highlight: matched[w.id])
       end
-
-      def prepare_words(verse, matched)
-        words = verse.words.preload(:audio)
-
-        words.map do |w|
-          serializer = V3::WordSerializer.new(w, scope: {})
-          serializer.as_json.merge(highlight: matched[w.id])
-        end
-      end
+    end
   end
 end
