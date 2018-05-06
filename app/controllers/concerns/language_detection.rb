@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module LanguageDetection
   extend ActiveSupport::Concern
 
@@ -35,7 +37,7 @@ module LanguageDetection
     # handle the accept-language http header
     if headers[ 'Accept-Language' ]
       # e.g. "en-US,en;q=0.8,ar;q=0.6"
-      headers[ 'Accept-Language' ].split( /,/ ).map { |str| str.split( /;/ )[0].split( /-/ )[0] }.each do |lc|
+      headers[ 'Accept-Language' ].split(/,/).map { |str| str.split(/;/)[0].split(/-/)[0] }.each do |lc|
         if not boost_language_code[ lc ]
           boost_language_code[ lc ] = 4
         else
@@ -48,9 +50,9 @@ module LanguageDetection
     if session[ 'country_code' ]
       # TODO this is NOT how we're going to do thiاللَّهُ نُورُs
       country_to_language_code = {}
-      File.open( '/usr/share/i18n/SUPPORTED' ).each do |line|
+      File.open('/usr/share/i18n/SUPPORTED').each do |line|
         line.gsub! /[ .@].*/, ''
-        lc, cc = line.split( /_/ )
+        lc, cc = line.split(/_/)
         country_to_language_code[ cc ] = lc if not country_to_language_code[ cc ]
       end
 
@@ -89,6 +91,6 @@ module LanguageDetection
       indices_boost[ :"translation-#{lc}" ] = boost_language_code[ lc ]
     end
 
-    return indices_boost
+    indices_boost
   end
 end

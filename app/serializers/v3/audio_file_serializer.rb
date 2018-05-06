@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: audio_files
@@ -15,6 +17,6 @@
 #  updated_at    :datetime         not null
 #
 
-class V3::AudioFileSerializer <  V3::ApplicationSerializer
+class V3::AudioFileSerializer < V3::ApplicationSerializer
   attributes :url, :duration, :segments, :format
 end

@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 module Search
   class Client
     attr_accessor :query, :options, :page
 
-    def initialize(query, options={})
+    def initialize(query, options = {})
       @query = Search::Query.new(query)
       @page = options[:page].to_i.abs
       @language = options[:language]
@@ -16,8 +18,8 @@ module Search
     def search_defination
       {
        _source: source_attributes,
-       query: search_query #,
-       # highlight: highlight
+       query: search_query # ,
+        # highlight: highlight
       }
     end
 
@@ -28,12 +30,12 @@ module Search
         available_languages = %w[ml en bs az cs fr hi es fi id it ko dv bn ku de am al fa ha mrn ms pl ja nl tr ur th
                                  no tg ug ru pt ro sq sw so sv ta uz zh tt]
 
-        trans_query = available_languages.map {|lang| trans_query(lang, @query.query)}
+        trans_query = available_languages.map { |lang| trans_query(lang, @query.query) }
       end
 
       words = [verse_query(@query.query), words_query(@query.query)]
 
-      {bool: {should: trans_query + words }}
+      { bool: { should: trans_query + words } }
     end
 
     def verse_query(query)
@@ -56,7 +58,7 @@ module Search
             query: {
               multi_match: {
                 query: query,
-                fields: ["words.madani^2", "words.simple"]
+                fields: ['words.madani^2', 'words.simple']
               }
             },
             inner_hits: nested_highlight('words.madani')
@@ -88,13 +90,13 @@ module Search
     end
 
     def source_attributes
-      ["verse_key", "id"]
+      ['verse_key', 'id']
     end
 
     def highlight
       {
         fields: {
-          "text_madani.text"  => {
+          'text_madani.text' => {
             type: 'fvh'.freeze
           }
         },

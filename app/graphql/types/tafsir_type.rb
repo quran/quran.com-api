@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Types::TafsirType = GraphQL::ObjectType.define do
   name 'Tafsir'
 

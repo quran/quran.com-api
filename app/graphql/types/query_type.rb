@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 Types::QueryType = GraphQL::ObjectType.define do
   name 'Query'
-  
+
   field :chapters, types[Types::ChapterType] do
     argument :language, types.String, default_value: 'en'
     resolve ->(_obj, args, _ctx) { Chapter.includes("#{args[:language]}_translated_names".to_sym).all }
@@ -18,7 +20,7 @@ Types::QueryType = GraphQL::ObjectType.define do
   field :chapterInfo, Types::ChapterInfoType do
     argument :chapterId, !types.ID
     argument :language, types.String, default_value: 'en'
-    resolve ->(_obj, args, _ctx) { 
+    resolve ->(_obj, args, _ctx) {
       ChapterInfo.where(chapter_id: args[:chapterId]).filter_by_language_or_default(args[:language])
     }
   end
@@ -75,7 +77,7 @@ Types::QueryType = GraphQL::ObjectType.define do
   field :verseTafsir, Types::TafsirType do
     argument :verseKey, !types.String
     argument :tafsirId, !types.ID
-    resolve lambda { |_obj, args, _ctx| 
+    resolve lambda { |_obj, args, _ctx|
       resource_id = ResourceContent
                     .where(id: args[:tafsirId])
                     .or(ResourceContent

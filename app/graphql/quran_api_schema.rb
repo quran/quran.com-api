@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 QuranAPISchema = GraphQL::Schema.define do
   query(Types::QueryType)
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Types::VerseType = GraphQL::ObjectType.define do
   name 'Verse'
 

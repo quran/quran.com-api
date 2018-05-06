@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Types::ChapterInfoType = GraphQL::ObjectType.define do
   name 'ChapterInfo'
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class V3::AudioFilesController < ApplicationController
   def index
     chapter = Chapter.find(params[:chapter_id])

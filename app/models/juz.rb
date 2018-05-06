@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: juzs
@@ -12,8 +14,6 @@
 #
 
 class Juz < ApplicationRecord
-  validates :juz_number, uniqueness: true
-
   has_many :verses, foreign_key: :juz_number
   has_many :chapters, through: :verses
 

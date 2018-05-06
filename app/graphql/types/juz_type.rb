@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Types::JuzType = GraphQL::ObjectType.define do
   name 'Juz'
 

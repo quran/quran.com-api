@@ -7,7 +7,7 @@ class CreateChapterInfos < ActiveRecord::Migration[5.0]
       t.text :short_text
       t.references :language
       t.references :resource_content
-      t.string :language_name #cache
+      t.string :language_name # cache
 
       t.timestamps
     end

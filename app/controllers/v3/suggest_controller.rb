@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class V3::SuggestController < ApplicationController
   def index
     if query.nil?

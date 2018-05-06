@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class V3::WordsController < ApplicationController
   def show
     word = Word.includes(word_includes).find(params[:id])

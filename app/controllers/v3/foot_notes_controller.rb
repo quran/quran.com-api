@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class V3::FootNotesController < ApplicationController
   # GET /foot_notes/1
   def show

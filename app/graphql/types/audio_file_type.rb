@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Types::AudioFileType = GraphQL::ObjectType.define do
   name 'AudioFile'
 

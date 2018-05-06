@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Types::VerseStemType = GraphQL::ObjectType.define do
   name 'VerseStem'
 

@@ -7,8 +7,8 @@ class CreateMediaContents < ActiveRecord::Migration[5.0]
       t.text :embed_text
       t.string :provider
       t.references :language
-      t.string :language_name #cache
-      t.string :author_name #cache
+      t.string :language_name # cache
+      t.string :author_name # cache
       t.references :resource_content
 
       t.timestamps

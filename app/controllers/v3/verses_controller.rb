@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class V3::VersesController < ApplicationController
   before_action :fix_resource_content
-  
+
   # GET /verses
   def index
     verses_index
@@ -102,12 +104,12 @@ class V3::VersesController < ApplicationController
               .where(translations: translations)
               .eager_load(:translations)
   end
-  
+
   def fix_resource_content
     # user can get translation using ID or Slug
     if render_translations?
       translation = params[:translations]
-      
+
       params[:translations] = ResourceContent.where(id: translation).or(ResourceContent.where(slug: translation)).pluck(:id)
     end
   end

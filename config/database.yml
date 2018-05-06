@@ -20,10 +20,17 @@
 
 default: &default
   encoding: unicode
+  adapter: postgresql
   # For details on connection pooling, see rails configuration guide
   # http://guides.rubyonrails.org/configuring.html#database-pooling
   pool: 5
   schema_search_path: quran,"$user",content,audio,i18n,public
+
+production:
+  <<: *default
+  adapter: postgresql
+  encoding: unicode
+  database: quran_dev
 
 development:
   <<: *default
@@ -33,7 +40,5 @@ development:
 
 test:
   <<: *default
+  database: quran_test
 
-production:
-  <<: *default
-  url: <%= ENV['DATABASE_URL'] %>

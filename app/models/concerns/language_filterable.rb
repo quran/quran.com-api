@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # vim: ts=4 sw=4 expandtab
 module LanguageFilterable
   extend ActiveSupport::Concern
