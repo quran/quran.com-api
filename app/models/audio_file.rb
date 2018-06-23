@@ -17,7 +17,7 @@
 #
 
 class AudioFile < ApplicationRecord
-  CDN_URL = 'https://audio.qurancdn.com/'
+  CDN_URL = '//audio.qurancdn.com/'
   
   belongs_to :resource, polymorphic: true
   belongs_to :recitation
