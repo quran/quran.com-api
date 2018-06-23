@@ -17,8 +17,14 @@
 #
 
 class AudioFile < ApplicationRecord
+  CDN_URL = 'https://audio.qurancdn.com/'
+  
   belongs_to :resource, polymorphic: true
   belongs_to :recitation
 
   serialize :segments, Array
+
+  def url
+    "#{CDN_URL}/#{read_attribute('url')}"
+  end
 end
