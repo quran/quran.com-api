@@ -1,0 +1,11 @@
+version: '3'
+services:
+  api:
+    build:
+      context: .
+      args:
+        - env=test
+        - bundle_opts=--without development
+    environment:
+      - SECRET_KEY_BASE=xyzabc
+
