@@ -20,7 +20,7 @@ RUN mkdir /var/www && \
 USER www-data
 
 # install a matching bundler to Gemfile.lock
-RUN gem install bundler -v 1.15.3
+RUN gem install bundler -v 1.3.0
 
 # install all gems
 ARG env=development
@@ -30,7 +30,7 @@ ENV RAILS_ENV $env
 ENV RACK_ENV $env
 
 RUN echo "Running \"bundle install $bundle_opts\" with environment set to \"$env\"..." && \
-    bundle install $bundle_opts
+    bundle install --without development test
 
 # generate sitemap
 RUN bundle exec sitemap:refresh:no_ping
