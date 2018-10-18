@@ -39,7 +39,8 @@ USER www-data
 RUN gem install bundler -v 1.15.3
 
 # install all gems
-ARG bundle_opts=
+ARG env=development
+ARG bundle_opts='--without development test'
 
 ENV RAILS_ENV $env
 ENV RACK_ENV $env

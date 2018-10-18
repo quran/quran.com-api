@@ -388,6 +388,9 @@ DEPENDENCIES
   puma (~> 3.0)
   rack-cors
   rails (~> 5.0.1)
+  rspec-rails (= 3.7.2)
+  rubocop-rails (= 1.2.2)
+  rubocop-rspec
   ruby-progressbar
   sentry-raven
   shoulda-matchers (~> 3.1.2)

@@ -7,10 +7,6 @@ rvm:
 
 cache: bundler
 
-services:
-  - redis
-  - redis-server
-
 addons:
   postgresql: "9.4"
   apt:
