@@ -98,6 +98,7 @@ GEM
       multi_json
     equalizer (0.0.11)
     erubis (2.7.0)
+    excon (0.60.0)
     execjs (2.7.0)
     faraday (0.15.3)
       multipart-post (>= 1.2, < 3)
@@ -368,6 +369,7 @@ DEPENDENCIES
   elasticsearch
   elasticsearch-model
   elasticsearch-rails
+  excon
   execjs
   graphiql-rails
   graphql

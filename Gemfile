@@ -30,6 +30,7 @@ gem 'graphql-activerecord'
 gem 'graphql-batch'
 
 # Elasticsearch
+gem 'excon' # using excon as faraday adapter (net::http breaks)
 gem 'elasticsearch'
 gem 'elasticsearch-model'
 gem 'elasticsearch-rails'
