@@ -30,6 +30,7 @@ gem 'graphql-activerecord'
 gem 'graphql-batch'
 
 # Elasticsearch
+gem 'excon' # using excon as faraday adapter (net::http breaks)
 gem 'elasticsearch'
 gem 'elasticsearch-model'
 gem 'elasticsearch-rails'
@@ -47,8 +48,6 @@ gem 'parallel'
 gem 'prose'
 
 gem 'puma', '~> 3.0'
-
-gem 'redis-rails'
 
 gem 'rack-cors'
 gem 'sitemap_generator'

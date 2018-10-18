@@ -6,6 +6,7 @@ services:
       args:
         - env=production
         - bundle_opts=--without development test --deployment --clean
+    image: qurancomapi_api:prod-latest
     environment:
       - SECRET_KEY_BASE=abcdefa
 
