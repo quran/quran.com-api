@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :v3 do
   task fix_char_type_name: :environment do
     CharType.all.each do |char_type|
@@ -75,7 +77,7 @@ namespace :v3 do
   end
 
   task import_from_v2: :environment do
-    #Migrate languages
+    # Migrate languages
     Locale::Language.find_each do |l|
       language = Language.find_or_initialize_by(name: l.english.to_s.strip)
 
@@ -89,7 +91,7 @@ namespace :v3 do
     language = Language.find_by_iso_code('en')
     arabic_lang = Language.find_by_iso_code('ar')
 
-    #Migrate resource, authors
+    # Migrate resource, authors
     Content::Author.find_each do |a|
       Author.where(name: a.name, url: a.url).first_or_create
     end
@@ -111,7 +113,7 @@ namespace :v3 do
       resource_content.save
     end
 
-    #Migrate chapters
+    # Migrate chapters
     Quran::Surah.order('surah_id asc').each do |surah|
       chapter = Chapter.find_or_initialize_by(chapter_number: surah.id)
 
@@ -130,7 +132,7 @@ namespace :v3 do
       chapter.translated_names.where(language: Language.find_by_iso_code('en')).first_or_create.update_attributes name: surah.name_english
     end
 
-    #CharType
+    # CharType
     Quran::CharType.find_each do |char|
       char_type = CharType.where(name: char.name).first_or_create
 
@@ -142,10 +144,10 @@ namespace :v3 do
       char_type.save
     end
 
-    #Chapter info
-    source = DataSource.where(name: "Tafhim al-Qur'an", url: "http://www.tafheem.net/").first_or_create
-    author = Author.where(name: "Sayyid Abul Ala Maududi").first_or_create
-    resource_content = ResourceContent.where(name: "Chapter Info", author: author, language: language).first_or_create(author_name: author.name, cardinality_type: ResourceContent::CardinalityType::OneChapter, resource_type: ResourceContent::ResourceType::Content, sub_type: 'Chapter info')
+    # Chapter info
+    source = DataSource.where(name: "Tafhim al-Qur'an", url: 'http://www.tafheem.net/').first_or_create
+    author = Author.where(name: 'Sayyid Abul Ala Maududi').first_or_create
+    resource_content = ResourceContent.where(name: 'Chapter Info', author: author, language: language).first_or_create(author_name: author.name, cardinality_type: ResourceContent::CardinalityType::OneChapter, resource_type: ResourceContent::ResourceType::Content, sub_type: 'Chapter info')
     resource_content.data_source = source
     resource_content.description = "Sayyid Abul Ala Maududi - Tafhim al-Qur'an - The Meaning of the Quran"
     resource_content.save
@@ -164,8 +166,8 @@ namespace :v3 do
     end
 
     sajdah_number = 1
-    #Migrate verses
-    Quran::Ayah.order("surah_id asc, ayah_num asc").each do |ayah|
+    # Migrate verses
+    Quran::Ayah.order('surah_id asc, ayah_num asc').each do |ayah|
       verse = Verse.find_or_initialize_by(verse_key: ayah.ayah_key)
 
       verse.chapter_id = ayah.surah_id
@@ -206,8 +208,8 @@ namespace :v3 do
 
         if word_font.word
           if token = word_font.word.token
-            word.text_madani =token.value
-            word.text_simple =token.clean
+            word.text_madani = token.value
+            word.text_simple = token.clean
           end
 
           word.translations.where(language: language, resource_content: word_trans_resource).first_or_create(text: word_font.word.translation, language_name: language.name.downcase)
@@ -217,7 +219,7 @@ namespace :v3 do
       end
     end
 
-    #Tafsir
+    # Tafsir
     Content::TafsirAyah.includes(:tafsir).order('').each do |tafsir|
       resource = tafsir.tafsir.resource
       language = Language.find_by_iso_code(resource.language_code)
@@ -231,7 +233,7 @@ namespace :v3 do
       puts "ayah tafsir #{taf.id}"
     end
 
-    #verse Translations
+    # verse Translations
     Content::Translation.order('').each do |trans|
       resource = trans.resource
       language = Language.find_by_iso_code(resource.language_code)
@@ -242,7 +244,7 @@ namespace :v3 do
       puts "ayah translation #{translation.id}"
     end
 
-    #verse Transliteration
+    # verse Transliteration
     Content::Transliteration.order('').each do |trans|
       resource = trans.resource
       language = Language.find_by_iso_code(resource.language_code) || language
@@ -259,13 +261,13 @@ namespace :v3 do
 
     author = Author.where(name: media_resource.name, url: media_resource.url).first_or_create
     resource_content = ResourceContent.where(author: author, language: language, resource_type: 'media', sub_type: 'video').first_or_create(author_name: author.name, cardinality_type: ResourceContent::CardinalityType::OneVerse, approved: true)
-    #Migrate media content
+    # Migrate media content
     Media::Content.all.each do |media|
       verse = Verse.find_by_verse_key(media.ayah_key)
       verse.media_contents.where(url: media.url, resource_content_id: resource_content.id).first_or_create
     end
 
-    #Migrate audio files
+    # Migrate audio files
     Audio::Style.find_each do |style|
       s = RecitationStyle.where(style: style.english).first_or_create
       s.translated_names.where(language: arabic_lang).first_or_create(name: style.arabic)
@@ -304,7 +306,7 @@ namespace :v3 do
       puts "audio #{audio.id}"
     end
 
-    #last few steps to fix missing attributes
+    # last few steps to fix missing attributes
     MediaContent.find_each do |m|
       m.language = language
       m.language_name = language.name
@@ -332,10 +334,9 @@ namespace :v3 do
     Quran::Image.all.each do |img|
       verse = Verse.find_by_verse_key(img.ayah_key)
 
-      verse.image_url = img.url.gsub("http:", '')
+      verse.image_url = img.url.gsub('http:', '')
       verse.image_width = img.width
       verse.save
     end
   end
 end
-

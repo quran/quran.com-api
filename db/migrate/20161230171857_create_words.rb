@@ -18,6 +18,7 @@ class CreateWords < ActiveRecord::Migration[5.0]
       t.integer :code_dec_v3
       t.references :char_type
       t.string :location, index: true
+      t.string :audio_url
 
       t.timestamps
     end

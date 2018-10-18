@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # vim: ts=4 sw=4 expandtab
 module Searchable
   extend ActiveSupport::Concern
@@ -6,15 +8,15 @@ module Searchable
     include Elasticsearch::Model
 
     settings YAML.load(
-        File.read(
-            File.expand_path(
-                "#{Rails.root}/config/elasticsearch/settings.yml", __FILE__
-            )
+      File.read(
+        File.expand_path(
+          "#{Rails.root}/config/elasticsearch/settings.yml", __FILE__
         )
+      )
     )
 
     # Initial the paging gem, Kaminari
-    Kaminari::Hooks.init
+    # Kaminari::Hooks.init
     Elasticsearch::Model::Response::Response.__send__ :include, Elasticsearch::Model::Response::Pagination::Kaminari
 
     def chapter_names
@@ -26,19 +28,19 @@ module Searchable
       "#{chapter_id}/#{verse_number}"
     end
 
-    def as_indexed_json(options={})
+    def as_indexed_json(options = {})
       hash = self.as_json(
-          only: [:id, :verse_key, :text_madani, :text_indopak, :text_simple],
-          methods: [:verse_path, :chapter_names]
+        only: [:id, :verse_key, :text_madani, :text_indopak, :text_simple],
+        methods: [:verse_path, :chapter_names]
       )
 
       hash[:words] = words.where.not(text_madani: nil).map do |w|
-        {id: w.id, madani: w.text_madani, simple: w.text_simple}
+        { id: w.id, madani: w.text_madani, simple: w.text_simple }
       end
 
       translations.includes(:language).each do |trans|
         hash["trans_#{trans.language.iso_code}"] ||= []
-        hash["trans_#{trans.language.iso_code}"] << {id: trans.id,
+        hash["trans_#{trans.language.iso_code}"] << { id: trans.id,
                                                      text: trans.text,
                                                      author: trans.resource_content.author_name,
                                                      language_name: trans.language_name.downcase,
@@ -67,11 +69,11 @@ module Searchable
           #         term_vector: 'with_positions_offsets',
           #         search_analyzer: 'arabic_normalized',
           #         analyzer: 'arabic_ngram'
-           indexes :autocomplete,
-                   type: 'string',
-                   analyzer: 'autocomplete_arabic',
-                   search_analyzer: 'arabic_normalized',
-                   index_options: 'offsets'
+          indexes :autocomplete,
+                  type: 'string',
+                  analyzer: 'autocomplete_arabic',
+                  search_analyzer: 'arabic_normalized',
+                  index_options: 'offsets'
         end
       end
 
@@ -82,7 +84,7 @@ module Searchable
       indexes :verse_path, type: 'keyword' # allow user to search by path e.g 1/2, 2/29 etc
 
       indexes :chapter_names
-      indexes "words", type: 'nested' do
+      indexes 'words', type: 'nested' do
         indexes :madani,
                 type: 'text',
                 term_vector: 'with_positions_offsets',

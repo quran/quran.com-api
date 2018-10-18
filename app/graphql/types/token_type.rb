@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Types::TokenType = GraphQL::ObjectType.define do
   name 'Token'
 

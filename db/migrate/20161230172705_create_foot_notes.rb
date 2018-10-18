@@ -4,7 +4,7 @@ class CreateFootNotes < ActiveRecord::Migration[5.0]
       t.belongs_to :resource, polymorphic: true
       t.text :text
       t.references :language
-      t.string :language_name #cache
+      t.string :language_name # cache
       t.references :resource_content
 
       t.timestamps

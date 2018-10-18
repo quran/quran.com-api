@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 # Set the host name for URL creation
-SitemapGenerator::Sitemap.default_host = "https://quran.com"
-SitemapGenerator::Sitemap.sitemaps_host = "https://quran.com/"
+SitemapGenerator::Sitemap.default_host = 'https://quran.com'
+SitemapGenerator::Sitemap.sitemaps_host = 'https://quran.com/'
 SitemapGenerator::Sitemap.sitemaps_path = 'sitemaps/'
 
 SitemapGenerator::Sitemap.create do
@@ -26,11 +28,11 @@ SitemapGenerator::Sitemap.create do
   #   Article.find_each do |article|
   #     add article_path(article), :lastmod => article.updated_at
   #   end
-  
+
   # Add all chapters
   Chapter.find_each do |chapter|
     add "/#{chapter.chapter_number}", priority: 1
-  
+
     # Add chapter info for available languages
     ['en', 'ur', 'ml', 'ta'].each do |local|
       add "/#{chapter.chapter_number}/info/#{local}", priority: 1
@@ -43,14 +45,14 @@ SitemapGenerator::Sitemap.create do
   # Add all verses
   Verse.find_each do |verse|
     verse_path = verse.verse_key.tr(':', '/')
-    
+
     add "/#{verse_path}",  priority: 0.8
-    
+
     # Add available translation for each verse
     available_translations.each do |trans|
       add "/#{verse_path}?translations=#{trans.slug || trans.id}",  priority: 0.8
     end
-    
+
     # Add available tafsirs for each verse
     available_tafsirs.each do |tafsir|
       add "/#{verse_path}/tafsirs/#{tafsir.slug || tafsir.id}",  priority: 0.8
@@ -61,11 +63,11 @@ SitemapGenerator::Sitemap.create do
   %w(about contactus contact donations contributions search).each do |url|
     add "/#{url}", priority: 0.3
   end
-  
+
   # Add site locals
   %w(en ar ur id tr fr).each do |local|
     add "/?local=#{local}", priority: 0.3
   end
-  
+
   add '/ayatul-kursi', priority: 1
 end

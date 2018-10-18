@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Types::ChapterType = GraphQL::ObjectType.define do
   name 'Chapter'
 

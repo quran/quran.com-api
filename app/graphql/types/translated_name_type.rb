@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Types::TranslatedNameType = GraphQL::ObjectType.define do
   name 'TranslatedName'
 

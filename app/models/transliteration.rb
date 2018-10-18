@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: transliterations
@@ -19,4 +21,3 @@ class Transliteration < ApplicationRecord
   belongs_to :resource, polymorphic: true
   belongs_to :resource_content
 end
-

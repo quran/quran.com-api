@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: recitations
@@ -17,7 +19,7 @@ class V3::RecitationSerializer < V3::ApplicationSerializer
     object.reciter_name
   end
 
-  #TODO: better name ? maybe reciter_name: {english: 'eng version', lang: 'lang specific name'}
+  # TODO: better name ? maybe reciter_name: {english: 'eng version', lang: 'lang specific name'}
   attribute :reciter_name_translated, if: :include_translated_name? do
     object.reciter.translated_names.filter_by_language_or_default(scope[:language]).name
   end

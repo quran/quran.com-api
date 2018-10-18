@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: foot_notes
@@ -12,6 +14,6 @@
 #  updated_at          :datetime         not null
 #
 
-class V3::FootNoteSerializer <  V3::ApplicationSerializer
+class V3::FootNoteSerializer < V3::ApplicationSerializer
   attributes :id, :text, :language_name
 end

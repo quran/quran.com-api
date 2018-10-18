@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Types::RootType = GraphQL::ObjectType.define do
   name 'Root'
 

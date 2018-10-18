@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: translated_names
@@ -15,6 +17,5 @@
 class TranslatedName < ApplicationRecord
   include LanguageFilterable
 
-  belongs_to :language
   belongs_to :resource, polymorphic: true
 end

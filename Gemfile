@@ -1,13 +1,15 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
 ruby '2.3.3'
 
 git_source(:github) do |repo_name|
-  repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?("/")
+  repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?('/')
   "https://github.com/#{repo_name}.git"
 end
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-#gem 'rails', '4.1.1'
+# gem 'rails', '4.1.1'
 gem 'rails', '~> 5.0.1'
 
 # Use postgresql as the database for Active Record
@@ -22,10 +24,10 @@ gem 'active_model_serializers', '~> 0.10.0'
 # Http request
 gem 'httparty', require: false
 
+gem 'graphiql-rails'
 gem 'graphql'
 gem 'graphql-activerecord'
 gem 'graphql-batch'
-gem 'graphiql-rails'
 
 # Elasticsearch
 gem 'excon' # using excon as faraday adapter (net::http breaks)
@@ -48,9 +50,6 @@ gem 'prose'
 gem 'puma', '~> 3.0'
 
 gem 'rack-cors'
-
-gem 'sentry-raven'
-
 gem 'sitemap_generator'
 
 gem 'virtus'
@@ -60,29 +59,40 @@ gem 'tzinfo-data'
 # Detect the language
 gem 'whatlanguage'
 
+gem 'sentry-raven', group: [:development, :production]
+
 group :development, :test do
   gem 'pry-byebug'
   gem 'pry-rails'
   gem 'zeus'
 end
 
-group :test do
-  gem 'rspec-rails' # http://betterspecs.org/
-  gem 'guard-rspec', require: false
-  gem 'parallel_tests'
-  gem 'simplecov', :require => false
-end
-
 group :development do
-  gem 'annotate'
-  gem 'ruby-progressbar'
   gem 'byebug', platform: :mri
+  gem 'ruby-progressbar'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
+  gem 'benchmark-ips', require: false
+  gem 'bullet'
+  gem 'derailed_benchmarks'
+  gem 'mechanize'
+  gem 'meta_request'
+  gem 'pre-commit'
   gem 'spring'
   gem 'spring-commands-rspec'
   gem 'spring-watcher-listen', '~> 2.0.0'
-  gem 'mechanize'
-  gem 'bullet'
-  gem 'meta_request'
-  gem 'rubocop', require: false
+  gem 'stackprof'
+end
+
+group :test, :development do
+  gem 'annotate', '= 2.6.5'
+  gem 'guard-rspec', '= 4.7.3'
+  gem 'guard-spork'
+  gem 'rspec-rails', '= 3.7.2'
+  gem 'shoulda-matchers', '~> 3.1.2'
+  gem 'simplecov', require: false
+
+  gem 'rubocop-rails', '= 1.2.2'
+  gem 'rubocop-rspec'
+  gem 'spork'
+  gem 'watchr'
 end

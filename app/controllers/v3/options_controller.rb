@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class V3::OptionsController < ApplicationController
   # GET options/default
   def default

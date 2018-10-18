@@ -6,6 +6,9 @@
 
 # Ignore bundler config.
 /.bundle
+rubocop.html
+# Data source files
+data/*
 
 # Ignore the default SQLite database.
 /db/*.sqlite3

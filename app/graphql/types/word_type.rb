@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Types::WordType = GraphQL::ObjectType.define do
   name 'Word'
 
@@ -70,7 +72,7 @@ Types::WordType = GraphQL::ObjectType.define do
       resolve ->(word, args, _ctx) {
         transliteration = word.public_send("#{args[:language]}_transliterations").first
 
-        transliteration.present? ? transliteration : word.en_transliterations.first 
+        transliteration.present? ? transliteration : word.en_transliterations.first
       }
     end
   end

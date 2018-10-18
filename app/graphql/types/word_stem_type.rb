@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Types::WordStemType = GraphQL::ObjectType.define do
   name 'WordStem'
 

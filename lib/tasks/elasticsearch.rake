@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :elasticsearch do
 
   desc 'deletes all elasticsearch indices'

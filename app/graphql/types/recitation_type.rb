@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Types::RecitationType = GraphQL::ObjectType.define do
   name 'Recitation'
 
