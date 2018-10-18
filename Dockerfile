@@ -24,13 +24,13 @@ RUN gem install bundler -v 1.3.0
 
 # install all gems
 ARG env=development
-ARG bundle_opts='--without development test'
+ARG bundle_opts=
 
 ENV RAILS_ENV $env
 ENV RACK_ENV $env
 
 RUN echo "Running \"bundle install $bundle_opts\" with environment set to \"$env\"..." && \
-    bundle install --without development test
+    bundle install $bundle_opts
 
 # generate sitemap
 RUN bundle exec sitemap:refresh:no_ping
