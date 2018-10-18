@@ -5,7 +5,6 @@
 #### Requirements
 - Rails 5.0.1
 - Elasticsearch 5.0.1
-- Redis
 
 #### Installations
 Gems:
@@ -15,11 +14,6 @@ bundle install
 
 Elasticsearch:
 See config/elasticsearch/README.md
-
-Redis:
-```
-brew install redis
-```
 
 Postgresql:
 
@@ -68,13 +62,6 @@ https://quran.api-docs.io/v3
 ## Slack
 Signup at https://quranslack.herokuapp.com to be added to the Slack group
 
-
-Redis
--------------
-### To start:
-```
-redis-server /usr/local/etc/redis.conf
-```
 
 Tests
 -------------

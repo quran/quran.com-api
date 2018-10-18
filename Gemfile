@@ -48,8 +48,6 @@ gem 'prose'
 
 gem 'puma', '~> 3.0'
 
-gem 'redis-rails'
-
 gem 'rack-cors'
 gem 'sitemap_generator'
 
