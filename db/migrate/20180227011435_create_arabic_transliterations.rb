@@ -7,6 +7,10 @@ class CreateArabicTransliterations < ActiveRecord::Migration[5.0]
       t.string :text
       t.string :indopak_text
       t.integer :page_number
+      t.string :ur_translation
+      t.integer :position_x
+      t.integer :position_y
+      t.integer :zoom
 
       t.timestamps
     end
