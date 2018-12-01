@@ -36,11 +36,11 @@ RUN mkdir /var/www && \
 USER www-data
 
 # install a matching bundler to Gemfile.lock
-RUN gem install bundler -v 1.15.3
+RUN gem install bundler -v 1.3.0
 
 # install all gems
 ARG env=development
-ARG bundle_opts='--without development test'
+ARG bundle_opts=
 
 ENV RAILS_ENV $env
 ENV RACK_ENV $env
