@@ -91,7 +91,8 @@ group :test, :development do
   gem 'shoulda-matchers', '~> 3.1.2'
   gem 'simplecov', require: false
 
-  gem 'rubocop-rails', '= 1.2.2'
+  gem "rubocop-rails_config"
+
   gem 'rubocop-rspec'
   gem 'spork'
   gem 'watchr'

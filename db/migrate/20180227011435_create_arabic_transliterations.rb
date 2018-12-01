@@ -8,7 +8,6 @@ class CreateArabicTransliterations < ActiveRecord::Migration[5.0]
       t.string :indopak_text
       t.integer :page_number
 
-
       t.timestamps
     end
 =end

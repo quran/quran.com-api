@@ -38,6 +38,7 @@ development:
   encoding: unicode
   database: quran_dev
 
+
 test:
   <<: *default
   database: quran_test

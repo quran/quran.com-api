@@ -1,6 +1,16 @@
 # frozen_string_literal: true
 
 namespace :one_time do
+  task fix_audio_url: :environment do
+    Word.includes(:audio).find_each do |w|
+      w.audio&.update_column :url, w.audio_url
+    end
+  
+    Word.update_all("audio_url = REPLACE(audio_url, '//verses.quran.com/wbw/', 'verses/wbw/')")
+    AudioFile.update_all("url = REPLACE(url, '//verses.quran.com', 'verses')")
+    AudioFile.update_all("url = REPLACE(url, 'https:', '')")
+  end
+  
   task replace_wbw_translation: :environment do
     require 'csv'
     changed = []
