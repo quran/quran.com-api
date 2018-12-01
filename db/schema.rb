@@ -10,10 +10,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180227011435) do
+ActiveRecord::Schema.define(version: 20181201180917) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "arabic_transliterations", force: :cascade do |t|
+    t.integer  "word_id"
+    t.integer  "verse_id"
+    t.string   "text"
+    t.string   "indopak_text"
+    t.integer  "page_number"
+    t.string   "ur_translation"
+    t.integer  "position_x"
+    t.integer  "position_y"
+    t.integer  "zoom"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.index ["verse_id"], name: "index_arabic_transliterations_on_verse_id", using: :btree
+    t.index ["word_id"], name: "index_arabic_transliterations_on_word_id", using: :btree
+  end
 
   create_table "audio_files", force: :cascade do |t|
     t.string   "resource_type"
@@ -292,6 +308,16 @@ ActiveRecord::Schema.define(version: 20180227011435) do
     t.float   "v2_weighted",   default: 0.618, null: false
   end
 
+  create_table "resource_content_stats", force: :cascade do |t|
+    t.integer  "resource_content_id"
+    t.integer  "download_count"
+    t.string   "platfrorm"
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+    t.index ["platfrorm"], name: "index_resource_content_stats_on_platfrorm", using: :btree
+    t.index ["resource_content_id"], name: "index_resource_content_stats_on_resource_content_id", using: :btree
+  end
+
   create_table "resource_contents", force: :cascade do |t|
     t.boolean  "approved"
     t.integer  "author_id"
@@ -304,14 +330,16 @@ ActiveRecord::Schema.define(version: 20180227011435) do
     t.string   "cardinality_type"
     t.integer  "language_id"
     t.string   "language_name"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
     t.string   "slug"
+    t.integer  "mobile_translation_id"
     t.index ["approved"], name: "index_resource_contents_on_approved", using: :btree
     t.index ["author_id"], name: "index_resource_contents_on_author_id", using: :btree
     t.index ["cardinality_type"], name: "index_resource_contents_on_cardinality_type", using: :btree
     t.index ["data_source_id"], name: "index_resource_contents_on_data_source_id", using: :btree
     t.index ["language_id"], name: "index_resource_contents_on_language_id", using: :btree
+    t.index ["mobile_translation_id"], name: "index_resource_contents_on_mobile_translation_id", using: :btree
     t.index ["resource_type"], name: "index_resource_contents_on_resource_type", using: :btree
     t.index ["slug"], name: "index_resource_contents_on_slug", using: :btree
     t.index ["sub_type"], name: "index_resource_contents_on_sub_type", using: :btree

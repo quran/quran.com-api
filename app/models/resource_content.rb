@@ -58,4 +58,11 @@ class ResourceContent < ApplicationRecord
 
   belongs_to :author
   belongs_to :data_source
+  has_one :resource_content_stat
+
+
+  def increment_download_count!
+     stats = resource_content_stat || create_resource_content_stat
+     stats.update_column :download_count, stats.download_count.to_i + 1
+  end
 end

@@ -1,11 +1,13 @@
+# frozen_string_literal: true
+
 module Mobile
-  class TranslationSerializer <  ActiveModel::Serializer
+  class TranslationSerializer < ActiveModel::Serializer
     attribute :id do
       object.mobile_translation_id
     end
 
     attribute :displayName do
-      object.localized_name.presence || object.name
+      object.name
     end
 
     attribute :translator do
@@ -32,12 +34,12 @@ module Mobile
       'translation'
     end
 
-    attribute  :minimum_version do
+    attribute :minimum_version do
       1
     end
 
     attribute :current_version do
-       object.updated_at.to_i
+      object.updated_at.to_i
     end
 
     attribute :enabled do
