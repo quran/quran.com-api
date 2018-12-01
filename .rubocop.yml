@@ -1,7 +1,7 @@
 # Use official rails's rubocop configuration
 require: rubocop-rspec
 inherit_gem:
-  rubocop-rails:
+  rubocop-rails_config:
     - config/rails.yml
   rubocop-rspec:
     - config/default.yml
