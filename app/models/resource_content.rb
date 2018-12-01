@@ -1,24 +1,24 @@
 # frozen_string_literal: true
-
 # == Schema Information
 #
 # Table name: resource_contents
 #
-#  id               :integer          not null, primary key
-#  approved         :boolean
-#  author_id        :integer
-#  data_source_id   :integer
-#  author_name      :string
-#  resource_type    :string
-#  sub_type         :string
-#  name             :string
-#  description      :text
-#  cardinality_type :string
-#  language_id      :integer
-#  language_name    :string
-#  created_at       :datetime         not null
-#  updated_at       :datetime         not null
-#  slug             :string
+#  id                    :integer          not null, primary key
+#  approved              :boolean
+#  author_id             :integer
+#  data_source_id        :integer
+#  author_name           :string
+#  resource_type         :string
+#  sub_type              :string
+#  name                  :string
+#  description           :text
+#  cardinality_type      :string
+#  language_id           :integer
+#  language_name         :string
+#  created_at            :datetime         not null
+#  updated_at            :datetime         not null
+#  slug                  :string
+#  mobile_translation_id :integer
 #
 
 class ResourceContent < ApplicationRecord
@@ -59,7 +59,6 @@ class ResourceContent < ApplicationRecord
   belongs_to :author
   belongs_to :data_source
   has_one :resource_content_stat
-
 
   def increment_download_count!
      stats = resource_content_stat || create_resource_content_stat

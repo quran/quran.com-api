@@ -1,3 +1,15 @@
+# == Schema Information
+#
+# Table name: char_types
+#
+#  id          :integer          not null, primary key
+#  name        :string
+#  parent_id   :integer
+#  description :text
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#
+
 # frozen_string_literal: true
 
 require 'rails_helper'

@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 # == Schema Information
 #
 # Table name: juzs
@@ -8,9 +7,9 @@
 #  juz_number    :integer
 #  name_simple   :string
 #  name_arabic   :string
-#  verse_mapping :text
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
+#  verse_mapping :json
 #
 
 class Juz < ApplicationRecord
