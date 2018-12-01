@@ -27,8 +27,10 @@ class V3::TafsirsController < ApplicationController
   def tafirs_filter
     return nil unless params[:tafsirs].present?
 
-    ResourceContent.where(id: params[:tafsirs])
+    ResourceContent
+      .where(id: params[:tafsirs])
       .or(ResourceContent.where(slug: params[:tafsirs]))
       .pluck(:id)
+
   end
 end

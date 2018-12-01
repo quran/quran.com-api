@@ -1,3 +1,13 @@
+# == Schema Information
+#
+# Table name: roots
+#
+#  id         :integer          not null, primary key
+#  value      :string
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+
 # frozen_string_literal: true
 
 require 'rails_helper'

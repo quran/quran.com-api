@@ -293,9 +293,9 @@ GEM
       rainbow (>= 2.2.2, < 4.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (~> 1.0, >= 1.0.1)
-    rubocop-rails (1.2.2)
+    rubocop-rails_config (0.2.6)
       railties (>= 3.0)
-      rubocop (~> 0.49)
+      rubocop (~> 0.56)
     rubocop-rspec (1.30.0)
       rubocop (>= 0.58.0)
     ruby-progressbar (1.10.0)
@@ -393,7 +393,7 @@ DEPENDENCIES
   rack-cors
   rails (~> 5.0.1)
   rspec-rails (= 3.7.2)
-  rubocop-rails (= 1.2.2)
+  rubocop-rails_config
   rubocop-rspec
   ruby-progressbar
   sentry-raven
@@ -416,4 +416,4 @@ RUBY VERSION
    ruby 2.3.3p222
 
 BUNDLED WITH
-   1.16.0
+   1.17.1

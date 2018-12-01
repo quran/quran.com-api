@@ -12,6 +12,15 @@ Rails.application.routes.draw do
     get 'audio_files/index'
   end
 
+
+  namespace :mobile do
+    resources :translations, only: :index do
+      member do
+        get :download
+      end
+    end
+  end
+
   scope :api do
     namespace :v3 do
       resources :foot_notes, only: :show, defaults: { format: 'json' }
