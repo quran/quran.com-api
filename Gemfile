@@ -50,7 +50,7 @@ gem 'prose'
 gem 'puma', '~> 3.12.0'
 
 gem 'rack-cors'
-gem 'sitemap_generator', require: false
+gem 'sitemap_generator'
 
 gem 'virtus'
 
