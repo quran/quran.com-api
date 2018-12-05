@@ -40,7 +40,7 @@ RUN gem install bundler -v 1.3.0
 
 # install all gems
 ARG env=development
-ARG bundle_opts=--without development test --deployment --clean
+ARG bundle_opts=
 
 ENV RAILS_ENV $env
 ENV RACK_ENV $env
