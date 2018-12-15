@@ -10,10 +10,10 @@ end
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 # gem 'rails', '4.1.1'
-gem 'rails', '~> 5.0.1'
+gem 'rails', '~> 5.2.2'
 
 # Use postgresql as the database for Active Record
-gem 'pg', '~> 0.19.0'
+gem 'pg', '~> 1.1.3'
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 gem 'execjs'
@@ -47,7 +47,7 @@ gem 'parallel'
 
 gem 'prose'
 
-gem 'puma', '~> 3.0'
+gem 'puma', '~> 3.12.0'
 
 gem 'rack-cors'
 gem 'sitemap_generator'

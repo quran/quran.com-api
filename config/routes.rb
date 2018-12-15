@@ -64,14 +64,14 @@ Rails.application.routes.draw do
       filename = req['PATH_INFO'].gsub('sitemaps', '').gsub(/\//, '')
 
       [
-        200,
-        {
-          'Pragma'        => 'public',
-          'Cache-Control' => "max-age=#{1.day.to_i}",
-          'Expires'       => 1.day.from_now.to_s(:rfc822),
-          'Content-Type'  => 'text/html'
-        },
-        [open(Rails.root.join('public', 'sitemaps', filename)).read]
+          200,
+          {
+              'Pragma'        => 'public',
+              'Cache-Control' => "max-age=#{1.day.to_i}",
+              'Expires'       => 1.day.from_now.to_s(:rfc822),
+              'Content-Type'  => 'text/html'
+          },
+          [open(Rails.root.join('public', 'sitemaps', filename)).read]
       ]
     }
   end
