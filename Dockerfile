@@ -36,7 +36,7 @@ RUN mkdir /var/www && \
 USER www-data
 
 # install a matching bundler to Gemfile.lock
-RUN gem install bundler -v 1.3.0
+RUN gem install bundler -v 1.17.2
 
 # install all gems
 ARG env=development
