@@ -84,7 +84,7 @@ group :development do
 end
 
 group :test, :development do
-  gem 'annotate', '= 2.6.5'
+  #gem 'annotate', '= 2.6.5'
   gem 'guard-rspec', '= 4.7.3'
   gem 'guard-spork'
   gem 'rspec-rails', '= 3.7.2'
