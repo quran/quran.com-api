@@ -4,9 +4,10 @@ class CreateWords < ActiveRecord::Migration[5.0]
       t.references :verse
       t.references :chapter
       t.integer :position, index: true
-      t.text :text_madani
+      t.text :text_madani #Uthmani script
       t.text :text_indopak
       t.text :text_simple
+      t.text :text_imlaei
       t.string :verse_key, index: true
       t.integer :page_number
       t.string :class_name
@@ -24,3 +25,4 @@ class CreateWords < ActiveRecord::Migration[5.0]
     end
   end
 end
+

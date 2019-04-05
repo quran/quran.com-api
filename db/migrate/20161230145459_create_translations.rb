@@ -6,6 +6,7 @@ class CreateTranslations < ActiveRecord::Migration[5.0]
       t.references :resource_content
       t.belongs_to :resource, polymorphic: true, index: true
       t.string :language_name # cache
+      t.integer :priority, index: true
 
       t.timestamps
     end

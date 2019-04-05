@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_10_123040) do
+ActiveRecord::Schema.define(version: 2019_03_19_010529) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -309,10 +309,10 @@ ActiveRecord::Schema.define(version: 2019_03_10_123040) do
   create_table "resource_content_stats", id: :serial, force: :cascade do |t|
     t.integer "resource_content_id"
     t.integer "download_count"
-    t.string "platfrorm"
+    t.string "platform"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["platfrorm"], name: "index_resource_content_stats_on_platfrorm"
+    t.index ["platform"], name: "index_resource_content_stats_on_platform"
     t.index ["resource_content_id"], name: "index_resource_content_stats_on_resource_content_id"
   end
 
@@ -333,10 +333,6 @@ ActiveRecord::Schema.define(version: 2019_03_10_123040) do
     t.string "slug"
     t.integer "mobile_translation_id"
     t.integer "priority"
-    t.integer "mobile_min_required_version"
-    t.integer "mobile_max_allowed_version"
-    t.integer "mobile_current_version"
-    t.integer "mobile_download_db_url"
     t.index ["approved"], name: "index_resource_contents_on_approved"
     t.index ["author_id"], name: "index_resource_contents_on_author_id"
     t.index ["cardinality_type"], name: "index_resource_contents_on_cardinality_type"
@@ -506,9 +502,7 @@ ActiveRecord::Schema.define(version: 2019_03_10_123040) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "resource_name"
-    t.integer "priority"
     t.index ["language_id"], name: "index_translations_on_language_id"
-    t.index ["priority"], name: "index_translations_on_priority"
     t.index ["resource_content_id"], name: "index_translations_on_resource_content_id"
     t.index ["resource_type", "resource_id"], name: "index_translations_on_resource_type_and_resource_id"
   end
@@ -574,6 +568,8 @@ ActiveRecord::Schema.define(version: 2019_03_10_123040) do
     t.integer "verse_root_id"
     t.integer "verse_lemma_id"
     t.integer "verse_stem_id"
+    t.string "text_imlaei"
+    t.string "text_uthmani_simple"
     t.index ["chapter_id"], name: "index_verses_on_chapter_id"
     t.index ["verse_index"], name: "index_verses_on_verse_index"
     t.index ["verse_key"], name: "index_verses_on_verse_key"
@@ -681,6 +677,19 @@ ActiveRecord::Schema.define(version: 2019_03_10_123040) do
     t.index ["word_id", "language_code"], name: "translation_word_id_language_code_key", unique: true
   end
 
+  create_table "word_translations", force: :cascade do |t|
+    t.integer "word_id"
+    t.string "text"
+    t.string "language_name"
+    t.integer "language_id"
+    t.integer "resource_content_id"
+    t.integer "priority"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["priority"], name: "index_word_translations_on_priority"
+    t.index ["word_id", "language_id"], name: "index_word_translations_on_word_id_and_language_id"
+  end
+
   create_table "word_transliteration", primary_key: "transliteration_id", id: :serial, force: :cascade do |t|
     t.integer "word_id"
     t.string "language_code"
@@ -714,6 +723,8 @@ ActiveRecord::Schema.define(version: 2019_03_10_123040) do
     t.integer "topic_id"
     t.string "location"
     t.string "char_type_name"
+    t.string "text_imlaei"
+    t.string "text_uthmani_simple"
     t.index ["chapter_id"], name: "index_words_on_chapter_id"
     t.index ["char_type_id"], name: "index_words_on_char_type_id"
     t.index ["location"], name: "index_words_on_location"

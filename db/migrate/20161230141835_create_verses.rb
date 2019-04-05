@@ -5,9 +5,10 @@ class CreateVerses < ActiveRecord::Migration[5.0]
       t.integer :verse_number, index: true
       t.integer :verse_index, index: true
       t.string :verse_key, index: true
-      t.text :text_madani
+      t.text :text_madani # Uthmani script
       t.text :text_indopak
       t.text :text_simple
+      t.text :text_imlaei
       t.integer :juz_number
       t.integer :hizb_number
       t.integer :rub_number
