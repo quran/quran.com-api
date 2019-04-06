@@ -1,34 +1,52 @@
 # frozen_string_literal: true
 
 namespace :one_time do
+  task fix_urdu_wbw: :environment do
+    require 'csv'
+
+    # Update missing wbw urdu from production db
+    CSV.foreach("word_ur.csv") do |w|
+      if word = Word.find_by_id(w[0])
+        word.ur_translations.update_all text: w[1] if w[1].present?
+        puts word.id
+      end
+    end
+
+    class ArabicTransliteration < ApplicationRecord
+      belongs_to :word
+    end
+
+    urdu = Language.find_by_id_or_iso_code('ur')
+
+    # Update missing urdu wbw from arabic transliteration
+    ArabicTransliteration.includes(:word).each do |at|
+      if word = at.word
+        if at.ur_translation.present?
+          word.ur_translations.update_all text: at.ur_translation.strip
+          WordTranslation.where(word_id: at.word_id, language_id: urdu.id, language_name: 'urdu', resource_content_id: 104).first_or_create.update_column(:text, at.ur_translation.strip)
+        end
+      end
+    end
+
+    # Still missing urdu wbw
+    puts "missing words #{Translation.where(resource_type: 'Word', text: '').count}"
+    25714
+    # Create word translations
+    Translation.where(resource_type: 'Word').find_each do |t|
+      if t.text.present?
+        WordTranslation.where(word_id: t.resource_id, language_id: t.language_id, language_name: t.language_name, resource_content_id: t.resource_content_id).first_or_create.update_column(:text, t.text)
+      end
+    end
+  end
+
   task fix_audio_url: :environment do
     Word.includes(:audio).find_each do |w|
       w.audio&.update_column :url, w.audio_url
     end
-  
+
     Word.update_all("audio_url = REPLACE(audio_url, '//verses.quran.com/wbw/', 'verses/wbw/')")
     AudioFile.update_all("url = REPLACE(url, '//verses.quran.com', 'verses')")
     AudioFile.update_all("url = REPLACE(url, 'https:', '')")
-  end
-  
-  task replace_wbw_translation: :environment do
-    require 'csv'
-    changed = []
-
-    data = CSV.open('final_wbw_translation.csv').read
-
-    data[1..data.size].each do |row|
-      word = Word.find(row[0])
-      if word.en_translations.first.text != row[2].to_s.strip
-        changed[word.id] = { current: word.en_translations.first.text, new: row[2].to_s.strip }
-      end
-
-      word.en_translations.first.update_column :text, row[2].to_s.strip
-    end
-
-    File.open('wbw_report', 'wb') do |file|
-      file << changed.to_json
-    end
   end
 
   task fix_tafsir: :environment do
