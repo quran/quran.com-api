@@ -32,22 +32,8 @@ PostgreSQL: clusterdb createdb createlang createuser dropdb droplang dropuser ec
 
 See: http://postgresapp.com/documentation/cli-tools.html
 
-
-Database
---------
-
-Currently, not everyone has access to the database as it's not opensource and will require you to contact one of the project's collaborators for access. Once you have access, you can pull down the submodule in one of two ways:
-```
-git clone --recursive git@github.com:quran/quran-api-rails.git
-cd quran-api-rails
-```
-For already cloned repo:
-```
-git clone git@github.com:quran/quran-api-rails.git
-cd quran-api-rails
-git submodule update --init --recursive
-```
-
+### Database 
+It's private, we will not share complete dump. If you need mini version for contributing to quran.com, please join our slack channel and ask one of project's collaborator for access.
 
 ### Usage
 
