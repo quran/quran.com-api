@@ -47,7 +47,7 @@ gem 'parallel'
 
 gem 'prose'
 
-gem 'puma', '~> 3.12.0'
+gem 'puma', '~> 3.12.2'
 
 gem 'rack-cors'
 gem 'sitemap_generator'
