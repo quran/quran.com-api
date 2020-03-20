@@ -10,7 +10,7 @@ end
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 # gem 'rails', '4.1.1'
-gem 'rails', '~> 5.2.2'
+gem 'rails', '~> 5.2.4', '>= 5.2.4.2'
 
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 1.1.3'
@@ -19,12 +19,12 @@ gem 'pg', '~> 1.1.3'
 gem 'execjs'
 gem 'therubyracer', platforms: :ruby
 
-gem 'active_model_serializers', '~> 0.10.0'
+gem 'active_model_serializers', '~> 0.10.8'
 
 # Http request
 gem 'httparty', require: false
 
-gem 'graphiql-rails'
+gem 'graphiql-rails', '>= 1.5.0'
 gem 'graphql'
 gem 'graphql-activerecord'
 gem 'graphql-batch'
@@ -36,7 +36,7 @@ gem 'elasticsearch-model'
 gem 'elasticsearch-rails'
 
 # Paging the results
-gem 'kaminari'
+gem 'kaminari', '>= 1.1.1'
 
 gem 'oj'
 gem 'oj_mimic_json'
@@ -75,7 +75,7 @@ group :development do
   gem 'bullet'
   gem 'derailed_benchmarks'
   gem 'mechanize'
-  gem 'meta_request'
+  gem 'meta_request', '>= 0.6.0'
   gem 'pre-commit'
   gem 'spring'
   gem 'spring-commands-rspec'
@@ -89,9 +89,9 @@ group :test, :development do
   gem 'guard-spork'
   gem 'rspec-rails', '= 3.7.2'
   gem 'shoulda-matchers', '~> 3.1.2'
-  gem 'simplecov', require: false
+  gem 'simplecov', '>= 0.16.1', require: false
 
-  gem "rubocop-rails_config"
+  gem "rubocop-rails_config", ">= 0.2.6"
 
   gem 'rubocop-rspec'
   gem 'spork'
