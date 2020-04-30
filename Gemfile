@@ -89,7 +89,7 @@ group :test, :development do
   gem 'guard-spork'
   gem 'rspec-rails', '= 3.7.2'
   gem 'shoulda-matchers', '~> 3.1.2'
-  gem 'simplecov', require: false
+  gem 'simplecov', '>= 0.16.1', require: false
 
   gem "rubocop-rails_config"
 
