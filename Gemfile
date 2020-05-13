@@ -19,12 +19,12 @@ gem 'pg', '~> 1.1.3'
 gem 'execjs'
 gem 'therubyracer', platforms: :ruby
 
-gem 'active_model_serializers', '~> 0.10.0'
+gem 'active_model_serializers', '~> 0.10.8'
 
 # Http request
 gem 'httparty', require: false
 
-gem 'graphiql-rails'
+gem 'graphiql-rails', '>= 1.5.0'
 gem 'graphql'
 gem 'graphql-activerecord'
 gem 'graphql-batch'
@@ -73,9 +73,9 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'benchmark-ips', require: false
   gem 'bullet'
-  gem 'derailed_benchmarks'
+  gem 'derailed_benchmarks', '>= 1.3.5'
   gem 'mechanize'
-  gem 'meta_request'
+  gem 'meta_request', '>= 0.6.0'
   gem 'pre-commit'
   gem 'spring'
   gem 'spring-commands-rspec'
@@ -91,7 +91,7 @@ group :test, :development do
   gem 'shoulda-matchers', '~> 3.1.2'
   gem 'simplecov', require: false
 
-  gem "rubocop-rails_config"
+  gem "rubocop-rails_config", ">= 0.2.6"
 
   gem 'rubocop-rspec'
   gem 'spork'
