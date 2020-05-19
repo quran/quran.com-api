@@ -10,7 +10,7 @@ end
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 # gem 'rails', '4.1.1'
-gem 'rails', '~> 5.2.2'
+gem 'rails', '~> 5.2.4', '>= 5.2.4.3'
 
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 1.1.3'
@@ -19,24 +19,24 @@ gem 'pg', '~> 1.1.3'
 gem 'execjs'
 gem 'therubyracer', platforms: :ruby
 
-gem 'active_model_serializers', '~> 0.10.0'
+gem 'active_model_serializers', '~> 0.10.8'
 
 # Http request
 gem 'httparty', require: false
 
-gem 'graphiql-rails'
+gem 'graphiql-rails', '>= 1.5.0'
 gem 'graphql'
-gem 'graphql-activerecord'
+gem 'graphql-activerecord', '>= 0.13.0'
 gem 'graphql-batch'
 
 # Elasticsearch
 gem 'excon' # using excon as faraday adapter (net::http breaks)
 gem 'elasticsearch'
-gem 'elasticsearch-model'
+gem 'elasticsearch-model', '>= 6.0.0'
 gem 'elasticsearch-rails'
 
 # Paging the results
-gem 'kaminari'
+gem 'kaminari', '>= 1.1.1'
 
 gem 'oj'
 gem 'oj_mimic_json'
@@ -72,14 +72,14 @@ group :development do
   gem 'ruby-progressbar'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'benchmark-ips', require: false
-  gem 'bullet'
+  gem 'bullet', '>= 5.9.0'
   gem 'derailed_benchmarks'
   gem 'mechanize'
-  gem 'meta_request'
+  gem 'meta_request', '>= 0.6.0'
   gem 'pre-commit'
-  gem 'spring'
-  gem 'spring-commands-rspec'
-  gem 'spring-watcher-listen', '~> 2.0.0'
+  gem 'spring', '>= 2.0.2'
+  gem 'spring-commands-rspec', '>= 1.0.4'
+  gem 'spring-watcher-listen', '~> 2.0.1'
   gem 'stackprof'
 end
 
@@ -91,7 +91,7 @@ group :test, :development do
   gem 'shoulda-matchers', '~> 3.1.2'
   gem 'simplecov', require: false
 
-  gem "rubocop-rails_config"
+  gem "rubocop-rails_config", ">= 0.2.6"
 
   gem 'rubocop-rspec'
   gem 'spork'
