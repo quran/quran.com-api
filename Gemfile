@@ -1,19 +1,14 @@
 # frozen_string_literal: true
 
 source 'https://rubygems.org'
-ruby '2.3.3'
+ruby '2.6.3'
 
-git_source(:github) do |repo_name|
-  repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?('/')
-  "https://github.com/#{repo_name}.git"
-end
+git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-# gem 'rails', '4.1.1'
-gem 'rails', '~> 5.2.2'
+gem "rails", "~> 6.0.3", ">= 6.0.3.2"
 
 # Use postgresql as the database for Active Record
-gem 'pg', '~> 1.1.3'
+gem "pg", ">= 0.18", "< 2.0"
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 gem 'execjs'
@@ -47,7 +42,7 @@ gem 'parallel'
 
 gem 'prose'
 
-gem 'puma', '~> 3.12.0'
+gem "puma", "~> 4.1"
 
 gem 'rack-cors'
 gem 'sitemap_generator'
@@ -55,9 +50,12 @@ gem 'sitemap_generator'
 gem 'virtus'
 
 gem 'tzinfo-data'
+gem "bootsnap", ">= 1.4.2", require: false
 
 # Detect the language
 gem 'whatlanguage'
+
+gem 'rubocop', require: false
 
 gem 'sentry-raven', group: [:development, :production]
 
@@ -88,7 +86,7 @@ group :test, :development do
   gem 'guard-rspec', '= 4.7.3'
   gem 'guard-spork'
   gem 'rspec-rails', '= 3.7.2'
-  gem 'shoulda-matchers', '~> 3.1.2'
+  gem 'shoulda-matchers', '~> 4.0'
   gem 'simplecov', require: false
 
   gem "rubocop-rails_config"
