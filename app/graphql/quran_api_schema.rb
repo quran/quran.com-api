@@ -1,10 +1,11 @@
-# frozen_string_literal: true
-
-QuranAPISchema = GraphQL::Schema.define do
+class QuranApiSchema < GraphQL::Schema
+  # mutation(Types::MutationType)
   query(Types::QueryType)
 
-  # GraphQL::Batch setup:
-  use GraphQL::Batch
+  # Opt in to the new runtime (default in future graphql-ruby versions)
+  use GraphQL::Execution::Interpreter
+  use GraphQL::Analysis::AST
 
-  instrument(:field, GraphQL::Models::Instrumentation.new)
+  # Add built-in connections for pagination
+  use GraphQL::Pagination::Connections
 end

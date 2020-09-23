@@ -1,10 +1,8 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-
   # NOTE: Normally we'd hide this in `Rails.env.development?` but having
   # anyone access it to play with API is a good tool
-  mount GraphiQL::Rails::Engine, at: '/graphiql', graphql_path: '/graphql'
 
   post '/graphql', to: 'graphql#execute'
 

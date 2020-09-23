@@ -1,13 +1,9 @@
-# frozen_string_literal: true
-
-Types::WordRootType = GraphQL::ObjectType.define do
-  name 'WordRoot'
-
-  backed_by_model :word_root do
-    attr :id
-    attr :word_id
-    attr :root_id
-
-    has_one :word
+module Types
+  class WordRootType < Types::BaseObject
+    field :id, ID, null: false
+    field :word_id, Integer, null: true
+    field :root_id, Integer, null: true
+    field :created_at, GraphQL::Types::ISO8601DateTime, null: false
+    field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
   end
 end

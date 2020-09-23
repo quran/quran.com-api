@@ -1,5 +1,4 @@
-# frozen_string_literal: true
-
-Types::ResourceType = GraphQL::ObjectType.define do
-  name 'Resource'
+module Types
+  class ResourceType < Types::BaseObject
+  end
 end

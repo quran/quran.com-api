@@ -19,10 +19,9 @@ gem 'active_model_serializers', '~> 0.10.0'
 # Http request
 gem 'httparty', require: false
 
-gem 'graphiql-rails'
 gem 'graphql'
-gem 'graphql-activerecord'
-gem 'graphql-batch'
+gem 'graphql-schema_comparator'
+# gem 'graphql-batch'
 
 # Elasticsearch
 gem 'excon' # using excon as faraday adapter (net::http breaks)
@@ -62,7 +61,7 @@ gem 'sentry-raven', group: [:development, :production]
 group :development, :test do
   gem 'pry-byebug'
   gem 'pry-rails'
-  gem 'zeus'
+  # gem 'zeus'
 end
 
 group :development do

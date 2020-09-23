@@ -1,16 +1,12 @@
 # frozen_string_literal: true
 
-Types::WordCorpusType = GraphQL::ObjectType.define do
-  name 'WordCorpus'
-
-  backed_by_model WordCorpus do
-    attr :id
-    attr :word_id
-    attr :location
-    attr :description
-    attr :image_src
-    attr :segments
-
-    has_one :word
+module Types
+  class WordCorpusType < Types::BaseObject
+    field :id, ID, null: false
+    field :word_id, Integer, null: true
+    field :location, String, null: true
+    field :description, String, null: true
+    field :image_src, String, null: true
+    field :segments, String, null: true
   end
 end

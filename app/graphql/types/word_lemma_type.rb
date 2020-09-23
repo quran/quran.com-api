@@ -1,13 +1,9 @@
-# frozen_string_literal: true
-
-Types::WordLemmaType = GraphQL::ObjectType.define do
-  name 'WordLemma'
-
-  backed_by_model :word_lemma do
-    attr :id
-    attr :word_id
-    attr :lemma_id
-
-    has_one :word
+module Types
+  class WordLemmaType < Types::BaseObject
+    field :id, ID, null: false
+    field :word_id, Integer, null: true
+    field :lemma_id, Integer, null: true
+    field :created_at, GraphQL::Types::ISO8601DateTime, null: false
+    field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
   end
 end
