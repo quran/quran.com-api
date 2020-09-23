@@ -1,0 +1,140 @@
+type AudioFile {
+  createdAt: ISO8601DateTime!
+  duration: Int
+  format: String
+  id: ID!
+  isEnabled: Boolean
+  mimeType: String
+  recitationId: Int
+  resourceId: Int
+  resourceType: String
+  segments: String
+  updatedAt: ISO8601DateTime!
+  url: String
+}
+
+type Chapter {
+  bismillahPre: Boolean
+  chapterNumber: Int
+  createdAt: ISO8601DateTime!
+  id: ID!
+  nameArabic: String
+  nameComplex: String
+  nameSimple: String
+  pages: String
+  revelationOrder: Int
+  revelationPlace: String
+  updatedAt: ISO8601DateTime!
+  versesCount: Int
+}
+
+type ChapterInfo {
+  chapterId: Int
+  createdAt: ISO8601DateTime!
+  id: ID!
+  languageId: Int
+  languageName: String
+  resourceContentId: Int
+  shortText: String
+  source: String
+  text: String
+  updatedAt: ISO8601DateTime!
+}
+
+"""
+An ISO 8601-encoded datetime
+"""
+scalar ISO8601DateTime
+
+"""
+Represents untyped JSON
+"""
+scalar JSON
+
+type Juz {
+  createdAt: ISO8601DateTime!
+  id: ID!
+  juzNumber: Int
+  updatedAt: ISO8601DateTime!
+  verseMapping: JSON
+}
+
+type Query {
+  audioFile(recitationId: ID!, resourceId: ID!, resourceType: String = "Verse"): AudioFile!
+  audioFiles(recitationId: ID!, resourceIds: [ID!]!, resourceType: String = "Verse"): [AudioFile!]!
+  chapter(id: ID!): Chapter!
+  chapterInfo(chapterId: ID!, language: String = "en"): ChapterInfo!
+  chapters(language: String = "en"): [Chapter!]!
+  juzs: [Juz!]!
+  tafsirs(verseId: ID, verseKey: String): [Tafsir!]!
+  verse(id: ID): Verse!
+  verseByVerseKey(verseKey: String!): Verse!
+  verses(chapterId: ID!, language: String = "en", limit: Int = 10, offset: Int = 0, padding: Int = 0, page: Int = 1): [Verse!]!
+  words(verseId: ID, verseKey: String): [Word!]!
+}
+
+type Tafsir {
+  createdAt: ISO8601DateTime!
+  id: ID!
+  languageId: Int
+  languageName: String
+  resourceContentId: Int
+  resourceName: String
+  text: String
+  updatedAt: ISO8601DateTime!
+  verseId: Int
+  verseKey: String
+}
+
+type Verse {
+  chapterId: Int
+  createdAt: ISO8601DateTime!
+  hizbNumber: Int
+  id: ID!
+  imageUrl: String
+  imageWidth: Int
+  juzNumber: Int
+  pageNumber: Int
+  rubNumber: Int
+  sajdah: String
+  sajdahNumber: Int
+  textImlaei: String
+  textIndopak: String
+  textMadani: String
+  textSimple: String
+  updatedAt: ISO8601DateTime!
+  verseIndex: Int
+  verseKey: String
+  verseLemmaId: Int
+  verseNumber: Int
+  verseRootId: Int
+  verseStemId: Int
+}
+
+type Word {
+  audioUrl: String
+  chapterId: Int
+  charTypeId: Int
+  charTypeName: String
+  className: String
+  codeDec: Int
+  codeDecV3: Int
+  codeHex: String
+  codeHexV3: String
+  createdAt: ISO8601DateTime!
+  id: ID!
+  lineNumber: Int
+  location: String
+  pageNumber: Int
+  pauseName: String
+  position: Int
+  textImlaei: String
+  textIndopak: String
+  textMadani: String
+  textSimple: String
+  tokenId: Int
+  topicId: Int
+  updatedAt: ISO8601DateTime!
+  verseId: Int
+  verseKey: String
+}

@@ -116,6 +116,29 @@ module Types
         recitation_id: args[:recitation_id]
       ).first
     end
-  end
 
+    field :search, Types::SearchResultsType do
+      argument :query, String, required: true
+      argument :page, Int, required: false, default_value: 1
+      argument :size, Int, required: false, default_value: 20
+      argument :language, String, required: false, default_value: 'en'
+    end
+    def search(query:, page:, size:, language:)
+      client = Search::Client.new(
+        query,
+        page: page, size: size, lanugage: language
+      )
+      response = client.search
+
+      {
+        query: query,
+        total_count: response.total_count,
+        took: response.took,
+        current_page: response.current_page,
+        total_pages: response.total_pages,
+        per_page: response.per_page,
+        results: response.results
+      }
+    end
+  end
 end

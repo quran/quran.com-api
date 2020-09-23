@@ -1,2 +1,2 @@
 require "graphql/rake_task"
-GraphQL::RakeTask.new
+GraphQL::RakeTask.new(schema_name: "QuranAPISchema")
