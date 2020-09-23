@@ -10,7 +10,7 @@ RSpec.describe GraphqlController, type: :controller do
       }
     GRAPHQL
 
-    result = QuranAPISchema.execute(query_string, variables: { })
+    result = QuranApiSchema.execute(query_string, variables: { })
 
     expect(result).not_to be_nil
   end
@@ -24,7 +24,7 @@ RSpec.describe GraphqlController, type: :controller do
       }
     GRAPHQL
 
-    result = QuranAPISchema.execute(query_string, variables: { })
+    result = QuranApiSchema.execute(query_string, variables: { })
 
     expect(result).not_to be_nil
   end
@@ -38,7 +38,7 @@ RSpec.describe GraphqlController, type: :controller do
       }
     GRAPHQL
 
-    result = QuranAPISchema.execute(query_string, variables: { id: 1 })
+    result = QuranApiSchema.execute(query_string, variables: { id: 1 })
 
     expect(result).not_to be_nil
   end
@@ -52,7 +52,7 @@ RSpec.describe GraphqlController, type: :controller do
       }
     GRAPHQL
 
-    result = QuranAPISchema.execute(query_string, variables: { id: 1 })
+    result = QuranApiSchema.execute(query_string, variables: { id: 1 })
 
     expect(result).not_to be_nil
   end
@@ -66,7 +66,7 @@ RSpec.describe GraphqlController, type: :controller do
       }
     GRAPHQL
 
-    result = QuranAPISchema.execute(query_string, variables: { id: 1 })
+    result = QuranApiSchema.execute(query_string, variables: { id: 1 })
 
     expect(result).not_to be_nil
   end
@@ -80,7 +80,7 @@ RSpec.describe GraphqlController, type: :controller do
       }
     GRAPHQL
 
-    result = QuranAPISchema.execute(query_string, variables: { id: '1:1' })
+    result = QuranApiSchema.execute(query_string, variables: { id: '1:1' })
 
     expect(result).not_to be_nil
   end
@@ -94,7 +94,7 @@ RSpec.describe GraphqlController, type: :controller do
       }
     GRAPHQL
 
-    result = QuranAPISchema.execute(query_string, variables: { id: 1 })
+    result = QuranApiSchema.execute(query_string, variables: { id: 1 })
 
     expect(result).not_to be_nil
   end
@@ -108,7 +108,7 @@ RSpec.describe GraphqlController, type: :controller do
       }
     GRAPHQL
 
-    result = QuranAPISchema.execute(query_string, variables: { id: 1 })
+    result = QuranApiSchema.execute(query_string, variables: { id: 1 })
 
     expect(result).not_to be_nil
   end

@@ -1,4 +1,4 @@
-class QuranAPISchema < GraphQL::Schema
+class QuranApiSchema < GraphQL::Schema
   # mutation(Types::MutationType)
   query(Types::QueryType)
 

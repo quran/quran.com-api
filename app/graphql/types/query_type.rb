@@ -117,13 +117,13 @@ module Types
       ).first
     end
 
-    field :search, Types::SearchResultsType do
+    field :search_verses, Types::SearchResultsType, null: true do
       argument :query, String, required: true
       argument :page, Int, required: false, default_value: 1
       argument :size, Int, required: false, default_value: 20
       argument :language, String, required: false, default_value: 'en'
     end
-    def search(query:, page:, size:, language:)
+    def search_verses(query:, page:, size:, language:)
       client = Search::Client.new(
         query,
         page: page, size: size, lanugage: language

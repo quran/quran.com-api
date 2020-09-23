@@ -1,6 +1,6 @@
 module Types
   class SearchResultsType < Types::BaseObject
-    field :query String, null: false
+      field :query, String, null: false
       field :total_count, Int, null: false
       field :took, Int, null: false
       field :current_page, Int, null: false

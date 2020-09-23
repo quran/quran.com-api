@@ -12,5 +12,17 @@ module Types
     field :chapter_number, Integer, null: true
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
+
+    field :translated_name, Types::TranslatedNameType, null: true do
+      argument :language, String, required: true, default_value: 'en'
+    end
+    def translated_name(language:)
+      object.public_send("#{language}_translated_names".to_sym).first
+    end
+
+    field :pages, [Int], null: false
+    def pages
+      object.pages
+    end
   end
 end
