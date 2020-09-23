@@ -15,7 +15,6 @@
 # gem 'pg'
 #
 
-
 # DATABASE_URL environment variable should determine connection params
 
 default: &default
@@ -38,8 +37,6 @@ development:
   encoding: unicode
   database: quran_dev
 
-
 test:
   <<: *default
   database: quran_test
-

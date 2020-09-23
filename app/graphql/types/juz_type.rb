@@ -4,6 +4,6 @@ module Types
     field :juz_number, Integer, null: true
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
-    field :verse_mapping, Types::JsonType, null: true
+    field :verse_mapping, GraphQL::Types::JSON, null: true
   end
 end

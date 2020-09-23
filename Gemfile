@@ -20,6 +20,7 @@ gem 'active_model_serializers', '~> 0.10.0'
 gem 'httparty', require: false
 
 gem 'graphql'
+gem 'graphql-schema_comparator'
 # gem 'graphql-batch'
 
 # Elasticsearch

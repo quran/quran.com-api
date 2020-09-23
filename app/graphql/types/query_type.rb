@@ -12,7 +12,7 @@ module Types
       argument :id, ID, required: true
     end
     def chapter(id:)
-      Chapter.find(id)
+      Chapter.find_by_id(id)
     end
 
     field :chapter_info, Types::ChapterInfoType, null: false do
@@ -52,70 +52,70 @@ module Types
       .offset(offset)
       .padding(padding)
     end
-  end
 
-  field :verse, Types::VerseType do
-    argument :id, ID, required: false
-  end
-  def verse(id:)
-    Verse.find(id)
-  end
-
-  field :verse_by_verse_key, Types::VerseType do
-    argument :verse_key, String, required: true
-  end
-  def verse_by_verse_key(verse_key:)
-    Verse.find_by_verse_key(verse_key)
-  end
-
-  field :tafsirs, [Types::TafsirType] do
-    argument :verse_id, ID, required: false
-    argument :verse_key, String, required: false
-  end
-  def tafsirs(verse_id:, verse_key:)
-    if verse_id.present?
-      Tafsir.where(verse_id: verse_id)
-    else
-      Tafsir.where(verse_key: verse_key)
+    field :verse, Types::VerseType, null: false do
+      argument :id, ID, required: false
     end
-  end
-
-  field :words, [Types::WordType] do
-    argument :verse_id, ID, required: false
-    argument :verse_key, String, required: false
-  end
-  def words(verse_id:, verse_key: '')
-    if verse_id
-      Word.where(verse_id: verse_id)
-    else
-      Word.where(verse_key: verse_key)
+    def verse(id:)
+      Verse.find_by_id(id)
     end
-  end
 
-  field :audio_files, [Types::AudioFileType] do
-    argument :recitation_id, types.ID, required: true
-    argument :resource_ids, [types.ID], required: true
-    argument :resource_type, String, default_value: 'Verse', required: false
-  end
-  def audio_files(args)
+    field :verse_by_verse_key, Types::VerseType, null: false do
+      argument :verse_key, String, required: true
+    end
+    def verse_by_verse_key(verse_key:)
+      Verse.find_by_verse_key(verse_key)
+    end
+
+    field :tafsirs, [Types::TafsirType], null: false do
+      argument :verse_id, ID, required: false
+      argument :verse_key, String, required: false
+    end
+    def tafsirs(verse_id:, verse_key:)
+      if verse_id.present?
+        Tafsir.where(verse_id: verse_id)
+      else
+        Tafsir.where(verse_key: verse_key)
+      end
+    end
+
+    field :words, [Types::WordType], null: false do
+      argument :verse_id, ID, required: false
+      argument :verse_key, String, required: false
+    end
+    def words(verse_id:, verse_key: '')
+      if verse_id
+        Word.where(verse_id: verse_id)
+      else
+        Word.where(verse_key: verse_key)
+      end
+    end
+
+    field :audio_files, [Types::AudioFileType], null: false do
+      argument :recitation_id, ID, required: true
+      argument :resource_ids, [ID], required: true
+      argument :resource_type, String, default_value: 'Verse', required: false
+    end
+    def audio_files(args)
+        AudioFile.where(
+          resource_id: args[:resource_ids],
+          resource_type: args[:resource_type],
+          recitation_id: args[:recitation_id]
+        )
+    end
+
+    field :audio_file, Types::AudioFileType, null: false do
+      argument :recitation_id, ID, required: true
+      argument :resource_id, ID, required: true
+      argument :resource_type, String, default_value: 'Verse', required: false
+    end
+    def audio_file(args)
       AudioFile.where(
-        resource_id: args[:resource_ids],
+        resource_id: args[:resource_id],
         resource_type: args[:resource_type],
         recitation_id: args[:recitation_id]
-      )
-  end
-
-  field :audio_file, Types::AudioFileType do
-    argument :recitation_id, ID, required: true
-    argument :resource_id, ID, required: true
-    argument :resource_type, String, default_value: 'Verse', required: false
-  end
-  def audio_file(args)
-    AudioFile.where(
-      resource_id: args[:resource_id],
-      resource_type: args[:resource_type],
-      recitation_id: args[:recitation_id]
-    ).first
+      ).first
+    end
   end
 
 end

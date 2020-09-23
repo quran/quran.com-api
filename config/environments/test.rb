@@ -28,6 +28,11 @@ Rails.application.configure do
   # Disable request forgery protection in test environment.
   config.action_controller.allow_forgery_protection = false
 
+  config.active_record.migration_error = false
+  # Remove check on dev as you can get the data from db dump
+  # config.active_record.migration_error = :page_load
+
+
   # Store uploaded files on the local file system in a temporary directory
   # config.active_storage.service = :test
 
