@@ -1,12 +1,8 @@
-# frozen_string_literal: true
-
-Types::VerseRootType = GraphQL::ObjectType.define do
-  name 'VerseRoot'
-
-  backed_by_model :verse_root do
-    attr :id
-    attr :value
-
-    # has_one :verse
+module Types
+  class VerseRootType < Types::BaseObject
+    field :id, ID, null: false
+    field :value, String, null: true
+    field :created_at, GraphQL::Types::ISO8601DateTime, null: false
+    field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
   end
 end

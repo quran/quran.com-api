@@ -1,15 +1,10 @@
-# frozen_string_literal: true
-
-Types::TokenType = GraphQL::ObjectType.define do
-  name 'Token'
-
-  backed_by_model :token do
-    attr :id
-    attr :text_madani
-    attr :text_clean
-    attr :text_indopak
-    attr :transliteration
-
-    has_one :word
+module Types
+  class TokenType < Types::BaseObject
+    field :id, ID, null: false
+    field :text_madani, String, null: true
+    field :text_clean, String, null: true
+    field :text_indopak, String, null: true
+    field :created_at, GraphQL::Types::ISO8601DateTime, null: false
+    field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
   end
 end

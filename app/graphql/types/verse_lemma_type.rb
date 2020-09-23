@@ -1,13 +1,9 @@
-# frozen_string_literal: true
-
-Types::VerseLemmaType = GraphQL::ObjectType.define do
-  name 'VerseLemma'
-
-  backed_by_model :verse_lemma do
-    attr :id
-    attr :text_madani
-    attr :text_clean
-
-    has_many_array :verses
+module Types
+  class VerseLemmaType < Types::BaseObject
+    field :id, ID, null: false
+    field :text_madani, String, null: true
+    field :text_clean, String, null: true
+    field :created_at, GraphQL::Types::ISO8601DateTime, null: false
+    field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
   end
 end

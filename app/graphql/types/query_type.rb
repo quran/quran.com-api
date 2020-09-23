@@ -1,157 +1,121 @@
-# frozen_string_literal: true
+module Types
+  class QueryType < Types::BaseObject
 
-Types::QueryType = GraphQL::ObjectType.define do
-  name 'Query'
+    field :chapters, [Types::ChapterType], null: false do
+      argument :language, String, required: false, default_value: 'en'
+    end
+    def chapters(language: 'en')
+      Chapter.includes("#{language}_translated_names".to_sym).all
+    end
 
-  field :chapters, types[Types::ChapterType] do
-    argument :language, types.String, default_value: 'en'
-    resolve ->(_obj, args, _ctx) { Chapter.includes("#{args[:language]}_translated_names".to_sym).all }
-  end
+    field :chapter, Types::ChapterType, null: false do
+      argument :id, ID, required: true
+    end
+    def chapter(id:)
+      Chapter.find(id)
+    end
 
-  field :juzs, types[Types::JuzType] do
-    resolve ->(_obj, _args, _ctx) { Juz.all }
-  end
+    field :chapter_info, Types::ChapterInfoType, null: false do
+      argument :chapter_id, ID, required: true
+      argument :language, String, required: false, default_value: 'en'
+    end
+    def chapter_info(id:, language: 'en')
+      ChapterInfo.where(chapter_id: chapter_id).filter_by_language_or_default(language)
+    end
 
-  field :chapter, Types::ChapterType do
-    argument :id, !types.ID
-    resolve ->(_obj, args, _ctx) { Chapter.find(args[:id]) }
-  end
+    field :juzs, [Types::JuzType], null: false
+    def juzs
+      Juz.all
+    end
 
-  field :chapterInfo, Types::ChapterInfoType do
-    argument :chapterId, !types.ID
-    argument :language, types.String, default_value: 'en'
-    resolve ->(_obj, args, _ctx) {
-      ChapterInfo.where(chapter_id: args[:chapterId]).filter_by_language_or_default(args[:language])
-    }
-  end
-
-  field :verses, types[Types::VerseType] do
-    argument :chapterId, !types.ID
-    argument :language, types.String, default_value: 'en'
-    argument :offset, types.Int, default_value: 0
-    argument :padding, types.Int, default_value: 0
-    argument :page, types.Int, default_value: 1
-    argument :limit, types.Int, default_value: 10, prepare: ->(limit, ctx) {
-      limit <= 50 ? limit : 50
-    }
-    resolve ->(_obj, args, _ctx) {
+    field :verses, [Types::VerseType], null: false do
+      argument :chapter_id, ID, required: true
+      argument :language, String, required: false, default_value: 'en'
+      argument :offset, Int, required: false, default_value: 0
+      argument :padding, Int, required: false, default_value: 0
+      argument :page, Int, required: false, default_value: 1
+      argument :limit, Int, required: false, default_value: 10, prepare: ->(limit, ctx) {
+        limit <= 50 ? limit : 50
+      }
+    end
+    def verses(chapter_id:, language:, offset:, padding:, page:, limit:)
       eager_words = [
-        "#{args[:language]}_translations".to_sym,
-        "#{args[:language]}_transliterations".to_sym
+        "#{language}_translations".to_sym,
+        "#{language}_transliterations".to_sym
       ]
 
       Verse
-      .where(chapter_id: args[:chapterId])
+      .where(chapter_id: chapterId)
       .preload(:media_contents, words: eager_words)
-      .page(args[:page])
-      .per(args[:limit])
-      .offset(args[:offset])
-      .padding(args[:padding])
-    }
+      .page(page)
+      .per(limit)
+      .offset(offset)
+      .padding(padding)
+    end
   end
 
   field :verse, Types::VerseType do
-    argument :id, types.ID
-    argument :verseKey, types.String
-    resolve lambda { |_obj, args, _ctx|
-      return Verse.find_by_verse_key(args[:verseKey]) if args[:verseKey].present?
-      Verse.find(args[id])
-    }
+    argument :id, ID, required: false
+  end
+  def verse(id:)
+    Verse.find(id)
   end
 
-  field :tafsirs, types[Types::TafsirType] do
-    argument :verseId, types.ID
-    argument :verseKey, types.String
-    resolve lambda { |_obj, args, _ctx|
-      return Tafsir.where(verse_id: args[:verse_id]) if args[:verse_id]
-
-      Tafsir.where(verse_key: args[:verse_key])
-    }
+  field :verse_by_verse_key, Types::VerseType do
+    argument :verse_key, String, required: true
+  end
+  def verse_by_verse_key(verse_key:)
+    Verse.find_by_verse_key(verse_key)
   end
 
-  field :tafsir, Types::TafsirType do
-    argument :id, !types.ID
-    resolve ->(_obj, args, _ctx) { Tafsir.find(args[:id]) }
+  field :tafsirs, [Types::TafsirType] do
+    argument :verse_id, ID, required: false
+    argument :verse_key, String, required: false
+  end
+  def tafsirs(verse_id:, verse_key:)
+    if verse_id.present?
+      Tafsir.where(verse_id: verse_id)
+    else
+      Tafsir.where(verse_key: verse_key)
+    end
   end
 
-  field :verseTafsir, Types::TafsirType do
-    argument :verseKey, !types.String
-    argument :tafsirId, !types.ID
-    resolve lambda { |_obj, args, _ctx|
-      resource_id = ResourceContent
-                    .where(id: args[:tafsirId])
-                    .or(ResourceContent
-                    .where(slug: args[:tafsirId]))
-                    .pluck(:id)
-
-      verse = Verse.find_by_id_or_key(args[:verseKey])
-      verse.tafsirs.where(resource_content_id: resource_id).first
-    }
+  field :words, [Types::WordType] do
+    argument :verse_id, ID, required: false
+    argument :verse_key, String, required: false
+  end
+  def words(verse_id:, verse_key: '')
+    if verse_id
+      Word.where(verse_id: verse_id)
+    else
+      Word.where(verse_key: verse_key)
+    end
   end
 
-  field :words, types[Types::WordType] do
-    argument :verseId, types.ID
-    argument :verseKey, types.String
-    resolve lambda { |_obj, args, _ctx|
-      return Word.where(verse_id: args[:verse_id]) if args[:verse_id]
-
-      Word.where(verse_key: args[:verse_key])
-    }
+  field :audio_files, [Types::AudioFileType] do
+    argument :recitation_id, types.ID, required: true
+    argument :resource_ids, [types.ID], required: true
+    argument :resource_type, String, default_value: 'Verse', required: false
   end
-
-  field :word, Types::WordType do
-    argument :id, !types.ID
-    resolve ->(_obj, args, _ctx) { Word.find(args[:id]) }
-  end
-
-  field :audioFiles, types[Types::AudioFileType] do
-    argument :recitationId, !types.ID
-    argument :resourceIds, !types[types.ID]
-    argument :resourceType, types.String, default_value: 'Verse'
-    resolve ->(obj, args, _ctx) {
+  def audio_files(args)
       AudioFile.where(
-        resource_id: args[:resourceIds],
-        resource_type: args[:resourceType],
-        recitation_id: args[:recitationId]
+        resource_id: args[:resource_ids],
+        resource_type: args[:resource_type],
+        recitation_id: args[:recitation_id]
       )
-    }
   end
 
-  field :audioFile, Types::AudioFileType do
-    argument :recitationId, !types.ID
-    argument :resourceId, !types.ID
-    argument :resourceType, types.String, default_value: 'Verse'
-    resolve ->(obj, args, _ctx) {
-      AudioFile.where(
-        resource_id: args[:resourceId],
-        resource_type: args[:resourceType],
-        recitation_id: args[:recitationId]
-      ).first
-    }
+  field :audio_file, Types::AudioFileType do
+    argument :recitation_id, ID, required: true
+    argument :resource_id, ID, required: true
+    argument :resource_type, String, default_value: 'Verse', required: false
+  end
+  def audio_file(args)
+    AudioFile.where(
+      resource_id: args[:resource_id],
+      resource_type: args[:resource_type],
+      recitation_id: args[:recitation_id]
+    ).first
   end
 
-  # field :search, [Types::VerseType] do
-  #   argument :q, !types.String
-  #   argument :page, types.Int, default_value: 1
-  #   argument :size, types.Int, default_value: 20
-  #   argument :lanugage, types.String, default_value: 'en'
-  #   resolve ->(_obj, args, _ctx) {
-  #     client = Search::Client.new(
-  #       query,
-  #       page: page, size: size, lanugage: language
-  #     )
-
-  #     response = client.search
-
-  #     {
-  #       query: query,
-  #       total_count: response.total_count,
-  #       took: response.took,
-  #       current_page: response.current_page,
-  #       total_pages: response.total_pages,
-  #       per_page: response.per_page,
-  #       results: response.results
-  #     }
-  #   }
-  # end
 end

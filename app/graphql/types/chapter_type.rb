@@ -1,31 +1,16 @@
-# frozen_string_literal: true
-
-Types::ChapterType = GraphQL::ObjectType.define do
-  name 'Chapter'
-
-  backed_by_model :chapter do
-    attr :id
-    attr :bismillah_pre
-    attr :revelation_order
-    attr :revelation_place
-    attr :name_complex
-    attr :name_arabic
-    attr :name_simple
-    attr :verses_count
-    attr :chapter_number
-
-    has_many_connection :verses
-    has_many_array :chapter_infos
-
-    field :pages, types[types.Int] do
-      resolve ->(chapter, _args, _ctx) { chapter.pages }
-    end
-
-    field :translatedName, Types::TranslatedNameType do
-      argument :language, types.String, default_value: 'en'
-      resolve ->(chapter, args, _ctx) do
-        chapter.public_send("#{args[:language]}_translated_names".to_sym).first
-      end
-    end
+module Types
+  class ChapterType < Types::BaseObject
+    field :id, ID, null: false
+    field :bismillah_pre, Boolean, null: true
+    field :revelation_order, Integer, null: true
+    field :revelation_place, String, null: true
+    field :name_complex, String, null: true
+    field :name_arabic, String, null: true
+    field :name_simple, String, null: true
+    field :pages, String, null: true
+    field :verses_count, Integer, null: true
+    field :chapter_number, Integer, null: true
+    field :created_at, GraphQL::Types::ISO8601DateTime, null: false
+    field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
   end
 end

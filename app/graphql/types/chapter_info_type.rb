@@ -1,18 +1,14 @@
-# frozen_string_literal: true
-
-Types::ChapterInfoType = GraphQL::ObjectType.define do
-  name 'ChapterInfo'
-
-  backed_by_model :chapter_info do
-    attr :id
-    attr :chapter_id
-    attr :text
-    attr :source
-    attr :short_text
-    attr :language_id
-    attr :resource_content_id
-    attr :language_name
-
-    has_one :chapter
+module Types
+  class ChapterInfoType < Types::BaseObject
+    field :id, ID, null: false
+    field :chapter_id, Integer, null: true
+    field :text, String, null: true
+    field :source, String, null: true
+    field :short_text, String, null: true
+    field :language_id, Integer, null: true
+    field :resource_content_id, Integer, null: true
+    field :language_name, String, null: true
+    field :created_at, GraphQL::Types::ISO8601DateTime, null: false
+    field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
   end
 end

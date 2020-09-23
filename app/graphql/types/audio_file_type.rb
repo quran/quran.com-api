@@ -1,17 +1,16 @@
-# frozen_string_literal: true
-
-Types::AudioFileType = GraphQL::ObjectType.define do
-  name 'AudioFile'
-
-  backed_by_model :audio_file do
-    attr :id
-    attr :resource_type
-    attr :resource_id
-    attr :url
-    attr :duration
-    attr :segments
-    attr :mime_type
-    attr :format
-    attr :recitation_id
+module Types
+  class AudioFileType < Types::BaseObject
+    field :id, ID, null: false
+    field :resource_type, String, null: true
+    field :resource_id, Integer, null: true
+    field :url, String, null: true
+    field :duration, Integer, null: true
+    field :segments, String, null: true
+    field :mime_type, String, null: true
+    field :format, String, null: true
+    field :is_enabled, Boolean, null: true
+    field :recitation_id, Integer, null: true
+    field :created_at, GraphQL::Types::ISO8601DateTime, null: false
+    field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
   end
 end
