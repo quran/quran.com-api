@@ -38,7 +38,7 @@ module Searchable
         { id: w.id, madani: w.text_madani, simple: w.text_simple }
       end
 
-      translations.includes(:language).each do |trans|
+      translations.includes(:language).find_each do |trans|
         hash["trans_#{trans.language.iso_code}"] ||= []
         hash["trans_#{trans.language.iso_code}"] << { id: trans.id,
                                                      text: trans.text,
@@ -100,7 +100,7 @@ module Searchable
       languages = Translation.where(resource_type: 'Verse').pluck(:language_id).uniq
       available_languages = Language.where(id: languages)
       available_languages.each do |lang|
-        es_analyzer = lang.es_analyzer_default.present? ? lang.es_analyzer_default : nil
+        es_analyzer = lang.es_analyzer_default.presence
 
         indexes "trans_#{lang.iso_code}", type: 'nested' do
           indexes :text,

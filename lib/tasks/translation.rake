@@ -7,7 +7,7 @@ namespace :translation do
 
     author_name = 'Mustafa Khattab'
     localized_name = 'Mustafa Khattab'
-    language = Language.find_by_iso_code('en') # English
+    language = Language.find_by(iso_code: 'en') # English
     data_source = DataSource.where(name: 'Quran.com').first_or_create
 
     author = Author.where(name: author_name).first_or_create

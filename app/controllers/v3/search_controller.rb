@@ -36,7 +36,6 @@ class V3::SearchController < ApplicationController
   end
 
   protected
-
   def language
     params[:language] || 'en'
   end

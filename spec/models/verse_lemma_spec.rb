@@ -14,8 +14,6 @@
 require 'rails_helper'
 
 RSpec.describe VerseLemma do
-
-
   context 'with associations' do
     it { is_expected.to have_many :verses }
     it { is_expected.to have_many(:words).through(:verses) }

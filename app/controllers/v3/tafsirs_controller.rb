@@ -15,22 +15,20 @@ class V3::TafsirsController < ApplicationController
   end
 
   protected
-
   def chapter
     Chapter.find(params[:chapter_id])
   end
 
   def set_verse
-    @verse = chapter.verses.find_by_verse_number(params[:verse_id])
+    @verse = chapter.verses.find_by(verse_number: params[:verse_id])
   end
 
   def tafirs_filter
-    return nil unless params[:tafsirs].present?
+    return nil if params[:tafsirs].blank?
 
     ResourceContent
       .where(id: params[:tafsirs])
       .or(ResourceContent.where(slug: params[:tafsirs]))
       .pluck(:id)
-
   end
 end

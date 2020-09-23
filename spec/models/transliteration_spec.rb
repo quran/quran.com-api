@@ -18,7 +18,6 @@
 require 'rails_helper'
 
 RSpec.describe Transliteration do
-
   context 'with associations' do
     it { is_expected.to belong_to :language }
     it { is_expected.to belong_to :resource }
@@ -44,5 +43,4 @@ RSpec.describe Transliteration do
     it_behaves_like 'modal with column', columns
     it_behaves_like 'modal have indexes on column', indexes
   end
-
 end

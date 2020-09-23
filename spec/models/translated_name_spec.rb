@@ -39,5 +39,4 @@ RSpec.describe TranslatedName do
     it_behaves_like 'modal with column', columns
     it_behaves_like 'modal have indexes on column', indexes
   end
-
 end

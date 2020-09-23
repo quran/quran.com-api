@@ -14,7 +14,6 @@
 require 'rails_helper'
 
 RSpec.describe WordStem do
-
   context 'with associations' do
     it { is_expected.to belong_to :word }
     it { is_expected.to belong_to :stem }

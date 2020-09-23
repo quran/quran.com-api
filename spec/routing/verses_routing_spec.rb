@@ -4,7 +4,6 @@ require 'rails_helper'
 
 RSpec.describe V3::VersesController, type: :routing do
   describe 'routing' do
-
     it 'routes to #index' do
       expect(get: '/verses').to route_to('verses#index')
     end
@@ -36,6 +35,5 @@ RSpec.describe V3::VersesController, type: :routing do
     it 'routes to #destroy' do
       expect(delete: '/verses/1').to route_to('verses#destroy', id: '1')
     end
-
   end
 end

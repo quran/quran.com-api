@@ -14,7 +14,6 @@
 require 'rails_helper'
 
 RSpec.describe DataSource do
-
   context 'with associations' do
    it { is_expected.to have_many :resource_contents }
  end

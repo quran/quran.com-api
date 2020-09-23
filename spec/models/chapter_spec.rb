@@ -21,13 +21,13 @@
 require 'rails_helper'
 
 RSpec.describe Chapter do
-
   context 'with associations and scopes' do
     it { is_expected.to have_many :verses }
     it { is_expected.to have_many :translated_names }
     it { is_expected.to have_many :chapter_infos }
 
     it { is_expected.to serialize :pages }
+
     it 'orders by chapter_number' do
       expect(described_class.default_scoped.to_sql)
         .to include('ORDER BY chapter_number asc')

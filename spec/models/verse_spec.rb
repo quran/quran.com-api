@@ -30,13 +30,13 @@
 require 'rails_helper'
 
 RSpec.describe Verse do
-
   context 'with associations' do
     it {
-      is_expected.to belong_to(:chapter)
+      expect(subject).to belong_to(:chapter)
                        .counter_cache(true)
                        .inverse_of(:verses)
     }
+
     it { is_expected.to belong_to :verse_root }
     it { is_expected.to belong_to :verse_lemma }
     it { is_expected.to belong_to :verse_stem }
@@ -86,5 +86,4 @@ RSpec.describe Verse do
     it_behaves_like 'modal with column', columns
     it_behaves_like 'modal have indexes on column', indexes
   end
-
 end

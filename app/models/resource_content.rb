@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: resource_contents
@@ -33,27 +34,27 @@ class ResourceContent < ApplicationRecord
   scope :approved, -> { where approved: true }
 
   module CardinalityType
-    OneVerse = '1_ayah'.freeze
-    OneWord = '1_word'.freeze
-    NVerse = 'n_ayah'.freeze
-    OneChapter = '1_chapter'.freeze
+    OneVerse = '1_ayah'
+    OneWord = '1_word'
+    NVerse = 'n_ayah'
+    OneChapter = '1_chapter'
   end
 
   module ResourceType
-    Audio = 'audio'.freeze
-    Content = 'content'.freeze
-    Quran = 'quran'.freeze
-    Media = 'media'.freeze
+    Audio = 'audio'
+    Content = 'content'
+    Quran = 'quran'
+    Media = 'media'
   end
 
   module SubType
-    Translation = 'translation'.freeze
-    Tafsir = 'tafsir'.freeze
-    Transliteration = 'transliteration'.freeze
-    Font = 'font'.freeze
-    Image = 'image'.freeze
-    Info = 'info'.freeze
-    Video = 'video'.freeze
+    Translation = 'translation'
+    Tafsir = 'tafsir'
+    Transliteration = 'transliteration'
+    Font = 'font'
+    Image = 'image'
+    Info = 'info'
+    Video = 'video'
   end
 
   belongs_to :author
@@ -61,7 +62,7 @@ class ResourceContent < ApplicationRecord
   has_one :resource_content_stat
 
   def increment_download_count!
-     stats = resource_content_stat || create_resource_content_stat
-     stats.update_column :download_count, stats.download_count.to_i + 1
+    stats = resource_content_stat || create_resource_content_stat
+    stats.update_column :download_count, stats.download_count.to_i + 1
   end
 end

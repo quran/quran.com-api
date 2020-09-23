@@ -1,6 +1,5 @@
 module Types
   class QueryType < Types::BaseObject
-
     field :chapters, [Types::ChapterType], null: false do
       argument :language, String, required: false, default_value: 'en'
     end
@@ -12,7 +11,7 @@ module Types
       argument :id, ID, required: true
     end
     def chapter(id:)
-      Chapter.find_by_id(id)
+      Chapter.find_by(id: id)
     end
 
     field :chapter_info, Types::ChapterInfoType, null: false do
@@ -57,14 +56,14 @@ module Types
       argument :id, ID, required: false
     end
     def verse(id:)
-      Verse.find_by_id(id)
+      Verse.find_by(id: id)
     end
 
     field :verse_by_verse_key, Types::VerseType, null: false do
       argument :verse_key, String, required: true
     end
     def verse_by_verse_key(verse_key:)
-      Verse.find_by_verse_key(verse_key)
+      Verse.find_by(verse_key: verse_key)
     end
 
     field :tafsirs, [Types::TafsirType], null: false do
@@ -97,11 +96,11 @@ module Types
       argument :resource_type, String, default_value: 'Verse', required: false
     end
     def audio_files(args)
-        AudioFile.where(
-          resource_id: args[:resource_ids],
-          resource_type: args[:resource_type],
-          recitation_id: args[:recitation_id]
-        )
+      AudioFile.where(
+        resource_id: args[:resource_ids],
+        resource_type: args[:resource_type],
+        recitation_id: args[:recitation_id]
+      )
     end
 
     field :audio_file, Types::AudioFileType, null: false do

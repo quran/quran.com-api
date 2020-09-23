@@ -21,8 +21,6 @@ module Types
     end
 
     field :pages, [Int], null: false
-    def pages
-      object.pages
-    end
+    delegate :pages, to: :object
   end
 end

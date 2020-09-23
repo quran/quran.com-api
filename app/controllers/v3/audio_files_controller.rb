@@ -5,13 +5,12 @@ class V3::AudioFilesController < ApplicationController
     chapter = Chapter.find(params[:chapter_id])
     verse = chapter.verses.find(params[:verse_id])
     data = verse.audio_files
-    data = data.find_by_recitation_id(recitation) if recitation.present?
+    data = data.find_by(recitation_id: recitation) if recitation.present?
 
     render json: data
   end
 
   private
-
   def recitation
     params[:recitation]
   end

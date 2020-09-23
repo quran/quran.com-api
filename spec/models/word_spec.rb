@@ -35,7 +35,6 @@
 require 'rails_helper'
 
 RSpec.describe Word do
-
   context 'with associations' do
     it { is_expected.to belong_to :verse }
     it { is_expected.to belong_to :char_type }

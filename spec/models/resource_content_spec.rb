@@ -25,8 +25,6 @@
 require 'rails_helper'
 
 RSpec.describe ResourceContent do
-
-
   context 'with associations' do
     it { is_expected.to belong_to :language }
     it { is_expected.to belong_to :author }

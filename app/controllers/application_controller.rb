@@ -9,7 +9,6 @@ class ApplicationController < ActionController::API
   before_action :set_cache_headers
 
   private
-
   def throw_the_error(error)
     render json: { error: error.message }, status: :not_found
   end

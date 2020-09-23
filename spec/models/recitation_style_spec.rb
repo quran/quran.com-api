@@ -13,7 +13,6 @@
 require 'rails_helper'
 
 RSpec.describe RecitationStyle do
-
   context 'with associations' do
    it { is_expected.to have_many :translated_names }
  end

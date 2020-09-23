@@ -16,8 +16,9 @@ require 'rails_helper'
 RSpec.describe Topic do
   context 'with associations' do
     it { is_expected.to belong_to(:parent).class_name('Topic') }
+
     it {
-      is_expected.to belong_to(:children)
+      expect(subject).to belong_to(:children)
                        .class_name('Topic')
                        .with_foreign_key('parent_id')
     }

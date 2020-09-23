@@ -27,7 +27,6 @@ class V3::VersesController < ApplicationController
   end
 
   private
-
   def pagination_dict(object)
     {
       current_page: object.current_page,

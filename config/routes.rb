@@ -55,7 +55,7 @@ Rails.application.routes.draw do
   end
 
   root to: 'v3/ping#ping'
-  get '/ping', to: 'v3/ping#ping'
+  get '/v3/ping', to: 'v3/ping#ping'
 
   ['sitemap.xml.gz', 'sitemap:number.xml.gz'].each do |path|
     get "/sitemaps/#{path}" => proc { |req|

@@ -3,7 +3,7 @@
 class V3::SuggestController < ApplicationController
   def index
     if query.nil?
-      render status: 400, json: [].to_json
+      render status: :bad_request, json: [].to_json
     else
       render json: get_suggestions
     end
