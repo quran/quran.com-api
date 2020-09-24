@@ -38,8 +38,9 @@ class Word < ApplicationRecord
   belongs_to :topic
   belongs_to :token
 
-  has_many :translations, as: :resource
   has_many :transliterations, as: :resource
+  has_many :word_translations
+
   has_many :word_lemmas
   has_many :lemmas, through: :word_lemmas
   has_many :word_stems
@@ -47,13 +48,19 @@ class Word < ApplicationRecord
   has_many :word_roots
   has_many :roots, through: :word_roots
 
-  has_one  :audio, class_name: 'AudioFile', as: :resource
   has_one :word_corpus
+
+  # For eager loading
+  has_one :word_translation
+  has_one :transliteration, -> { where(language_id: 38) }, as: :resource
 
   default_scope { order 'position asc' }
 
-  Language.all.find_each do |language|
-    has_many "#{language.iso_code}_translations".to_sym, -> { where(language: language) }, class_name: 'Translation', as: :resource
-    has_many "#{language.iso_code}_transliterations".to_sym, -> { where(language: language) }, class_name: 'Transliteration', as: :resource
+  def code
+    "&#x#{code_hex};"
+  end
+
+  def code_v2
+    "&#x#{code_hex_v3};"
   end
 end

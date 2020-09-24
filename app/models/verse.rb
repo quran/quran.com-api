@@ -28,8 +28,7 @@
 #
 
 class Verse < ApplicationRecord
-  # TODO: figure out ES
-  include Searchable
+  include QuranSearchable
 
   belongs_to :chapter, inverse_of: :verses, counter_cache: true
   belongs_to :verse_root
@@ -38,16 +37,24 @@ class Verse < ApplicationRecord
 
   has_many :tafsirs
   has_many :words
-  has_many :media_contents, as: :resource
-  has_many :translations, as: :resource
-  has_many :transliterations, as: :resource
+  #has_many :media_contents, as: :resource
+  has_many :translations
   has_many :audio_files, as: :resource
   has_many :recitations, through: :audio_files
   has_many :roots, through: :words
 
+  # For eager loading
+  has_one  :audio, class_name: 'AudioFile', as: :resource
+
   default_scope { order 'verse_number asc' }
+
+  attr_accessor :highlighted_text
 
   def self.find_by_id_or_key(id)
     where(verse_key: id).or(where(id: id)).first
+  end
+
+  def highlighted_text
+    @highlighted_text || text_madani
   end
 end

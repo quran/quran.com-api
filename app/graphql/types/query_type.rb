@@ -92,26 +92,22 @@ module Types
 
     field :audio_files, [Types::AudioFileType], null: false do
       argument :recitation_id, ID, required: true
-      argument :resource_ids, [ID], required: true
-      argument :resource_type, String, default_value: 'Verse', required: false
+      argument :verse_ids, [ID], required: true
     end
     def audio_files(args)
       AudioFile.where(
-        resource_id: args[:resource_ids],
-        resource_type: args[:resource_type],
+        verse_id: args[:verse_ids],
         recitation_id: args[:recitation_id]
       )
     end
 
     field :audio_file, Types::AudioFileType, null: false do
       argument :recitation_id, ID, required: true
-      argument :resource_id, ID, required: true
-      argument :resource_type, String, default_value: 'Verse', required: false
+      argument :verse_id, ID, required: true
     end
     def audio_file(args)
       AudioFile.where(
-        resource_id: args[:resource_id],
-        resource_type: args[:resource_type],
+        verse_id: args[:verse_id],
         recitation_id: args[:recitation_id]
       ).first
     end

@@ -6,9 +6,7 @@ class CreateWordTranslations < ActiveRecord::Migration[5.2]
      t.string :language_name
      t.integer :language_id
      t.integer :resource_content_id
-     t.string :text
      t.integer :priority, index: true
-
 
      t.timestamps
     end

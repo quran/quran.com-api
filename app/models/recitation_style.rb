@@ -11,5 +11,5 @@
 #
 
 class RecitationStyle < ApplicationRecord
-  has_many :translated_names, as: :resource
+  include NameTranslateable
 end

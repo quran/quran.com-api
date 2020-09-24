@@ -1,8 +1,7 @@
 module Types
   class AudioFileType < Types::BaseObject
     field :id, ID, null: false
-    field :resource_type, String, null: true
-    field :resource_id, Integer, null: true
+    field :verse_id, Integer, null: true
     field :url, String, null: true
     field :duration, Integer, null: true
     field :segments, String, null: true

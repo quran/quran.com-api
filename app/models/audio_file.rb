@@ -19,7 +19,7 @@
 #
 
 class AudioFile < ApplicationRecord
-  belongs_to :resource, polymorphic: true
+  belongs_to :verse
   belongs_to :recitation
 
   serialize :segments, Array

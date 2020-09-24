@@ -27,7 +27,6 @@ class V3::VerseSerializer < V3::ApplicationSerializer
              :verse_number,
              :chapter_id,
              :verse_key,
-             :text_madani,
              :text_indopak,
              :text_simple,
              :juz_number,
@@ -37,7 +36,11 @@ class V3::VerseSerializer < V3::ApplicationSerializer
              :sajdah_number,
              :page_number
 
-  has_one :audio, if: :render_audio?, serializer: V3::AudioFileSerializer
+  attribute :text_madani do
+    object.text_uthmani
+  end
+
+    has_one :audio, if: :render_audio?, serializer: V3::AudioFileSerializer
 
   has_many :translations, if: :render_translations?
 
