@@ -29,7 +29,7 @@ gem 'elasticsearch-rails'
 gem 'excon' # using excon as faraday adapter (net::http breaks)
 
 # Paging the results
-gem 'kaminari'
+gem 'pagy'
 
 gem 'oj'
 gem 'oj_mimic_json'

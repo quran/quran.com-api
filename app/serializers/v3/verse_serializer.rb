@@ -28,35 +28,33 @@ class V3::VerseSerializer < V3::ApplicationSerializer
              :chapter_id,
              :verse_key,
              :text_indopak,
-             :text_simple,
              :juz_number,
              :hizb_number,
              :rub_number,
-             :sajdah,
              :sajdah_number,
              :page_number
+
+  attribute :sajdah do
+    object.sajdah_type
+  end
 
   attribute :text_madani do
     object.text_uthmani
   end
 
-    has_one :audio, if: :render_audio?, serializer: V3::AudioFileSerializer
+  attribute :text_simple do
+    object.text_imlaei_simple
+  end
+
+  has_one :audio, if: :render_audio?, serializer: V3::AudioFileSerializer
 
   has_many :translations, if: :render_translations?
-
-  # TODO: Should always return media
-  # has_many :media_contents, if: :render_media? do
-  #   object
-  #     .media_contents
-  #     .joins(:resource_content)
-  #     .where(resource_content_id: scope[:media])
-  # end
-  has_many :media_contents
+  has_many :media_contents, if: :render_media?
 
   has_many :words, unless: :render_images?
 
   attribute :image, key: :image, if: :render_images? do
-    { url: object.image_url, width: object.image_width }
+    {url: object.image_url, width: object.image_width}
   end
 
   def render_images?
@@ -72,10 +70,10 @@ class V3::VerseSerializer < V3::ApplicationSerializer
   end
 
   def render_media?
-    scope[:media].present?
+    1 == scope[:chapter_id] && scope[:media].present?
   end
 
   def audio
-    object.audio_files.first
+    object.audio_file
   end
 end

@@ -23,30 +23,33 @@
 class V3::WordSerializer < V3::ApplicationSerializer
   attributes :id,
              :position,
-             :text_madani,
              :text_indopak,
-             :text_simple,
              :verse_key,
              :class_name,
              :line_number,
              :page_number,
-             :code,
-             :code_v3
+             :code
+
+  attribute :text_madani do
+    object.text_uthmani
+  end
+
+  attribute :text_simple do
+    object.text_imlaei_simple
+  end
 
   attribute :char_type_name, key: :char_type
 
+  attribute :transliteration do
+    {text: object.en_transliteration, language_name: 'english'}
+  end
+
   attribute :audio do
-    { url: object.audio_url }
+    {url: object.audio_url}
   end
 
-  has_one :translation, serializer: V3::TranslationSerializer do
-    translation = object.public_send("#{scope[:language] || 'en'}_translations").first
-
-    translation.presence || object.en_translations.first
-  end
-
-  has_one :transliteration, serializer: V3::TranslationSerializer do
-    object.en_translations.first
+  has_one :translation, serializer: V3::WordTranslationSerializer do
+    object.word_translation
   end
 
   def class_name

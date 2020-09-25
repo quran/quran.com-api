@@ -160,18 +160,6 @@ GEM
       concurrent-ruby (~> 1.0)
     ice_nine (0.11.2)
     jsonapi-renderer (0.2.2)
-    kaminari (1.2.1)
-      activesupport (>= 4.1.0)
-      kaminari-actionview (= 1.2.1)
-      kaminari-activerecord (= 1.2.1)
-      kaminari-core (= 1.2.1)
-    kaminari-actionview (1.2.1)
-      actionview
-      kaminari-core (= 1.2.1)
-    kaminari-activerecord (1.2.1)
-      activerecord
-      kaminari-core (= 1.2.1)
-    kaminari-core (1.2.1)
     libv8 (3.16.14.19)
     listen (3.2.1)
       rb-fsevent (~> 0.10, >= 0.10.3)
@@ -223,6 +211,7 @@ GEM
     ntlm-http (0.1.1)
     oj (3.10.14)
     oj_mimic_json (1.0.1)
+    pagy (3.8.3)
     parallel (1.19.2)
     parser (2.7.1.4)
       ast (~> 2.4.1)
@@ -403,11 +392,11 @@ DEPENDENCIES
   guard-rspec (= 4.7.3)
   guard-spork
   httparty
-  kaminari
   mechanize
   meta_request
   oj
   oj_mimic_json
+  pagy
   parallel
   pg (>= 0.18, < 2.0)
   pre-commit

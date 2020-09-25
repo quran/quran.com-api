@@ -1,115 +1,36 @@
 # frozen_string_literal: true
 
 class V3::VersesController < ApplicationController
-  before_action :fix_resource_content
-
-  # GET /verses
+  # GET /chapter-id-or-slug/verses
+  # GET /1/verses
+  # GET /surah-al-fatihah/verses
   def index
-    verses_index
-    set_offset_and_padding
-    load_audio
-    load_translations
+    finder = VerseFinder.new(params)
+    verses = finder.load_verses(fetch_locale)
 
-    render json: @verses,
-           meta: pagination_dict(@verses),
+    render json: verses,
+           meta: pagination_dict(finder),
            include: '**'
   end
 
-  # GET /verses/1
+  # GET /chapter-id-or-slug/verses/verse-number
+  # GET /1/verses/1
+  # GET /surah-al-fatihah/verses/1
   def show
-    chapter = Chapter.find(params[:chapter_id])
-    verse = chapter
-            .verses
-            .includes(words: [:audio])
-            .find(params[:id])
+    finder = VerseFinder.new(params)
 
-    render json: verse, include: '**'
+    render json: finder.find(params[:id], fetch_locale), include: '**'
   end
 
   private
-  def pagination_dict(object)
+
+  def pagination_dict(finder)
     {
-      current_page: object.current_page,
-      next_page: object.next_page,
-      prev_page: object.prev_page,
-      total_pages: object.total_pages,
-      total_count: object.total_count
+      current_page: finder.current_page,
+      next_page: finder.next_page,
+      prev_page: finder.prev_page,
+      total_pages: finder.total_pages,
+      total_count: finder.total_verses
     }
-  end
-
-  def page
-    params[:page].to_i.abs
-  end
-
-  def per_page
-    limit = (params[:limit] || 10).to_i.abs
-    limit <= 50 ? limit : 50
-  end
-
-  def offset
-    params[:offset] ? params[:offset].to_i.abs : nil
-  end
-
-  def padding
-    params[:padding] ? params[:padding].to_i.abs : nil
-  end
-
-  def render_audio?
-    params[:recitation].present?
-  end
-
-  def render_translations?
-    params[:translations].present?
-  end
-
-  def render_media?
-    params[:media].present?
-  end
-
-  def word_includes
-    [
-      eager_language('translations'),
-      eager_language('transliterations')
-    ]
-  end
-
-  def verses_index
-    @verses = Verse
-              .where(chapter_id: params[:chapter_id])
-              .preload(:media_contents, words: word_includes)
-              .page(page)
-              .per(per_page)
-  end
-
-  def set_offset_and_padding
-    @verses = @verses.offset(offset) if offset.present?
-    @verses = @verses.padding(padding) if padding.present?
-  end
-
-  def load_audio
-    return unless render_audio?
-    @verses = @verses
-              .where('audio_files.recitation_id = ?', params[:recitation])
-              .eager_load(:audio_files)
-  end
-
-  def load_translations
-    return unless render_translations?
-    translations = {
-      resource_content_id: params[:translations]
-    }
-
-    @verses = @verses
-              .where(translations: translations)
-              .eager_load(:translations)
-  end
-
-  def fix_resource_content
-    # user can get translation using ID or Slug
-    if render_translations?
-      translation = params[:translations]
-
-      params[:translations] = ResourceContent.where(id: translation).or(ResourceContent.where(slug: translation)).pluck(:id)
-    end
   end
 end
