@@ -27,16 +27,13 @@ default: &default
 
 production:
   <<: *default
-  adapter: postgresql
-  encoding: unicode
   database: quran_dev
 
 development:
   <<: *default
-  adapter: postgresql
-  encoding: unicode
   database: quran_dev
 
+# We are not clearing db in test environment, its kind of safe to use dev db for test
 test:
   <<: *default
-  database: quran_test
+  database: quran_dev

@@ -45,7 +45,8 @@ RSpec.describe ResourceContent do
       cardinality_type: :string,
       language_id: :integer,
       language_name: :string,
-      slug: :string
+      slug: :string,
+      priority: :integer
     }
 
     indexes = [
@@ -56,7 +57,8 @@ RSpec.describe ResourceContent do
       ['language_id'],
       ['resource_type'],
       ['slug'],
-      ['sub_type']
+      ['sub_type'],
+      ['priority']
     ]
 
     it_behaves_like 'modal with column', columns

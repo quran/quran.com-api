@@ -13,19 +13,14 @@
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
 #
+module Api
+  class V3::LanguageSerializer < V3::ApplicationSerializer
+    attributes :name,
+               :iso_code,
+               :native_name,
+               :direction,
+               :id
 
-class Language < ApplicationRecord
-  include NameTranslateable
-
-  scope :with_translations, -> {where 'translations_count > 0'}
-
-  class << self
-    def default
-      Language.find_by(iso_code: :en)
-    end
-
-    def find_by_id_or_iso_code(id)
-      Language.where(id: id).or(Language.where(iso_code: id)).first
-    end
+    has_one :translated_name
   end
 end

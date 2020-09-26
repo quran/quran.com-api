@@ -59,6 +59,7 @@ class VerseFinder
   end
 
   protected
+
   def fetch_verses_range
     verse_start = verse_pagination_start
     verse_end = verse_pagination_end(verse_start)
@@ -73,10 +74,15 @@ class VerseFinder
 
     words_with_default_translation = results.where(word_translations: {language_id: Language.default.id})
 
-    @results = @results
-                 .where(word_translations: {language_id: language.id})
-                 .or(words_with_default_translation)
-                 .eager_load(words: eager_load_words)
+    if (language)
+      @results = @results
+                   .where(word_translations: {language_id: language.id})
+                   .or(words_with_default_translation)
+                   .eager_load(words: eager_load_words)
+    else
+      @results = words_with_default_translation
+                   .eager_load(words: eager_load_words)
+    end
   end
 
   def load_translations

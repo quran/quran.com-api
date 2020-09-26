@@ -83,7 +83,9 @@ RSpec.describe Word do
       topic_id: :integer,
       location: :string,
       en_transliteration: :string,
-      char_type_name: :string
+      char_type_name: :string,
+      image_blob: :text,
+      image_url: :string
     }
 
     indexes = [
