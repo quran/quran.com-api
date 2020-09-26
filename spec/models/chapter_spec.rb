@@ -25,6 +25,8 @@ RSpec.describe Chapter do
     it { is_expected.to have_many :verses }
     it { is_expected.to have_many :translated_names }
     it { is_expected.to have_many :chapter_infos }
+    it { is_expected.to have_many :slugs }
+    it { is_expected.to have_one :translated_name }
 
     it { is_expected.to serialize :pages }
 

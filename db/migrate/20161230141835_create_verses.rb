@@ -6,6 +6,8 @@ class CreateVerses < ActiveRecord::Migration[5.0]
       t.integer :verse_index, index: true
       t.string :verse_key, index: true
       t.text :text_madani # Uthmani script
+      t.text :text_uthmani_simple
+      t.text :text_uthmani_tajweed
       t.text :text_indopak
       t.text :text_simple
       t.text :text_imlaei

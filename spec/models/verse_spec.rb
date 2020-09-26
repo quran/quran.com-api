@@ -33,8 +33,7 @@ RSpec.describe Verse do
   context 'with associations' do
     it {
       expect(subject).to belong_to(:chapter)
-                       .counter_cache(true)
-                       .inverse_of(:verses)
+                           .inverse_of(:verses)
     }
 
     it { is_expected.to belong_to :verse_root }
@@ -45,32 +44,35 @@ RSpec.describe Verse do
     it { is_expected.to have_many :words }
     it { is_expected.to have_many :media_contents }
     it { is_expected.to have_many :translations }
-    it { is_expected.to have_many :transliterations }
     it { is_expected.to have_many :audio_files }
-    it { is_expected.to have_many :recitations }
     it { is_expected.to have_many(:roots).through(:words) }
+
+    it { is_expected.to have_one(:audio_file) }
   end
 
   context 'with columns and indexes' do
     columns = {
-      chapter_id:     :integer,
-      verse_number:   :integer,
-      verse_index:    :integer,
-      verse_key:      :string,
-      text_madani:    :text,
-      text_indopak:   :text,
-      text_simple:    :text,
-      juz_number:     :integer,
-      hizb_number:    :integer,
-      rub_number:     :integer,
-      sajdah:         :string,
-      sajdah_number:  :integer,
-      page_number:    :integer,
-      image_url:      :text,
-      image_width:    :integer,
-      verse_root_id:  :integer,
+      chapter_id: :integer,
+      verse_number: :integer,
+      verse_index: :integer,
+      verse_key: :string,
+      text_uthmani: :text,
+      text_uthmani_simple: :text,
+      text_uthmani_tajweed: :text,
+      text_imlaei: :text,
+      text_imlaei_simple: :text,
+      text_indopak: :text,
+      juz_number: :integer,
+      hizb_number: :integer,
+      rub_number: :integer,
+      sajdah_type: :string,
+      sajdah_number: :integer,
+      page_number: :integer,
+      image_url: :text,
+      image_width: :integer,
+      verse_root_id: :integer,
       verse_lemma_id: :integer,
-      verse_stem_id:  :integer
+      verse_stem_id: :integer
     }
 
     indexes = [

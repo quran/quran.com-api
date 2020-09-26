@@ -36,6 +36,7 @@ RSpec.describe ResourceContent do
       approved: :boolean,
       author_id: :integer,
       data_source_id: :integer,
+      mobile_translation_id: :integer,
       author_name: :string,
       resource_type: :string,
       sub_type: :string,

@@ -13,15 +13,14 @@ class RemoveUnusedPolymorphic < ActiveRecord::Migration[6.0]
 
     rename_column :words, :text_madani, :text_uthmani
     rename_column :words, :text_simple, :text_imlaei_simple
-    add_column :words, :text_madani_tajweed, :string
+    add_column :words, :text_uthmani_tajweed, :string
+    add_column :words, :text_uthmani_simple, :string
     add_column :words, :en_transliteration, :string
 
     rename_column :tokens, :text_madani, :text_uthmani
     rename_column :tokens, :text_clean, :text_imlaei_simple
     add_column :tokens, :text_imlaei, :string
     add_column :tokens, :text_uthmani_tajweed, :string
-
-
   end
 
   def down
@@ -35,7 +34,7 @@ class RemoveUnusedPolymorphic < ActiveRecord::Migration[6.0]
 
     rename_column :words, :text_uthmani, :text_madani
     rename_column :words, :text_imlaei_simple, :text_simple
-    remove_column :words, :text_madani_tajweed
+    remove_column :words, :text_uthmani_tajweed
 
     rename_column :tokens, :text_uthmani, :text_madani
     rename_column :tokens, :text_imlaei_simple, :text_clean

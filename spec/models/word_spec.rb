@@ -40,9 +40,7 @@ RSpec.describe Word do
     it { is_expected.to belong_to :char_type }
     it { is_expected.to belong_to :topic }
     it { is_expected.to belong_to :token }
-    it { is_expected.to have_one(:audio).class_name('AudioFile') }
     it { is_expected.to have_one :word_corpus }
-    it { is_expected.to have_many :translations }
     it { is_expected.to have_many :transliterations }
     it { is_expected.to have_many :word_lemmas }
     it { is_expected.to have_many :lemmas }
@@ -50,6 +48,8 @@ RSpec.describe Word do
     it { is_expected.to have_many :stems }
     it { is_expected.to have_many :word_roots }
     it { is_expected.to have_many :roots }
+    it { is_expected.to have_many :word_translations }
+    it { is_expected.to have_one :word_translation }
 
     it 'orders by position' do
       expect(described_class.default_scoped.to_sql)
@@ -62,9 +62,12 @@ RSpec.describe Word do
       verse_id: :integer,
       chapter_id: :integer,
       position: :integer,
-      text_madani: :text,
-      text_indopak: :text,
-      text_simple: :text,
+      text_uthmani: :string,
+      text_uthmani_simple: :string,
+      text_uthmani_tajweed: :string,
+      text_imlaei: :string,
+      text_imlaei_simple: :string,
+      text_indopak: :string,
       verse_key: :string,
       page_number: :integer,
       class_name: :string,
@@ -79,6 +82,7 @@ RSpec.describe Word do
       token_id: :integer,
       topic_id: :integer,
       location: :string,
+      en_transliteration: :string,
       char_type_name: :string
     }
 

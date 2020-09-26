@@ -22,16 +22,14 @@ require 'rails_helper'
 
 RSpec.describe AudioFile do
   context 'with associations' do
-    it { is_expected.to belong_to(:resource) }
+    it { is_expected.to belong_to(:verse) }
     it { is_expected.to belong_to(:recitation) }
-
     it { is_expected.to serialize(:segments).as(Array) }
   end
 
   context 'with columns and indexes' do
     columns = {
-      resource_type: :string,
-      resource_id:   :integer,
+      verse_id:   :integer,
       url:           :text,
       duration:      :integer,
       segments:      :text,
@@ -44,7 +42,7 @@ RSpec.describe AudioFile do
     indexes = [
       ['is_enabled'],
       ['recitation_id'],
-      ['resource_type', 'resource_id']
+      ['verse_id']
     ]
 
     it_behaves_like 'modal with column', columns

@@ -25,13 +25,23 @@ RSpec.describe Juz do
 
   context 'with columns and indexes' do
     columns = {
-      juz_number:    :integer,
-      name_simple:   :string,
-      name_arabic:   :string,
+      juz_number: :integer,
       verse_mapping: :json
     }
 
     it_behaves_like 'modal with column', columns
     it_behaves_like 'modal have indexes on column', [['juz_number']]
+  end
+
+  context '#elastic search' do
+    it 'has an index' do
+      expect(described_class.index_name).to eq('chapters')
+    end
+
+    it 'respond to ES methods' do
+      expect(described_class).to respond_to(:mappings)
+      expect(described_class.new).to respond_to(:es_mappings)
+      expect(described_class.new).to respond_to(:as_indexed_json)
+    end
   end
 end

@@ -3,8 +3,8 @@ require 'elasticsearch/model'
 module TranslationSearchable
   extend ActiveSupport::Concern
   ES_TEXT_SANITIZER = Rails::Html::WhiteListSanitizer.new
-=begin
 
+=begin
   included do
     include Elasticsearch::Model
     index_name 'translations'

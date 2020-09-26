@@ -80,15 +80,14 @@ group :development do
 end
 
 group :test, :development do
-  # gem 'annotate', '= 2.6.5'
+  gem 'annotate'
   gem 'guard-rspec', '= 4.7.3'
   gem 'guard-spork'
   gem 'rspec-rails', '= 3.7.2'
   gem 'shoulda-matchers', '~> 4.0'
   gem 'simplecov', require: false
-
+  gem 'factory_bot_rails'
   gem 'rubocop-rails_config'
-
   gem 'rubocop-rspec'
   gem 'spork'
   gem 'watchr'

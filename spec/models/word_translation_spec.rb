@@ -1,5 +1,15 @@
 require 'rails_helper'
 
 RSpec.describe WordTranslation, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  context 'with associations' do
+    it {
+      expect(subject).to belong_to(:word)
+    }
+    it {
+      expect(subject).to belong_to(:language)
+    }
+    it {
+      expect(subject).to belong_to(:resource_content)
+    }
+  end
 end

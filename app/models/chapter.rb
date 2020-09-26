@@ -25,7 +25,6 @@ class Chapter < ApplicationRecord
 
   has_many :verses
   has_many :chapter_infos
-  has_many :slugs
 
   serialize :pages
 
