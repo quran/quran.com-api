@@ -8,6 +8,10 @@ namespace :v3 do
 
     resources :verses, only: [:index, :show] do
       resources :audio_files, only: [:index]
+
+      member do
+        get '/tafsirs/:tafsir', to: 'tafsirs#show'
+      end
     end
   end
 
