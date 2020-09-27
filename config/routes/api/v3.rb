@@ -1,23 +1,20 @@
 namespace :v3 do
-  resources :foot_notes, only: :show, defaults: { format: 'json' }
+  resources :foot_notes, only: :show
 
-  resources :chapters, only: [:index, :show], defaults: { format: 'json' } do
+  resources :chapters, only: [:index, :show] do
     member do
       get :info, to: 'chapter_infos#show'
     end
 
-    resources :verses, only: [:index, :show], defaults: { format: 'json' } do
-      resources :tafsirs, only: [:index], defaults: { format: 'json' }
-      resources :translations, only: [:index], defaults: { format: 'json' }
-      resources :audio_files, only: [:index], defaults: { format: 'json' }
+    resources :verses, only: [:index, :show] do
+      resources :audio_files, only: [:index]
     end
   end
 
-  resources :juzs, only: [:show, :index], defaults: { format: 'json' }
-  resources :pages, only: [:show], defaults: { format: 'json' }
-  resources :words, only: [:show], defaults: { format: 'json' }
+  resources :juzs, only: [:show, :index]
+  resources :pages, only: [:show]
 
-  namespace :options, defaults: { format: 'json' } do
+  namespace :options do
     get :default
     get :translations
     get :recitations

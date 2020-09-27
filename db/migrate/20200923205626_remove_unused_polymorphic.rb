@@ -7,6 +7,10 @@ class RemoveUnusedPolymorphic < ActiveRecord::Migration[6.0]
 
     add_index :audio_files, :verse_id
 
+    rename_column :foot_notes, :resource_id, :translation_id
+    remove_column :foot_notes, :resource_type
+    add_index :foot_notes, :translation_id
+
     rename_column :verses, :sajdah, :sajdah_type
     rename_column :verses, :text_madani, :text_uthmani
     rename_column :verses, :text_simple, :text_imlaei_simple
@@ -58,5 +62,8 @@ class RemoveUnusedPolymorphic < ActiveRecord::Migration[6.0]
 
     remove_column :languages, :translations_count
     remove_index :languages, :translations_count
+
+    rename_column :foot_notes, :translation_id, :resource_id
+    add_column :foot_notes, :resource_type, :string
   end
 end

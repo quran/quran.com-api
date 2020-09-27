@@ -20,10 +20,12 @@
 #
 module Api
   class V3::ResourceContentSerializer < V3::ApplicationSerializer
-    attributes :id, :author_name, :slug, :name
+    attributes :id,
+               :author_name,
+               :slug,
+               :name,
+               :language_name
 
-    attribute :language_name do
-      object.language.translated_names.filter_by_language_or_default(scope[:language]).name
-    end
+    has_one :translated_name
   end
 end

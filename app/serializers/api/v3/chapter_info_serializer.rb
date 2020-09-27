@@ -16,6 +16,10 @@
 #
 module Api
   class V3::ChapterInfoSerializer < V3::ApplicationSerializer
-    attributes :chapter_id, :text, :source, :short_text, :language_name
+    attributes :chapter_id,
+               :text,
+               :source,
+               :short_text,
+               :language_name
   end
 end

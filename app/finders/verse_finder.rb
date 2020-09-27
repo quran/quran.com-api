@@ -144,7 +144,12 @@ class VerseFinder
   end
 
   def verse_pagination_end(start)
-    min((start + per_page) - 1, chapter.verses_count)
+    if params[:id]
+      # for show page, skip the pagination
+      min(params[:id].to_i, chapter.verses_count)
+    else
+      min((start + per_page) - 1, chapter.verses_count)
+    end
   end
 
   def chapter
