@@ -42,6 +42,7 @@ RSpec.describe ResourceContent do
       resource_type: :string,
       sub_type: :string,
       name: :string,
+      mobile_translation_id: :integer,
       description: :text,
       cardinality_type: :string,
       language_id: :integer,

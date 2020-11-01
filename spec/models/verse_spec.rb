@@ -10,6 +10,7 @@
 #  text_madani    :text
 #  text_indopak   :text
 #  text_simple    :text
+#  text_imlaei    :text
 #  juz_number     :integer
 #  hizb_number    :integer
 #  rub_number     :integer
@@ -59,6 +60,7 @@ RSpec.describe Verse do
       verse_key:      :string,
       text_madani:    :text,
       text_indopak:   :text,
+      text_imlaei:    :text,
       text_simple:    :text,
       juz_number:     :integer,
       hizb_number:    :integer,

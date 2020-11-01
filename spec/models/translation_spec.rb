@@ -9,6 +9,7 @@
 #  resource_type       :string
 #  resource_id         :integer
 #  language_name       :string
+#  priority         :integer
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
 #  resource_name       :string
@@ -34,6 +35,7 @@ RSpec.describe Translation do
       resource_content_id: :integer,
       resource_type: :string,
       resource_id: :integer,
+      priority: :integer,
       language_name: :string,
       resource_name: :string
     }

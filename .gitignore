@@ -26,6 +26,7 @@ vendor/bundle/
 dumps
 dump.rdb
 passenger.*
+spec/examples.txt
 .idea/*
 .DS_Store
 .ruby-version

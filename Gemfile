@@ -87,6 +87,7 @@ group :test, :development do
   gem 'rspec-rails', '= 3.7.2'
   gem 'shoulda-matchers', '~> 4.0'
   gem 'simplecov', require: false
+  gem 'database_cleaner-active_record'
 
   gem "rubocop-rails_config"
 

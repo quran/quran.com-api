@@ -4,14 +4,15 @@
 #
 # Table name: translated_names
 #
-#  id            :integer          not null, primary key
-#  resource_type :string
-#  resource_id   :integer
-#  language_id   :integer
-#  name          :string
-#  language_name :string
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
+#  id                 :integer          not null, primary key
+#  resource_type      :string
+#  resource_id        :integer
+#  language_id        :integer
+#  language_priority  :integer
+#  name               :string
+#  language_name      :string
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
 #
 
 class TranslatedName < ApplicationRecord

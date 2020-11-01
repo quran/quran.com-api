@@ -15,5 +15,7 @@
 #
 
 class WordCorpus < ApplicationRecord
+  self.table_name = :word_corpuses
+
   belongs_to :word
 end

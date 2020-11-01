@@ -9,6 +9,7 @@
 #  text_madani    :text
 #  text_indopak   :text
 #  text_simple    :text
+#  text_imlaei    :text
 #  verse_key      :string
 #  page_number    :integer
 #  class_name     :string
@@ -66,6 +67,7 @@ RSpec.describe Word do
       text_madani: :text,
       text_indopak: :text,
       text_simple: :text,
+      text_imlaei: :text,
       verse_key: :string,
       page_number: :integer,
       class_name: :string,

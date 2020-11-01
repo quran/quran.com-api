@@ -11,6 +11,7 @@
 #  verse_key      :string
 #  text_madani    :text
 #  text_indopak   :text
+#  text_imlaei    :text
 #  text_simple    :text
 #  juz_number     :integer
 #  hizb_number    :integer

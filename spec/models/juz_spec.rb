@@ -4,8 +4,6 @@
 #
 #  id            :integer          not null, primary key
 #  juz_number    :integer
-#  name_simple   :string
-#  name_arabic   :string
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
 #  verse_mapping :json
@@ -26,8 +24,6 @@ RSpec.describe Juz do
   context 'with columns and indexes' do
     columns = {
       juz_number:    :integer,
-      name_simple:   :string,
-      name_arabic:   :string,
       verse_mapping: :json
     }
 
