@@ -16,7 +16,7 @@ class VerseFinder
     load_translations
     load_words(language_code)
     load_audio
-    set_offset
+    # set_offset
 
     @results.order('verses.verse_index ASC, words.position ASC, word_translations.priority ASC')
   end
@@ -133,14 +133,16 @@ class VerseFinder
   def eager_load_words
     %i[
       word_translation
-      transliteration
     ]
   end
 
   def verse_pagination_start
-    start = 1 + (current_page - 1) * per_page
-
-    min(start, total_verses)
+    if offset
+      min(offset + 1, total_verses)
+    else
+      start = 1 + (current_page - 1) * per_page
+      min(start, total_verses)
+    end
   end
 
   def verse_pagination_end(start)

@@ -144,8 +144,7 @@ ActiveRecord::Schema.define(version: 2020_09_23_205626) do
   end
 
   create_table "foot_notes", id: :serial, force: :cascade do |t|
-    t.string "resource_type"
-    t.integer "resource_id"
+    t.integer "translation_id"
     t.text "text"
     t.integer "language_id"
     t.string "language_name"
@@ -154,7 +153,7 @@ ActiveRecord::Schema.define(version: 2020_09_23_205626) do
     t.datetime "updated_at", null: false
     t.index ["language_id"], name: "index_foot_notes_on_language_id"
     t.index ["resource_content_id"], name: "index_foot_notes_on_resource_content_id"
-    t.index ["resource_type", "resource_id"], name: "index_foot_notes_on_resource_type_and_resource_id"
+    t.index ["translation_id"], name: "index_foot_notes_on_translation_id"
   end
 
   create_table "image", primary_key: ["resource_id", "ayah_key"], force: :cascade do |t|
@@ -499,7 +498,7 @@ ActiveRecord::Schema.define(version: 2020_09_23_205626) do
 
   create_table "translations", id: :serial, force: :cascade do |t|
     t.integer "language_id"
-    t.string "text"
+    t.text "text"
     t.integer "resource_content_id"
     t.integer "verse_id"
     t.string "language_name"
@@ -708,9 +707,9 @@ ActiveRecord::Schema.define(version: 2020_09_23_205626) do
     t.integer "verse_id"
     t.integer "chapter_id"
     t.integer "position"
-    t.text "text_uthmani"
-    t.text "text_indopak"
-    t.text "text_imlaei_simple"
+    t.string "text_uthmani"
+    t.string "text_indopak"
+    t.string "text_imlaei_simple"
     t.string "verse_key"
     t.integer "page_number"
     t.string "class_name"

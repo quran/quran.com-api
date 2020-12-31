@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 source 'https://rubygems.org'
-ruby '2.7.1'
+ruby '3.0.0'
 
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-gem 'rails', '~> 6.0.3', '>= 6.0.3.2'
+gem 'rails', '~> 6.1'
 
 # Use postgresql as the database for Active Record
 gem 'pg', '>= 0.18', '< 2.0'
@@ -43,7 +43,6 @@ gem 'prose'
 gem 'puma', '~> 4.1'
 
 gem 'rack-cors'
-gem 'sitemap_generator'
 
 gem 'virtus'
 
@@ -66,13 +65,13 @@ end
 group :development do
   gem 'byebug', platform: :mri
   gem 'ruby-progressbar'
-  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'benchmark-ips', require: false
   gem 'bullet'
   gem 'derailed_benchmarks'
   gem 'mechanize'
   gem 'meta_request'
   gem 'pre-commit'
+  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'spring-commands-rspec'
   gem 'spring-watcher-listen', '~> 2.0.0'

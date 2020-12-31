@@ -28,23 +28,6 @@ Rails.application.routes.draw do
     draw_routes :v4
   end
 
-  root to: 'v3/ping#ping'
-  get '/v3/ping', to: 'v3/ping#ping'
-
-  ['sitemap.xml.gz', 'sitemap:number.xml.gz'].each do |path|
-    get "/sitemaps/#{path}" => proc { |req|
-      filename = req['PATH_INFO'].gsub('sitemaps', '').gsub(/\//, '')
-
-      [
-          200,
-          {
-              'Pragma'        => 'public',
-              'Cache-Control' => "max-age=#{1.day.to_i}",
-              'Expires'       => 1.day.from_now.to_s(:rfc822),
-              'Content-Type'  => 'text/html'
-          },
-          [open(Rails.root.join('public', 'sitemaps', filename)).read]
-      ]
-    }
-  end
+  root to: 'api/v3/ping#ping'
+  get 'api/v3/ping', to: 'api/v3/ping#ping'
 end

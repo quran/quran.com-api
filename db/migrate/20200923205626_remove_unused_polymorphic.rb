@@ -38,8 +38,6 @@ class RemoveUnusedPolymorphic < ActiveRecord::Migration[6.0]
     change_column :words, :text_uthmani, :string
     change_column :words, :text_indopak, :string
     change_column :words, :text_imlaei_simple, :string
-
-    change_column :translations, :text, :text
   end
 
   def down
