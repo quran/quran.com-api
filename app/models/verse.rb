@@ -28,10 +28,9 @@
 #
 
 class Verse < ApplicationRecord
-  # TODO: figure out ES
-  include Searchable
+  include QuranSearchable
 
-  belongs_to :chapter, inverse_of: :verses, counter_cache: true
+  belongs_to :chapter, inverse_of: :verses
   belongs_to :verse_root
   belongs_to :verse_lemma
   belongs_to :verse_stem
@@ -39,11 +38,11 @@ class Verse < ApplicationRecord
   has_many :tafsirs
   has_many :words
   has_many :media_contents, as: :resource
-  has_many :translations, as: :resource
-  has_many :transliterations, as: :resource
-  has_many :audio_files, as: :resource
-  has_many :recitations, through: :audio_files
+  has_many :translations
   has_many :roots, through: :words
+  has_many :audio_files
+  # for eager loading one audio
+  has_one :audio_file
 
   default_scope { order 'verse_number asc' }
 

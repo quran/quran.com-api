@@ -17,9 +17,7 @@ module Search
       @query.arabic?
     end
 
-    def query
-      @query
-    end
+    attr_reader :query
 
     def language_match
       @query.prose

@@ -51,7 +51,7 @@ module LanguageDetection
       # TODO this is NOT how we're going to do thiاللَّهُ نُورُs
       country_to_language_code = {}
       File.open('/usr/share/i18n/SUPPORTED').each do |line|
-        line.gsub! /[ .@].*/, ''
+        line.gsub!(/[ .@].*/, '')
         lc, cc = line.split(/_/)
         country_to_language_code[ cc ] = lc if not country_to_language_code[ cc ]
       end

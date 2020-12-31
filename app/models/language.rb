@@ -15,11 +15,13 @@
 #
 
 class Language < ApplicationRecord
-  has_many :translated_names, as: :resource
+  include NameTranslateable
+
+  scope :with_translations, -> {where 'translations_count > 0'}
 
   class << self
     def default
-      Language.find_by_iso_code(:en)
+      Language.find_by(iso_code: :en)
     end
 
     def find_by_id_or_iso_code(id)

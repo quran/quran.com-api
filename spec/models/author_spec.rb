@@ -22,5 +22,4 @@ RSpec.describe Author do
   context 'with columns and indexes' do
     it_behaves_like 'modal with column', name: :string, url: :string
   end
-
 end

@@ -5,8 +5,8 @@ namespace :one_time do
     require 'csv'
 
     # Update missing wbw urdu from production db
-    CSV.foreach("word_ur.csv") do |w|
-      if word = Word.find_by_id(w[0])
+    CSV.foreach('word_ur.csv') do |w|
+      if word = Word.find_by(id: w[0])
         word.ur_translations.update_all text: w[1] if w[1].present?
         puts word.id
       end
@@ -16,7 +16,7 @@ namespace :one_time do
       belongs_to :word
     end
 
-    urdu = Language.find_by_id_or_iso_code('ur')
+    urdu = Language.find_by(id_or_iso_code: 'ur')
 
     # Update missing urdu wbw from arabic transliteration
     ArabicTransliteration.includes(:word).each do |at|

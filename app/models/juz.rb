@@ -13,8 +13,10 @@
 #
 
 class Juz < ApplicationRecord
+  serialize :verse_mapping, Hash
+
+  include QuranNavigationSearchable
+
   has_many :verses, foreign_key: :juz_number
   has_many :chapters, through: :verses
-
-  serialize :verse_mapping, Hash
 end

@@ -25,8 +25,6 @@
 require 'rails_helper'
 
 RSpec.describe ResourceContent do
-
-
   context 'with associations' do
     it { is_expected.to belong_to :language }
     it { is_expected.to belong_to :author }
@@ -38,6 +36,7 @@ RSpec.describe ResourceContent do
       approved: :boolean,
       author_id: :integer,
       data_source_id: :integer,
+      mobile_translation_id: :integer,
       author_name: :string,
       resource_type: :string,
       sub_type: :string,
@@ -46,7 +45,8 @@ RSpec.describe ResourceContent do
       cardinality_type: :string,
       language_id: :integer,
       language_name: :string,
-      slug: :string
+      slug: :string,
+      priority: :integer
     }
 
     indexes = [
@@ -57,7 +57,8 @@ RSpec.describe ResourceContent do
       ['language_id'],
       ['resource_type'],
       ['slug'],
-      ['sub_type']
+      ['sub_type'],
+      ['priority']
     ]
 
     it_behaves_like 'modal with column', columns

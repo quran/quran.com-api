@@ -1,4 +1,9 @@
 # frozen_string_literal: true
+class ActionDispatch::Routing::Mapper
+  def draw_routes(routes_name)
+    instance_eval(File.read(Rails.root.join("config/routes", "#{@scope[:shallow_prefix]}", "#{routes_name}.rb")))
+  end
+end
 
 Rails.application.routes.draw do
   # NOTE: Normally we'd hide this in `Rails.env.development?` but having
@@ -10,7 +15,6 @@ Rails.application.routes.draw do
     get 'audio_files/index'
   end
 
-
   namespace :mobile do
     resources :translations, only: :index do
       member do
@@ -19,43 +23,13 @@ Rails.application.routes.draw do
     end
   end
 
-  scope :api do
-    namespace :v3 do
-      resources :foot_notes, only: :show, defaults: { format: 'json' }
-
-      resources :chapters, only: [:index, :show], defaults: { format: 'json' } do
-        member do
-          get :info, to: 'chapter_infos#show'
-        end
-
-        resources :verses, only: [:index, :show], defaults: { format: 'json' } do
-          resources :tafsirs, only: [:index], defaults: { format: 'json' }
-          resources :translations, only: [:index], defaults: { format: 'json' }
-          resources :audio_files, only: [:index], defaults: { format: 'json' }
-        end
-      end
-
-      resources :juzs, only: [:show, :index], defaults: { format: 'json' }
-      resources :pages, only: [:show], defaults: { format: 'json' }
-      resources :words, only: [:show], defaults: { format: 'json' }
-
-      namespace :options, defaults: { format: 'json' } do
-        get :default
-        get :translations
-        get :recitations
-        get :tafsirs
-        get :languages
-        get :media_content
-        get :chapter_info
-      end
-
-      get 'search', to: 'search#index'
-      get 'suggest', to: 'suggest#index'
-    end
+  namespace :api, defaults: {format: :json} do
+    draw_routes :v3
+    draw_routes :v4
   end
 
   root to: 'v3/ping#ping'
-  get '/ping', to: 'v3/ping#ping'
+  get '/v3/ping', to: 'v3/ping#ping'
 
   ['sitemap.xml.gz', 'sitemap:number.xml.gz'].each do |path|
     get "/sitemaps/#{path}" => proc { |req|

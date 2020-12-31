@@ -9,7 +9,7 @@ class CreateResourceContents < ActiveRecord::Migration[5.0]
       t.string :resource_type, index: true
       t.string :sub_type, index: true
       t.string :name
-      t.integer :mobile_translation_id, index: true # mobile app has different ids for translation. Need this for backword compatibility
+      t.integer :mobile_translation_id, index: true # mobile app has different ids for translation. Need this for backward compatibility
 
       t.text :description
       t.string :cardinality_type, index: true

@@ -19,7 +19,7 @@ namespace :v3 do
   task import_root_lemma: :environment do
     # Roots
     Quran::TextRoot.all.each do |text_root|
-      verse = Verse.find_by_verse_key(text_root.ayah_key)
+      verse = Verse.find_by(verse_key: text_root.ayah_key)
       root = VerseRoot.where(value: text_root.text).first_or_create
       verse.update_attribute :verse_root, root
     end
@@ -28,14 +28,14 @@ namespace :v3 do
       root = Root.where(value: r.value).first_or_create
 
       r.words.each do |w|
-        word = Word.find_by_verse_key_and_position(w.ayah_key, w.position)
+        word = Word.find_by(verse_key: w.ayah_key, position: w.position)
         word.roots << root
       end
     end
 
     # Lemmas
     Quran::TextLemma.all.each do |text_lemma|
-      verse = Verse.find_by_verse_key(text_lemma.ayah_key)
+      verse = Verse.find_by(verse_key: text_lemma.ayah_key)
       lemma = VerseLemma.where(text_madani: text_lemma.text).first_or_create
       verse.update_attribute :verse_lemma, lemma
     end
@@ -44,7 +44,7 @@ namespace :v3 do
       lemma = Lemma.where(text_clean: l.clean, text_madani: l.value).first_or_create
 
       l.words.each do |w|
-        word = Word.find_by_verse_key_and_position(w.ayah_key, w.position)
+        word = Word.find_by(verse_key: w.ayah_key, position: w.position)
         word.lemmas << lemma
       end
     end
@@ -54,14 +54,14 @@ namespace :v3 do
     Quran::Token.find_each do |t|
       token = Token.where(text_madani: t.value, text_clean: t.clean).first_or_create
       t.words.each do |w|
-        word = Word.find_by_verse_key_and_position(w.ayah_key, w.position)
+        word = Word.find_by(verse_key: w.ayah_key, position: w.position)
         word.update_attribute :token, token
       end
     end
 
     # Stems
     Quran::TextStem.all.each do |text_stem|
-      verse = Verse.find_by_verse_key(text_stem.ayah_key)
+      verse = Verse.find_by(verse_key: text_stem.ayah_key)
       stem = VerseStem.where(text_madani: text_stem.text).first_or_create
       verse.update_attribute :verse_stem, stem
     end
@@ -70,7 +70,7 @@ namespace :v3 do
       stem = Stem.where(text_clean: s.clean, text_madani: s.value).first_or_create
 
       s.words.each do |w|
-        word = Word.find_by_verse_key_and_position(w.ayah_key, w.position)
+        word = Word.find_by(verse_key: w.ayah_key, position: w.position)
         word.stems << stem
       end
     end
@@ -88,8 +88,8 @@ namespace :v3 do
       language.save
     end
 
-    language = Language.find_by_iso_code('en')
-    arabic_lang = Language.find_by_iso_code('ar')
+    language = Language.find_by(iso_code: 'en')
+    arabic_lang = Language.find_by(iso_code: 'ar')
 
     # Migrate resource, authors
     Content::Author.find_each do |a|
@@ -104,7 +104,7 @@ namespace :v3 do
       author = Author.where(name: content.author.name, url: content.author.url).first_or_create if content.author
       resource_content = ResourceContent.where(author: author, resource_type: content.type, sub_type: content.sub_type, name: content.name, cardinality_type: content.cardinality_type).first_or_create
       resource_content.description = content.description
-      resource_content.language = Language.find_by_iso_code(content.language_code)
+      resource_content.language = Language.find_by(iso_code: content.language_code)
       resource_content.author_name = author&.name
       if content.source
         data_source = DataSource.where(name: content.source.name, url: content.source.url).first_or_create
@@ -129,7 +129,7 @@ namespace :v3 do
 
       puts "chapter #{chapter.id}"
 
-      chapter.translated_names.where(language: Language.find_by_iso_code('en')).first_or_create.update_attributes name: surah.name_english
+      chapter.translated_names.where(language: Language.find_by(iso_code: 'en')).first_or_create.update_attributes name: surah.name_english
     end
 
     # CharType
@@ -183,7 +183,7 @@ namespace :v3 do
       verse.verse_number = ayah.ayah_num
       verse.verse_index = ayah.ayah_index
       verse.text_simple = ayah.text
-      verse.text_madani = Quran::Text.find_by_ayah_key(ayah.ayah_key).text
+      verse.text_madani = Quran::Text.find_by(ayah_key: ayah.ayah_key).text
       verse.save
       puts "verse #{verse.id}"
     end
@@ -222,8 +222,8 @@ namespace :v3 do
     # Tafsir
     Content::TafsirAyah.includes(:tafsir).order('').each do |tafsir|
       resource = tafsir.tafsir.resource
-      language = Language.find_by_iso_code(resource.language_code)
-      verse = Verse.find_by_verse_key(tafsir.ayah_key)
+      language = Language.find_by(iso_code: resource.language_code)
+      verse = Verse.find_by(verse_key: tafsir.ayah_key)
       data_source = DataSource.where(name: resource.source.name, url: resource.source.url).first_or_create if resource.source
 
       resource_content = ResourceContent.where(resource_type: resource.type, sub_type: resource.sub_type, author_name: resource.author&.name, cardinality_type: resource.cardinality_type, language: language).first_or_create
@@ -236,8 +236,8 @@ namespace :v3 do
     # verse Translations
     Content::Translation.order('').each do |trans|
       resource = trans.resource
-      language = Language.find_by_iso_code(resource.language_code)
-      verse = Verse.find_by_verse_key(trans.ayah_key)
+      language = Language.find_by(iso_code: resource.language_code)
+      verse = Verse.find_by(verse_key: trans.ayah_key)
       resource_content = ResourceContent.where(resource_type: resource.type, sub_type: resource.sub_type, author_name: resource.slug || resource.author&.name, cardinality_type: resource.cardinality_type, language: language).first_or_create
       translation = verse.translations.where(language: language, resource_content: resource_content, text: trans.text).first_or_create
 
@@ -247,8 +247,8 @@ namespace :v3 do
     # verse Transliteration
     Content::Transliteration.order('').each do |trans|
       resource = trans.resource
-      language = Language.find_by_iso_code(resource.language_code) || language
-      verse = Verse.find_by_verse_key(trans.ayah_key)
+      language = Language.find_by(iso_code: resource.language_code) || language
+      verse = Verse.find_by(verse_key: trans.ayah_key)
 
       resource_content = ResourceContent.where(resource_type: resource.type, sub_type: resource.sub_type, author_name: resource.author&.name, cardinality_type: resource.cardinality_type, language: language).first_or_create
       transliteration = verse.transliterations.where(language: language, resource_content: resource_content).first_or_create(text: trans.text)
@@ -263,7 +263,7 @@ namespace :v3 do
     resource_content = ResourceContent.where(author: author, language: language, resource_type: 'media', sub_type: 'video').first_or_create(author_name: author.name, cardinality_type: ResourceContent::CardinalityType::OneVerse, approved: true)
     # Migrate media content
     Media::Content.all.each do |media|
-      verse = Verse.find_by_verse_key(media.ayah_key)
+      verse = Verse.find_by(verse_key: media.ayah_key)
       verse.media_contents.where(url: media.url, resource_content_id: resource_content.id).first_or_create
     end
 
@@ -282,18 +282,18 @@ namespace :v3 do
 
     Audio::Recitation.find_each do |r|
       resource_content = ResourceContent.where(language: arabic_lang, author_name: r.reciter.english, sub_type: 'audio', resource_type: 'media').first_or_create(cardinality_type: ResourceContent::CardinalityType::OneVerse)
-      style = RecitationStyle.find_by_style(r.style.english) if r.style
-      Recitation.where(resource_content: resource_content, reciter: Reciter.find_by_name(r.reciter.english), recitation_style: style).first_or_create
+      style = RecitationStyle.find_by(style: r.style.english) if r.style
+      Recitation.where(resource_content: resource_content, reciter: Reciter.find_by(name: r.reciter.english), recitation_style: style).first_or_create
 
       resource_content.approved = Audio::File.where(recitation_id: r.id, is_enabled: false).blank?
       resource_content.save
     end
 
     Audio::File.find_each do |file|
-      reciter = Reciter.find_by_name(file.reciter.english)
-      recitation_style = RecitationStyle.find_by_style(file.recitation.style.english) if file.recitation.style
+      reciter = Reciter.find_by(name: file.reciter.english)
+      recitation_style = RecitationStyle.find_by(style: file.recitation.style.english) if file.recitation.style
       recitation = Recitation.where(reciter: reciter, recitation_style: recitation_style).first
-      verse = Verse.find_by_verse_key(file.ayah_key)
+      verse = Verse.find_by(verse_key: file.ayah_key)
 
       audio = AudioFile.where(resource: verse, recitation: recitation).first_or_create
       audio.segments = file.segments
@@ -330,9 +330,9 @@ namespace :v3 do
       r.save
     end
 
-    image_resource = ResourceContent.find_by_sub_type 'image'
+    image_resource = ResourceContent.find_by sub_type: 'image'
     Quran::Image.all.each do |img|
-      verse = Verse.find_by_verse_key(img.ayah_key)
+      verse = Verse.find_by(verse_key: img.ayah_key)
 
       verse.image_url = img.url.gsub('http:', '')
       verse.image_width = img.width

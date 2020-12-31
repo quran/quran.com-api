@@ -9,7 +9,7 @@ module Mobile
     end
 
     def download
-      resource = ResourceContent.find_by_mobile_translation_id(params[:id])
+      resource = ResourceContent.find_by(mobile_translation_id: params[:id])
       resource.increment_download_count!
 
       redirect_to resource.sqlite_file_url

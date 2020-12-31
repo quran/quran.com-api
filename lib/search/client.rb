@@ -26,7 +26,7 @@ module Search
     def search_query
       trans_query = []
 
-      unless /[:\/]/.match(@query.query)
+      unless /[:\/]/.match?(@query.query)
         available_languages = %w[ml en bs az cs fr hi es fi id it ko dv bn ku de am al fa ha mrn ms pl ja nl tr ur th
                                  no tg ug ru pt ro sq sw so sv ta uz zh tt]
 
@@ -97,10 +97,10 @@ module Search
       {
         fields: {
           'text_madani.text' => {
-            type: 'fvh'.freeze
+            type: 'fvh'
           }
         },
-        tags_schema: 'styled'.freeze
+        tags_schema: 'styled'
       }
     end
 
@@ -108,9 +108,9 @@ module Search
       {
         highlight: {
           fields: {
-            filed => { type: 'fvh'.freeze }
+            filed => { type: 'fvh' }
           },
-          tags_schema: 'styled'.freeze
+          tags_schema: 'styled'
         },
         size: 500
       }
