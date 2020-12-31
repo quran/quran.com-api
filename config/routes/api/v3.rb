@@ -1,4 +1,6 @@
 namespace :v3 do
+  get 'ping', to: 'ping#ping'
+
   resources :foot_notes, only: :show
 
   resources :chapters, only: [:index, :show] do

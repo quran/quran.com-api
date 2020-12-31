@@ -1,4 +1,5 @@
-scope :v4 do
+namespace :v4 do
+  get 'ping', to: 'ping#ping'
 
   # Chapters
   get 'chapters', to: 'chapters#index'
@@ -7,28 +8,23 @@ scope :v4 do
   # Chapter info
   get 'chapters/:id/info', to: 'chapter_infos#show'
 
-  # Verses
+  # Random verse
   get 'chapters/:chapter_id/verses/random', to: 'verses#random'
   get 'verses/random', to: 'verses#random'
+
+  # Verse by chapter
   get 'chapters/:chapter_id/verses', to: 'verses#index'
   get 'chapters/:chapter_id/verses/:id', to: 'verses#show'
+
+  # Verses by page number
+  get 'pages/:id', to: 'pages#show'
 
   # Footnote
   get 'foot_notes/:id', to: 'foot_notes#show'
 
-  # Page
-  get 'pages/:id', to: 'pages#show'
-
   # Juz
-  get 'juzs', to:  'juzs#index'
-  get 'juzs/:id', to:  'juzs#show'
-
-  resources :chapters, only: [:index, :show] do
-    resources :verses, only: [:index, :show] do
-      resources :translations, only: [:index]
-      resources :audio_files, only: [:index]
-    end
-  end
+  get 'juzs', to: 'juzs#index'
+  get 'juzs/:id', to: 'juzs#show'
 
   resources :words, only: [:show]
 
