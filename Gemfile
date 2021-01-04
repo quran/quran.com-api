@@ -5,7 +5,7 @@ ruby '2.7.1'
 
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-gem 'rails', '~> 6.0.3', '>= 6.0.3.2'
+gem 'rails', '~> 6.0.3', '>= 6.0.3.3'
 
 # Use postgresql as the database for Active Record
 gem 'pg', '>= 0.18', '< 2.0'
@@ -14,7 +14,7 @@ gem 'pg', '>= 0.18', '< 2.0'
 gem 'execjs'
 gem 'therubyracer', platforms: :ruby
 
-gem 'active_model_serializers', '~> 0.10.0'
+gem 'active_model_serializers', '~> 0.10.10'
 
 # Http request
 gem 'httparty', require: false
@@ -70,8 +70,8 @@ group :development do
   gem 'benchmark-ips', require: false
   gem 'bullet'
   gem 'derailed_benchmarks'
-  gem 'mechanize'
-  gem 'meta_request'
+  gem 'mechanize', '>= 2.7.6'
+  gem 'meta_request', '>= 0.7.2'
   gem 'pre-commit'
   gem 'spring'
   gem 'spring-commands-rspec'
@@ -86,8 +86,8 @@ group :test, :development do
   gem 'rspec-rails', '= 3.7.2'
   gem 'shoulda-matchers', '~> 4.0'
   gem 'simplecov', require: false
-  gem 'factory_bot_rails'
-  gem 'rubocop-rails_config'
+  gem 'factory_bot_rails', '>= 6.1.0'
+  gem 'rubocop-rails_config', '>= 0.12.6'
   gem 'rubocop-rspec'
   gem 'spork'
   gem 'watchr'
