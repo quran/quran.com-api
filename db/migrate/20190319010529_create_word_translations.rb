@@ -11,6 +11,6 @@ class CreateWordTranslations < ActiveRecord::Migration[5.2]
      t.timestamps
     end
 
-    add_index :word_translations, [:word_id, :language_id]
+   add_index :word_translations, [:word_id, :language_id]
   end
 end

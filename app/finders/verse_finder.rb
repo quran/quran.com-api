@@ -7,7 +7,7 @@ class VerseFinder
     @params = params
   end
 
-  def find(verse_number, language_code)
+  def find(verse_number, language_code='en')
     load_verses(language_code).find_by_verse_number(verse_number)
   end
 
