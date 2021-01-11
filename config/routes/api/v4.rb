@@ -8,12 +8,12 @@ namespace :v4 do
   # Chapter info
   get 'chapters/:id/info', to: 'chapter_infos#show'
 
-  # Footnote
-  get 'foot_notes/:id', to: 'foot_notes#show'
-
   # Juz
   get 'juzs', to: 'juzs#index'
   get 'juzs/:id', to: 'juzs#show'
+
+  # Footnote
+  get 'foot_notes/:id', to: 'foot_notes#show'
 
   # available resources
   namespace :resources do
@@ -31,16 +31,16 @@ namespace :v4 do
   # routes for fetching all records of one resource.
   # i.e /v4/quran/translations/121 will send complete Clear Quran translation
   namespace :quran do
-    get 'translations/:id', action: 'translation'
-    get :'tafsirs/:id', action: 'tafsir'
-    get :'recitations/:id', action: 'recitation'
+    get 'translations/:translation_id', action: 'translation'
+    get :'tafsirs/:tafsir_id', action: 'tafsir'
+    get :'recitations/:recitation_id', action: 'recitation'
 
-    get :'verses/uthmani', action: 'verses_text'
-    get :'verses/uthmani_simple', action: 'verses_text'
-    get :'verses/uthmani_tajweed', action: 'verses_text'
-    get :'verses/indopak', action: 'verses_text'
-    get :'verses/imlaei', action: 'verses_text'
-    get :'verses/imlaei_simple', action: 'verses_text'
+    get :'verses/uthmani', action: 'verses_text', script: 'text_uthmani'
+    get :'verses/uthmani_simple', action: 'verses_text', script: 'text_uthmani_simple'
+    get :'verses/uthmani_tajweed', action: 'verses_text', script: 'text_uthmani_tajweed'
+    get :'verses/indopak', action: 'verses_text', script: 'text_indopak'
+    get :'verses/imlaei', action: 'verses_text', script: 'text_imlaei'
+    get :'verses/imlaei_simple', action: 'verses_text', script: 'text_imlaei_simple'
     # TODO: add Qaloon and other Qira'at
   end
 

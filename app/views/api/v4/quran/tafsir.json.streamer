@@ -1,0 +1,5 @@
+json.array! @tafsirs do |tafsir|
+  json.object! do
+    json.extract! tafsir, :id, :verse_id, :verse_key, :text
+  end
+end
