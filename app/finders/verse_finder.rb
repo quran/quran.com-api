@@ -16,7 +16,6 @@ class VerseFinder
     load_translations
     load_words(language_code)
     load_audio
-    # set_offset
 
     @results.order('verses.verse_index ASC, words.position ASC, word_translations.priority ASC')
   end

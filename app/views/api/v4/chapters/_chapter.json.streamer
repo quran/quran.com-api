@@ -1,0 +1,19 @@
+json.object! do
+  json.id chapter.id
+  json.revelation_place chapter.revelation_place
+  json.revelation_order chapter.revelation_order
+  json.bismillah_pre chapter.bismillah_pre
+  json.name_complex chapter.name_complex
+  json.name_arabic chapter.name_arabic
+  json.verses_count chapter.verses_count
+  json.pages chapter.pages
+
+  json.translated_name do
+    name = chapter.translated_name
+
+    json.object! do
+      json.language name.language_name
+      json.name name.name
+    end
+  end
+end

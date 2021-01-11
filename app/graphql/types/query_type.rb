@@ -1,6 +1,8 @@
 module Types
   class QueryType < Types::BaseObject
     field :chapters, [Types::ChapterType], null: false do
+      description "Chapter/Surah list. Use `language` query string if you want to fetch translated names in a specific language."
+
       argument :language, String, required: false, default_value: 'en'
     end
 
@@ -9,6 +11,8 @@ module Types
     end
 
     field :chapter, Types::ChapterType, null: false do
+      description "Chapter/Surah detail."
+
       argument :id, ID, required: true
       argument :language, String, required: false, default_value: 'en'
     end
@@ -22,7 +26,7 @@ module Types
       argument :language, String, required: false, default_value: 'en'
     end
 
-    def chapter_info(id:, language: 'en')
+    def chapter_info(chapter_id:, language: 'en')
       ChapterInfo.where(chapter_id: chapter_id).filter_by_language_or_default(language)
     end
 
@@ -79,19 +83,6 @@ module Types
         Tafsir.where(verse_id: verse_id)
       else
         Tafsir.where(verse_key: verse_key)
-      end
-    end
-
-    field :words, [Types::WordType], null: false do
-      argument :verse_id, ID, required: false
-      argument :verse_key, String, required: false
-    end
-
-    def words(verse_id:, verse_key: '')
-      if verse_id
-        Word.where(verse_id: verse_id)
-      else
-        Word.where(verse_key: verse_key)
       end
     end
 

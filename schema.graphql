@@ -1,44 +1,74 @@
 type AudioFile {
-  createdAt: ISO8601DateTime!
   duration: Int
-  format: String
   id: ID!
-  isEnabled: Boolean
-  mimeType: String
   recitationId: Int
-  resourceId: Int
-  resourceType: String
   segments: String
-  updatedAt: ISO8601DateTime!
   url: String
+  verseId: Int
 }
 
 type Chapter {
-  bismillahPre: Boolean
-  chapterNumber: Int
-  createdAt: ISO8601DateTime!
+  """
+  Boolean attribute indicating if this surah should show bismillah
+  """
+  bismillahPre: Boolean!
+
+  """
+  Surah number
+  """
+  chapterNumber: Int!
   id: ID!
-  nameArabic: String
-  nameComplex: String
-  nameSimple: String
-  pages: String
-  revelationOrder: Int
-  revelationPlace: String
-  updatedAt: ISO8601DateTime!
-  versesCount: Int
+  nameArabic: String!
+  nameComplex: String!
+  nameSimple: String!
+  pages: [Int!]!
+  revelationOrder: Int!
+  revelationPlace: String!
+
+  """
+  Translated chapter names
+  """
+  translatedName(language: String! = "en"): TranslatedName
+
+  """
+  verses for this chapter
+  """
+  verses(
+    """
+    Restrict items to this status
+    """
+    from: Int
+
+    """
+    Restrict items to this status
+    """
+    language: String
+
+    """
+    Restrict items to this status
+    """
+    page: Int
+
+    """
+    Restrict items to this status
+    """
+    perPage: Int
+
+    """
+    Restrict items to this status
+    """
+    to: Int
+  ): [Verse!]
+  versesCount: Int!
 }
 
 type ChapterInfo {
   chapterId: Int
-  createdAt: ISO8601DateTime!
-  id: ID!
-  languageId: Int
+  id: ID
   languageName: String
-  resourceContentId: Int
   shortText: String
   source: String
   text: String
-  updatedAt: ISO8601DateTime!
 }
 
 """
@@ -60,17 +90,32 @@ type Juz {
 }
 
 type Query {
-  audioFile(recitationId: ID!, resourceId: ID!, resourceType: String = "Verse"): AudioFile!
-  audioFiles(recitationId: ID!, resourceIds: [ID!]!, resourceType: String = "Verse"): [AudioFile!]!
-  chapter(id: ID!): Chapter!
+  audioFile(recitationId: ID!, verseId: ID!): AudioFile!
+  audioFiles(recitationId: ID!, verseIds: [ID!]!): [AudioFile!]!
+  chapter(id: ID!, language: String = "en"): Chapter!
   chapterInfo(chapterId: ID!, language: String = "en"): ChapterInfo!
+
+  """
+  Range of dates
+  """
   chapters(language: String = "en"): [Chapter!]!
   juzs: [Juz!]!
+  searchVerses(language: String = "en", page: Int = 1, query: String!, size: Int = 20): SearchResults
   tafsirs(verseId: ID, verseKey: String): [Tafsir!]!
   verse(id: ID): Verse!
   verseByVerseKey(verseKey: String!): Verse!
-  verses(chapterId: ID!, language: String = "en", limit: Int = 10, offset: Int = 0, padding: Int = 0, page: Int = 1): [Verse!]!
+  verses(chapterId: ID!, language: String = "en", limit: Int = 10, offset: Int = 0, page: Int = 1): [Verse!]!
   words(verseId: ID, verseKey: String): [Word!]!
+}
+
+type SearchResults {
+  currentPage: Int!
+  perPage: Int!
+  query: String!
+  results: [Verse!]!
+  took: Int!
+  totalCount: Int!
+  totalPages: Int!
 }
 
 type Tafsir {
@@ -86,9 +131,15 @@ type Tafsir {
   verseKey: String
 }
 
+type TranslatedName {
+  id: ID!
+  languageId: Int
+  languageName: String
+  name: String!
+}
+
 type Verse {
   chapterId: Int
-  createdAt: ISO8601DateTime!
   hizbNumber: Int
   id: ID!
   imageUrl: String
@@ -100,41 +151,28 @@ type Verse {
   sajdahNumber: Int
   textImlaei: String
   textIndopak: String
-  textMadani: String
   textSimple: String
-  updatedAt: ISO8601DateTime!
+  textUthmani: String
   verseIndex: Int
   verseKey: String
-  verseLemmaId: Int
   verseNumber: Int
-  verseRootId: Int
-  verseStemId: Int
 }
 
 type Word {
   audioUrl: String
   chapterId: Int
-  charTypeId: Int
   charTypeName: String
   className: String
-  codeDec: Int
-  codeDecV3: Int
-  codeHex: String
-  codeHexV3: String
-  createdAt: ISO8601DateTime!
+  code: String
   id: ID!
   lineNumber: Int
   location: String
   pageNumber: Int
-  pauseName: String
   position: Int
   textImlaei: String
   textIndopak: String
-  textMadani: String
   textSimple: String
-  tokenId: Int
-  topicId: Int
-  updatedAt: ISO8601DateTime!
+  textUthmani: String
   verseId: Int
   verseKey: String
 }

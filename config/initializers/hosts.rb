@@ -3,7 +3,8 @@
 Rails.application.config.hosts += [
   '.quran.com',
   '.qurancdn.com',
-  'localhost'
+  'localhost',
+  '.ngrok.io'
 ]
 
 if Rails.env.development?

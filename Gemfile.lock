@@ -75,6 +75,8 @@ GEM
     annotate (3.1.1)
       activerecord (>= 3.2, < 7.0)
       rake (>= 10.4, < 14.0)
+    apollo-tracing (1.6.0)
+      graphql (>= 1.7.0, < 2)
     ast (2.4.1)
     axiom-types (0.1.1)
       descendants_tracker (~> 0.0.4)
@@ -353,6 +355,8 @@ GEM
       ref
     thor (1.0.1)
     thread_safe (0.3.6)
+    turbostreamer (1.9.0)
+      activesupport (>= 5.0.0)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
     tzinfo-data (1.2020.5)
@@ -377,6 +381,7 @@ PLATFORMS
 DEPENDENCIES
   active_model_serializers (~> 0.10.0)
   annotate
+  apollo-tracing
   benchmark-ips
   bootsnap (>= 1.4.2)
   bullet
@@ -421,6 +426,7 @@ DEPENDENCIES
   spring-watcher-listen (~> 2.0.0)
   stackprof
   therubyracer
+  turbostreamer (>= 1.9)
   tzinfo-data
   virtus
   watchr

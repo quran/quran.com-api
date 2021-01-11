@@ -15,6 +15,7 @@ gem 'execjs'
 gem 'therubyracer', platforms: :ruby
 
 gem 'active_model_serializers', '~> 0.10.0'
+gem 'turbostreamer', '>= 1.9'
 
 # Http request
 gem 'httparty', require: false
@@ -62,6 +63,7 @@ gem 'sentry-raven', group: [:development, :production]
 group :development, :test do
   gem 'pry-byebug'
   gem 'pry-rails'
+  gem 'apollo-tracing'
   # gem 'zeus'
 end
 

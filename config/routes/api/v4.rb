@@ -1,23 +1,12 @@
 namespace :v4 do
-  get 'ping', to: 'ping#ping'
+  get :search, to: 'search#search'
+  get :suggest, to: 'suggest#suggest'
 
-  # Chapters
-  get 'chapters', to: 'chapters#index'
+  get :chapters, to: 'chapters#index'
   get 'chapters/:id', to: 'chapters#show'
 
   # Chapter info
   get 'chapters/:id/info', to: 'chapter_infos#show'
-
-  # Random verse
-  get 'chapters/:chapter_id/verses/random', to: 'verses#random'
-  get 'verses/random', to: 'verses#random'
-
-  # Verse by chapter
-  get 'chapters/:chapter_id/verses', to: 'verses#index'
-  get 'chapters/:chapter_id/verses/:id', to: 'verses#show'
-
-  # Verses by page number
-  get 'pages/:id', to: 'pages#show'
 
   # Footnote
   get 'foot_notes/:id', to: 'foot_notes#show'
@@ -26,17 +15,66 @@ namespace :v4 do
   get 'juzs', to: 'juzs#index'
   get 'juzs/:id', to: 'juzs#show'
 
-  resources :words, only: [:show]
-
-  namespace :options do
+  # available resources
+  namespace :resources do
     get :translations
-    get :recitations
+    get 'translations/:id/info', action: 'translation_info'
     get :tafsirs
+    get 'tafsirs/:id/info', action: 'tafsir_info'
+    get :recitations
+    get 'recitations/:id/info', action: 'recitation_info'
     get :languages
-    get :media_contents
     get :chapter_infos
+    get :verse_media
   end
 
-  get 'search', to: 'search#index'
-  get 'suggest', to: 'suggest#index'
+  # routes for fetching all records of one resource.
+  # i.e /v4/quran/translations/121 will send complete Clear Quran translation
+  namespace :quran do
+    get 'translations/:id', action: 'translation'
+    get :'tafsirs/:id', action: 'tafsir'
+    get :'recitations/:id', action: 'recitation'
+
+    get :'verses/uthmani', action: 'verses_text'
+    get :'verses/uthmani_simple', action: 'verses_text'
+    get :'verses/uthmani_tajweed', action: 'verses_text'
+    get :'verses/indopak', action: 'verses_text'
+    get :'verses/imlaei', action: 'verses_text'
+    get :'verses/imlaei_simple', action: 'verses_text'
+    # TODO: add Qaloon and other Qira'at
+  end
+
+  # verses routes, by juz, chapter, page
+  namespace :verses do
+    get 'by_page/:page_number', action: 'by_page'
+    get 'by_juz/:juz_number', action: 'by_juz'
+    get 'by_chapter/:chapter_number', action: 'by_chapter'
+    get 'random', action: 'random'
+  end
+
+  # translations routes, by juz, chapter, page
+  scope 'translations/:id', controller: 'translations' do
+    get 'by_page/:page_number', action: 'by_page'
+    get 'by_juz/:juz_number', action: 'by_juz'
+    get 'by_chapter/:chapter_number', action: 'by_chapter'
+    get 'random', action: 'random'
+  end
+
+  # tafsir routes, by juz, chapter, page
+  scope 'tafsirs/:id', controller: 'tafsirs' do
+    get 'by_page/:page_number', action: 'by_page'
+    get 'by_juz/:juz_number', action: 'by_juz'
+    get 'by_chapter/:chapter_number', action: 'by_chapter'
+    get 'random', action: 'random'
+  end
+
+  # recitation routes, by juz, chapter, page
+  scope 'recitations/:id', controller: 'recitations' do
+    get 'by_page/:page_number', action: 'by_page'
+    get 'by_juz/:juz_number', action: 'by_juz'
+    get 'by_chapter/:chapter_number', action: 'by_chapter'
+    get 'random', action: 'random'
+  end
+
+  get 'ping', to: 'ping#ping'
 end

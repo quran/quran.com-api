@@ -6,8 +6,6 @@ module Types
     field :text, String, null: true
     field :language_name, String, null: true
     field :resource_content_id, Integer, null: true
-    field :created_at, GraphQL::Types::ISO8601DateTime, null: false
-    field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
     field :resource_name, String, null: true
     field :verse_key, String, null: true
   end
