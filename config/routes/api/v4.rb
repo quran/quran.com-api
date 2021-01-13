@@ -23,6 +23,7 @@ namespace :v4 do
     get 'tafsirs/:id/info', action: 'tafsir_info'
     get :recitations
     get 'recitations/:id/info', action: 'recitation_info'
+    get :recitation_styles
     get :languages
     get :chapter_infos
     get :verse_media
