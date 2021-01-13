@@ -15,6 +15,8 @@ module Api::V4
     end
 
     def translation_info
+      @translation = fetch_translation_resource
+
       render
     end
 
@@ -32,7 +34,8 @@ module Api::V4
     end
 
     def tafsir_info
-
+      @tafsir = fetch_tafsir_resource
+      render
     end
 
     def recitations
@@ -47,7 +50,10 @@ module Api::V4
     end
 
     def recitation_info
-
+      @recitation = Recitation
+                        .approved
+                        .find(params[:recitation_id])
+      render
     end
 
     def recitation_styles
@@ -68,9 +74,9 @@ module Api::V4
 
     def verse_media
       @media = ResourceContent
-                      .includes(:language)
-                      .media
-                      .one_verse.approved
+                   .includes(:language)
+                   .media
+                   .one_verse.approved
 
       render
     end
@@ -109,31 +115,6 @@ module Api::V4
     def chapter
       finder = ChapterFinder.new
       finder.find_with_translated_name(params[:id], fetch_locale)
-    end
-
-    def fetch_translation_id
-      approved = ResourceContent
-                     .tafsirs
-                     .one_verse
-                     .approved
-
-      find_resource(approved, params[:translation_id])
-    end
-
-    def fetch_translation_resource
-      approved = ResourceContent
-                     .tafsirs
-                     .one_verse
-                     .approved
-
-      find_resource(approved, params[:tafsir_id])
-    end
-
-    def find_resource(list, key)
-      with_ids = list.where(id: key.to_i)
-      with_slug = approved.where(slug: key)
-
-      with_ids.or(with_slug).first
     end
   end
 end

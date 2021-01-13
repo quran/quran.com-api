@@ -5,7 +5,7 @@ module Api::V4
 
     def not_found
       respond_to do |format|
-        format.json{ render :json => 'Record Not Found',            :status => 404 }
+        format.json { render :json => 'Record Not Found', :status => 404 }
       end
     end
 
@@ -24,5 +24,29 @@ module Api::V4
           ).or(defaults).order('translated_names.language_priority DESC')
     end
 
+    def fetch_translation_resource
+      approved = ResourceContent
+                     .translations
+                     .one_verse
+                     .approved
+
+      find_resource(approved, params[:translation_id])
+    end
+
+    def fetch_tafsir_resource
+      approved = ResourceContent
+                     .tafsirs
+                     .one_verse
+                     .approved
+
+      find_resource(approved, params[:tafsir_id])
+    end
+
+    def find_resource(list, key)
+      with_ids = list.where(id: key.to_i)
+      with_slug = list.where(slug: key)
+
+      with_ids.or(with_slug).first
+    end
   end
 end

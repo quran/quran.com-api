@@ -18,9 +18,9 @@ namespace :v4 do
   # available resources
   namespace :resources do
     get :translations
-    get 'translations/:id/info', action: 'translation_info'
+    get 'translations/:translation_id/info', action: 'translation_info'
     get :tafsirs
-    get 'tafsirs/:id/info', action: 'tafsir_info'
+    get 'tafsirs/:tafsir_id/info', action: 'tafsir_info'
     get :recitations
     get 'recitations/:id/info', action: 'recitation_info'
     get :recitation_styles

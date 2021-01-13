@@ -1,0 +1,4 @@
+json.object! do
+  json.id @tafsir.id
+  json.info @tafsir.resource_info
+end

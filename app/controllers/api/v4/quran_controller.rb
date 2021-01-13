@@ -12,7 +12,7 @@ module Api::V4
 
     def translation
       @translations = if (resource = fetch_translation_resource)
-                        Translation.order('verse_id ASC').where(resource_content_id: resource)
+                        Translation.order('verse_id ASC').where(resource_content_id: resource.id)
                       else
                         []
                       end
@@ -21,7 +21,12 @@ module Api::V4
     end
 
     def tafsir
-      @tafsirs = Tafsir.order('verse_id ASC').where(resource_content_id: fetch_tafsir_id)
+      @tafsirs = if (resource = fetch_tafsir_resource)
+                   Tafsir.order('verse_id ASC').where(resource_content_id: resource.id)
+                 else
+                   []
+                 end
+
       render
     end
 
@@ -32,7 +37,10 @@ module Api::V4
 
     def verses_text
       @script_type = fetch_script_type
-      @verses = Verse.select(:id, :verse_key, @script_type)
+      @verses = Verse
+                    .unscope(:order)
+                    .order('verse_index ASC')
+                    .select(:id, :verse_key, @script_type)
 
       render
     end
@@ -57,31 +65,6 @@ module Api::V4
     def chapter
       finder = ChapterFinder.new
       finder.find_with_translated_name(params[:id], fetch_locale)
-    end
-
-    def fetch_translation_id
-      approved = ResourceContent
-                     .tafsirs
-                     .one_verse
-                     .approved
-
-      find_resource(approved, params[:translation_id])
-    end
-
-    def fetch_translation_resource
-      approved = ResourceContent
-                     .translations
-                     .one_verse
-                     .approved
-
-      find_resource(approved, params[:translation_id])
-    end
-
-    def find_resource(list, key)
-      with_ids = list.where(id: key.to_i)
-      with_slug = list.where(slug: key)
-
-      with_ids.or(with_slug).first
     end
   end
 end
