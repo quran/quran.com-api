@@ -65,7 +65,7 @@ class VerseFinder
 
     @results = Verse
                  .where(chapter_id: chapter.id)
-                 .where('verse_number >= ? AND verse_number <= ?', verse_start.to_i, verse_end.to_i)
+                 .where('verses.verse_number >= ? AND verses.verse_number <= ?', verse_start.to_i, verse_end.to_i)
   end
 
   def load_words(word_translation_lang)

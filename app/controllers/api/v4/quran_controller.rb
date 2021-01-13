@@ -70,16 +70,16 @@ module Api::V4
 
     def fetch_translation_resource
       approved = ResourceContent
-                     .tafsirs
+                     .translations
                      .one_verse
                      .approved
 
-      find_resource(approved, params[:tafsir_id])
+      find_resource(approved, params[:translation_id])
     end
 
     def find_resource(list, key)
       with_ids = list.where(id: key.to_i)
-      with_slug = approved.where(slug: key)
+      with_slug = list.where(slug: key)
 
       with_ids.or(with_slug).first
     end
