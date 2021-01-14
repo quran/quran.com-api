@@ -1,13 +1,6 @@
 module Api::V4
   class ApiController < ApplicationController
     include ActionView::Rendering
-    rescue_from ActiveRecord::RecordNotFound, with: :not_found
-
-    def not_found
-      respond_to do |format|
-        format.json { render :json => 'Record Not Found', :status => 404 }
-      end
-    end
 
     protected
 

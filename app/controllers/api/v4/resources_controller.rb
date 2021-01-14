@@ -51,8 +51,12 @@ module Api::V4
 
     def recitation_info
       @recitation = Recitation
-                        .approved
-                        .find(params[:recitation_id])
+                       .includes(:resource_content)
+                       .approved
+                       .find(params[:recitation_id])
+
+      @resource = @recitation.resource_content
+
       render
     end
 

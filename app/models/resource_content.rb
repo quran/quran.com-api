@@ -33,6 +33,7 @@ class ResourceContent < ApplicationRecord
   scope :one_verse, -> { where cardinality_type: CardinalityType::OneVerse }
   scope :one_chapter, -> { where cardinality_type: CardinalityType::OneChapter }
   scope :approved, -> { where approved: true }
+  scope :recitations, -> { where sub_type: SubType::Audio }
 
   module CardinalityType
     OneVerse = '1_ayah'
@@ -56,6 +57,7 @@ class ResourceContent < ApplicationRecord
     Image = 'image'
     Info = 'info'
     Video = 'video'
+    Audio = 'audio'
   end
 
   belongs_to :author

@@ -22,7 +22,7 @@ namespace :v4 do
     get :tafsirs
     get 'tafsirs/:tafsir_id/info', action: 'tafsir_info'
     get :recitations
-    get 'recitations/:id/info', action: 'recitation_info'
+    get 'recitations/:recitation_id/info', action: 'recitation_info'
     get :recitation_styles
     get :languages
     get :chapter_infos

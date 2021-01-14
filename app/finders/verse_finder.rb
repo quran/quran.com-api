@@ -2,6 +2,7 @@
 
 class VerseFinder
   attr_reader :params, :results
+  include QuranUtils::StrongMemoize
 
   def initialize(params)
     @params = params
@@ -49,7 +50,7 @@ class VerseFinder
     @current_page ||= (params[:page].to_i <= 1 ? 1 : params[:page].to_i)
   end
 
-  def total_pages
+  def total_versestotal_pages
     (total_verses / per_page).ceil
   end
 
