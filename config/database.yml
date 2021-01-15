@@ -27,7 +27,24 @@ default: &default
 
 production:
   <<: *default
+  adapter: postgresql
+  encoding: unicode
+  host: <%= ENV['POSTGRES_PORT_5432_TCP_ADDR'] %>
+  port: <%= ENV['POSTGRES_PORT_5432_TCP_PORT'] %>
   database: quran_dev
+  username: quran_dev
+  password: dev_quran
+  pool: <%= ENV.fetch('RAILS_MAX_THREADS'){5} %>
+
+staging:
+  <<: *default
+  adapter: postgresql
+  encoding: unicode
+  host: <%= ENV['POSTGRES_PORT_5432_TCP_ADDR'] %>
+  port: <%= ENV['POSTGRES_PORT_5432_TCP_PORT'] %>
+  database: quran_dev
+  username: quran_dev
+  password: dev_quran
 
 development:
   <<: *default
