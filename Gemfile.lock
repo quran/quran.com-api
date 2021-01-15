@@ -390,7 +390,7 @@ DEPENDENCIES
   elasticsearch-model
   elasticsearch-rails
   excon
-  factory_bot_rails
+  factory_bot_rails (>= 6.1.0)
   graphql (= 1.11.4)
   graphql-playground!
   graphql-schema_comparator
@@ -409,7 +409,7 @@ DEPENDENCIES
   puma (~> 4.1)
   rack-cors
   rails (~> 6.1)
-  rails-html-sanitizer
+  rails-html-sanitizer (>= 1.3.0)
   rspec-rails (= 4.0.2)
   rubocop
   rubocop-rails_config
