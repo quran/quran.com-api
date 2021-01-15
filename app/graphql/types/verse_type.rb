@@ -28,25 +28,33 @@ module Types
     #field :pagintion, [Types::PaginationType], null: false
 
     field :words, [Types::WordType], "words of the verse", null: true
-
-    def words
-      object.words
+    field :tafsirs, [Types::TafsirType], "tafsirs of the verse", null: true do
+      argument :tafsir_ids, String, "Comma separated ids of tafsir to load for each verse", required: true
     end
 
     field :translations, [Types::TranslationType], "translations of verse", null: true do
-      argument :translation_ids, String, "Comma separated list of translation ids to load for each verse", required: true
-    end
-
-    def translations(translation_ids:)
-      object.translations.where(resource_content_id: translation_ids.split(', '))
+      argument :translation_ids, String, "Comma separated ids of translation to load for each verse", required: true
     end
 
     field :audio, Types::AudioFileType, "recitation of verse", null: true do
       argument :recitation, Integer, "Recitation id", required: true
     end
 
+    def words
+      object.words
+    end
+
+    def translations(translation_ids:)
+      object.translations
+    end
+
     def audio(recitation:)
-      object.audio_files.find_by(recitation_id: recitation)
+      object.audio_file
+    end
+
+    def tafsirs(tafsir_ids:)
+      # We've already preloaded these related resources using lookahead in VerseFinder
+      object.tafsirs
     end
   end
 end

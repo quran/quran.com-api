@@ -32,14 +32,41 @@ module Types
     end
 
     def verses(lookahead:, from:, to:, page: 1, per_page: 10, language: 'en')
-      # word_selection = lookahead.selections.detect do |selection|
-      #  :words == selection.name
-      #end
-      #word_selection.selects? 'translation'
-      # lookahead.selection(:words).selects?(:translation)
+      finder = V4::VerseFinder.new({
+                                       chapter_number: object.id,
+                                       from: from,
+                                       to: to,
+                                       page: page,
+                                       per_page: per_page
+                                   })
 
-      finder = V4::VerseFinder.new({chapter_id: object.id, from: from, to: to, page: page, per_page: per_page})
-      finder.load_verses(language)
+
+      finder.load_verses(
+          'by_chapter',
+          language,
+          words: lookahead.selects?(:words),
+          tafsirs: fetch_tafsirs(lookahead),
+          translations: fetch_translations(lookahead),
+          audio: fetch_audio(lookahead)
+      )
+    end
+
+    def fetch_tafsirs(lookahead)
+      if args = lookahead.selection(:tafsirs).arguments
+        args[:tafsir_ids]
+      end
+    end
+
+    def fetch_translations(lookahead)
+      if args = lookahead.selection(:translations).arguments
+        args[:translation_ids]
+      end
+    end
+
+    def fetch_audio(lookahead)
+      if args = lookahead.selection(:audio).arguments
+        args[:recitation]
+      end
     end
   end
 end

@@ -1,11 +1,51 @@
 class VersesPresenter < BasePresenter
   attr_reader :lookahead, :finder
+  VERSE_FIELDS = [
+      "chapter_id",
+      "verse_number",
+      "verse_key",
+      "text_uthmani",
+      "text_indopak",
+      "text_imlaei_simple",
+      "juz_number",
+      "hizb_number",
+      "rub_number",
+      "sajdah_type",
+      "sajdah_number",
+      "page_number",
+      "image_url",
+      "image_width",
+      "text_imlaei",
+      "text_uthmani_simple",
+      "text_uthmani_tajweed"
+  ]
 
-  def initialize(params, context)
-    super(params, context)
+  WORDS_FIELDS = [
+      "verse_id",
+      "chapter_id",
+      "position",
+      "text_uthmani",
+      "text_indopak",
+      "text_imlaei_simple",
+      "verse_key",
+      "page_number",
+      "class_name",
+      "line_number",
+      "code_dec",
+      "code_hex",
+      "audio_url",
+      "location",
+      "char_type_name",
+      "text_imlaei",
+      "text_uthmani_simple",
+      "text_uthmani_tajweed",
+  ]
 
-    @lookahead = RestApi::ParamLookahead.new(params)
-    @finder = V4::VerseFinder.new(params, lookahead)
+  def initialize(params, lookahead)
+    super(params)
+
+    @lookahead = lookahead
+    @finder = V4::VerseFinder.new(params)
   end
 
   def random_verse(language)
@@ -22,6 +62,38 @@ class VersesPresenter < BasePresenter
         translations: fetch_translations,
         audio: fetch_audio
     )
+  end
+
+  def total_records
+    finder.total_records
+  end
+
+  def verse_fields
+    strong_memoize :fields do
+      if (fields = params[:fields]).presence
+        fields.split(',').select do |field|
+          VERSE_FIELDS.include?(field)
+        end
+      else
+        []
+      end
+    end
+  end
+
+  def word_fields
+    strong_memoize :word_fields do
+      if (fields = params[:word_fields]).presence
+        fields.split(',').select do |field|
+          WORDS_FIELDS.include?(field)
+        end
+      else
+        []
+      end
+    end
+  end
+
+  def next_page
+    finder.next_page
   end
 
   def verses(filter, language)

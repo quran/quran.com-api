@@ -23,7 +23,8 @@ module Api::V4
     protected
 
     def init_presenter
-      @presenter = VersesPresenter.new(params, self)
+      lookahead = RestApi::ParamLookahead.new(params)
+      @presenter = VersesPresenter.new(params, lookahead)
     end
 
     def load_verses

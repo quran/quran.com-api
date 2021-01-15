@@ -3,10 +3,9 @@
 class BasePresenter
   include QuranUtils::StrongMemoize
 
-  attr_reader :params, :context
+  attr_reader :params
 
-  def initialize(params, context)
+  def initialize(params)
     @params = params
-    @context = context
   end
 end

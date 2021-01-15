@@ -1,8 +1,5 @@
 json.object! do
-  json.id word.id
-  json.position word.position
-  json.audio word.audio_url
-  json.char_type word.char_type_name
+  json.extract! word, :id, :position, :audio_url, :char_type_name, *fields
 
   json.translation do
     json.object! do

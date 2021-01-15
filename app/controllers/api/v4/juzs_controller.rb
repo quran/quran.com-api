@@ -2,7 +2,7 @@
 module Api::V4
   class JuzsController < ApiController
     def index
-      @juzs = Juz.all
+      @juzs = Juz.order('juz_number ASC').all
       render
     end
 

@@ -33,7 +33,7 @@ module Types
     field :juzs, [Types::JuzType], null: false
 
     def juzs
-      Juz.all
+      Juz.order('juz_number ASC').all
     end
 
     field :verses, [Types::VerseType], null: false do
