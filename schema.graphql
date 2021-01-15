@@ -31,31 +31,26 @@ type Chapter {
   translatedName(language: String! = "en"): TranslatedName
 
   """
-  verses for this chapter
+  verses for this chapter, max 50 results per call
   """
   verses(
     """
-    Restrict items to this status
+    starting ayah number
     """
     from: Int
 
     """
-    Restrict items to this status
+    page number for paginating within from-to ayah range
     """
-    language: String
+    page: Int = 1
 
     """
-    Restrict items to this status
+    number of ayahs per call
     """
-    page: Int
+    perPage: Int = 10
 
     """
-    Restrict items to this status
-    """
-    perPage: Int
-
-    """
-    Restrict items to this status
+    last ayah number
     """
     to: Int
   ): [Verse!]
@@ -72,31 +67,43 @@ type ChapterInfo {
 }
 
 """
-An ISO 8601-encoded datetime
-"""
-scalar ISO8601DateTime
-
-"""
 Represents untyped JSON
 """
 scalar JSON
 
 type Juz {
-  createdAt: ISO8601DateTime!
   id: ID!
   juzNumber: Int
-  updatedAt: ISO8601DateTime!
   verseMapping: JSON
+
+  """
+  verses for this juz, max 50 results per call
+  """
+  verses(
+    """
+    page number for paginating within from-to ayah range
+    """
+    page: Int = 1
+
+    """
+    number of ayahs per call
+    """
+    perPage: Int = 10
+  ): [Verse!]
 }
 
 type Query {
   audioFile(recitationId: ID!, verseId: ID!): AudioFile!
   audioFiles(recitationId: ID!, verseIds: [ID!]!): [AudioFile!]!
+
+  """
+  Chapter/Surah detail.
+  """
   chapter(id: ID!, language: String = "en"): Chapter!
   chapterInfo(chapterId: ID!, language: String = "en"): ChapterInfo!
 
   """
-  Range of dates
+  Chapter/Surah list. Use `language` query string if you want to fetch translated names in a specific language.
   """
   chapters(language: String = "en"): [Chapter!]!
   juzs: [Juz!]!
@@ -105,7 +112,6 @@ type Query {
   verse(id: ID): Verse!
   verseByVerseKey(verseKey: String!): Verse!
   verses(chapterId: ID!, language: String = "en", limit: Int = 10, offset: Int = 0, page: Int = 1): [Verse!]!
-  words(verseId: ID, verseKey: String): [Word!]!
 }
 
 type SearchResults {
@@ -119,14 +125,12 @@ type SearchResults {
 }
 
 type Tafsir {
-  createdAt: ISO8601DateTime!
   id: ID!
   languageId: Int
   languageName: String
   resourceContentId: Int
   resourceName: String
   text: String
-  updatedAt: ISO8601DateTime!
   verseId: Int
   verseKey: String
 }
@@ -138,7 +142,25 @@ type TranslatedName {
   name: String!
 }
 
+type Translation {
+  id: ID!
+  languageId: Int
+  languageName: String
+  resourceName: String
+  text: String
+  verseId: Int
+}
+
 type Verse {
+  """
+  recitation of verse
+  """
+  audio(
+    """
+    Recitation id
+    """
+    recitation: Int!
+  ): AudioFile
   chapterId: Int
   hizbNumber: Int
   id: ID!
@@ -147,15 +169,42 @@ type Verse {
   juzNumber: Int
   pageNumber: Int
   rubNumber: Int
-  sajdah: String
   sajdahNumber: Int
+  sajdahType: String
+
+  """
+  tafsirs of the verse
+  """
+  tafsirs(
+    """
+    Comma separated ids of tafsir to load for each verse
+    """
+    tafsirIds: String!
+  ): [Tafsir!]
   textImlaei: String
+  textImlaeiSimple: String
   textIndopak: String
-  textSimple: String
   textUthmani: String
+  textUthmaniSimple: String
+  textUthmaniTajweed: String
+
+  """
+  translations of verse
+  """
+  translations(
+    """
+    Comma separated ids of translation to load for each verse
+    """
+    translationIds: String!
+  ): [Translation!]
   verseIndex: Int
   verseKey: String
   verseNumber: Int
+
+  """
+  words of the verse
+  """
+  words: [Word!]
 }
 
 type Word {
@@ -173,6 +222,19 @@ type Word {
   textIndopak: String
   textSimple: String
   textUthmani: String
+
+  """
+  word translation in given language. If translation for give language doesn't exist, we'll fallback to English translation
+  """
+  translation: WordTranslation
   verseId: Int
   verseKey: String
+}
+
+type WordTranslation {
+  id: ID!
+  languageId: Int
+  languageName: String
+  text: String
+  wordId: Int
 }

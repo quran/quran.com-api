@@ -290,11 +290,11 @@
             },
             {
               "name": "verses",
-              "description": "verses for this chapter",
+              "description": "verses for this chapter, max 50 results per call",
               "args": [
                 {
                   "name": "from",
-                  "description": "Restrict items to this status",
+                  "description": "starting ayah number",
                   "type": {
                     "kind": "SCALAR",
                     "name": "Int",
@@ -304,7 +304,7 @@
                 },
                 {
                   "name": "to",
-                  "description": "Restrict items to this status",
+                  "description": "last ayah number",
                   "type": {
                     "kind": "SCALAR",
                     "name": "Int",
@@ -314,33 +314,23 @@
                 },
                 {
                   "name": "page",
-                  "description": "Restrict items to this status",
+                  "description": "page number for paginating within from-to ayah range",
                   "type": {
                     "kind": "SCALAR",
                     "name": "Int",
                     "ofType": null
                   },
-                  "defaultValue": null
+                  "defaultValue": "1"
                 },
                 {
                   "name": "perPage",
-                  "description": "Restrict items to this status",
+                  "description": "number of ayahs per call",
                   "type": {
                     "kind": "SCALAR",
                     "name": "Int",
                     "ofType": null
                   },
-                  "defaultValue": null
-                },
-                {
-                  "name": "language",
-                  "description": "Restrict items to this status",
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  },
-                  "defaultValue": null
+                  "defaultValue": "10"
                 }
               ],
               "type": {
@@ -476,16 +466,6 @@
         },
         {
           "kind": "SCALAR",
-          "name": "ISO8601DateTime",
-          "description": "An ISO 8601-encoded datetime",
-          "fields": null,
-          "inputFields": null,
-          "interfaces": null,
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "SCALAR",
           "name": "Int",
           "description": "Represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1.",
           "fields": null,
@@ -509,22 +489,6 @@
           "name": "Juz",
           "description": null,
           "fields": [
-            {
-              "name": "createdAt",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "ISO8601DateTime",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
             {
               "name": "id",
               "description": null,
@@ -554,22 +518,6 @@
               "deprecationReason": null
             },
             {
-              "name": "updatedAt",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "ISO8601DateTime",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
               "name": "verseMapping",
               "description": null,
               "args": [],
@@ -577,6 +525,47 @@
                 "kind": "SCALAR",
                 "name": "JSON",
                 "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "verses",
+              "description": "verses for this juz, max 50 results per call",
+              "args": [
+                {
+                  "name": "page",
+                  "description": "page number for paginating within from-to ayah range",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": "1"
+                },
+                {
+                  "name": "perPage",
+                  "description": "number of ayahs per call",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": "10"
+                }
+              ],
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "Verse",
+                    "ofType": null
+                  }
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -700,7 +689,7 @@
             },
             {
               "name": "chapter",
-              "description": null,
+              "description": "Chapter/Surah detail.",
               "args": [
                 {
                   "name": "id",
@@ -782,7 +771,7 @@
             },
             {
               "name": "chapters",
-              "description": "Range of dates",
+              "description": "Chapter/Surah list. Use `language` query string if you want to fetch translated names in a specific language.",
               "args": [
                 {
                   "name": "language",
@@ -1077,51 +1066,6 @@
               },
               "isDeprecated": false,
               "deprecationReason": null
-            },
-            {
-              "name": "words",
-              "description": null,
-              "args": [
-                {
-                  "name": "verseId",
-                  "description": null,
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "ID",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "verseKey",
-                  "description": null,
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                }
-              ],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "OBJECT",
-                      "name": "Word",
-                      "ofType": null
-                    }
-                  }
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
             }
           ],
           "inputFields": null,
@@ -1276,22 +1220,6 @@
           "description": null,
           "fields": [
             {
-              "name": "createdAt",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "ISO8601DateTime",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
               "name": "id",
               "description": null,
               "args": [],
@@ -1363,22 +1291,6 @@
                 "kind": "SCALAR",
                 "name": "String",
                 "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "updatedAt",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "ISO8601DateTime",
-                  "ofType": null
-                }
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -1482,9 +1394,123 @@
         },
         {
           "kind": "OBJECT",
+          "name": "Translation",
+          "description": null,
+          "fields": [
+            {
+              "name": "id",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "languageId",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "languageName",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "resourceName",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "text",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "verseId",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
           "name": "Verse",
           "description": null,
           "fields": [
+            {
+              "name": "audio",
+              "description": "recitation of verse",
+              "args": [
+                {
+                  "name": "recitation",
+                  "description": "Recitation id",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "Int",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "OBJECT",
+                "name": "AudioFile",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
             {
               "name": "chapterId",
               "description": null,
@@ -1586,18 +1612,6 @@
               "deprecationReason": null
             },
             {
-              "name": "sajdah",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
               "name": "sajdahNumber",
               "description": null,
               "args": [],
@@ -1610,7 +1624,66 @@
               "deprecationReason": null
             },
             {
+              "name": "sajdahType",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "tafsirs",
+              "description": "tafsirs of the verse",
+              "args": [
+                {
+                  "name": "tafsirIds",
+                  "description": "Comma separated ids of tafsir to load for each verse",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "String",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "Tafsir",
+                    "ofType": null
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "textImlaei",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "textImlaeiSimple",
               "description": null,
               "args": [],
               "type": {
@@ -1634,7 +1707,7 @@
               "deprecationReason": null
             },
             {
-              "name": "textSimple",
+              "name": "textUthmani",
               "description": null,
               "args": [],
               "type": {
@@ -1646,13 +1719,60 @@
               "deprecationReason": null
             },
             {
-              "name": "textUthmani",
+              "name": "textUthmaniSimple",
               "description": null,
               "args": [],
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
                 "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "textUthmaniTajweed",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "translations",
+              "description": "translations of verse",
+              "args": [
+                {
+                  "name": "translationIds",
+                  "description": "Comma separated ids of translation to load for each verse",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "String",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "Translation",
+                    "ofType": null
+                  }
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -1689,6 +1809,26 @@
                 "kind": "SCALAR",
                 "name": "Int",
                 "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "words",
+              "description": "words of the verse",
+              "args": [],
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "Word",
+                    "ofType": null
+                  }
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -1877,6 +2017,18 @@
               "deprecationReason": null
             },
             {
+              "name": "translation",
+              "description": "word translation in given language. If translation for give language doesn't exist, we'll fallback to English translation",
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "WordTranslation",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "verseId",
               "description": null,
               "args": [],
@@ -1895,6 +2047,81 @@
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "WordTranslation",
+          "description": null,
+          "fields": [
+            {
+              "name": "id",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "languageId",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "languageName",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "text",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "wordId",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Int",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -2822,9 +3049,9 @@
   "extensions": {
     "tracing": {
       "version": 1,
-      "startTime": "2021-01-06T20:32:32.685Z",
-      "endTime": "2021-01-06T20:32:32.760Z",
-      "duration": 75018882,
+      "startTime": "2021-01-15T18:32:59.648Z",
+      "endTime": "2021-01-15T18:32:59.711Z",
+      "duration": 63406944,
       "execution": {
         "resolvers": []
       }
