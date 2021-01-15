@@ -28,6 +28,7 @@
 #
 
 class Verse < ApplicationRecord
+  attr_accessor :highlighted_text
   include QuranSearchable
 
   belongs_to :chapter, inverse_of: :verses

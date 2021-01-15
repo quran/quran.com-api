@@ -34,14 +34,14 @@ module QuranNavigationSearchable
         verse_mapping.map do |chapter_id, verse_range|
           [
               {
-                name: "Juz - #{juz_number} - #{Chapter.find(chapter_id).name_simple}",
-                url: "/#{verse_range}",
+                name: "Juz #{juz_number} #{Chapter.find(chapter_id).name_simple}",
+                url: "/#{chapter_id}/#{verse_range}",
                 verse_id: ''
               },
 
               {
-                name: "-  جز#{juz_number} - #{Chapter.find(chapter_id).name_arabic}",
-                url: "/#{verse_range}",
+                name: " جز#{juz_number} #{Chapter.find(chapter_id).name_arabic}",
+                url: "/#{chapter_id}/#{verse_range}",
                 verse_id: ''
               },
           ]

@@ -17,6 +17,9 @@ gem 'therubyracer', platforms: :ruby
 gem 'active_model_serializers', '~> 0.10.0'
 gem 'turbostreamer', '>= 1.9'
 
+# Detect langauge from text
+gem "cld3", '>= 3.4.1'
+
 # Http request
 gem 'httparty', require: false
 

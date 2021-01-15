@@ -1,7 +1,6 @@
 # frozen_string_literal: true
-module Api::V3
-  class SearchController < ApplicationController
-    include ActionView::Rendering
+module Api::V4
+  class SearchController < ApiController
     include LanguageBoost
     QUERY_SANITIZER = Rails::Html::WhiteListSanitizer.new
 

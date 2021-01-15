@@ -2,31 +2,35 @@
 
 module Search
   class Results
-    def initialize(search)
+    attr_reader :result_type
+
+    def initialize(search, page, search_type = nil)
       @search = search
-      @search_result = search.results.results
+      @record_highlights = {}
+      @result_size = 0
+      @current_page = page
+      @result_type = search_type
     end
 
     def results
-      @search_result.map do |res|
-        prepare_result res
+      if empty?
+        {}
+      else
+        preppare_heighlights
+        @record_highlights
       end
     end
 
-    def total_count
-      @search.response['hits']['total']
+    def pagination
+      Pagy.new(count: total_count, page: @current_page + 1, per_page: VERSES_PER_PAGE)
     end
 
-    def current_page
-      @search.current_page
+    def empty?
+      @search.empty?
     end
 
-    def total_pages
-      @search.total_pages
-    end
-
-    def per_page
-      @search.limit_value
+    def timed_out?
+      @search.timed_out
     end
 
     def took
@@ -34,54 +38,65 @@ module Search
     end
 
     protected
-    def prepare_result(result)
-      verse = Verse.find(result['_source']['id'])
-      translations = []
-      matched_words = {}
-      words = result['inner_hits'].delete('words')
 
-      words['hits']['hits'].map do |hit|
-        word_id = hit['_source']['id']
-        matched_words[word_id] = word_hightlight_class(hit)
+    def total_count
+      @search.response['hits']['total']['value']
+    end
+
+    def preppare_heighlights
+      @search.response['hits']['hits'].each do |hit|
+        if :navigation == @result_type
+          @record_highlights[hit['_source']['url']] = fetch_navigational_highlighted_text(hit)
+        else
+          @record_highlights[hit['_source']['verse_id']] = {
+              text: fetch_verse_highligted_text(hit['highlight']),
+              translations: fetch_translations(hit)
+          }
+        end
+        @result_size += 1
       end
+    end
 
-      result['inner_hits'].each_pair do |key, val|
-        if val['hits']['total'] > 0
-          val['hits']['hits'].each do |trans|
-            translations << prepare_translation(trans, key)
+    def fetch_navigational_highlighted_text(hit)
+      if hit['highlight'].present?
+        hit['highlight'].values[0][0]
+      else
+        hit['_source']['name']
+      end
+    end
+
+    def fetch_verse_highligted_text(highlight)
+      if highlight.presence
+        highlight.values[0][0]
+      end
+    end
+
+    def fetch_translations(hit)
+      return [] if hit['inner_hits'].blank?
+
+      translations = []
+
+      hit['inner_hits'].each do |lang, inner_hit|
+        total = inner_hit['hits']['total']['value']
+
+        if total > 0
+          language = inner_hit['hits']['hits'][0]['_source']['language']
+
+          inner_hit['hits']['hits'].first(5).map do |trans_hit|
+            _source = trans_hit['_source']
+
+            translations << {
+                resource_id: _source['resource_id'],
+                resource_name: _source['resource_name'],
+                id: trans_hit['_id'],
+                text: trans_hit['highlight'].values[0][0],
+                language: language
+            }
           end
         end
       end
 
-      { id: verse.id, verse_number: verse.verse_number, chapter_id: verse.chapter_id, verse_key: verse.verse_key, text_madani: verse.text_madani, words: prepare_words(verse, matched_words), translations: translations }
-    end
-
-    def prepare_translation(trans, key)
-      author = trans['_source']['author']
-      text = trans['highlight']["#{key}.text"].first
-
-      { resource_name: author, text: text, id: trans['_source']['id'], language_name: trans['_source']['language_name'], resource_id: trans['_source']['resource_content_id'] }
-    end
-
-    def word_hightlight_class(hit)
-      return 'hlt1' unless hit['highlight']
-
-      highlight = hit['highlight'].values.first.first
-
-      if matched = highlight.match(/(hlt\ds*)/)
-        matched[0]
-      else
-        ''
-      end
-    end
-
-    def prepare_words(verse, matched)
-      words = verse.words.preload(:audio)
-
-      words.map do |w|
-        serializer = V3::WordSerializer.new(w, scope: {})
-        serializer.as_json.merge(highlight: matched[w.id])
-      end
+      translations
     end
   end
 end

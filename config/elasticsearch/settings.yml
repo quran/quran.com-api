@@ -1,169 +1,138 @@
 index:
-    number_of_shards: 5
-#    query:
-        #        default_field: text
-    similarity:
-        my_bm25:
-            type: BM25
-            b: 0.236
-    analysis:
+  number_of_shards: 5
+  mapping:
+    nested_fields:
+      limit: 200
+  #    query:
+  #        default_field: text
+  # https://www.elastic.co/guide/en/elasticsearch/reference/current/similarity.html
+  similarity:
+    my_bm25:
+      type: BM25
+      b: 0.236
+
+  analysis:
+    filter:
+      # english analyzer, see http://www.elasticsearch.org/guide/en/elasticsearch/reference/1.4/analysis-lang-analyzer.html#english-analyzer
+      english_stop:
+        type: stop
+        stopwords_path: analysis/english_stop.txt
+      english_keywords:
+        type: keyword_marker
+        keywords:
+          - Allah
+          - God
+          - Moses
+          - Musa
+          - Isa
+          - Jesus
+          - Noah
+      arabic_keywords:
+        type: keyword_marker
+        keywords:
+          - الله
+          - ياسين
+          - موسي
+          - عيسي
+          - يوسف
+          - ابراهيم
+          - اسماعيل
+          - نوح
+      english_stemmer:
+        type: stemmer
+        language: english
+      english_possessive_stemmer:
+        type: stemmer
+        language: possessive_english
+      autocomplete:
+        type: "edge_ngram"
+        min_gram: 1
+        max_gram: 30
+
+      unique_tokens:
+        type: unique
+        only_on_same_position: true
+      arabic_ngram:
+        type: ngram
+        min_gram: 5
+        max_gram: 6
+      arabic_stop:
+        type: stop
+        stopwords: _arabic_
+      arabic_stemmer:
+        type: stemmer
+        language: arabic
+      quran_word_synonym:
+        type: synonym
+        expand: true
+        synonyms_path: analysis/quran_word_synonym.txt
+      shingle_filter:
+        type: shingle
+        min_shingle_size: 2
+        max_shingle_size: 2
+        output_unigrams: false
+
+    analyzer:
+      autocomplete_arabic:
+        type: custom
+        tokenizer: whitespace
         filter:
-            # english analyzer, see http://www.elasticsearch.org/guide/en/elasticsearch/reference/1.4/analysis-lang-analyzer.html#english-analyzer
-            english_stop:
-                type: stop
-                stopwords_path: analysis/english_stop.txt
-            english_keywords:
-                type: keyword_marker
-                keywords: [ 'allah' ]
-            english_stemmer:
-                type: stemmer
-                language: english
-            english_possessive_stemmer:
-                type: stemmer
-                language: possessive_english
-            autocomplete:
-                type: "edgeNGram"
-                min_gram: 1
-                max_gram: 30
+          - arabic_normalization
+          - autocomplete
+          - arabic_keywords
+      arabic_synonym_normalized:
+        tokenizer: icu_tokenizer
+        filter:
+          - arabic_keywords
+          - quran_word_synonym
+          - arabic_normalization
+          # - arabic_stemmer
+          - arabic_stop
+          - icu_folding
 
+      arabic_normalized:
+        tokenizer: whitespace
+        filter:
+          - arabic_normalization
+          - quran_word_synonym
+          - arabic_keywords
+      arabic_stemmed:
+        tokenizer: whitespace
+        filter:
+          - arabic_normalization
+          - arabic_stemmer
+          - quran_word_synonym
+          - arabic_keywords
+      arabic_ngram:
+        tokenizer: whitespace
+        filter:
+          - arabic_normalization
+          - arabic_ngram
+          - reverse
+          - unique_tokens
+          - arabic_keywords
+      english:
+        tokenizer: standard
+        filter:
+          - english_possessive_stemmer
+          - lowercase
+          - english_stop
+          - english_keywords
+          - english_stemmer
 
-            unique_tokens:
-                type: unique
-                only_on_same_position: true
-            arabic_ngram:
-                type: nGram
-                min_gram: 5
-                max_gram: 8
-            arabic_stop:
-                type: stop
-                stopwords: _arabic_
-            arabic_keywords:
-                type: keyword_marker
-                keywords:
-                    - الله
-            arabic_stemmer:
-                type: stemmer
-                language: arabic
-            quran_token_to_lemma_synonym:
-                type: synonym
-                synonyms_path: analysis/synonym.text-token.to.text-lemma.txt
-            quran_token_to_lemma_stop:
-                type: stop
-                stopwords_path: analysis/stop.text-token.to.text-lemma.txt
-
-            quran_token_to_stem_synonym:
-                type: synonym
-                synonyms_path: analysis/synonym.text-token.to.text-stem.txt
-
-            quran_token_to_root_synonym:
-                type: synonym
-                synonyms_path: analysis/synonym.text-token.to.text-root.txt
-            quran_token_to_root_stop:
-                type: stop
-                stopwords_path: analysis/stop.text-token.to.text-root.txt
-            dbl_metaphone:
-                type: phonetic
-                encoder: doublemetaphone
-            shingle_filter:
-                type: shingle
-                min_shingle_size: 2
-                max_shingle_size: 2
-                output_unigrams: false
-
-        analyzer:
-            autocomplete:
-                type: custom
-                tokenizer: standard
-                filter: [ "lowercase", "autocomplete" ]
-            autocomplete_arabic:
-                type: custom
-                tokenizer: whitespace
-                filter:
-                    - arabic_normalization
-                    - arabic_keywords
-                    - autocomplete
-
-            # english analyzer, see http://www.elasticsearch.org/guide/en/elasticsearch/reference/1.4/analysis-lang-analyzer.html#english-analyzer
-            quran_token_to_lemma:
-                tokenizer: icu_tokenizer
-                filter:
-                    - quran_token_to_lemma_synonym
-                    - quran_token_to_lemma_stop
-            quran_token_to_lemma_normalized:
-                tokenizer: icu_tokenizer
-                filter:
-                    - quran_token_to_lemma_synonym
-                    - quran_token_to_lemma_stop
-                    - arabic_normalization
-                    - arabic_keywords
-                    - icu_folding
-                    - icu_normalizer
-            quran_token_to_stem:
-                tokenizer: icu_tokenizer
-                filter:
-                    - quran_token_to_stem_synonym
-            quran_token_to_stem_normalized:
-                tokenizer: icu_tokenizer
-                filter:
-                    - quran_token_to_stem_synonym
-                    - arabic_normalization
-                    - arabic_keywords
-                    - icu_folding
-                    - icu_normalizer
-            quran_token_to_root:
-                tokenizer: icu_tokenizer
-                filter:
-                    - quran_token_to_root_synonym
-                    - quran_token_to_root_stop
-            arabic_normalized:
-                tokenizer: whitespace
-                filter:
-                    - arabic_normalization
-                    - arabic_keywords
-            arabic_stemmed:
-                tokenizer: whitespace
-                filter:
-                    - arabic_normalization
-                    - arabic_keywords
-                    - arabic_stemmer
-            arabic_ngram:
-                tokenizer: whitespace
-                filter:
-                    - arabic_normalization
-                    - arabic_keywords
-                    - arabic_ngram
-                    - reverse
-                    - arabic_ngram
-                    - reverse
-                    - unique_tokens
-            english:
-                tokenizer: standard
-                filter:
-                    - english_possessive_stemmer
-                    - lowercase
-                    - english_stop
-                    - english_keywords
-                    - english_stemmer
-
-            arabic:
-                tokenizer: whitespace
-                filter:
-                    - arabic_normalization
-                    - arabic_keywords
-                    - arabic_stemmer
-            minimal:
-                tokenizer: whitespace
-                filter:
-                    - lowercase
-
-            dbl_metaphone:
-                tokenizer: standard
-                filter:
-                    - dbl_metaphone
-
-            shingle_analyzer:
-                type: custom
-                tokenizer: standard
-                filter:
-                    - lowercase
-                    - shingle_filter
+      arabic:
+        tokenizer: whitespace
+        filter:
+          - arabic_normalization
+          - arabic_stemmer
+          - arabic_keywords
+      minimal:
+        tokenizer: whitespace
+        filter:
+          - lowercase
+      shingle_analyzer:
+        type: custom
+        tokenizer: standard
+        filter:
+          - lowercase
+          - shingle_filter
