@@ -2,12 +2,13 @@
 
 class VerseFinder
   attr_reader :params, :results
+  include QuranUtils::StrongMemoize
 
   def initialize(params)
     @params = params
   end
 
-  def find(verse_number, language_code)
+  def find(verse_number, language_code='en')
     load_verses(language_code).find_by_verse_number(verse_number)
   end
 
@@ -16,7 +17,6 @@ class VerseFinder
     load_translations
     load_words(language_code)
     load_audio
-    set_offset
 
     @results.order('verses.verse_index ASC, words.position ASC, word_translations.priority ASC')
   end
@@ -50,7 +50,7 @@ class VerseFinder
     @current_page ||= (params[:page].to_i <= 1 ? 1 : params[:page].to_i)
   end
 
-  def total_pages
+  def total_versestotal_pages
     (total_verses / per_page).ceil
   end
 
@@ -66,7 +66,7 @@ class VerseFinder
 
     @results = Verse
                  .where(chapter_id: chapter.id)
-                 .where('verse_number >= ? AND verse_number <= ?', verse_start.to_i, verse_end.to_i)
+                 .where('verses.verse_number >= ? AND verses.verse_number <= ?', verse_start.to_i, verse_end.to_i)
   end
 
   def load_words(word_translation_lang)
@@ -133,14 +133,16 @@ class VerseFinder
   def eager_load_words
     %i[
       word_translation
-      transliteration
     ]
   end
 
   def verse_pagination_start
-    start = 1 + (current_page - 1) * per_page
-
-    min(start, total_verses)
+    if offset
+      min(offset + 1, total_verses)
+    else
+      start = 1 + (current_page - 1) * per_page
+      min(start, total_verses)
+    end
   end
 
   def verse_pagination_end(start)

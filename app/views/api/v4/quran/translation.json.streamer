@@ -1,0 +1,5 @@
+json.array! @translations do |translation|
+  json.object! do
+    json.extract! translation, :id, :verse_id, :verse_key, :text
+  end
+end

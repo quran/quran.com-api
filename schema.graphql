@@ -1,50 +1,70 @@
 type AudioFile {
-  createdAt: ISO8601DateTime!
   duration: Int
-  format: String
   id: ID!
-  isEnabled: Boolean
-  mimeType: String
   recitationId: Int
-  resourceId: Int
-  resourceType: String
   segments: String
-  updatedAt: ISO8601DateTime!
   url: String
+  verseId: Int
 }
 
 type Chapter {
-  bismillahPre: Boolean
-  chapterNumber: Int
-  createdAt: ISO8601DateTime!
+  """
+  Boolean attribute indicating if this surah should show bismillah
+  """
+  bismillahPre: Boolean!
+
+  """
+  Surah number
+  """
+  chapterNumber: Int!
   id: ID!
-  nameArabic: String
-  nameComplex: String
-  nameSimple: String
-  pages: String
-  revelationOrder: Int
-  revelationPlace: String
-  updatedAt: ISO8601DateTime!
-  versesCount: Int
+  nameArabic: String!
+  nameComplex: String!
+  nameSimple: String!
+  pages: [Int!]!
+  revelationOrder: Int!
+  revelationPlace: String!
+
+  """
+  Translated chapter names
+  """
+  translatedName(language: String! = "en"): TranslatedName
+
+  """
+  verses for this chapter, max 50 results per call
+  """
+  verses(
+    """
+    starting ayah number
+    """
+    from: Int
+
+    """
+    page number for paginating within from-to ayah range
+    """
+    page: Int = 1
+
+    """
+    number of ayahs per call
+    """
+    perPage: Int = 10
+
+    """
+    last ayah number
+    """
+    to: Int
+  ): [Verse!]
+  versesCount: Int!
 }
 
 type ChapterInfo {
   chapterId: Int
-  createdAt: ISO8601DateTime!
-  id: ID!
-  languageId: Int
+  id: ID
   languageName: String
-  resourceContentId: Int
   shortText: String
   source: String
   text: String
-  updatedAt: ISO8601DateTime!
 }
-
-"""
-An ISO 8601-encoded datetime
-"""
-scalar ISO8601DateTime
 
 """
 Represents untyped JSON
@@ -52,43 +72,96 @@ Represents untyped JSON
 scalar JSON
 
 type Juz {
-  createdAt: ISO8601DateTime!
   id: ID!
   juzNumber: Int
-  updatedAt: ISO8601DateTime!
   verseMapping: JSON
+
+  """
+  verses for this juz, max 50 results per call
+  """
+  verses(
+    """
+    page number for paginating within from-to ayah range
+    """
+    page: Int = 1
+
+    """
+    number of ayahs per call
+    """
+    perPage: Int = 10
+  ): [Verse!]
 }
 
 type Query {
-  audioFile(recitationId: ID!, resourceId: ID!, resourceType: String = "Verse"): AudioFile!
-  audioFiles(recitationId: ID!, resourceIds: [ID!]!, resourceType: String = "Verse"): [AudioFile!]!
-  chapter(id: ID!): Chapter!
+  audioFile(recitationId: ID!, verseId: ID!): AudioFile!
+  audioFiles(recitationId: ID!, verseIds: [ID!]!): [AudioFile!]!
+
+  """
+  Chapter/Surah detail.
+  """
+  chapter(id: ID!, language: String = "en"): Chapter!
   chapterInfo(chapterId: ID!, language: String = "en"): ChapterInfo!
+
+  """
+  Chapter/Surah list. Use `language` query string if you want to fetch translated names in a specific language.
+  """
   chapters(language: String = "en"): [Chapter!]!
   juzs: [Juz!]!
+  searchVerses(language: String = "en", page: Int = 1, query: String!, size: Int = 20): SearchResults
   tafsirs(verseId: ID, verseKey: String): [Tafsir!]!
   verse(id: ID): Verse!
   verseByVerseKey(verseKey: String!): Verse!
-  verses(chapterId: ID!, language: String = "en", limit: Int = 10, offset: Int = 0, padding: Int = 0, page: Int = 1): [Verse!]!
-  words(verseId: ID, verseKey: String): [Word!]!
+  verses(chapterId: ID!, language: String = "en", limit: Int = 10, offset: Int = 0, page: Int = 1): [Verse!]!
+}
+
+type SearchResults {
+  currentPage: Int!
+  perPage: Int!
+  query: String!
+  results: [Verse!]!
+  took: Int!
+  totalCount: Int!
+  totalPages: Int!
 }
 
 type Tafsir {
-  createdAt: ISO8601DateTime!
   id: ID!
   languageId: Int
   languageName: String
   resourceContentId: Int
   resourceName: String
   text: String
-  updatedAt: ISO8601DateTime!
   verseId: Int
   verseKey: String
 }
 
+type TranslatedName {
+  id: ID!
+  languageId: Int
+  languageName: String
+  name: String!
+}
+
+type Translation {
+  id: ID!
+  languageId: Int
+  languageName: String
+  resourceName: String
+  text: String
+  verseId: Int
+}
+
 type Verse {
+  """
+  recitation of verse
+  """
+  audio(
+    """
+    Recitation id
+    """
+    recitation: Int!
+  ): AudioFile
   chapterId: Int
-  createdAt: ISO8601DateTime!
   hizbNumber: Int
   id: ID!
   imageUrl: String
@@ -96,45 +169,72 @@ type Verse {
   juzNumber: Int
   pageNumber: Int
   rubNumber: Int
-  sajdah: String
   sajdahNumber: Int
+  sajdahType: String
+
+  """
+  tafsirs of the verse
+  """
+  tafsirs(
+    """
+    Comma separated ids of tafsir to load for each verse
+    """
+    tafsirIds: String!
+  ): [Tafsir!]
   textImlaei: String
+  textImlaeiSimple: String
   textIndopak: String
-  textMadani: String
-  textSimple: String
-  updatedAt: ISO8601DateTime!
+  textUthmani: String
+  textUthmaniSimple: String
+  textUthmaniTajweed: String
+
+  """
+  translations of verse
+  """
+  translations(
+    """
+    Comma separated ids of translation to load for each verse
+    """
+    translationIds: String!
+  ): [Translation!]
   verseIndex: Int
   verseKey: String
-  verseLemmaId: Int
   verseNumber: Int
-  verseRootId: Int
-  verseStemId: Int
+
+  """
+  words of the verse
+  """
+  words: [Word!]
 }
 
 type Word {
   audioUrl: String
   chapterId: Int
-  charTypeId: Int
   charTypeName: String
   className: String
-  codeDec: Int
-  codeDecV3: Int
-  codeHex: String
-  codeHexV3: String
-  createdAt: ISO8601DateTime!
+  code: String
   id: ID!
   lineNumber: Int
   location: String
   pageNumber: Int
-  pauseName: String
   position: Int
   textImlaei: String
   textIndopak: String
-  textMadani: String
   textSimple: String
-  tokenId: Int
-  topicId: Int
-  updatedAt: ISO8601DateTime!
+  textUthmani: String
+
+  """
+  word translation in given language. If translation for give language doesn't exist, we'll fallback to English translation
+  """
+  translation: WordTranslation
   verseId: Int
   verseKey: String
+}
+
+type WordTranslation {
+  id: ID!
+  languageId: Int
+  languageName: String
+  text: String
+  wordId: Int
 }

@@ -1,4 +1,6 @@
 namespace :v3 do
+  get 'ping', to: 'ping#ping'
+
   resources :foot_notes, only: :show
 
   resources :chapters, only: [:index, :show] do
@@ -28,6 +30,6 @@ namespace :v3 do
     get :chapter_info
   end
 
-  get 'search', to: 'search#index'
-  get 'suggest', to: 'suggest#index'
+  get 'search', to: 'search#search'
+  get 'suggest', to: 'search#suggest'
 end

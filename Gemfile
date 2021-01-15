@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 source 'https://rubygems.org'
-ruby '2.7.1'
+ruby '3.0.0'
 
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-gem 'rails', '~> 6.0.3', '>= 6.0.3.2'
+gem 'rails', '~> 6.1'
 
 # Use postgresql as the database for Active Record
 gem 'pg', '>= 0.18', '< 2.0'
@@ -15,12 +15,17 @@ gem 'execjs'
 gem 'therubyracer', platforms: :ruby
 
 gem 'active_model_serializers', '~> 0.10.0'
+gem 'turbostreamer', '>= 1.9'
+
+# Detect langauge from text
+gem "cld3", '>= 3.4.1'
 
 # Http request
 gem 'httparty', require: false
 
 gem 'graphql', '1.11.4'
 gem 'graphql-schema_comparator'
+gem 'graphql-playground', github: 'naveed-ahmad/graphql-playground-rails'
 
 # Elasticsearch
 gem 'elasticsearch'
@@ -34,6 +39,8 @@ gem 'pagy'
 gem 'oj'
 gem 'oj_mimic_json'
 
+gem 'rails-html-sanitizer'
+
 # This is to run the rake task for importing in parallel
 gem 'parallel'
 # Will provide a progress bar as the import happens
@@ -43,7 +50,6 @@ gem 'prose'
 gem 'puma', '~> 4.1'
 
 gem 'rack-cors'
-gem 'sitemap_generator'
 
 gem 'virtus'
 
@@ -60,19 +66,18 @@ gem 'sentry-raven', group: [:development, :production]
 group :development, :test do
   gem 'pry-byebug'
   gem 'pry-rails'
+  gem 'apollo-tracing'
   # gem 'zeus'
 end
 
 group :development do
   gem 'byebug', platform: :mri
   gem 'ruby-progressbar'
-  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'benchmark-ips', require: false
   gem 'bullet'
   gem 'derailed_benchmarks'
-  gem 'mechanize'
-  gem 'meta_request'
   gem 'pre-commit'
+  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'spring-commands-rspec'
   gem 'spring-watcher-listen', '~> 2.0.0'
@@ -83,7 +88,7 @@ group :test, :development do
   gem 'annotate'
   gem 'guard-rspec', '= 4.7.3'
   gem 'guard-spork'
-  gem 'rspec-rails', '= 3.7.2'
+  gem 'rspec-rails', '= 4.0.2'
   gem 'shoulda-matchers', '~> 4.0'
   gem 'simplecov', require: false
   gem 'factory_bot_rails'

@@ -1,0 +1,9 @@
+json.object! do
+  json.extract! word, :id, :position, :audio_url, :char_type_name, *fields
+
+  json.translation do
+    json.object! do
+      json.extract! word.word_translation, :text, :language_name
+    end
+  end
+end

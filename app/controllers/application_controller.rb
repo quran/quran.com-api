@@ -14,10 +14,6 @@ class ApplicationController < ActionController::API
     render json: {error: error.message}, status: :not_found
   end
 
-  def eager_language(type)
-    "#{params[:language] || 'en'}_#{type}".to_sym
-  end
-
   def fetch_locale
     params[:language].presence || params[:locale].presence || 'en'
   end

@@ -1,0 +1,4 @@
+json.object! do
+  json.id @recitation.id
+  json.info @resource.resource_info
+end

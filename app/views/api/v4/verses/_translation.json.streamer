@@ -1,0 +1,6 @@
+json.object! do
+  json.id translation.id
+  json.text translation.text
+  json.name translation.resource_name
+  json.language_name translation.language_name
+end

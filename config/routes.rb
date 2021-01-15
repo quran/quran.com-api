@@ -8,7 +8,7 @@ end
 Rails.application.routes.draw do
   # NOTE: Normally we'd hide this in `Rails.env.development?` but having
   # anyone access it to play with API is a good tool
-
+  mount GraphQL::Playground::Engine, at: "/graphql-playground", graphql_path: "/graphql"
   post '/graphql', to: 'graphql#execute'
 
   namespace :v3 do
@@ -28,23 +28,5 @@ Rails.application.routes.draw do
     draw_routes :v4
   end
 
-  root to: 'v3/ping#ping'
-  get '/v3/ping', to: 'v3/ping#ping'
-
-  ['sitemap.xml.gz', 'sitemap:number.xml.gz'].each do |path|
-    get "/sitemaps/#{path}" => proc { |req|
-      filename = req['PATH_INFO'].gsub('sitemaps', '').gsub(/\//, '')
-
-      [
-          200,
-          {
-              'Pragma'        => 'public',
-              'Cache-Control' => "max-age=#{1.day.to_i}",
-              'Expires'       => 1.day.from_now.to_s(:rfc822),
-              'Content-Type'  => 'text/html'
-          },
-          [open(Rails.root.join('public', 'sitemaps', filename)).read]
-      ]
-    }
-  end
+  root to: 'api/v4/ping#ping'
 end

@@ -1,0 +1,1 @@
+TurboStreamer.encode(encoder: :oj)

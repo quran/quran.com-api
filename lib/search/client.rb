@@ -1,20 +1,28 @@
 # frozen_string_literal: true
 
 module Search
+  VERSES_PER_PAGE = 20
+
   class Client
-    attr_accessor :query, :options, :page
+    attr_accessor :query, :options, :page, :phrase_matching
 
     def initialize(query, options = {})
       @query = Search::Query.new(query)
+      @options = options
       @page = options[:page].to_i.abs
       @language = options[:language]
+      @phrase_matching = options[:phrase_matching]
     end
 
+=begin
     def search
-      Search::Results.new(Verse.search(search_defination).page(@page).per(20))
+      search = Elasticsearch::Model.search(search_defination, [Verse, Translation, Chapter, Juz]).results.to_a.map(&:to_hash)
+
+      Search::Results.new(search, page)
     end
 
     protected
+
     def search_defination
       {
        _source: source_attributes,
@@ -26,7 +34,7 @@ module Search
     def search_query
       trans_query = []
 
-      unless /[:\/]/.match?(@query.query)
+      unless /[:\/]/.match(@query.query)
         available_languages = %w[ml en bs az cs fr hi es fi id it ko dv bn ku de am al fa ha mrn ms pl ja nl tr ur th
                                  no tg ug ru pt ro sq sw so sv ta uz zh tt]
 
@@ -90,17 +98,17 @@ module Search
     end
 
     def source_attributes
-      ['verse_key', 'id']
+      ['verse_key', 'verse_id', 'url']
     end
 
     def highlight
       {
         fields: {
           'text_madani.text' => {
-            type: 'fvh'
+            type: 'fvh'.freeze
           }
         },
-        tags_schema: 'styled'
+        tags_schema: 'styled'.freeze
       }
     end
 
@@ -108,12 +116,13 @@ module Search
       {
         highlight: {
           fields: {
-            filed => { type: 'fvh' }
+            filed => { type: 'fvh'.freeze }
           },
-          tags_schema: 'styled'
+          tags_schema: 'styled'.freeze
         },
         size: 500
       }
     end
+=end
   end
 end

@@ -10,7 +10,7 @@ require "action_controller/railtie"
 # require "action_mailer/railtie"
 # require "action_mailbox/engine"
 # require "action_text/engine"
-#require "action_view/railtie"
+require "action_view/railtie"
 # require "action_cable/engine"
 # require "sprockets/railtie"
 #require "rails/test_unit/railtie"
@@ -33,6 +33,7 @@ module QuranAPI
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
+    config.eager_load_paths << "#{config.root}/lib"
 
     config.generators do |g|
       g.test_framework :rspec, fixture: true

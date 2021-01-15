@@ -1,0 +1,5 @@
+json.array! @audio_files do |audio_file|
+  json.object! do
+    json.extract! audio_file, :id, :verse_id, :verse_key, :url, :duration, :segments
+  end
+end

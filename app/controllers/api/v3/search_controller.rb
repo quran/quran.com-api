@@ -1,56 +1,64 @@
 # frozen_string_literal: true
+module Api::V3
+  class SearchController < ApplicationController
+    include ActionView::Rendering
+    include LanguageBoost
+    QUERY_SANITIZER = Rails::Html::WhiteListSanitizer.new
 
-class V3::SearchController < ApplicationController
-  include LanguageDetection
+    def search
+      if do_search
+        render
+      else
+        #TODO: render error
+      end
+    end
 
-  def index
-    client = Search::Client.new(
-      query,
-      page: page, size: size, lanugage: language
-    )
+    protected
 
-    response = client.search
+    def language
+      (params[:language] || params[:locale]).presence || 'en'
+    end
 
-    render json: {
-      query: query,
-      total_count: response.total_count,
-      took: response.took,
-      current_page: response.current_page,
-      total_pages: response.total_pages,
-      per_page: response.per_page,
-      results: response.results
-    }
+    def query
+      query = (params[:q] || params[:query]).to_s.strip.first(150)
+      params[:q] = QUERY_SANITIZER.sanitize(query)
+    end
 
-    # render json: {
-    #     query: search.query.query,
-    #     total: search.total,
-    #     page: search.page,
-    #     size: search.size,
-    #     from: search.from + 1,
-    #     took: {
-    #         total: search.delta_time,
-    #         elasticsearch: search.response.took.to_f / 1000
-    #     },
-    #     results: search.response.records
-    # }
-  end
+    def size(default = 20)
+      (params[:size] || params[:s] || default).to_i
+    end
 
-  protected
-  def language
-    params[:language] || 'en'
-  end
+    def page
+      # NODE: ES's pagination starts from 0,
+      # pagy gem we're using to render pagination start pages from 1
+      (params[:page] || params[:p]).to_i.abs
+    end
 
-  def query
-    params[:q] || params[:query]
-  end
+    def do_search
+      client = Search::QuranSearchClient.new(
+          query,
+          page: page,
+          size: size,
+          lanugage: language,
+          phrase_matching: force_phrase_matching?
+      )
 
-  def size(default = 20)
-    (params[:size] || params[:s] || default).to_i
-  end
+      @presenter = SearchPresenter.new(params, query)
 
-  def page
-    p = (params[:page] || params[:p]).to_i
+      begin
+        results = client.search
 
-    p.zero? ? 1 : p
+        @presenter.add_search_results(results)
+      rescue Faraday::ConnectionFailed => e
+        false
+      rescue Elasticsearch::Transport::Transport::ServerError => e
+        # Index not ready yet? or other ES server errors
+        false
+      end
+    end
+
+    def force_phrase_matching?
+      params[:phrase].presence || query.match?(/\d+(:)?(\d+)?/)
+    end
   end
 end

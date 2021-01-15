@@ -1,0 +1,1 @@
+json.partial! 'chapter', chapter: @chapter

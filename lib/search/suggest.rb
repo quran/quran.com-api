@@ -26,7 +26,7 @@ module Search
     def suggest_query
       trans_query = []
 
-      unless /[:\/]/.match?(@query.query)
+      unless /[:\/]/.match(@query.query)
         available_languages = %w[ml en bs az cs fr hi es fi id it ko dv bn ku de am al fa ha mrn ms pl ja nl tr ur th
                                  no tg ug ru pt ro sq sw so sv ta uz zh tt]
 
@@ -85,10 +85,10 @@ module Search
       {
         fields:      {
           'text_madani.text' => {
-            type: 'fvh'
+            type: 'fvh'.freeze
           }
         },
-        tags_schema: 'styled'
+        tags_schema: 'styled'.freeze
       }
     end
 
@@ -96,9 +96,9 @@ module Search
       {
         highlight: {
           fields:              {
-            filed => { type: 'plain' },
+            filed => { type: 'plain'.freeze },
           },
-          tags_schema:         'styled',
+          tags_schema:         'styled'.freeze,
           number_of_fragments: 1, # Don't highlight entire translation
           fragment_size:       90, # return 90 chars around matched word
           pre_tags:            ['<b>'],

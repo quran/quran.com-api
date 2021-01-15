@@ -1,0 +1,6 @@
+json.object! do
+  json.id tafsir.id
+  json.text tafsir.text
+  json.name tafsir.resource_name
+  json.language_name tafsir.language_name
+end

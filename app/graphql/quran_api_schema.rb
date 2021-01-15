@@ -8,4 +8,9 @@ class QuranApiSchema < GraphQL::Schema
 
   # Add built-in connections for pagination
   use GraphQL::Pagination::Connections
+
+  # Performance tracing
+  if Rails.env.development?
+    use ApolloTracing.new
+  end
 end

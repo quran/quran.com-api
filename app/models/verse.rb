@@ -28,6 +28,7 @@
 #
 
 class Verse < ApplicationRecord
+  attr_accessor :highlighted_text
   include QuranSearchable
 
   belongs_to :chapter, inverse_of: :verses
@@ -44,7 +45,7 @@ class Verse < ApplicationRecord
   # for eager loading one audio
   has_one :audio_file
 
-  default_scope { order 'verse_number asc' }
+  default_scope { order 'verses.verse_number asc' }
 
   def self.find_by_id_or_key(id)
     where(verse_key: id).or(where(id: id)).first

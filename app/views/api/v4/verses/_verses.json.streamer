@@ -1,0 +1,56 @@
+include_words = @presenter.render_words?
+include_translations = @presenter.render_translations?
+include_audio = @presenter.render_audio?
+include_tafsirs = @presenter.render_tafsirs?
+fields = @presenter.verse_fields
+word_fields = @presenter.word_fields
+
+json.object! do
+  json.verses do
+    json.array! @verses do |verse|
+      json.object! do
+        json.extract! verse, :id,
+                      :verse_number,
+                      :page_number,
+                      :verse_key,
+                      :juz_number,
+                      :hizb_number,
+                      :rub_number,
+                      :sajdah_type,
+                      :sajdah_number, *fields
+
+        if include_words
+          json.words do
+            json.array! verse.words, partial: 'word', as: :word, locals: {fields: word_fields}
+          end
+        end
+
+        if include_audio
+          json.audio do
+            json.object! do
+              json.extract! verse.audio_file, :url, :segments
+            end
+          end
+        end
+
+        if include_translations
+          json.translations do
+            json.array! verse.translations, partial: 'translation', as: :translation
+          end
+        end
+
+        if include_tafsirs
+          json.tafsirs do
+            json.array! verse.tafsirs, partial: 'tafsir', as: :tafsir
+          end
+        end
+      end
+    end
+  end
+
+  json.pagination do
+    json.object! do
+      json.next_page @presenter.next_page
+    end
+  end
+end

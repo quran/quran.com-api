@@ -1,0 +1,17 @@
+json.array! @media do |media|
+  json.object! do
+    json.extract! media,
+                  :id,
+                  :name,
+                  :author_name,
+                  :slug,
+                  :language_name
+
+    json.translated_name do
+      translated_name = media.translated_name
+      json.object! do
+        json.extract! translated_name, :name, :language_name
+      end
+    end
+  end
+end
