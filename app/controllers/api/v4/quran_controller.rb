@@ -12,7 +12,7 @@ module Api::V4
 
     def translation
       @translations = if (resource = fetch_translation_resource)
-                        Translation.order('verse_id ASC').where(resource_content_id: resource.id)
+                        Translation.order('verse_id ASC').where(resource_filters(resource))
                       else
                         []
                       end
@@ -22,7 +22,7 @@ module Api::V4
 
     def tafsir
       @tafsirs = if (resource = fetch_tafsir_resource)
-                   Tafsir.order('verse_id ASC').where(resource_content_id: resource.id)
+                   Tafsir.order('verse_id ASC').where(resource_filters(resource))
                  else
                    []
                  end
@@ -31,7 +31,7 @@ module Api::V4
     end
 
     def recitation
-      @audio_files = AudioFile.order('verse_id ASC').where(recitation_id: params[:recitation_id])
+      @audio_files = AudioFile.order('verse_id ASC').where(resource_filters(resource))
       render
     end
 
@@ -39,7 +39,7 @@ module Api::V4
       @script_type = fetch_script_type
       @verses = Verse
                     .unscope(:order)
-                    .order('verse_index ASC')
+                    .order('verse_index ASC').where(resource_filters)
                     .select(:id, :verse_key, @script_type)
 
       render
@@ -57,14 +57,15 @@ module Api::V4
       end
     end
 
-    def chapters
-      finder = ChapterFinder.new
-      finder.all_with_translated_names(fetch_locale)
-    end
-
-    def chapter
-      finder = ChapterFinder.new
-      finder.find_with_translated_name(params[:id], fetch_locale)
+    def resource_filters(resource = nil)
+      {
+          resource_content_id: resource&.id,
+          chapter_id: params[:chapter_number],
+          juz_number: params[:juz_number],
+          hizb_number: params[:hizb_number],
+          rub_number: params[:rub_number],
+          page_number: params[:page_number]
+      }.compact
     end
   end
 end
