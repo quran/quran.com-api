@@ -87,7 +87,7 @@ group :test, :development do
   gem 'rspec-rails', '= 4.0.2'
   gem 'shoulda-matchers', '~> 4.0'
   gem 'simplecov', require: false
-  gem 'factory_bot_rails'
+  gem 'factory_bot_rails', '>= 6.1.0'
   gem 'rubocop-rails_config'
   gem 'rubocop-rspec'
   gem 'spork'
