@@ -130,7 +130,6 @@ GEM
     equalizer (0.0.11)
     erubi (1.10.0)
     excon (0.78.1)
-    execjs (2.7.0)
     factory_bot (6.1.0)
       activesupport (>= 5.0.0)
     factory_bot_rails (6.1.0)
@@ -179,7 +178,6 @@ GEM
       concurrent-ruby (~> 1.0)
     ice_nine (0.11.2)
     jsonapi-renderer (0.2.2)
-    libv8 (3.16.14.19)
     listen (3.3.3)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
@@ -269,7 +267,6 @@ GEM
     rb-fsevent (0.10.4)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
-    ref (2.0.0)
     regexp_parser (2.0.3)
     rexml (3.2.4)
     rspec (3.10.0)
@@ -352,9 +349,6 @@ GEM
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
     stackprof (0.2.16)
-    therubyracer (0.12.3)
-      libv8 (~> 3.16.14.15)
-      ref
     thor (1.0.1)
     thread_safe (0.3.6)
     turbostreamer (1.9.0)
@@ -394,7 +388,6 @@ DEPENDENCIES
   elasticsearch-model
   elasticsearch-rails
   excon
-  execjs
   factory_bot_rails
   graphql (= 1.11.4)
   graphql-playground!
@@ -428,7 +421,6 @@ DEPENDENCIES
   spring-commands-rspec
   spring-watcher-listen (~> 2.0.0)
   stackprof
-  therubyracer
   turbostreamer (>= 1.9)
   tzinfo-data
   virtus

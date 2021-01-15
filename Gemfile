@@ -10,10 +10,6 @@ gem 'rails', '~> 6.1'
 # Use postgresql as the database for Active Record
 gem 'pg', '>= 0.18', '< 2.0'
 
-# See https://github.com/sstephenson/execjs#readme for more supported runtimes
-gem 'execjs'
-gem 'therubyracer', platforms: :ruby
-
 gem 'active_model_serializers', '~> 0.10.0'
 gem 'turbostreamer', '>= 1.9'
 
