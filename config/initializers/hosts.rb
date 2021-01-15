@@ -2,11 +2,9 @@
 
 Rails.application.config.hosts += [
   '.quran.com',
-  '.qurancdn.com',
-  'localhost',
-  '.ngrok.io'
+  '.qurancdn.com'
 ]
 
 if Rails.env.development?
-  Rails.application.config.hosts << '.loca.lt'
+  Rails.application.config.hosts +=['.loca.lt', 'ngrok.io', 'localhost']
 end
