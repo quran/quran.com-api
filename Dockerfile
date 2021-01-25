@@ -1,54 +1,44 @@
-FROM ruby:2.3.3
+FROM ruby:3.0.0-alpine
 
-RUN apt-get update -qq && \
-    apt-get install -y \
-        build-essential \
-        libpq-dev \
-        nodejs \
-        rsync && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache curl postgresql-dev tzdata git make gcc g++ python3 linux-headers binutils-gold gnupg libstdc++ yarn bash autoconf automake libtool build-base
 
-ARG env=development
+# install protobuf
+ENV PROTOBUF_URL https://github.com/google/protobuf/releases/download/v3.3.0/protobuf-cpp-3.3.0.tar.gz
+RUN curl -L -o /tmp/protobuf.tar.gz $PROTOBUF_URL
+WORKDIR /tmp/
+RUN tar xvzf protobuf.tar.gz
+WORKDIR /tmp/protobuf-3.3.0
+RUN mkdir /export
+RUN ./autogen.sh && \
+    ./configure --prefix=/usr && \
+    make -j 3 && \
+    make check && \
+    make install
+RUN ldconfig /etc/ld.so.conf.d
 
-WORKDIR /app
-COPY /app /app/app
-COPY /bin /app/bin
-COPY /config /app/config
-COPY /db /app/db
-COPY /lib /app/lib
-COPY /public /app/public
-COPY /spec /app/spec
-COPY /config.ru /app/
-COPY /Gemfile /app/
-COPY /Gemfile.lock /app/
-COPY /Rakefile /app/
-COPY /gen-sitemaps-and-run.sh /app/gen-sitemaps-and-run.sh
-# files could be mounted in dev for realtime code changes without rebuild
-# typically that would be: .:/app
+# Rails
+ENV RAILS_ROOT /var/www/quran
+RUN mkdir -p $RAILS_ROOT
+WORKDIR $RAILS_ROOT
 
-# copy build cache for the requested environment only
-COPY /build-cache/$env/bundle/ /usr/local/bundle/
+# Setting env up
+ENV RAILS_ENV='production'
+ENV RACK_ENV='production'
 
-RUN mkdir /var/www && \
-    chown -R www-data /app /var/www /usr/local/bundle
+# Adding gems
+RUN gem install bundler
+COPY Gemfile Gemfile
+COPY Gemfile.lock Gemfile.lock
+RUN bundle config set without 'development test'
+RUN bundle install --jobs 20 --retry 5
 
-USER www-data
+# Adding project files
+COPY . .
 
-# install a matching bundler to Gemfile.lock
-RUN gem install bundler -v 1.17.2
+# run yarn install
+RUN yarn install --silent --no-progress --no-audit --no-optional
 
-# install all gems
-ARG env=development
-ARG bundle_opts=
-
-ENV RAILS_ENV $env
-ENV RACK_ENV $env
-
-RUN echo "Running \"bundle install $bundle_opts\" with environment set to \"$env\"..." && \
-    bundle install $bundle_opts
+RUN mkdir -p /var/www/quran/tmp/pids/
 
 EXPOSE 3000
-
-ENTRYPOINT ["bundle", "exec"]
-CMD ["./gen-sitemaps-and-run.sh"]
+CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]
