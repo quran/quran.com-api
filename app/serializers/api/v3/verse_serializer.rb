@@ -54,7 +54,7 @@ module Api
     has_many :words, unless: :render_images?
 
     attribute :image, key: :image, if: :render_images? do
-      {url: object.image_url, width: object.image_width}
+      { url: object.image_url, width: object.image_width }
     end
 
     def render_images?

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Api::V3
   class AudioFilesController < ApplicationController
     def index
@@ -11,7 +12,6 @@ module Api::V3
     end
 
     private
-
     def recitation
       params[:recitation]
     end

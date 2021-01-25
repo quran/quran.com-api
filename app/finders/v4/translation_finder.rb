@@ -9,7 +9,6 @@ class V4::TranslationFinder < V4::VerseFinder
   end
 
   protected
-
   def load_translate_range(filter, resource_id)
     results = send("fetch_#{filter}", resource_id)
 
@@ -62,7 +61,7 @@ class V4::TranslationFinder < V4::VerseFinder
   end
 
   def fetch_by_juz(resource_id)
-    if juz = Juz.find_by_juz_number(params[:juz_number].to_i.abs)
+    if juz = Juz.find_by(juz_number: params[:juz_number].to_i.abs)
       @total_records = juz.verses_count
 
       results = filter_translations(resource_id)
@@ -75,8 +74,8 @@ class V4::TranslationFinder < V4::VerseFinder
   end
 
   def fetch_by_ayah(resource_id)
-      @total_records = 1
-      filter_translations(resource_id).where(verse_key: params[:ayah_key])
+    @total_records = 1
+    filter_translations(resource_id).where(verse_key: params[:ayah_key])
   end
 
   def filter_translations(resource_id)

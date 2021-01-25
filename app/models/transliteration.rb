@@ -22,6 +22,5 @@ class Transliteration < ApplicationRecord
   belongs_to :resource, polymorphic: true
 
   def resource_name
-
   end
 end

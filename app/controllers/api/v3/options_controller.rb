@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Api
   class V3::OptionsController < ApplicationController
     # GET options/default
@@ -7,7 +8,7 @@ module Api
       # Translation: Sahih International(English)
       # Recitation: Qari Abdul Baset(Mujawwad style)
       # Media: Bayyinah ( 61 )
-      render json: {translations: [21], language: 'en', recitation: 1, media: 61}
+      render json: { translations: [21], language: 'en', recitation: 1, media: 61 }
     end
 
     # GET options/languages

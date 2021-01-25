@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Api::V4
   class QuranController < ApiController
     VERSE_AVAILABLE_SCRIPTS = [
@@ -12,10 +13,10 @@ module Api::V4
 
     def translation
       @translations = if (resource = fetch_translation_resource)
-                        Translation.order('verse_id ASC').where(resource_filters(resource))
-                      else
-                        []
-                      end
+        Translation.order('verse_id ASC').where(resource_filters(resource))
+      else
+        []
+      end
 
       @fields = ['verse_id', 'verse_key']
 
@@ -24,10 +25,10 @@ module Api::V4
 
     def tafsir
       @tafsirs = if (resource = fetch_tafsir_resource)
-                   Tafsir.order('verse_id ASC').where(resource_filters(resource))
-                 else
-                   []
-                 end
+        Tafsir.order('verse_id ASC').where(resource_filters(resource))
+      else
+        []
+      end
 
       @fields = ['verse_id', 'verse_key']
 
@@ -50,7 +51,6 @@ module Api::V4
     end
 
     protected
-
     def fetch_script_type
       script = params[:script]
 

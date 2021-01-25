@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Api::V4
   class TranslationsController < ApiController
     before_action :init_presenter
@@ -29,7 +30,6 @@ module Api::V4
     end
 
     protected
-
     def init_presenter
       @presenter = TranslationsPresenter.new(params)
     end

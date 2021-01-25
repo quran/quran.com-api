@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Types
   class WordRootType < Types::BaseObject
     field :id, ID, null: false

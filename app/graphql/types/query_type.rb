@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 module Types
   class QueryType < Types::BaseObject
     field :chapters, [Types::ChapterType], null: false do
-      description "Chapter/Surah list. Use `language` query string if you want to fetch translated names in a specific language."
+      description 'Chapter/Surah list. Use `language` query string if you want to fetch translated names in a specific language.'
 
       argument :language, String, required: false, default_value: 'en'
     end
@@ -11,7 +13,7 @@ module Types
     end
 
     field :chapter, Types::ChapterType, null: false do
-      description "Chapter/Surah detail."
+      description 'Chapter/Surah detail.'
 
       argument :id, ID, required: true
       argument :language, String, required: false, default_value: 'en'

@@ -8,8 +8,8 @@ class VerseFinder
     @params = params
   end
 
-  def find(verse_number, language_code='en')
-    load_verses(language_code).find_by_verse_number(verse_number)
+  def find(verse_number, language_code = 'en')
+    load_verses(language_code).find_by(verse_number: verse_number)
   end
 
   def load_verses(language_code)
@@ -59,7 +59,6 @@ class VerseFinder
   end
 
   protected
-
   def fetch_verses_range
     verse_start = verse_pagination_start
     verse_end = verse_pagination_end(verse_start)
@@ -70,13 +69,13 @@ class VerseFinder
   end
 
   def load_words(word_translation_lang)
-    language = Language.find_by_id_or_iso_code(word_translation_lang)
+    language = Language.find_by(id_or_iso_code: word_translation_lang)
 
-    words_with_default_translation = results.where(word_translations: {language_id: Language.default.id})
+    words_with_default_translation = results.where(word_translations: { language_id: Language.default.id })
 
-    if (language)
+    if language
       @results = @results
-                   .where(word_translations: {language_id: language.id})
+                   .where(word_translations: { language_id: language.id })
                    .or(words_with_default_translation)
                    .eager_load(words: eager_load_words)
     else
@@ -90,7 +89,7 @@ class VerseFinder
 
     if translations.present?
       @results = @results
-                   .where(translations: {resource_content_id: translations})
+                   .where(translations: { resource_content_id: translations })
                    .eager_load(:translations)
     end
   end
@@ -98,7 +97,7 @@ class VerseFinder
   def load_audio
     if params[:recitation].present?
       @results = @results
-                   .where(audio_files: {recitation_id: params[:recitation]})
+                   .where(audio_files: { recitation_id: params[:recitation] })
                    .eager_load(:audio_file)
     end
   end

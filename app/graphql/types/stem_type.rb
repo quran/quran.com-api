@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Types
   class StemType < Types::BaseObject
     field :id, ID, null: false

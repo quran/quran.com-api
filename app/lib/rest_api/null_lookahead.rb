@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RestApi::NullLookahead < RestApi::ParamLookahead
   # No inputs required here.
   def initialize
@@ -20,6 +22,6 @@ class RestApi::NullLookahead < RestApi::ParamLookahead
   end
 
   def inspect
-    "#<RestApi::NullLookahead>"
+    '#<RestApi::NullLookahead>'
   end
 end

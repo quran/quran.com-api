@@ -5,7 +5,7 @@ class V4::VerseFinder < ::VerseFinder
               :total_records
 
   def random_verse(filters, language_code, words: true, tafsirs: false, translations: false, audio: false)
-    @results = Verse.unscope(:order).where(filters).order("RANDOM()").limit(3)
+    @results = Verse.unscope(:order).where(filters).order('RANDOM()').limit(3)
 
     load_translations(translations) if translations.present?
     load_words(language_code) if words
@@ -41,7 +41,6 @@ class V4::VerseFinder < ::VerseFinder
   end
 
   protected
-
   def fetch_by_chapter
     if chapter = Chapter.find_by(id: params[:chapter_number].to_i.abs)
       @total_records = chapter.verses_count
@@ -97,7 +96,7 @@ class V4::VerseFinder < ::VerseFinder
   end
 
   def fetch_by_juz
-    if juz = Juz.find_by_juz_number(params[:juz_number].to_i.abs)
+    if juz = Juz.find_by(juz_number: params[:juz_number].to_i.abs)
       @total_records = juz.verses_count
 
       verse_start = juz.first_verse_id + (current_page - 1) * per_page
@@ -134,13 +133,13 @@ class V4::VerseFinder < ::VerseFinder
   end
 
   def load_words(word_translation_lang)
-    language = Language.find_by_id_or_iso_code(word_translation_lang)
+    language = Language.find_by(id_or_iso_code: word_translation_lang)
 
-    words_with_default_translation = @results.where(word_translations: {language_id: Language.default.id})
+    words_with_default_translation = @results.where(word_translations: { language_id: Language.default.id })
 
-    if (language)
+    if language
       @results = @results
-                     .where(word_translations: {language_id: language.id})
+                     .where(word_translations: { language_id: language.id })
                      .or(words_with_default_translation)
                      .eager_load(words: eager_load_words)
     else
@@ -150,19 +149,19 @@ class V4::VerseFinder < ::VerseFinder
 
   def load_translations(translations)
     @results = @results
-                   .where(translations: {resource_content_id: translations})
+                   .where(translations: { resource_content_id: translations })
                    .eager_load(:translations)
   end
 
   def load_tafsirs(tafsirs)
     @results = @results
-                   .where(tafsirs: {resource_content_id: tafsirs})
+                   .where(tafsirs: { resource_content_id: tafsirs })
                    .eager_load(:tafsirs)
   end
 
   def load_audio(recitation)
     @results = @results
-                   .where(audio_files: {recitation_id: recitation})
+                   .where(audio_files: { recitation_id: recitation })
                    .eager_load(:audio_file)
   end
 

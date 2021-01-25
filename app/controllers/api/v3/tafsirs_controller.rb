@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Api::V3
   class TafsirsController < ApplicationController
     # GET /chapter_id/verses/verse_number/tafsirs/tafsir_id
@@ -11,7 +12,6 @@ module Api::V3
     end
 
     protected
-
     def verse
       finder = VerseFinder.new(params)
 

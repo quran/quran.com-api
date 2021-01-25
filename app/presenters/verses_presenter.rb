@@ -1,44 +1,46 @@
+# frozen_string_literal: true
+
 class VersesPresenter < BasePresenter
   attr_reader :lookahead, :finder
   VERSE_FIELDS = [
-      "chapter_id",
-      "verse_number",
-      "verse_key",
-      "text_uthmani",
-      "text_indopak",
-      "text_imlaei_simple",
-      "juz_number",
-      "hizb_number",
-      "rub_number",
-      "sajdah_type",
-      "sajdah_number",
-      "page_number",
-      "image_url",
-      "image_width",
-      "text_imlaei",
-      "text_uthmani_simple",
-      "text_uthmani_tajweed"
+      'chapter_id',
+      'verse_number',
+      'verse_key',
+      'text_uthmani',
+      'text_indopak',
+      'text_imlaei_simple',
+      'juz_number',
+      'hizb_number',
+      'rub_number',
+      'sajdah_type',
+      'sajdah_number',
+      'page_number',
+      'image_url',
+      'image_width',
+      'text_imlaei',
+      'text_uthmani_simple',
+      'text_uthmani_tajweed'
   ]
 
   WORDS_FIELDS = [
-      "verse_id",
-      "chapter_id",
-      "position",
-      "text_uthmani",
-      "text_indopak",
-      "text_imlaei_simple",
-      "verse_key",
-      "page_number",
-      "class_name",
-      "line_number",
-      "code_dec",
-      "code_hex",
-      "audio_url",
-      "location",
-      "char_type_name",
-      "text_imlaei",
-      "text_uthmani_simple",
-      "text_uthmani_tajweed",
+      'verse_id',
+      'chapter_id',
+      'position',
+      'text_uthmani',
+      'text_indopak',
+      'text_imlaei_simple',
+      'verse_key',
+      'page_number',
+      'class_name',
+      'line_number',
+      'code_dec',
+      'code_hex',
+      'audio_url',
+      'location',
+      'char_type_name',
+      'text_imlaei',
+      'text_uthmani_simple',
+      'text_uthmani_tajweed',
   ]
 
   TRANSLATION_FIELDS = [
@@ -64,7 +66,7 @@ class VersesPresenter < BasePresenter
     }.compact
 
     @finder.random_verse(
-        filters,
+      filters,
         language,
         tafsirs: fetch_tafsirs,
         translations: fetch_translations,
@@ -72,9 +74,7 @@ class VersesPresenter < BasePresenter
     )
   end
 
-  def total_records
-    finder.total_records
-  end
+  delegate :total_records, to: :finder
 
   def verse_fields
     strong_memoize :fields do
@@ -124,25 +124,15 @@ class VersesPresenter < BasePresenter
     end
   end
 
-  def next_page
-    finder.next_page
-  end
+  delegate :next_page, to: :finder
 
-  def current_page
-    finder.current_page
-  end
+  delegate :current_page, to: :finder
 
-  def per_page
-    finder.per_page
-  end
+  delegate :per_page, to: :finder
 
-  def total_records
-    finder.total_records
-  end
+  delegate :total_records, to: :finder
 
-  def total_pages
-    finder.total_pages
-  end
+  delegate :total_pages, to: :finder
 
   def verses(filter, language)
     finder.load_verses(filter, language, words: render_words?, tafsirs: fetch_tafsirs, translations: fetch_translations, audio: fetch_audio)
@@ -173,7 +163,6 @@ class VersesPresenter < BasePresenter
   end
 
   protected
-
   def fetch_tafsirs
     if params[:tafsirs]
       params[:tafsirs].to_s.split(',')

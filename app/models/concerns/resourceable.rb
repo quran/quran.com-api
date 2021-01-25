@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Resourceable
   extend ActiveSupport::Concern
 
@@ -10,6 +12,6 @@ module Resourceable
   end
 
   def resource_name
-    read_attribute('resource_name') || resource_content.name
+    self['resource_name'] || resource_content.name
   end
 end

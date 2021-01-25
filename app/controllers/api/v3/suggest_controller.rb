@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Api::V3
   class SuggestController < ApplicationController
     def index

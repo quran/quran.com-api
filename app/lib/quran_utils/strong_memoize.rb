@@ -47,7 +47,6 @@ module QuranUtils
     end
 
     private
-
     def cache_key(name)
       "#{self.class.name}_#{name}".parameterize.underscore
     end

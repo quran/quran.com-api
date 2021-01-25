@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Types
   class VerseType < Types::BaseObject
     field :id, ID, null: false
@@ -25,24 +27,22 @@ module Types
     field :image_url, String, null: true
     field :image_width, Integer, null: true
 
-    #field :pagintion, [Types::PaginationType], null: false
+    # field :pagintion, [Types::PaginationType], null: false
 
-    field :words, [Types::WordType], "words of the verse", null: true
-    field :tafsirs, [Types::TafsirType], "tafsirs of the verse", null: true do
-      argument :tafsir_ids, String, "Comma separated ids of tafsir to load for each verse", required: true
+    field :words, [Types::WordType], 'words of the verse', null: true
+    field :tafsirs, [Types::TafsirType], 'tafsirs of the verse', null: true do
+      argument :tafsir_ids, String, 'Comma separated ids of tafsir to load for each verse', required: true
     end
 
-    field :translations, [Types::TranslationType], "translations of verse", null: true do
-      argument :translation_ids, String, "Comma separated ids of translation to load for each verse", required: true
+    field :translations, [Types::TranslationType], 'translations of verse', null: true do
+      argument :translation_ids, String, 'Comma separated ids of translation to load for each verse', required: true
     end
 
-    field :audio, Types::AudioFileType, "recitation of verse", null: true do
-      argument :recitation, Integer, "Recitation id", required: true
+    field :audio, Types::AudioFileType, 'recitation of verse', null: true do
+      argument :recitation, Integer, 'Recitation id', required: true
     end
 
-    def words
-      object.words
-    end
+    delegate :words, to: :object
 
     def translations(translation_ids:)
       object.translations
