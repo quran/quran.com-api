@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RestApi::ParamLookahead
   attr_reader :params
 

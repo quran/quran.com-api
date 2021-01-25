@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
 class V4::VerseFinder < ::VerseFinder
-  attr_reader :next_page, :total_records
+  attr_reader :next_page,
+              :total_records
 
   def random_verse(filters, language_code, words: true, tafsirs: false, translations: false, audio: false)
-    @results = Verse.unscope(:order).where(filters).order("RANDOM()").limit(3)
+    @results = Verse.unscope(:order).where(filters).order('RANDOM()').limit(3)
 
     load_translations(translations) if translations.present?
     load_words(language_code) if words
@@ -35,8 +36,11 @@ class V4::VerseFinder < ::VerseFinder
     limit <= 50 ? limit : 50
   end
 
-  protected
+  def total_pages
+    (total_records / per_page.to_f).ceil
+  end
 
+  protected
   def fetch_by_chapter
     if chapter = Chapter.find_by(id: params[:chapter_number].to_i.abs)
       @total_records = chapter.verses_count
@@ -48,7 +52,6 @@ class V4::VerseFinder < ::VerseFinder
       @results = Verse
                      .where(chapter_id: params[:chapter_number].to_i.abs)
                      .where('verses.verse_number >= ? AND verses.verse_number <= ?', verse_start.to_i, verse_end.to_i)
-
     else
       @results = Verse.where('1=0')
     end
@@ -64,8 +67,36 @@ class V4::VerseFinder < ::VerseFinder
     @results
   end
 
+  def fetch_by_rub
+    results = rescope_verses('verse_index')
+                  .where(rub_number: params[:rub_number].to_i.abs)
+
+    @total_records = results.size
+    @results = results.limit(per_page).offset((current_page - 1) * per_page)
+
+    if current_page < total_pages
+      @next_page = current_page + 1
+    end
+
+    @results
+  end
+
+  def fetch_by_hizb
+    results = rescope_verses('verse_index')
+                  .where(hizb_number: params[:hizb_number].to_i.abs)
+
+    @total_records = results.size
+    @results = results.limit(per_page).offset((current_page - 1) * per_page)
+
+    if current_page < total_pages
+      @next_page = current_page + 1
+    end
+
+    @results
+  end
+
   def fetch_by_juz
-    if juz = Juz.find_by_juz_number(params[:juz_number].to_i.abs)
+    if juz = Juz.find_by(juz_number: params[:juz_number].to_i.abs)
       @total_records = juz.verses_count
 
       verse_start = juz.first_verse_id + (current_page - 1) * per_page
@@ -75,7 +106,7 @@ class V4::VerseFinder < ::VerseFinder
         @next_page = current_page + 1
       end
 
-      Verse
+      @results = rescope_verses('verse_index')
           .where(juz_number: juz.juz_number)
           .where('verses.verse_index >= ? AND verses.verse_index <= ?', verse_start.to_i, verse_end.to_i)
     else
@@ -102,13 +133,13 @@ class V4::VerseFinder < ::VerseFinder
   end
 
   def load_words(word_translation_lang)
-    language = Language.find_by_id_or_iso_code(word_translation_lang)
+    language = Language.find_by(id_or_iso_code: word_translation_lang)
 
-    words_with_default_translation = @results.where(word_translations: {language_id: Language.default.id})
+    words_with_default_translation = @results.where(word_translations: { language_id: Language.default.id })
 
-    if (language)
+    if language
       @results = @results
-                     .where(word_translations: {language_id: language.id})
+                     .where(word_translations: { language_id: language.id })
                      .or(words_with_default_translation)
                      .eager_load(words: eager_load_words)
     else
@@ -118,19 +149,23 @@ class V4::VerseFinder < ::VerseFinder
 
   def load_translations(translations)
     @results = @results
-                   .where(translations: {resource_content_id: translations})
+                   .where(translations: { resource_content_id: translations })
                    .eager_load(:translations)
   end
 
   def load_tafsirs(tafsirs)
     @results = @results
-                   .where(tafsirs: {resource_content_id: tafsirs})
+                   .where(tafsirs: { resource_content_id: tafsirs })
                    .eager_load(:tafsirs)
   end
 
   def load_audio(recitation)
     @results = @results
-                   .where(audio_files: {recitation_id: recitation})
+                   .where(audio_files: { recitation_id: recitation })
                    .eager_load(:audio_file)
+  end
+
+  def rescope_verses(by)
+    Verse.unscope(:order).order("#{by} ASC")
   end
 end

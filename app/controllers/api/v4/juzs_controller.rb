@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Api::V4
   class JuzsController < ApiController
     def index
@@ -7,7 +8,6 @@ module Api::V4
     end
 
     protected
-
     def chapters
       finder = ChapterFinder.new
       finder.all_with_translated_names(fetch_locale)

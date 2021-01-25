@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Api::V4
   class ChapterInfosController < ApiController
     def show
@@ -7,7 +8,6 @@ module Api::V4
     end
 
     protected
-
     def chapter_info
       ChapterInfo
           .where(chapter_id: params[:id])

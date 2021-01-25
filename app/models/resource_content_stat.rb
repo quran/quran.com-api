@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: resource_content_stats
@@ -11,5 +13,5 @@
 #
 
 class ResourceContentStat < ApplicationRecord
-  belongs_to :resource_content
+  include Resourceable
 end

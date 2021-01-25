@@ -1,44 +1,54 @@
+# frozen_string_literal: true
+
 class VersesPresenter < BasePresenter
   attr_reader :lookahead, :finder
   VERSE_FIELDS = [
-      "chapter_id",
-      "verse_number",
-      "verse_key",
-      "text_uthmani",
-      "text_indopak",
-      "text_imlaei_simple",
-      "juz_number",
-      "hizb_number",
-      "rub_number",
-      "sajdah_type",
-      "sajdah_number",
-      "page_number",
-      "image_url",
-      "image_width",
-      "text_imlaei",
-      "text_uthmani_simple",
-      "text_uthmani_tajweed"
+      'chapter_id',
+      'verse_number',
+      'verse_key',
+      'text_uthmani',
+      'text_indopak',
+      'text_imlaei_simple',
+      'juz_number',
+      'hizb_number',
+      'rub_number',
+      'sajdah_type',
+      'sajdah_number',
+      'page_number',
+      'image_url',
+      'image_width',
+      'text_imlaei',
+      'text_uthmani_simple',
+      'text_uthmani_tajweed'
   ]
 
   WORDS_FIELDS = [
-      "verse_id",
-      "chapter_id",
-      "position",
-      "text_uthmani",
-      "text_indopak",
-      "text_imlaei_simple",
-      "verse_key",
-      "page_number",
-      "class_name",
-      "line_number",
-      "code_dec",
-      "code_hex",
-      "audio_url",
-      "location",
-      "char_type_name",
-      "text_imlaei",
-      "text_uthmani_simple",
-      "text_uthmani_tajweed",
+      'verse_id',
+      'chapter_id',
+      'position',
+      'text_uthmani',
+      'text_indopak',
+      'text_imlaei_simple',
+      'verse_key',
+      'page_number',
+      'class_name',
+      'line_number',
+      'code_dec',
+      'code_hex',
+      'audio_url',
+      'location',
+      'char_type_name',
+      'text_imlaei',
+      'text_uthmani_simple',
+      'text_uthmani_tajweed',
+  ]
+
+  TRANSLATION_FIELDS = [
+
+  ]
+
+  TAFSIR_FIELDS = [
+
   ]
 
   def initialize(params, lookahead)
@@ -56,7 +66,7 @@ class VersesPresenter < BasePresenter
     }.compact
 
     @finder.random_verse(
-        filters,
+      filters,
         language,
         tafsirs: fetch_tafsirs,
         translations: fetch_translations,
@@ -64,9 +74,7 @@ class VersesPresenter < BasePresenter
     )
   end
 
-  def total_records
-    finder.total_records
-  end
+  delegate :total_records, to: :finder
 
   def verse_fields
     strong_memoize :fields do
@@ -92,9 +100,39 @@ class VersesPresenter < BasePresenter
     end
   end
 
-  def next_page
-    finder.next_page
+  def translation_fields
+    strong_memoize :translation_fields do
+      if (fields = params[:translation_fields]).presence
+        fields.split(',').select do |field|
+          TRANSLATION_FIELDS.include?(field)
+        end
+      else
+        []
+      end
+    end
   end
+
+  def tafsir_fields
+    strong_memoize :tafsir_fields do
+      if (fields = params[:tafsir_fields]).presence
+        fields.split(',').select do |field|
+          TAFSIR_FIELDS.include?(field)
+        end
+      else
+        []
+      end
+    end
+  end
+
+  delegate :next_page, to: :finder
+
+  delegate :current_page, to: :finder
+
+  delegate :per_page, to: :finder
+
+  delegate :total_records, to: :finder
+
+  delegate :total_pages, to: :finder
 
   def verses(filter, language)
     finder.load_verses(filter, language, words: render_words?, tafsirs: fetch_tafsirs, translations: fetch_translations, audio: fetch_audio)
@@ -125,7 +163,6 @@ class VersesPresenter < BasePresenter
   end
 
   protected
-
   def fetch_tafsirs
     if params[:tafsirs]
       params[:tafsirs].to_s.split(',')
@@ -133,8 +170,21 @@ class VersesPresenter < BasePresenter
   end
 
   def fetch_translations
-    if params[:translations]
-      params[:translations].to_s.split(',')
+    strong_memoize :approve_translations do
+      if params[:translations]
+        translations = params[:translations].to_s.split(',')
+
+        approved_translations = ResourceContent
+                                    .approved
+                                    .translations
+                                    .one_verse
+
+        params[:translations] = approved_translations
+                                    .where(id: translations)
+                                    .or(approved_translations.where(slug: translations))
+                                    .pluck(:id)
+        params[:translations]
+      end
     end
   end
 

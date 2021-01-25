@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Api::V3
   class PagesController < ApplicationController
     def show

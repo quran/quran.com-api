@@ -19,13 +19,13 @@
 class Translation < ApplicationRecord
   include LanguageFilterable
   include TranslationSearchable
+  include Resourceable
 
   belongs_to :verse
-  belongs_to :resource_content
   belongs_to :language
   has_many :foot_notes
 
-  scope :approved, -> {joins(:resource_content).where('resource_contents.approved = ?', true)}
+  scope :approved, -> { joins(:resource_content).where('resource_contents.approved = ?', true) }
 
   def es_analyzer
   end

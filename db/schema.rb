@@ -15,47 +15,6 @@ ActiveRecord::Schema.define(version: 2019_03_19_010529) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "active_admin_comments", id: :serial, force: :cascade do |t|
-    t.string "namespace"
-    t.text "body"
-    t.string "resource_type", null: false
-    t.integer "resource_id", null: false
-    t.string "author_type"
-    t.integer "author_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["author_type", "author_id"], name: "index_active_admin_comments_on_author_type_and_author_id"
-    t.index ["namespace"], name: "index_active_admin_comments_on_namespace"
-    t.index ["resource_type", "resource_id"], name: "index_active_admin_comments_on_resource_type_and_resource_id"
-  end
-
-  create_table "admin_users", id: :serial, force: :cascade do |t|
-    t.string "name"
-    t.string "email", default: "", null: false
-    t.string "encrypted_password", default: "", null: false
-    t.string "reset_password_token"
-    t.datetime "reset_password_sent_at"
-    t.datetime "remember_created_at"
-    t.integer "sign_in_count", default: 0, null: false
-    t.datetime "current_sign_in_at"
-    t.datetime "last_sign_in_at"
-    t.inet "current_sign_in_ip"
-    t.inet "last_sign_in_ip"
-    t.string "confirmation_token"
-    t.datetime "confirmed_at"
-    t.datetime "confirmation_sent_at"
-    t.string "unconfirmed_email"
-    t.integer "failed_attempts", default: 0, null: false
-    t.string "unlock_token"
-    t.datetime "locked_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["confirmation_token"], name: "index_admin_users_on_confirmation_token", unique: true
-    t.index ["email"], name: "index_admin_users_on_email", unique: true
-    t.index ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true
-    t.index ["unlock_token"], name: "index_admin_users_on_unlock_token", unique: true
-  end
-
   create_table "arabic_transliterations", id: :serial, force: :cascade do |t|
     t.integer "word_id"
     t.integer "verse_id"
@@ -84,9 +43,23 @@ ActiveRecord::Schema.define(version: 2019_03_19_010529) do
     t.integer "recitation_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "verse_key"
+    t.integer "chapter_id"
+    t.integer "verse_number"
+    t.integer "juz_number"
+    t.integer "hizb_number"
+    t.integer "rub_number"
+    t.integer "page_number"
+    t.index ["chapter_id", "verse_number"], name: "index_audio_files_on_chapter_id_and_verse_number"
+    t.index ["chapter_id"], name: "index_audio_files_on_chapter_id"
+    t.index ["hizb_number"], name: "index_audio_files_on_hizb_number"
     t.index ["is_enabled"], name: "index_audio_files_on_is_enabled"
+    t.index ["juz_number"], name: "index_audio_files_on_juz_number"
+    t.index ["page_number"], name: "index_audio_files_on_page_number"
     t.index ["recitation_id"], name: "index_audio_files_on_recitation_id"
+    t.index ["rub_number"], name: "index_audio_files_on_rub_number"
     t.index ["verse_id"], name: "index_audio_files_on_verse_id"
+    t.index ["verse_key"], name: "index_audio_files_on_verse_key"
   end
 
   create_table "author", primary_key: "author_id", id: :integer, default: -> { "nextval('_author_author_id_seq'::regclass)" }, force: :cascade do |t|
@@ -163,27 +136,9 @@ ActiveRecord::Schema.define(version: 2019_03_19_010529) do
     t.index ["parent_id"], name: "index_char_types_on_parent_id"
   end
 
-  create_table "contact_messages", force: :cascade do |t|
-    t.string "name"
-    t.string "email"
-    t.text "detail"
-    t.string "subject"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "data_sources", id: :serial, force: :cascade do |t|
     t.string "name"
     t.string "url"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "database_backups", force: :cascade do |t|
-    t.string "database_name"
-    t.string "file"
-    t.string "size"
-    t.string "tag"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -240,7 +195,12 @@ ActiveRecord::Schema.define(version: 2019_03_19_010529) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.json "verse_mapping"
+    t.integer "first_verse_id"
+    t.integer "last_verse_id"
+    t.integer "verses_count"
+    t.index ["first_verse_id"], name: "index_juzs_on_first_verse_id"
     t.index ["juz_number"], name: "index_juzs_on_juz_number"
+    t.index ["last_verse_id"], name: "index_juzs_on_last_verse_id"
   end
 
   create_table "language", primary_key: "language_code", id: :text, force: :cascade do |t|
@@ -295,34 +255,6 @@ ActiveRecord::Schema.define(version: 2019_03_19_010529) do
     t.index ["language_id"], name: "index_media_contents_on_language_id"
     t.index ["resource_content_id"], name: "index_media_contents_on_resource_content_id"
     t.index ["resource_type", "resource_id"], name: "index_media_contents_on_resource_type_and_resource_id"
-  end
-
-  create_table "pause_marks", id: :serial, force: :cascade do |t|
-    t.integer "word_id"
-    t.string "verse_key"
-    t.integer "position"
-    t.string "mark"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["word_id"], name: "index_pause_marks_on_word_id"
-  end
-
-  create_table "proof_read_comments", force: :cascade do |t|
-    t.bigint "user_id"
-    t.string "resource_type", null: false
-    t.bigint "resource_id", null: false
-    t.text "text"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["resource_type", "resource_id"], name: "index_proof_read_comments_on_resource_type_and_resource_id"
-    t.index ["user_id"], name: "index_proof_read_comments_on_user_id"
-  end
-
-  create_table "quran_table_details", force: :cascade do |t|
-    t.string "name"
-    t.integer "enteries"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "recitation", primary_key: "recitation_id", id: :serial, force: :cascade do |t|
@@ -422,6 +354,7 @@ ActiveRecord::Schema.define(version: 2019_03_19_010529) do
     t.string "slug"
     t.integer "mobile_translation_id"
     t.integer "priority"
+    t.text "resource_info"
     t.index ["approved"], name: "index_resource_contents_on_approved"
     t.index ["author_id"], name: "index_resource_contents_on_author_id"
     t.index ["cardinality_type"], name: "index_resource_contents_on_cardinality_type"
@@ -505,13 +438,6 @@ ActiveRecord::Schema.define(version: 2019_03_19_010529) do
     t.index ["surah_id"], name: "index_content.surah_infos_on_surah_id"
   end
 
-  create_table "synonyms", force: :cascade do |t|
-    t.string "text"
-    t.text "synonyms"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "tafsir", primary_key: "tafsir_id", id: :integer, default: -> { "nextval('_tafsir_tafsir_id_seq'::regclass)" }, force: :cascade do |t|
     t.integer "resource_id", null: false
     t.text "text", null: false
@@ -533,8 +459,20 @@ ActiveRecord::Schema.define(version: 2019_03_19_010529) do
     t.datetime "updated_at", null: false
     t.string "resource_name"
     t.string "verse_key"
+    t.integer "chapter_id"
+    t.integer "verse_number"
+    t.integer "juz_number"
+    t.integer "hizb_number"
+    t.integer "rub_number"
+    t.integer "page_number"
+    t.index ["chapter_id", "verse_number"], name: "index_tafsirs_on_chapter_id_and_verse_number"
+    t.index ["chapter_id"], name: "index_tafsirs_on_chapter_id"
+    t.index ["hizb_number"], name: "index_tafsirs_on_hizb_number"
+    t.index ["juz_number"], name: "index_tafsirs_on_juz_number"
     t.index ["language_id"], name: "index_tafsirs_on_language_id"
+    t.index ["page_number"], name: "index_tafsirs_on_page_number"
     t.index ["resource_content_id"], name: "index_tafsirs_on_resource_content_id"
+    t.index ["rub_number"], name: "index_tafsirs_on_rub_number"
     t.index ["verse_id"], name: "index_tafsirs_on_verse_id"
     t.index ["verse_key"], name: "index_tafsirs_on_verse_key"
   end
@@ -600,10 +538,24 @@ ActiveRecord::Schema.define(version: 2019_03_19_010529) do
     t.datetime "updated_at", null: false
     t.string "resource_name"
     t.integer "priority"
+    t.string "verse_key"
+    t.integer "chapter_id"
+    t.integer "verse_number"
+    t.integer "juz_number"
+    t.integer "hizb_number"
+    t.integer "rub_number"
+    t.integer "page_number"
+    t.index ["chapter_id", "verse_number"], name: "index_translations_on_chapter_id_and_verse_number"
+    t.index ["chapter_id"], name: "index_translations_on_chapter_id"
+    t.index ["hizb_number"], name: "index_translations_on_hizb_number"
+    t.index ["juz_number"], name: "index_translations_on_juz_number"
     t.index ["language_id"], name: "index_translations_on_language_id"
+    t.index ["page_number"], name: "index_translations_on_page_number"
     t.index ["priority"], name: "index_translations_on_priority"
     t.index ["resource_content_id"], name: "index_translations_on_resource_content_id"
+    t.index ["rub_number"], name: "index_translations_on_rub_number"
     t.index ["verse_id"], name: "index_translations_on_verse_id"
+    t.index ["verse_key"], name: "index_translations_on_verse_key"
   end
 
   create_table "transliteration", primary_key: ["resource_id", "ayah_key"], force: :cascade do |t|
@@ -624,35 +576,6 @@ ActiveRecord::Schema.define(version: 2019_03_19_010529) do
     t.index ["language_id"], name: "index_transliterations_on_language_id"
     t.index ["resource_content_id"], name: "index_transliterations_on_resource_content_id"
     t.index ["resource_type", "resource_id"], name: "index_transliterations_on_resource_type_and_resource_id"
-  end
-
-  create_table "users", force: :cascade do |t|
-    t.string "first_name"
-    t.string "last_name"
-    t.boolean "approved", default: false
-    t.string "email", default: "", null: false
-    t.string "encrypted_password", default: "", null: false
-    t.string "reset_password_token"
-    t.datetime "reset_password_sent_at"
-    t.datetime "remember_created_at"
-    t.integer "sign_in_count", default: 0, null: false
-    t.datetime "current_sign_in_at"
-    t.datetime "last_sign_in_at"
-    t.inet "current_sign_in_ip"
-    t.inet "last_sign_in_ip"
-    t.string "confirmation_token"
-    t.datetime "confirmed_at"
-    t.datetime "confirmation_sent_at"
-    t.string "unconfirmed_email"
-    t.integer "failed_attempts", default: 0, null: false
-    t.string "unlock_token"
-    t.datetime "locked_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
-    t.index ["email"], name: "index_users_on_email", unique: true
-    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
-    t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end
 
   create_table "verse_lemmas", id: :serial, force: :cascade do |t|
@@ -708,50 +631,7 @@ ActiveRecord::Schema.define(version: 2019_03_19_010529) do
     t.index ["verse_stem_id"], name: "index_verses_on_verse_stem_id"
   end
 
-  create_table "versions", id: :serial, force: :cascade do |t|
-    t.string "item_type", null: false
-    t.integer "item_id", null: false
-    t.string "event", null: false
-    t.string "whodunnit"
-    t.text "object"
-    t.datetime "created_at"
-    t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
-  end
-
   create_table "view", primary_key: "view_id", id: :serial, force: :cascade do |t|
-  end
-
-  create_table "wbw_texts", force: :cascade do |t|
-    t.integer "word_id"
-    t.integer "verse_id"
-    t.string "text_indopak"
-    t.string "text_uthmani"
-    t.string "text_imlaei"
-    t.boolean "is_updated", default: false
-    t.boolean "approved", default: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["verse_id"], name: "index_wbw_texts_on_verse_id"
-    t.index ["word_id"], name: "index_wbw_texts_on_word_id"
-  end
-
-  create_table "wbw_translations", force: :cascade do |t|
-    t.integer "language_id"
-    t.string "text"
-    t.integer "user_id"
-    t.boolean "approved"
-    t.integer "word_id"
-    t.string "text_madani"
-    t.string "text_indopak"
-    t.integer "chapter_id"
-    t.integer "verse_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["approved"], name: "index_wbw_translations_on_approved"
-    t.index ["chapter_id"], name: "index_wbw_translations_on_chapter_id"
-    t.index ["user_id"], name: "index_wbw_translations_on_user_id"
-    t.index ["verse_id"], name: "index_wbw_translations_on_verse_id"
-    t.index ["word_id"], name: "index_wbw_translations_on_word_id"
   end
 
   create_table "word", primary_key: "word_id", id: :serial, force: :cascade do |t|
@@ -840,14 +720,6 @@ ActiveRecord::Schema.define(version: 2019_03_19_010529) do
     t.datetime "updated_at", null: false
     t.index ["stem_id"], name: "index_word_stems_on_stem_id"
     t.index ["word_id"], name: "index_word_stems_on_word_id"
-  end
-
-  create_table "word_synonyms", force: :cascade do |t|
-    t.integer "synonym_id"
-    t.integer "word_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["synonym_id", "word_id"], name: "index_word_synonyms_on_synonym_id_and_word_id"
   end
 
   create_table "word_translation", primary_key: "translation_id", id: :integer, default: -> { "nextval('translation_translation_id_seq1'::regclass)" }, force: :cascade do |t|

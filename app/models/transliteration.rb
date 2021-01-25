@@ -17,11 +17,10 @@
 
 class Transliteration < ApplicationRecord
   include LanguageFilterable
+  include Resourceable
 
   belongs_to :resource, polymorphic: true
-  belongs_to :resource_content
 
   def resource_name
-
   end
 end

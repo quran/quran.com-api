@@ -9,9 +9,8 @@ class ApplicationController < ActionController::API
   before_action :set_cache_headers
 
   private
-
   def throw_the_error(error)
-    render json: {error: error.message}, status: :not_found
+    render json: { error: error.message }, status: :not_found
   end
 
   def fetch_locale
@@ -23,14 +22,14 @@ class ApplicationController < ActionController::API
   end
 
   def eager_load_translated_name(records)
-    language = Language.find_by_id_or_iso_code(fetch_locale)
+    language = Language.find_by(id_or_iso_code: fetch_locale)
     defaults = records.where(
-      translated_names: {language_id: Language.default.id}
+      translated_names: { language_id: Language.default.id }
     )
 
     records
       .where(
-        translated_names: {language_id: language}
+        translated_names: { language_id: language }
       ).or(defaults).order('translated_names.language_priority DESC')
   end
 end

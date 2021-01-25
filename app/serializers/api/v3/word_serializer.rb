@@ -41,11 +41,11 @@ module Api
     attribute :char_type_name, key: :char_type
 
     attribute :transliteration do
-      {text: object.en_transliteration, language_name: 'english'}
+      { text: object.en_transliteration, language_name: 'english' }
     end
 
     attribute :audio do
-      {url: object.audio_url}
+      { url: object.audio_url }
     end
 
     has_one :translation, serializer: V3::WordTranslationSerializer do

@@ -4,6 +4,8 @@ include_audio = @presenter.render_audio?
 include_tafsirs = @presenter.render_tafsirs?
 fields = @presenter.verse_fields
 word_fields = @presenter.word_fields
+tafsir_fields = @presenter.tafsir_fields
+translation_fields = @presenter.translation_fields
 
 json.object! do
   json.verses do
@@ -35,13 +37,13 @@ json.object! do
 
         if include_translations
           json.translations do
-            json.array! verse.translations, partial: 'translation', as: :translation
+            json.array! verse.translations, partial: 'translation', as: :translation, locals: {fields: translation_fields}
           end
         end
 
         if include_tafsirs
           json.tafsirs do
-            json.array! verse.tafsirs, partial: 'tafsir', as: :tafsir
+            json.array! verse.tafsirs, partial: 'tafsir', as: :tafsir, locals: {fields: tafsir_fields}
           end
         end
       end
@@ -50,7 +52,11 @@ json.object! do
 
   json.pagination do
     json.object! do
+      json.per_page @presenter.per_page
+      json.current_page @presenter.current_page
       json.next_page @presenter.next_page
+      json.total_pages = @presenter.total_pages
+      json.total_records = @presenter.total_records
     end
   end
 end

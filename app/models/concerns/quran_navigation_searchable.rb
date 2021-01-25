@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module QuranNavigationSearchable
   extend ActiveSupport::Concern
 
@@ -5,7 +7,7 @@ module QuranNavigationSearchable
     include Elasticsearch::Model
     index_name 'chapters'
     settings YAML.load(
-        File.read("config/elasticsearch/settings.yml")
+      File.read('config/elasticsearch/settings.yml')
     )
 
     def index_variation(document, options)
@@ -13,7 +15,7 @@ module QuranNavigationSearchable
           index: self.class.index_name,
           body: document
       }
-      request.merge!(type: self.class.document_type) if self.class.document_type
+      request[:type] = self.class.document_type if self.class.document_type
 
       __elasticsearch__.client.index(request.merge!(options))
     end

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Api::V4
   class SearchController < ApiController
     include LanguageBoost
@@ -8,12 +9,11 @@ module Api::V4
       if do_search
         render
       else
-        #TODO: render error
+        # TODO: render error
       end
     end
 
     protected
-
     def language
       (params[:language] || params[:locale]).presence || 'en'
     end
@@ -35,7 +35,7 @@ module Api::V4
 
     def do_search
       client = Search::QuranSearchClient.new(
-          query,
+        query,
           page: page,
           size: size,
           lanugage: language,

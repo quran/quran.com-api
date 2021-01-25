@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Types
   class SearchResultsType < Types::BaseObject
     field :query, String, null: false

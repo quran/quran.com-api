@@ -30,12 +30,11 @@ namespace :v4 do
   end
 
   # routes for fetching all records of one resource.
-  # i.e /v4/quran/translations/121 will send complete Clear Quran translation
+  # i.e /v4/quran/translations/131 will send complete Clear Quran translation
   namespace :quran do
     get 'translations/:translation_id', action: 'translation'
     get :'tafsirs/:tafsir_id', action: 'tafsir'
     get :'recitations/:recitation_id', action: 'recitation'
-
     get :'verses/uthmani', action: 'verses_text', script: 'text_uthmani'
     get :'verses/uthmani_simple', action: 'verses_text', script: 'text_uthmani_simple'
     get :'verses/uthmani_tajweed', action: 'verses_text', script: 'text_uthmani_tajweed'
@@ -50,31 +49,30 @@ namespace :v4 do
     get 'by_page/:page_number', action: 'by_page'
     get 'by_juz/:juz_number', action: 'by_juz'
     get 'by_chapter/:chapter_number', action: 'by_chapter'
+    get 'by_rub/:rub_number', action: 'by_rub'
+    get 'by_hizb/:hizb_number', action: 'by_hizb'
+
     get 'random', action: 'random'
   end
 
   # translations routes, by juz, chapter, page
-  scope 'translations/:id', controller: 'translations' do
+  scope 'translations/:resource_id', controller: 'translations' do
+    get 'by_chapter/:chapter_number', action: 'by_chapter'
     get 'by_page/:page_number', action: 'by_page'
     get 'by_juz/:juz_number', action: 'by_juz'
-    get 'by_chapter/:chapter_number', action: 'by_chapter'
-    get 'random', action: 'random'
+    get 'by_rub/:rub_number', action: 'by_rub'
+    get 'by_hizb/:hizb_number', action: 'by_hizb'
+    get 'by_ayah/:ayah_key', action: 'by_ayah'
   end
 
   # tafsir routes, by juz, chapter, page
-  scope 'tafsirs/:id', controller: 'tafsirs' do
+  scope 'tafsirs/:resource_id', controller: 'tafsirs' do
+    get 'by_chapter/:chapter_number', action: 'by_chapter'
     get 'by_page/:page_number', action: 'by_page'
     get 'by_juz/:juz_number', action: 'by_juz'
-    get 'by_chapter/:chapter_number', action: 'by_chapter'
-    get 'random', action: 'random'
-  end
-
-  # recitation routes, by juz, chapter, page
-  scope 'recitations/:id', controller: 'recitations' do
-    get 'by_page/:page_number', action: 'by_page'
-    get 'by_juz/:juz_number', action: 'by_juz'
-    get 'by_chapter/:chapter_number', action: 'by_chapter'
-    get 'random', action: 'random'
+    get 'by_rub/:rub_number', action: 'by_rub'
+    get 'by_hizb/:hizb_number', action: 'by_hizb'
+    get 'by_ayah/:ayah_key', action: 'by_ayah'
   end
 
   get 'ping', to: 'ping#ping'

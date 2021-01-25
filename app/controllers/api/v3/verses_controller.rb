@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Api::V3
   class VersesController < ApplicationController
     # GET /chapter-id-or-slug/verses
@@ -23,7 +24,6 @@ module Api::V3
     end
 
     private
-
     def pagination_dict(finder)
       {
         current_page: finder.current_page,

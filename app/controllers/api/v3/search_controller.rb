@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Api::V3
   class SearchController < ApplicationController
     include ActionView::Rendering
@@ -9,12 +10,11 @@ module Api::V3
       if do_search
         render
       else
-        #TODO: render error
+        # TODO: render error
       end
     end
 
     protected
-
     def language
       (params[:language] || params[:locale]).presence || 'en'
     end
@@ -36,7 +36,7 @@ module Api::V3
 
     def do_search
       client = Search::QuranSearchClient.new(
-          query,
+        query,
           page: page,
           size: size,
           lanugage: language,

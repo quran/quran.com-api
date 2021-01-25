@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Api::V3
   class ChaptersController < ApplicationController
     # GET /chapters
@@ -12,7 +13,6 @@ module Api::V3
     end
 
     protected
-
     def chapters
       finder = ChapterFinder.new
       finder.all_with_translated_names(fetch_locale)

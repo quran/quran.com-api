@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Api::V4
   class VersesController < ApiController
     before_action :init_presenter
@@ -16,12 +17,19 @@ module Api::V4
       render partial: 'verses'
     end
 
+    def by_rub
+      render partial: 'verses'
+    end
+
+    def by_hizb
+      render partial: 'verses'
+    end
+
     def random
-      render partial: 'verse', locals: {verse: @presenter.random_verse(fetch_locale)}
+      render partial: 'verse', locals: { verse: @presenter.random_verse(fetch_locale) }
     end
 
     protected
-
     def init_presenter
       lookahead = RestApi::ParamLookahead.new(params)
       @presenter = VersesPresenter.new(params, lookahead)
@@ -32,5 +40,3 @@ module Api::V4
     end
   end
 end
-
-

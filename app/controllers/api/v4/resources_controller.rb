@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Api::V4
   class ResourcesController < ApiController
     def translations
@@ -100,7 +101,6 @@ module Api::V4
     end
 
     protected
-
     def fetch_script_type
       script = params[:script]
 
