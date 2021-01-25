@@ -57,7 +57,7 @@ gem 'whatlanguage'
 
 gem 'rubocop', require: false
 
-gem 'sentry-raven', group: [:development, :production]
+gem 'sentry-raven', group: [:production]
 
 group :development, :test do
   gem 'pry-byebug'

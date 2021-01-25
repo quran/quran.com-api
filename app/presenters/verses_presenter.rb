@@ -41,6 +41,14 @@ class VersesPresenter < BasePresenter
       "text_uthmani_tajweed",
   ]
 
+  TRANSLATION_FIELDS = [
+
+  ]
+
+  TAFSIR_FIELDS = [
+
+  ]
+
   def initialize(params, lookahead)
     super(params)
 
@@ -92,8 +100,48 @@ class VersesPresenter < BasePresenter
     end
   end
 
+  def translation_fields
+    strong_memoize :translation_fields do
+      if (fields = params[:translation_fields]).presence
+        fields.split(',').select do |field|
+          TRANSLATION_FIELDS.include?(field)
+        end
+      else
+        []
+      end
+    end
+  end
+
+  def tafsir_fields
+    strong_memoize :tafsir_fields do
+      if (fields = params[:tafsir_fields]).presence
+        fields.split(',').select do |field|
+          TAFSIR_FIELDS.include?(field)
+        end
+      else
+        []
+      end
+    end
+  end
+
   def next_page
     finder.next_page
+  end
+
+  def current_page
+    finder.current_page
+  end
+
+  def per_page
+    finder.per_page
+  end
+
+  def total_records
+    finder.total_records
+  end
+
+  def total_pages
+    finder.total_pages
   end
 
   def verses(filter, language)
@@ -133,8 +181,21 @@ class VersesPresenter < BasePresenter
   end
 
   def fetch_translations
-    if params[:translations]
-      params[:translations].to_s.split(',')
+    strong_memoize :approve_translations do
+      if params[:translations]
+        translations = params[:translations].to_s.split(',')
+
+        approved_translations = ResourceContent
+                                    .approved
+                                    .translations
+                                    .one_verse
+
+        params[:translations] = approved_translations
+                                    .where(id: translations)
+                                    .or(approved_translations.where(slug: translations))
+                                    .pluck(:id)
+        params[:translations]
+      end
     end
   end
 

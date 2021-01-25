@@ -11,5 +11,5 @@
 #
 
 class ResourceContentStat < ApplicationRecord
-  belongs_to :resource_content
+  include Resourceable
 end

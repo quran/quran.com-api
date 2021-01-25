@@ -18,7 +18,7 @@
 
 class ChapterInfo < ApplicationRecord
   include LanguageFilterable
+  include Resourceable
 
   belongs_to :chapter
-  belongs_to :resource_content
 end

@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 class V4::VerseFinder < ::VerseFinder
-  attr_reader :next_page, :total_records
+  attr_reader :next_page,
+              :total_records
 
   def random_verse(filters, language_code, words: true, tafsirs: false, translations: false, audio: false)
     @results = Verse.unscope(:order).where(filters).order("RANDOM()").limit(3)
@@ -35,6 +36,10 @@ class V4::VerseFinder < ::VerseFinder
     limit <= 50 ? limit : 50
   end
 
+  def total_pages
+    (total_records / per_page.to_f).ceil
+  end
+
   protected
 
   def fetch_by_chapter
@@ -48,7 +53,6 @@ class V4::VerseFinder < ::VerseFinder
       @results = Verse
                      .where(chapter_id: params[:chapter_number].to_i.abs)
                      .where('verses.verse_number >= ? AND verses.verse_number <= ?', verse_start.to_i, verse_end.to_i)
-
     else
       @results = Verse.where('1=0')
     end
@@ -64,6 +68,34 @@ class V4::VerseFinder < ::VerseFinder
     @results
   end
 
+  def fetch_by_rub
+    results = rescope_verses('verse_index')
+                  .where(rub_number: params[:rub_number].to_i.abs)
+
+    @total_records = results.size
+    @results = results.limit(per_page).offset((current_page - 1) * per_page)
+
+    if current_page < total_pages
+      @next_page = current_page + 1
+    end
+
+    @results
+  end
+
+  def fetch_by_hizb
+    results = rescope_verses('verse_index')
+                  .where(hizb_number: params[:hizb_number].to_i.abs)
+
+    @total_records = results.size
+    @results = results.limit(per_page).offset((current_page - 1) * per_page)
+
+    if current_page < total_pages
+      @next_page = current_page + 1
+    end
+
+    @results
+  end
+
   def fetch_by_juz
     if juz = Juz.find_by_juz_number(params[:juz_number].to_i.abs)
       @total_records = juz.verses_count
@@ -75,7 +107,7 @@ class V4::VerseFinder < ::VerseFinder
         @next_page = current_page + 1
       end
 
-      Verse
+      @results = rescope_verses('verse_index')
           .where(juz_number: juz.juz_number)
           .where('verses.verse_index >= ? AND verses.verse_index <= ?', verse_start.to_i, verse_end.to_i)
     else
@@ -132,5 +164,9 @@ class V4::VerseFinder < ::VerseFinder
     @results = @results
                    .where(audio_files: {recitation_id: recitation})
                    .eager_load(:audio_file)
+  end
+
+  def rescope_verses(by)
+    Verse.unscope(:order).order("#{by} ASC")
   end
 end

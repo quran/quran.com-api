@@ -1,0 +1,89 @@
+class TafsirsPresenter < BasePresenter
+  attr_reader :finder
+  TAFSIR_FIELDS = [
+      "chapter_id",
+      "verse_number",
+      "verse_key",
+      "juz_number",
+      "hizb_number",
+      "rub_number",
+      "page_number",
+      "resource_name",
+      "language_name",
+      "language_id",
+      "id"
+  ]
+
+  def initialize(params)
+    super(params)
+
+    @finder = V4::TafsirFinder.new(params)
+  end
+
+  def total_records
+    finder.total_records
+  end
+
+  def tafsir_fields
+    strong_memoize :valid_fields do
+      fetch_fields.select do |field|
+        TAFSIR_FIELDS.include?(field)
+      end
+    end
+  end
+
+  def next_page
+    finder.next_page
+  end
+
+  def current_page
+    finder.current_page
+  end
+
+  def per_page
+    finder.per_page
+  end
+
+  def total_records
+    finder.total_records
+  end
+
+  def total_pages
+    finder.total_pages
+  end
+
+  def tafsirs(filter)
+    finder.load_tafsirs(filter, resource_id)
+  end
+
+  protected
+
+  def resource_id
+      strong_memoize :approved_tafsir do
+        if params[:resource_id]
+          tafsir = params[:resource_id].to_s
+
+          approved_Tafsirs = ResourceContent
+                                      .approved
+                                      .tafsirs
+                                      .one_verse
+
+          params[:resource_id] = approved_Tafsirs
+                                      .where(id: tafsir)
+                                      .or(approved_Tafsirs.where(slug: tafsir))
+                                      .pluck(:id).first
+          params[:resource_id]
+        else
+          []
+        end
+      end
+  end
+
+  def fetch_fields
+    if (fields = params[:fields]).presence
+      fields.split(',')
+    else
+      []
+    end
+  end
+end

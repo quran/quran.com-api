@@ -17,6 +17,8 @@ module Api::V4
                         []
                       end
 
+      @fields = ['verse_id', 'verse_key']
+
       render
     end
 
@@ -26,6 +28,8 @@ module Api::V4
                  else
                    []
                  end
+
+      @fields = ['verse_id', 'verse_key']
 
       render
     end

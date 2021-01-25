@@ -16,6 +16,14 @@ module Api::V4
       render partial: 'verses'
     end
 
+    def by_rub
+      render partial: 'verses'
+    end
+
+    def by_hizb
+      render partial: 'verses'
+    end
+
     def random
       render partial: 'verse', locals: {verse: @presenter.random_verse(fetch_locale)}
     end

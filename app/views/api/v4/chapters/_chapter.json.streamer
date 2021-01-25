@@ -3,6 +3,7 @@ json.object! do
                 :revelation_place,
                 :revelation_order,
                 :bismillah_pre,
+                :name_simple,
                 :name_complex,
                 :name_arabic,
                 :verses_count,
