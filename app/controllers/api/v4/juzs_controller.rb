@@ -7,15 +7,9 @@ module Api::V4
       render
     end
 
-    protected
-    def chapters
-      finder = ChapterFinder.new
-      finder.all_with_translated_names(fetch_locale)
-    end
-
-    def chapter
-      finder = ChapterFinder.new
-      finder.find_with_translated_name(params[:id], fetch_locale)
+    def show
+      @juz = Juz.find(params[:id])
+      render
     end
   end
 end

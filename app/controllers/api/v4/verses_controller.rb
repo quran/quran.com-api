@@ -3,7 +3,7 @@
 module Api::V4
   class VersesController < ApiController
     before_action :init_presenter
-    before_action :load_verses, except: :random
+    before_action :load_verses, except: [:random, :by_key]
 
     def by_chapter
       render partial: 'verses'
@@ -27,6 +27,10 @@ module Api::V4
 
     def random
       render partial: 'verse', locals: { verse: @presenter.random_verse(fetch_locale) }
+    end
+
+    def by_key
+      render partial: 'verse', locals: { verse: @presenter.find_verse('by_key', fetch_locale) }
     end
 
     protected

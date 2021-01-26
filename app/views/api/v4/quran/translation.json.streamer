@@ -1,9 +1,19 @@
-json.array! @translations do |translation|
-  json.object! do
-    json.extract! translation,
-                  :resource_id,
-                  *@fields
-                  :text
+json.object! do
+  json.translations do
+    json.array! @translations do |translation|
+      json.object! do
+        json.extract! translation,
+                      :resource_id,
+                      *@fields,
+                      :text
+      end
+    end
+  end
 
+  json.meta do
+    json.object! do
+      json.translation_name @resource.name
+      json.author_name @resource.author_name
+    end
   end
 end

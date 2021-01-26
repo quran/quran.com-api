@@ -74,6 +74,19 @@ class VersesPresenter < BasePresenter
     )
   end
 
+  def find_verse(filter, language)
+    case filter
+    when 'by_key'
+      @finder.find_by_key(
+          params[:verse_key],
+          language,
+          tafsirs: fetch_tafsirs,
+          translations: fetch_translations,
+          audio: fetch_audio
+      )
+    end
+  end
+
   delegate :total_records, to: :finder
 
   def verse_fields
@@ -95,7 +108,7 @@ class VersesPresenter < BasePresenter
           WORDS_FIELDS.include?(field)
         end
       else
-        []
+        ['code']
       end
     end
   end

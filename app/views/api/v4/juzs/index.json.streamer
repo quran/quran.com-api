@@ -1,3 +1,7 @@
-json.array! @juzs do |juz|
-  json.partial! 'juz', juz: juz
+json.object! do
+  json.juzs do
+    json.array! @juzs do |juz|
+      json.partial! 'juz', juz: juz
+    end
+  end
 end

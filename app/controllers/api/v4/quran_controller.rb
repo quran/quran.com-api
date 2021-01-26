@@ -12,11 +12,11 @@ module Api::V4
     ]
 
     def translation
-      @translations = if (resource = fetch_translation_resource)
-        Translation.order('verse_id ASC').where(resource_filters(resource))
-      else
-        []
-      end
+      @translations = if (@resource = fetch_translation_resource)
+                        Translation.order('verse_id ASC').where(resource_filters(@resource))
+                      else
+                        []
+                      end
 
       @fields = ['verse_id', 'verse_key']
 
@@ -24,11 +24,11 @@ module Api::V4
     end
 
     def tafsir
-      @tafsirs = if (resource = fetch_tafsir_resource)
-        Tafsir.order('verse_id ASC').where(resource_filters(resource))
-      else
-        []
-      end
+      @tafsirs = if (@resource = fetch_tafsir_resource)
+                   Tafsir.order('verse_id ASC').where(resource_filters(@resource))
+                 else
+                   []
+                 end
 
       @fields = ['verse_id', 'verse_key']
 
@@ -36,7 +36,14 @@ module Api::V4
     end
 
     def recitation
-      @audio_files = AudioFile.order('verse_id ASC').where(resource_filters(resource))
+      @audio_files = if (@recitation = fetch_approved_recitation)
+                       filters = resource_filters
+                       filters[:recitation_id] = @recitation.id
+
+                       @audio_files = AudioFile.order('verse_id ASC').where(filters)
+                     else
+                       []
+                     end
       render
     end
 
@@ -51,6 +58,7 @@ module Api::V4
     end
 
     protected
+
     def fetch_script_type
       script = params[:script]
 
@@ -70,6 +78,13 @@ module Api::V4
           rub_number: params[:rub_number],
           page_number: params[:page_number]
       }.compact
+    end
+
+    def fetch_approved_recitation
+      list = Recitation
+                 .approved
+
+      list.where(id: params[:recitation_id]).first
     end
   end
 end

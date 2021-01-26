@@ -51,6 +51,7 @@ namespace :v4 do
     get 'by_chapter/:chapter_number', action: 'by_chapter'
     get 'by_rub/:rub_number', action: 'by_rub'
     get 'by_hizb/:hizb_number', action: 'by_hizb'
+    get 'by_key/:verse_key', action: 'by_key'
 
     get 'random', action: 'random'
   end

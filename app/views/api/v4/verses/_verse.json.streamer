@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 include_words = @presenter.render_words?
 include_translations = @presenter.render_translations?
 include_audio = @presenter.render_audio?
@@ -8,39 +10,43 @@ tafsir_fields = @presenter.tafsir_fields
 translation_fields = @presenter.translation_fields
 
 json.object! do
-  json.extract! verse, :id,
-                :verse_number,
-                :page_number,
-                :verse_key,
-                :juz_number,
-                :hizb_number,
-                :rub_number,
-                :sajdah_type,
-                :sajdah_number, *fields
+  json.verse do
+    json.object! do
+      json.extract! verse, :id,
+                    :verse_number,
+                    :page_number,
+                    :verse_key,
+                    :juz_number,
+                    :hizb_number,
+                    :rub_number,
+                    :sajdah_type,
+                    :sajdah_number, *fields
 
-  if include_words
-    json.words do
-      json.array! verse.words, partial: 'word', as: :word, locals: {fields: word_fields}
-    end
-  end
-
-  if include_audio
-    json.audio do
-      json.object! do
-        json.extract! verse.audio_file, :url, :segments
+      if include_words
+        json.words do
+          json.array! verse.words, partial: 'word', as: :word, locals: { fields: word_fields }
+        end
       end
-    end
-  end
 
-  if include_translations
-    json.translations do
-      json.array! verse.translations, partial: 'translation', as: :translation, locals: {fields: translation_fields}
-    end
-  end
+      if include_audio
+        json.audio do
+          json.object! do
+            json.extract! verse.audio_file, :url, :segments
+          end
+        end
+      end
 
-  if include_tafsirs
-    json.tafsirs do
-      json.array! verse.tafsirs, partial: 'tafsir', as: :tafsir, locals: {fields: tafsir_fields}
+      if include_translations
+        json.translations do
+          json.array! verse.translations, partial: 'translation', as: :translation, locals: { fields: translation_fields }
+        end
+      end
+
+      if include_tafsirs
+        json.tafsirs do
+          json.array! verse.tafsirs, partial: 'tafsir', as: :tafsir, locals: { fields: tafsir_fields }
+        end
+      end
     end
   end
 end

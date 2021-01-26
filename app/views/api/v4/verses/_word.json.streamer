@@ -1,9 +1,25 @@
+# frozen_string_literal: true
+
 json.object! do
-  json.extract! word, :id, :position, :audio_url, :char_type_name, *fields
+  json.extract! word,
+                :id,
+                :position,
+                :audio_url,
+                :char_type_name,
+                :line_number,
+                :page_number,
+                *fields
 
   json.translation do
     json.object! do
       json.extract! word.word_translation, :text, :language_name
+    end
+  end
+
+  json.transliteration do
+    json.object! do
+      json.text word.en_transliteration
+      json.language_name 'english'
     end
   end
 end

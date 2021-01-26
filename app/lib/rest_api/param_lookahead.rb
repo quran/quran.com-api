@@ -31,6 +31,8 @@ class RestApi::ParamLookahead
         else
           RestApi::ParamLookahead.new(query)
         end
+      when Array
+        RestApi::ParamLookahead.new(query)
       end
     else
       NULL_LOOKAHEAD

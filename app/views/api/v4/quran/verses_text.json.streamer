@@ -1,5 +1,9 @@
-json.array! @verses do |verse|
-  json.object! do
-    json.extract! verse, :id, :verse_key, @script_type
+json.object! do
+  json.verses do
+    json.array! @verses do |verse|
+      json.object! do
+        json.extract! verse, :id, :verse_key, @script_type
+      end
+    end
   end
 end

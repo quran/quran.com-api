@@ -1,1 +1,5 @@
-json.partial! 'chapter', chapter: @chapter
+json.object! do
+  json.chapter do
+    json.partial! 'chapter', chapter: @chapter
+  end
+end
