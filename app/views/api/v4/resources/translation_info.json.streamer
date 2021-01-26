@@ -1,4 +1,8 @@
 json.object! do
-  json.id @translation.id
-  json.info @translation.resource_info
+  json.info do
+    json.object! do
+      json.id @translation.id
+      json.info @translation.resource_info
+    end
+  end
 end

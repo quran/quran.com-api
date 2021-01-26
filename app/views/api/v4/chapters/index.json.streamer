@@ -1,3 +1,7 @@
-json.array! @chapters do |chapter|
-  json.partial! 'chapter', chapter: chapter
+json.object! do
+  json.chapters do
+    json.array! @chapters do |chapter|
+      json.partial! 'chapter', chapter: chapter
+    end
+  end
 end

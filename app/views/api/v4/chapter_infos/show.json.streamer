@@ -1,7 +1,13 @@
 json.object! do
-  json.extract! @chapter_info,
-                :id,
-                :chapter_id,
-                :language_name,
-                :text
+  json.info do
+    json.object! do
+      json.extract! @chapter_info,
+                    :id,
+                    :chapter_id,
+                    :language_name,
+                    :short_text,
+                    :source,
+                    :text
+    end
+  end
 end

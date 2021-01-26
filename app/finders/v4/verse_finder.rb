@@ -15,6 +15,17 @@ class V4::VerseFinder < ::VerseFinder
     @results.sample
   end
 
+  def find_by_key(key, language_code, words: true, tafsirs: false, translations: false, audio: false)
+    @results = Verse.where(verse_key: key).limit(1)
+
+    load_translations(translations) if translations.present?
+    load_words(language_code) if words
+    load_audio(audio) if audio
+    load_tafsirs(tafsirs) if tafsirs.present?
+
+    @results.first
+  end
+
   def load_verses(filter, language_code, words: true, tafsirs: false, translations: false, audio: false)
     fetch_verses_range(filter)
     load_translations(translations) if translations.present?
@@ -133,7 +144,7 @@ class V4::VerseFinder < ::VerseFinder
   end
 
   def load_words(word_translation_lang)
-    language = Language.find_by(id_or_iso_code: word_translation_lang)
+    language = Language.find_with_id_or_iso_code( word_translation_lang)
 
     words_with_default_translation = @results.where(word_translations: { language_id: Language.default.id })
 

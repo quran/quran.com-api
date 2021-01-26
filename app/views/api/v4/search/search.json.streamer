@@ -1,24 +1,27 @@
 pagy_info = @presenter.pagination
-
 json.object! do
-  json.query @presenter.query
-  json.total_results pagy_info.count
-  json.current_page pagy_info.page
-  json.total_pages pagy_info.pages
+  json.search do
+    json.object! do
+      json.query @presenter.query
+      json.total_results pagy_info.count
+      json.current_page pagy_info.page
+      json.total_pages pagy_info.pages
 
-  json.results do
-    json.array! @presenter.items do |item|
+      json.results do
+        json.array! @presenter.items do |item|
 
-      json.object! do
-        json.verse_id item.id
-        json.text item.highlighted_text
+          json.object! do
+            json.verse_id item.id
+            json.text item.highlighted_text
 
-        json.translations do
-          json.array! @presenter.load_translations(item) do |trans|
-            json.object! do
-              json.name trans[:resource_name]
-              json.id trans[:resource_id]
-              json.text trans[:text]
+            json.translations do
+              json.array! @presenter.load_translations(item) do |trans|
+                json.object! do
+                  json.name trans[:resource_name]
+                  json.id trans[:resource_id]
+                  json.text trans[:text]
+                end
+              end
             end
           end
         end

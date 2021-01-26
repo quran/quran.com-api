@@ -1,1 +1,5 @@
-json.partial! 'juz', juz: @juz
+json.object! do
+  json.juz do
+    json.partial! 'juz', juz: @juz
+  end
+end

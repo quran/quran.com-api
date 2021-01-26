@@ -69,7 +69,7 @@ class VerseFinder
   end
 
   def load_words(word_translation_lang)
-    language = Language.find_by(id_or_iso_code: word_translation_lang)
+    language = Language.find_with_id_or_iso_code( word_translation_lang)
 
     words_with_default_translation = results.where(word_translations: { language_id: Language.default.id })
 

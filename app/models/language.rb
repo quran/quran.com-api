@@ -24,7 +24,7 @@ class Language < ApplicationRecord
       Language.find_by(iso_code: :en)
     end
 
-    def find_by_id_or_iso_code(id)
+    def find_with_id_or_iso_code(id)
       Language.where(id: id).or(Language.where(iso_code: id)).first
     end
   end

@@ -1,5 +1,8 @@
 json.object! do
   json.extract! juz, :id,
                 :juz_number,
-                :verse_mapping
+                :verse_mapping,
+                :first_verse_id,
+                :last_verse_id,
+                :verses_count
 end
