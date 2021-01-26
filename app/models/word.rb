@@ -56,11 +56,15 @@ class Word < ApplicationRecord
 
   default_scope { order 'position asc' }
 
-  def code
+  def code_v1
     "&#x#{code_hex};"
   end
 
   def code_v2
     "&#x#{code_hex_v3};"
+  end
+
+  def class_name
+    "p#{page_number}"
   end
 end

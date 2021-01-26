@@ -4,51 +4,58 @@ class VersesPresenter < BasePresenter
   attr_reader :lookahead, :finder
   VERSE_FIELDS = [
       'chapter_id',
-      'verse_number',
-      'verse_key',
-      'text_uthmani',
       'text_indopak',
       'text_imlaei_simple',
-      'juz_number',
-      'hizb_number',
-      'rub_number',
-      'sajdah_type',
-      'sajdah_number',
-      'page_number',
+      'text_imlaei',
+      'text_uthmani',
+      'text_uthmani_simple',
+      'text_uthmani_tajweed',
       'image_url',
       'image_width',
-      'text_imlaei',
-      'text_uthmani_simple',
-      'text_uthmani_tajweed'
+      'code_v1'
   ]
 
   WORDS_FIELDS = [
       'verse_id',
       'chapter_id',
-      'position',
       'text_uthmani',
       'text_indopak',
       'text_imlaei_simple',
-      'verse_key',
-      'page_number',
-      'class_name',
-      'line_number',
-      'code_dec',
-      'code_hex',
-      'audio_url',
-      'location',
-      'char_type_name',
       'text_imlaei',
       'text_uthmani_simple',
       'text_uthmani_tajweed',
+      'code_v1',
+      'verse_key',
+      'class_name',
+      'location'
   ]
 
   TRANSLATION_FIELDS = [
-
+      'chapter_id',
+      'verse_number',
+      'verse_key',
+      'juz_number',
+      'hizb_number',
+      'rub_number',
+      'page_number',
+      'resource_name',
+      'language_name',
+      'language_id',
+      'id'
   ]
 
   TAFSIR_FIELDS = [
-
+      'chapter_id',
+      'verse_number',
+      'verse_key',
+      'juz_number',
+      'hizb_number',
+      'rub_number',
+      'page_number',
+      'resource_name',
+      'language_name',
+      'language_id',
+      'id'
   ]
 
   def initialize(params, lookahead)
@@ -108,7 +115,7 @@ class VersesPresenter < BasePresenter
           WORDS_FIELDS.include?(field)
         end
       else
-        ['code']
+        ['code_v1']
       end
     end
   end
@@ -136,16 +143,6 @@ class VersesPresenter < BasePresenter
       end
     end
   end
-
-  delegate :next_page, to: :finder
-
-  delegate :current_page, to: :finder
-
-  delegate :per_page, to: :finder
-
-  delegate :total_records, to: :finder
-
-  delegate :total_pages, to: :finder
 
   def verses(filter, language)
     finder.load_verses(filter, language, words: render_words?, tafsirs: fetch_tafsirs, translations: fetch_translations, audio: fetch_audio)
