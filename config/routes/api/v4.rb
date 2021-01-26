@@ -41,7 +41,11 @@ namespace :v4 do
     get :'verses/indopak', action: 'verses_text', script: 'text_indopak'
     get :'verses/imlaei', action: 'verses_text', script: 'text_imlaei'
     get :'verses/imlaei_simple', action: 'verses_text', script: 'text_imlaei_simple'
-    # TODO: add Qaloon and other Qira'at
+    get :'verses/code_v1', action: 'verses_text', script: 'code_v1'
+
+    # TODO: Naveed. V2 codes are buggy, fix them before exposing via api
+    # get :'verses/code_v2', action: 'verses_text', script: 'code_v1'
+    # TODO: Naveed. add Qaloon and other Qira'at
   end
 
   # verses routes, by juz, chapter, page

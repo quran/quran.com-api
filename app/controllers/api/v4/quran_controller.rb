@@ -8,7 +8,8 @@ module Api::V4
         'text_uthmani_tajweed',
         'text_indopak',
         'text_imlaei',
-        'text_imlaei_simple'
+        'text_imlaei_simple',
+        'code_v1'
     ]
 
     def translation
@@ -49,10 +50,16 @@ module Api::V4
 
     def verses_text
       @script_type = fetch_script_type
+      @extra_fields = []
+
+      if 'code_v1' == @script_type
+        @extra_fields << :page_number
+      end
+
       @verses = Verse
                     .unscope(:order)
                     .order('verse_index ASC').where(resource_filters)
-                    .select(:id, :verse_key, @script_type)
+                    .select(:id, :verse_key, @script_type, *@extra_fields)
 
       render
     end
