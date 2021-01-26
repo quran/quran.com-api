@@ -83,7 +83,8 @@ module Api::V4
           juz_number: params[:juz_number],
           hizb_number: params[:hizb_number],
           rub_number: params[:rub_number],
-          page_number: params[:page_number]
+          page_number: params[:page_number],
+          verse_key: params[:verse_key]
       }.compact
     end
 

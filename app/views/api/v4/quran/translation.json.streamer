@@ -10,10 +10,12 @@ json.object! do
     end
   end
 
-  json.meta do
-    json.object! do
-      json.translation_name @resource.name
-      json.author_name @resource.author_name
+  if @resource
+    json.meta do
+      json.object! do
+        json.translation_name @resource.name
+        json.author_name @resource.author_name
+      end
     end
   end
 end
