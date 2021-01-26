@@ -50,7 +50,7 @@ class VerseFinder
     @current_page ||= (params[:page].to_i <= 1 ? 1 : params[:page].to_i)
   end
 
-  def total_versestotal_pages
+  def total_pages
     (total_verses / per_page).ceil
   end
 
