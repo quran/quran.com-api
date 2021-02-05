@@ -13,9 +13,6 @@ gem 'pg', '>= 0.18', '< 2.0'
 gem 'active_model_serializers', '~> 0.10.0'
 gem 'turbostreamer', '>= 1.9'
 
-# Detect langauge from text
-gem "cld3", '>= 3.4.1'
-
 # Http request
 gem 'httparty', require: false
 
@@ -23,11 +20,13 @@ gem 'graphql', '1.11.4'
 gem 'graphql-schema_comparator'
 gem 'graphql-playground', github: 'naveed-ahmad/graphql-playground-rails'
 
+gem 'cld3', '>= 3.4.1'
+
 # Elasticsearch
-gem 'elasticsearch'
-gem 'elasticsearch-model'
-gem 'elasticsearch-rails'
-gem 'excon' # using excon as faraday adapter (net::http breaks)
+# using excon as faraday adapter (net::http breaks)
+gem 'elasticsearch-model', '>= 7.1.1'
+gem 'excon'
+gem 'typhoeus', github: 'naveed-ahmad/typhoeus'
 
 # Paging the results
 gem 'pagy'
