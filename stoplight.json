@@ -1804,16 +1804,16 @@
         "/quran/verses/imlaei": {
             "get": {
                 "operationId": "QURAN-verses-Imlaei",
-                "summary": "Get Imlaei Simple text of ayah",
+                "summary": "Get Imlaei Script of ayah",
                 "tags": [
                     "Quran"
                 ],
-                "description": "Get Imlaei simple script(without tashkiq/diacritical marks) of ayah.",
+                "description": "Get Imlaei script of ayah. Use query strings to filter results, leave all query string blank if you want to fetch Imlaei script of whole Quran.",
                 "parameters": [
                     {
                         "name": "chapter_number",
                         "in": "query",
-                        "description": "If you want to get text of a specific surah.",
+                        "description": "If you want to get Imlaei script of a specific surah.",
                         "type": "integer",
                         "minimum": 1,
                         "maximum": 114
@@ -1821,7 +1821,7 @@
                     {
                         "name": "juz_number",
                         "in": "query",
-                        "description": "If you want to get text of a specific juz.",
+                        "description": "If you want to get Imlaei script of a specific juz.",
                         "type": "integer",
                         "minimum": 1,
                         "maximum": 30
@@ -1829,7 +1829,7 @@
                     {
                         "name": "page_number",
                         "in": "query",
-                        "description": "If you want to get text of a Madani Muhsaf page",
+                        "description": "If you want to get Imlaei script of a Madani Muhsaf page",
                         "type": "integer",
                         "minimum": 1,
                         "maximum": 604
@@ -1837,7 +1837,7 @@
                     {
                         "name": "hizb_number",
                         "in": "query",
-                        "description": "If you want to get text of a specific hizb.",
+                        "description": "If you want to get Imlaei script of a specific hizb.",
                         "type": "integer",
                         "minimum": 1,
                         "maximum": 60
@@ -1845,7 +1845,7 @@
                     {
                         "name": "rub_number",
                         "in": "query",
-                        "description": "If you want to get text of a specific rub.",
+                        "description": "If you want to get Imlaei script of a specific rub.",
                         "type": "integer",
                         "minimum": 1,
                         "maximum": 240
@@ -1853,7 +1853,7 @@
                     {
                         "name": "verse_key",
                         "in": "query",
-                        "description": "If you want to get text of a specific ayah.",
+                        "description": "If you want to get Imlaei script of a specific ayah.",
                         "type": "string"
                     }
                 ],
@@ -1897,6 +1897,137 @@
                 },
                 "x-stoplight": {
                     "id": "QURAN-verses-Imlaei",
+                    "beforeScript": null,
+                    "afterScript": null,
+                    "public": true,
+                    "mock": {
+                        "enabled": false,
+                        "dynamic": false,
+                        "statusCode": 200
+                    }
+                }
+            }
+        },
+        "/quran/translations/{translation_id}": {
+            "parameters": [
+                {
+                    "name": "translation_id",
+                    "in": "path",
+                    "description": "Recitation id",
+                    "required": true,
+                    "type": "number"
+                }
+            ],
+            "get": {
+                "operationId": "recitations",
+                "summary": "Get a single translation",
+                "tags": [
+                    "Quran"
+                ],
+                "description": "Get a single #model:XCinMTfQdCrC3D3vH of all ayah.\n\nSee #endpoint:N4JAF8phDshhyrBHs endpoint to fetch available translations.\n\nYou can also include more fields of translation using `fields` query string.",
+                "parameters": [
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "comma seperated fields of translation.",
+                        "type": "string"
+                    },
+                    {
+                        "name": "chapter_number",
+                        "in": "query",
+                        "description": "If you want to get translation of a specific surah.",
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 114
+                    },
+                    {
+                        "name": "juz_number",
+                        "in": "query",
+                        "description": "If you want to get translation of a specific juz.",
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 30
+                    },
+                    {
+                        "name": "page_number",
+                        "in": "query",
+                        "description": "If you want to get translation of a Madani Muhsaf page",
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 604
+                    },
+                    {
+                        "name": "hizb_number",
+                        "in": "query",
+                        "description": "If you want to get translation of a specific hizb.",
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 60
+                    },
+                    {
+                        "name": "rub_number",
+                        "in": "query",
+                        "description": "If you want to get translation of a specific rub.",
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 240
+                    },
+                    {
+                        "name": "verse_key",
+                        "in": "query",
+                        "description": "If you want to get translation of a specific ayah.",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "translations": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/translation"
+                                    }
+                                },
+                                "meta": {
+                                    "type": "object",
+                                    "properties": {
+                                        "translation_name": {
+                                            "type": "string"
+                                        },
+                                        "author_name": {
+                                            "type": [
+                                                "null",
+                                                "string"
+                                            ]
+                                        }
+                                    }
+                                }
+                            },
+                            "required": [
+                                "translations"
+                            ]
+                        },
+                        "examples": {
+                            "application/json": {
+                                "translations": [
+                                    {
+                                        "resource_id": 131,
+                                        "text": "In the Name of Allah—the Most Compassionate, Most Merciful."
+                                    }
+                                ],
+                                "meta": {
+                                    "translation_name": "Dr. Mustafa Khattab, the Clear Quran",
+                                    "author_name": "Dr. Mustafa Khattab"
+                                }
+                            }
+                        }
+                    }
+                },
+                "x-stoplight": {
+                    "id": "recitations",
                     "beforeScript": null,
                     "afterScript": null,
                     "public": true,
@@ -2077,137 +2208,6 @@
                                 "meta": {
                                     "tafsir_name": "Tafsir Ibn Kathir",
                                     "author_name": "Hafiz Ibn Kathir"
-                                }
-                            }
-                        }
-                    }
-                },
-                "x-stoplight": {
-                    "id": "recitations",
-                    "beforeScript": null,
-                    "afterScript": null,
-                    "public": true,
-                    "mock": {
-                        "enabled": false,
-                        "dynamic": false,
-                        "statusCode": 200
-                    }
-                }
-            }
-        },
-        "/quran/translations/{translation_id}": {
-            "parameters": [
-                {
-                    "name": "translation_id",
-                    "in": "path",
-                    "description": "Recitation id",
-                    "required": true,
-                    "type": "number"
-                }
-            ],
-            "get": {
-                "operationId": "recitations",
-                "summary": "Get a single translation",
-                "tags": [
-                    "Quran"
-                ],
-                "description": "Get a single #model:XCinMTfQdCrC3D3vH of all ayah.\n\nSee #endpoint:N4JAF8phDshhyrBHs endpoint to fetch available translations.\n\nYou can also include more fields of translation using `fields` query string.",
-                "parameters": [
-                    {
-                        "name": "fields",
-                        "in": "query",
-                        "description": "comma seperated fields of translation.",
-                        "type": "string"
-                    },
-                    {
-                        "name": "chapter_number",
-                        "in": "query",
-                        "description": "If you want to get translation of a specific surah.",
-                        "type": "integer",
-                        "minimum": 1,
-                        "maximum": 114
-                    },
-                    {
-                        "name": "juz_number",
-                        "in": "query",
-                        "description": "If you want to get translation of a specific juz.",
-                        "type": "integer",
-                        "minimum": 1,
-                        "maximum": 30
-                    },
-                    {
-                        "name": "page_number",
-                        "in": "query",
-                        "description": "If you want to get translation of a Madani Muhsaf page",
-                        "type": "integer",
-                        "minimum": 1,
-                        "maximum": 604
-                    },
-                    {
-                        "name": "hizb_number",
-                        "in": "query",
-                        "description": "If you want to get translation of a specific hizb.",
-                        "type": "integer",
-                        "minimum": 1,
-                        "maximum": 60
-                    },
-                    {
-                        "name": "rub_number",
-                        "in": "query",
-                        "description": "If you want to get translation of a specific rub.",
-                        "type": "integer",
-                        "minimum": 1,
-                        "maximum": 240
-                    },
-                    {
-                        "name": "verse_key",
-                        "in": "query",
-                        "description": "If you want to get translation of a specific ayah.",
-                        "type": "string"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "",
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "translations": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/definitions/translation"
-                                    }
-                                },
-                                "meta": {
-                                    "type": "object",
-                                    "properties": {
-                                        "translation_name": {
-                                            "type": "string"
-                                        },
-                                        "author_name": {
-                                            "type": [
-                                                "null",
-                                                "string"
-                                            ]
-                                        }
-                                    }
-                                }
-                            },
-                            "required": [
-                                "translations"
-                            ]
-                        },
-                        "examples": {
-                            "application/json": {
-                                "translations": [
-                                    {
-                                        "resource_id": 131,
-                                        "text": "In the Name of Allah—the Most Compassionate, Most Merciful."
-                                    }
-                                ],
-                                "meta": {
-                                    "translation_name": "Dr. Mustafa Khattab, the Clear Quran",
-                                    "author_name": "Dr. Mustafa Khattab"
                                 }
                             }
                         }
@@ -2564,53 +2564,6 @@
                 }
             }
         },
-        "/resources/languages": {
-            "get": {
-                "operationId": "languages",
-                "summary": "Languages",
-                "tags": [
-                    "Resources"
-                ],
-                "description": "Get all languages. You can get translated names of languages in specific language using `language` query parameter. For example \n\n  ```\n  /resources/languages?language=ur\n  ```\n  \nwill return language names translated into Urdu",
-                "parameters": [
-                    {
-                        "name": "language",
-                        "in": "query",
-                        "type": "string"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/language"
-                            }
-                        },
-                        "examples": {
-                            "application/json": [
-                                {
-                                    "id": -71611860,
-                                    "iso_code": "amet"
-                                }
-                            ]
-                        }
-                    }
-                },
-                "x-stoplight": {
-                    "id": "languages",
-                    "beforeScript": null,
-                    "afterScript": null,
-                    "public": true,
-                    "mock": {
-                        "enabled": false,
-                        "dynamic": false,
-                        "statusCode": 200
-                    }
-                }
-            }
-        },
         "/resources/tafsirs": {
             "get": {
                 "operationId": "tafsirs",
@@ -2674,6 +2627,54 @@
                 }
             }
         },
+        "/resources/tafsirs/{tafsir_id}/info": {
+            "parameters": [
+                {
+                    "name": "tafsir_id",
+                    "in": "path",
+                    "required": true,
+                    "type": "string"
+                }
+            ],
+            "get": {
+                "operationId": "TAFSIR-info",
+                "summary": "Tafsir Info",
+                "tags": [
+                    "Resources"
+                ],
+                "description": "Get the information of a specific tafsir. Could include information about the author, when it was published etc.",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "number"
+                                },
+                                "info": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "x-stoplight": {
+                    "id": "TAFSIR-info",
+                    "beforeScript": null,
+                    "afterScript": null,
+                    "public": true,
+                    "mock": {
+                        "enabled": false,
+                        "dynamic": false,
+                        "statusCode": 200
+                    }
+                }
+            }
+        },
         "/resources/recitation_styles": {
             "get": {
                 "operationId": "RECITATION-styles",
@@ -2714,43 +2715,42 @@
                 }
             }
         },
-        "/resources/tafsirs/{tafsir_id}/info": {
-            "parameters": [
-                {
-                    "name": "tafsir_id",
-                    "in": "path",
-                    "required": true,
-                    "type": "string"
-                }
-            ],
+        "/resources/languages": {
             "get": {
-                "operationId": "TAFSIR-info",
-                "summary": "Tafsir Info",
+                "operationId": "languages",
+                "summary": "Languages",
                 "tags": [
                     "Resources"
                 ],
-                "description": "Get the information of a specific tafsir. Could include information about the author, when it was published etc.",
+                "description": "Get all languages. You can get translated names of languages in specific language using `language` query parameter. For example \n\n  ```\n  /resources/languages?language=ur\n  ```\n  \nwill return language names translated into Urdu",
+                "parameters": [
+                    {
+                        "name": "language",
+                        "in": "query",
+                        "type": "string"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "",
                         "schema": {
-                            "type": "object",
-                            "properties": {
-                                "id": {
-                                    "type": "number"
-                                },
-                                "info": {
-                                    "type": [
-                                        "string",
-                                        "null"
-                                    ]
-                                }
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/language"
                             }
+                        },
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "id": -71611860,
+                                    "iso_code": "amet"
+                                }
+                            ]
                         }
                     }
                 },
                 "x-stoplight": {
-                    "id": "TAFSIR-info",
+                    "id": "languages",
                     "beforeScript": null,
                     "afterScript": null,
                     "public": true,
@@ -3490,6 +3490,14 @@
                     "items": {
                         "$ref": "#/definitions/translation"
                     }
+                },
+                "code_v1": {
+                    "type": "string",
+                    "description": "Glyphs codes for QCF v1 fonts"
+                },
+                "code_v2": {
+                    "type": "string",
+                    "description": "Glyphs codes for QCF v2 fonts"
                 }
             },
             "required": [
@@ -3591,6 +3599,10 @@
                 "code_v1": {
                     "type": "string",
                     "description": "glyph code that you can use to render the word using QCF  v1 font."
+                },
+                "code_v2": {
+                    "type": "string",
+                    "description": "glyph code that you can use to render the word using QCF  v2 font."
                 },
                 "translation": {
                     "type": "object",
@@ -4061,7 +4073,7 @@
                                 "type": "endpoints"
                             },
                             {
-                                "_id": "languages",
+                                "_id": "RECITATION-info",
                                 "type": "endpoints"
                             },
                             {
@@ -4069,11 +4081,15 @@
                                 "type": "endpoints"
                             },
                             {
+                                "_id": "TAFSIR-info",
+                                "type": "endpoints"
+                            },
+                            {
                                 "_id": "RECITATION-styles",
                                 "type": "endpoints"
                             },
                             {
-                                "_id": "TAFSIR-info",
+                                "_id": "languages",
                                 "type": "endpoints"
                             },
                             {

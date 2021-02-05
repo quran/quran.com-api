@@ -1425,7 +1425,7 @@ documentation:
       displayName: imlaei
       get:
         displayName: QURAN-verses-Imlaei
-        description: Get Imlaei simple script(without tashkiq/diacritical marks) of ayah.
+        description: 'Get Imlaei script of ayah. Use query strings to filter results, leave all query string blank if you want to fetch Imlaei script of whole Quran.'
         responses:
           '200':
             body:
@@ -1464,38 +1464,138 @@ documentation:
         queryParameters:
           chapter_number:
             type: integer
-            description: If you want to get text of a specific surah.
+            description: If you want to get Imlaei script of a specific surah.
             minimum: 1
             maximum: 114
-            displayName: If you want to get text of a specific surah.
+            displayName: If you want to get Imlaei script of a specific surah.
           juz_number:
             type: integer
-            description: If you want to get text of a specific juz.
+            description: If you want to get Imlaei script of a specific juz.
             minimum: 1
             maximum: 30
-            displayName: If you want to get text of a specific juz.
+            displayName: If you want to get Imlaei script of a specific juz.
           page_number:
             type: integer
-            description: If you want to get text of a Madani Muhsaf page
+            description: If you want to get Imlaei script of a Madani Muhsaf page
             minimum: 1
             maximum: 604
-            displayName: If you want to get text of a Madani Muhsaf page
+            displayName: If you want to get Imlaei script of a Madani Muhsaf page
           hizb_number:
             type: integer
-            description: If you want to get text of a specific hizb.
+            description: If you want to get Imlaei script of a specific hizb.
             minimum: 1
             maximum: 60
-            displayName: If you want to get text of a specific hizb.
+            displayName: If you want to get Imlaei script of a specific hizb.
           rub_number:
             type: integer
-            description: If you want to get text of a specific rub.
+            description: If you want to get Imlaei script of a specific rub.
             minimum: 1
             maximum: 240
-            displayName: If you want to get text of a specific rub.
+            displayName: If you want to get Imlaei script of a specific rub.
           verse_key:
             type: string
-            description: If you want to get text of a specific ayah.
-            displayName: If you want to get text of a specific ayah.
+            description: If you want to get Imlaei script of a specific ayah.
+            displayName: If you want to get Imlaei script of a specific ayah.
+  /translations:
+    displayName: translations
+    '/{translation_id}':
+      displayName: translation_id
+      uriParameters:
+        translation_id:
+          type: number
+          description: Recitation id
+          displayName: Recitation id
+      get:
+        displayName: recitations
+        description: |-
+          Get a single #model:XCinMTfQdCrC3D3vH of all ayah.
+
+          See #endpoint:N4JAF8phDshhyrBHs endpoint to fetch available translations.
+
+          You can also include more fields of translation using `fields` query string.
+        responses:
+          '200':
+            body:
+              application/json: |-
+                {
+                  "type": "object",
+                  "properties": {
+                    "translations": {
+                      "type": "array",
+                      "items": {
+                        "type": "translation"
+                      }
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "translation_name": {
+                          "type": "string"
+                        },
+                        "author_name": {
+                          "type": [
+                            "null",
+                            "string"
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "translations"
+                  ],
+                  "example": {
+                    "translations": [
+                      {
+                        "resource_id": 131,
+                        "text": "In the Name of Allah—the Most Compassionate, Most Merciful."
+                      }
+                    ],
+                    "meta": {
+                      "translation_name": "Dr. Mustafa Khattab, the Clear Quran",
+                      "author_name": "Dr. Mustafa Khattab"
+                    }
+                  }
+                }
+        queryParameters:
+          fields:
+            type: string
+            description: comma seperated fields of translation.
+            displayName: comma seperated fields of translation.
+          chapter_number:
+            type: integer
+            description: If you want to get translation of a specific surah.
+            minimum: 1
+            maximum: 114
+            displayName: If you want to get translation of a specific surah.
+          juz_number:
+            type: integer
+            description: If you want to get translation of a specific juz.
+            minimum: 1
+            maximum: 30
+            displayName: If you want to get translation of a specific juz.
+          page_number:
+            type: integer
+            description: If you want to get translation of a Madani Muhsaf page
+            minimum: 1
+            maximum: 604
+            displayName: If you want to get translation of a Madani Muhsaf page
+          hizb_number:
+            type: integer
+            description: If you want to get translation of a specific hizb.
+            minimum: 1
+            maximum: 60
+            displayName: If you want to get translation of a specific hizb.
+          rub_number:
+            type: integer
+            description: If you want to get translation of a specific rub.
+            minimum: 1
+            maximum: 240
+            displayName: If you want to get translation of a specific rub.
+          verse_key:
+            type: string
+            description: If you want to get translation of a specific ayah.
+            displayName: If you want to get translation of a specific ayah.
   /tafsirs:
     displayName: tafsirs
     '/{tafsir_id}':
@@ -1597,106 +1697,6 @@ documentation:
             type: string
             description: If you want to get tafsir of a specific ayah.
             displayName: If you want to get tafsir of a specific ayah.
-  /translations:
-    displayName: translations
-    '/{translation_id}':
-      displayName: translation_id
-      uriParameters:
-        translation_id:
-          type: number
-          description: Recitation id
-          displayName: Recitation id
-      get:
-        displayName: recitations
-        description: |-
-          Get a single #model:XCinMTfQdCrC3D3vH of all ayah.
-
-          See #endpoint:N4JAF8phDshhyrBHs endpoint to fetch available translations.
-
-          You can also include more fields of translation using `fields` query string.
-        responses:
-          '200':
-            body:
-              application/json: |-
-                {
-                  "type": "object",
-                  "properties": {
-                    "translations": {
-                      "type": "array",
-                      "items": {
-                        "type": "translation"
-                      }
-                    },
-                    "meta": {
-                      "type": "object",
-                      "properties": {
-                        "translation_name": {
-                          "type": "string"
-                        },
-                        "author_name": {
-                          "type": [
-                            "null",
-                            "string"
-                          ]
-                        }
-                      }
-                    }
-                  },
-                  "required": [
-                    "translations"
-                  ],
-                  "example": {
-                    "translations": [
-                      {
-                        "resource_id": 131,
-                        "text": "In the Name of Allah—the Most Compassionate, Most Merciful."
-                      }
-                    ],
-                    "meta": {
-                      "translation_name": "Dr. Mustafa Khattab, the Clear Quran",
-                      "author_name": "Dr. Mustafa Khattab"
-                    }
-                  }
-                }
-        queryParameters:
-          fields:
-            type: string
-            description: comma seperated fields of translation.
-            displayName: comma seperated fields of translation.
-          chapter_number:
-            type: integer
-            description: If you want to get translation of a specific surah.
-            minimum: 1
-            maximum: 114
-            displayName: If you want to get translation of a specific surah.
-          juz_number:
-            type: integer
-            description: If you want to get translation of a specific juz.
-            minimum: 1
-            maximum: 30
-            displayName: If you want to get translation of a specific juz.
-          page_number:
-            type: integer
-            description: If you want to get translation of a Madani Muhsaf page
-            minimum: 1
-            maximum: 604
-            displayName: If you want to get translation of a Madani Muhsaf page
-          hizb_number:
-            type: integer
-            description: If you want to get translation of a specific hizb.
-            minimum: 1
-            maximum: 60
-            displayName: If you want to get translation of a specific hizb.
-          rub_number:
-            type: integer
-            description: If you want to get translation of a specific rub.
-            minimum: 1
-            maximum: 240
-            displayName: If you want to get translation of a specific rub.
-          verse_key:
-            type: string
-            description: If you want to get translation of a specific ayah.
-            displayName: If you want to get translation of a specific ayah.
   /recitations:
     displayName: recitations
     '/{recitation_id}':
@@ -1970,37 +1970,6 @@ documentation:
           type:
             - string
             - number
-  /languages:
-    displayName: languages
-    get:
-      displayName: languages
-      description: |-
-        Get all languages. You can get translated names of languages in specific language using `language` query parameter. For example 
-
-          ```
-          /resources/languages?language=ur
-          ```
-          
-        will return language names translated into Urdu
-      responses:
-        '200':
-          body:
-            application/json: |-
-              {
-                "type": "array",
-                "items": {
-                  "type": "language"
-                },
-                "example": [
-                  {
-                    "id": -71611860,
-                    "iso_code": "amet"
-                  }
-                ]
-              }
-      queryParameters:
-        language:
-          type: string
   /tafsirs:
     displayName: tafsirs
     get:
@@ -2088,6 +2057,37 @@ documentation:
                   }
                 }
               }
+  /languages:
+    displayName: languages
+    get:
+      displayName: languages
+      description: |-
+        Get all languages. You can get translated names of languages in specific language using `language` query parameter. For example 
+
+          ```
+          /resources/languages?language=ur
+          ```
+          
+        will return language names translated into Urdu
+      responses:
+        '200':
+          body:
+            application/json: |-
+              {
+                "type": "array",
+                "items": {
+                  "type": "language"
+                },
+                "example": [
+                  {
+                    "id": -71611860,
+                    "iso_code": "amet"
+                  }
+                ]
+              }
+      queryParameters:
+        language:
+          type: string
   /chapter_infos:
     displayName: chapter_infos
     get:
@@ -2611,6 +2611,14 @@ types:
         items:
           type: translation
         required: false
+      code_v1:
+        type: string
+        description: Glyphs codes for QCF v1 fonts
+        required: false
+      code_v2:
+        type: string
+        description: Glyphs codes for QCF v2 fonts
+        required: false
     example:
       id: 1
       chapter_id: 1
@@ -2683,6 +2691,10 @@ types:
       code_v1:
         type: string
         description: glyph code that you can use to render the word using QCF  v1 font.
+        required: false
+      code_v2:
+        type: string
+        description: glyph code that you can use to render the word using QCF  v2 font.
         required: false
       translation:
         type: object

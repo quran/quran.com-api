@@ -49,6 +49,15 @@ paths:
                   translated_name:
                     language_name: english
                     name: The Opener
+      x-stoplight:
+        id: LIST-chapters
+        beforeScript: null
+        afterScript: null
+        public: true
+        mock:
+          enabled: false
+          dynamic: false
+          statusCode: 200
   '/chapters/{id}':
     parameters:
       - name: id
@@ -94,6 +103,15 @@ paths:
                 translated_name:
                   language_name: english
                   name: The Opener
+      x-stoplight:
+        id: GET-chapter
+        beforeScript: null
+        afterScript: null
+        public: true
+        mock:
+          enabled: false
+          dynamic: false
+          statusCode: 200
   '/chapters/{chapter_id}/info':
     parameters:
       - name: chapter_id
@@ -131,6 +149,15 @@ paths:
                 short_text: 'This Surah is named Al-Fatihah because of its subject-matter. Fatihah is that which opens a subject or a book or any other thing. In other words, Al-Fatihah is a sort of preface.'
                 source: Sayyid Abul Ala Maududi - Tafhim al-Qur'an - The Meaning of the Quran
                 text: "<h2>Name</h2>\r\n<p>This Surah is named Al-Fatihah because of its subject-matter. Fatihah is that which opens a subject or a book or any other thing. In other words, Al-Fatihah is a sort of preface.</p>\r\n<h2>Period of Revelation</h2>..."
+      x-stoplight:
+        id: info
+        beforeScript: null
+        afterScript: null
+        public: true
+        mock:
+          enabled: false
+          dynamic: false
+          statusCode: 200
   '/verses/by_chapter/{chapter_number}':
     parameters:
       - name: chapter_number
@@ -238,6 +265,15 @@ paths:
                 next_page: 2
                 total_pages: 7
                 total_records: 7
+      x-stoplight:
+        id: GET_verses-bychapter-chapternumber
+        beforeScript: null
+        afterScript: null
+        public: true
+        mock:
+          enabled: false
+          dynamic: false
+          statusCode: 200
   '/verses/by_page/{page_number}':
     parameters:
       - name: page_number
@@ -347,6 +383,15 @@ paths:
                 next_page: 2
                 total_pages: 7
                 total_records: 7
+      x-stoplight:
+        id: GET_verses-bypage-pagenumber
+        beforeScript: null
+        afterScript: null
+        public: true
+        mock:
+          enabled: false
+          dynamic: false
+          statusCode: 200
   '/verses/by_juz/{juz_number}':
     parameters:
       - name: juz_number
@@ -453,6 +498,15 @@ paths:
                 next_page: 2
                 total_pages: 7
                 total_records: 7
+      x-stoplight:
+        id: GET_verses-byjuz-juznumber
+        beforeScript: null
+        afterScript: null
+        public: true
+        mock:
+          enabled: false
+          dynamic: false
+          statusCode: 200
   '/verses/by_hizb/{hizb_number}':
     parameters:
       - name: hizb_number
@@ -560,6 +614,15 @@ paths:
                 next_page: 2
                 total_pages: 7
                 total_records: 7
+      x-stoplight:
+        id: GET_verses-byhizb-hizbnumber
+        beforeScript: null
+        afterScript: null
+        public: true
+        mock:
+          enabled: false
+          dynamic: false
+          statusCode: 200
   '/verses/by_rub/{rub_number}':
     parameters:
       - name: rub_number
@@ -667,6 +730,15 @@ paths:
                 next_page: 2
                 total_pages: 7
                 total_records: 7
+      x-stoplight:
+        id: GET_verses-byrub-rubnumber
+        beforeScript: null
+        afterScript: null
+        public: true
+        mock:
+          enabled: false
+          dynamic: false
+          statusCode: 200
   '/verses/by_key/{verse_key}':
     parameters:
       - name: verse_key
@@ -767,6 +839,15 @@ paths:
                     language_name: english
                     name: Tafsir Ibn Kathir
                     text: <h2 class="title">Which was revealed in Makkah</h2><h2 class="title">The Meaning of Al-Fatihah and its Various Names</h2>
+      x-stoplight:
+        id: GET_verses-bykey-versekey
+        beforeScript: null
+        afterScript: null
+        public: true
+        mock:
+          enabled: false
+          dynamic: false
+          statusCode: 200
   /verses/random:
     get:
       operationId: GET_verses-random
@@ -888,6 +969,15 @@ paths:
                     language_name: english
                     name: Tafsir Ibn Kathir
                     text: <h2 class="title">Which was revealed in Makkah</h2><h2 class="title">The Meaning of Al-Fatihah and its Various Names</h2>
+      x-stoplight:
+        id: GET_verses-random
+        beforeScript: null
+        afterScript: null
+        public: true
+        mock:
+          enabled: false
+          dynamic: false
+          statusCode: 200
   /juzs:
     get:
       operationId: GET_juzs
@@ -899,6 +989,15 @@ paths:
         default:
           description: ''
           schema: {}
+      x-stoplight:
+        id: GET_juzs
+        beforeScript: null
+        afterScript: null
+        public: true
+        mock:
+          enabled: false
+          dynamic: false
+          statusCode: 200
   /quran/verses/indopak:
     get:
       operationId: QURAN-verses-indopak
@@ -964,6 +1063,15 @@ paths:
                 - id: 1
                   verse_key: '1:1'
                   text_indopak: 'بِسۡمِ اللهِ الرَّحۡم]ٰنِ الرَّحِيۡمِ'
+      x-stoplight:
+        id: QURAN-verses-indopak
+        beforeScript: null
+        afterScript: null
+        public: true
+        mock:
+          enabled: false
+          dynamic: false
+          statusCode: 200
   /quran/verses/uthmani:
     get:
       operationId: QURAN-verses-uthmani
@@ -1029,6 +1137,15 @@ paths:
                 - id: 1
                   verse_key: '1:1'
                   text_uthmani: بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ
+      x-stoplight:
+        id: QURAN-verses-uthmani
+        beforeScript: null
+        afterScript: null
+        public: true
+        mock:
+          enabled: false
+          dynamic: false
+          statusCode: 200
   /quran/verses/uthmani_tajweed:
     get:
       operationId: QURAN-verses-uthmani
@@ -1094,6 +1211,15 @@ paths:
                 - id: 1
                   verse_key: '1:1'
                   text_uthmani_tajweed: بِسْمِ <tajweed class=ham_wasl>ٱ</tajweed>للَّهِ <tajweed class=ham_wasl>ٱ</tajweed><tajweed class=laam_shamsiyah>ل</tajweed>رَّحْمَ<tajweed class=madda_normal>ـٰ</tajweed>نِ <tajweed class=ham_wasl>ٱ</tajweed><tajweed class=laam_shamsiyah>ل</tajweed>رَّح<tajweed class=madda_permissible>ِي</tajweed>مِ <span class=end>١</span>
+      x-stoplight:
+        id: QURAN-verses-uthmani
+        beforeScript: null
+        afterScript: null
+        public: true
+        mock:
+          enabled: false
+          dynamic: false
+          statusCode: 200
   /quran/verses/uthmani_simple:
     get:
       operationId: QURAN-verses-uthmani_simple
@@ -1159,6 +1285,15 @@ paths:
                 - id: 1
                   verse_key: '1:1'
                   text_uthmani_simple: بسم الله الرحمن الرحيم
+      x-stoplight:
+        id: QURAN-verses-uthmani_simple
+        beforeScript: null
+        afterScript: null
+        public: true
+        mock:
+          enabled: false
+          dynamic: false
+          statusCode: 200
   /quran/verses/imlaei:
     get:
       operationId: QURAN-verses-Imlaei
@@ -1224,6 +1359,15 @@ paths:
                 - id: 1
                   verse_key: '1:1'
                   text_imlaei: بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
+      x-stoplight:
+        id: QURAN-verses-Imlaei
+        beforeScript: null
+        afterScript: null
+        public: true
+        mock:
+          enabled: false
+          dynamic: false
+          statusCode: 200
   '/quran/translations/{translation_id}':
     parameters:
       - name: translation_id
@@ -1310,6 +1454,15 @@ paths:
               meta:
                 translation_name: 'Dr. Mustafa Khattab, the Clear Quran'
                 author_name: Dr. Mustafa Khattab
+      x-stoplight:
+        id: recitations
+        beforeScript: null
+        afterScript: null
+        public: true
+        mock:
+          enabled: false
+          dynamic: false
+          statusCode: 200
   /resources/recitations:
     get:
       operationId: recitations
@@ -1339,6 +1492,18 @@ paths:
                   translated_name:
                     name: AbdulBaset AbdulSamad
                     language_name: english
+      x-stoplight:
+        id: recitations
+        beforeScript: |-
+          function (ctx, request) {
+            // Your javascript code here.
+          }
+        afterScript: null
+        public: true
+        mock:
+          enabled: false
+          dynamic: false
+          statusCode: 200
   '/quran/tafsirs/{tafsir_id}':
     parameters:
       - name: tafsir_id
@@ -1426,6 +1591,15 @@ paths:
               meta:
                 tafsir_name: Tafsir Ibn Kathir
                 author_name: Hafiz Ibn Kathir
+      x-stoplight:
+        id: recitations
+        beforeScript: null
+        afterScript: null
+        public: true
+        mock:
+          enabled: false
+          dynamic: false
+          statusCode: 200
   '/quran/recitations/{recitation_id}':
     parameters:
       - name: recitation_id
@@ -1522,6 +1696,15 @@ paths:
               meta:
                 reciter_name: Mishari Rashid al-`Afasy
                 recitation_style: null
+      x-stoplight:
+        id: recitations
+        beforeScript: null
+        afterScript: null
+        public: true
+        mock:
+          enabled: false
+          dynamic: false
+          statusCode: 200
   '/resources/translations/{translation_id}/info':
     parameters:
       - name: translation_id
@@ -1554,6 +1737,15 @@ paths:
               info:
                 id: 1
                 info: null
+      x-stoplight:
+        id: RECITATION-info
+        beforeScript: null
+        afterScript: null
+        public: true
+        mock:
+          enabled: false
+          dynamic: false
+          statusCode: 200
   '/resources/recitations/{recitation_id}/info':
     parameters:
       - name: recitation_id
@@ -1586,6 +1778,15 @@ paths:
               info:
                 id: 1
                 info: null
+      x-stoplight:
+        id: RECITATION-info
+        beforeScript: null
+        afterScript: null
+        public: true
+        mock:
+          enabled: false
+          dynamic: false
+          statusCode: 200
   /resources/translations:
     get:
       operationId: translations
@@ -1621,6 +1822,15 @@ paths:
                   translated_name:
                     name: Dr. Mustafa Khattab
                     language_name: english
+      x-stoplight:
+        id: translations
+        beforeScript: null
+        afterScript: null
+        public: true
+        mock:
+          enabled: false
+          dynamic: false
+          statusCode: 200
   /resources/tafsirs:
     get:
       operationId: tafsirs
@@ -1655,6 +1865,15 @@ paths:
                   translated_name:
                     name: Tafsir Ibn Kathir
                     language_name: english
+      x-stoplight:
+        id: tafsirs
+        beforeScript: null
+        afterScript: null
+        public: true
+        mock:
+          enabled: false
+          dynamic: false
+          statusCode: 200
   '/resources/tafsirs/{tafsir_id}/info':
     parameters:
       - name: tafsir_id
@@ -1679,6 +1898,15 @@ paths:
                 type:
                   - string
                   - 'null'
+      x-stoplight:
+        id: TAFSIR-info
+        beforeScript: null
+        afterScript: null
+        public: true
+        mock:
+          enabled: false
+          dynamic: false
+          statusCode: 200
   /resources/recitation_styles:
     get:
       operationId: RECITATION-styles
@@ -1698,6 +1926,15 @@ paths:
                 type: string
               muallim:
                 type: string
+      x-stoplight:
+        id: RECITATION-styles
+        beforeScript: null
+        afterScript: null
+        public: true
+        mock:
+          enabled: false
+          dynamic: false
+          statusCode: 200
   /resources/languages:
     get:
       operationId: languages
@@ -1727,6 +1964,15 @@ paths:
             application/json:
               - id: -71611860
                 iso_code: amet
+      x-stoplight:
+        id: languages
+        beforeScript: null
+        afterScript: null
+        public: true
+        mock:
+          enabled: false
+          dynamic: false
+          statusCode: 200
   /resources/chapter_infos:
     get:
       operationId: CHAPTER-info
@@ -1799,6 +2045,15 @@ paths:
                   translated_name:
                     name: Chapter Info
                     language_name: english
+      x-stoplight:
+        id: CHAPTER-info
+        beforeScript: null
+        afterScript: null
+        public: true
+        mock:
+          enabled: false
+          dynamic: false
+          statusCode: 200
   /resources/verse_media:
     get:
       operationId: VERSE-media
@@ -1820,6 +2075,15 @@ paths:
                 type: string
               language_name:
                 type: string
+      x-stoplight:
+        id: VERSE-media
+        beforeScript: null
+        afterScript: null
+        public: true
+        mock:
+          enabled: false
+          dynamic: false
+          statusCode: 200
   /search:
     get:
       operationId: GET_search
@@ -1853,6 +2117,15 @@ paths:
         default:
           description: ''
           schema: {}
+      x-stoplight:
+        id: GET_search
+        beforeScript: null
+        afterScript: null
+        public: true
+        mock:
+          enabled: false
+          dynamic: false
+          statusCode: 200
 definitions:
   audiofile:
     title: AudioFile
@@ -1890,6 +2163,10 @@ definitions:
           - - 4810
             - 390
             - -1
+    x-stoplight:
+      id: audiofile
+      name: AudioFile
+      public: true
   author:
     title: Author
     type: object
@@ -1905,6 +2182,10 @@ definitions:
     example:
       name: Dr. Ghali
       url: null
+    x-stoplight:
+      id: author
+      name: Author
+      public: true
   chapter-info:
     title: Chapter Info
     type: object
@@ -1934,6 +2215,10 @@ definitions:
       short_text: 'This Surah is named Al-Fatihah because of its subject-matter. Fatihah is that which opens a subject or a book or any other thing. In other words, Al-Fatihah is a sort of preface.'
       language_name: English
       source: Sayyid Abul Ala Maududi - Tafhim al-Qur'an - The Meaning of the Quran
+    x-stoplight:
+      id: chapter-info
+      name: Chapter Info
+      public: true
   language:
     title: Language
     type: object
@@ -1962,6 +2247,10 @@ definitions:
       translated_names:
         - name: انگریزی
           language_name: Urdu
+    x-stoplight:
+      id: language
+      name: Language
+      public: true
   media-content:
     title: MediaContent
     type: object
@@ -1979,6 +2268,10 @@ definitions:
       embed_text: <iframe src="//www.youtube.com/embed/JyLuLv2hrAo?enablejsapi=1&wmode=transparent&iv_load_policy=3&origin=https%3A%2F%2Fquran.com&rel=0&autohide=1&autoplay=1" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
       provider: YouTube
       author_name: Bayyinah
+    x-stoplight:
+      id: media-content
+      name: MediaContent
+      public: true
   recitation:
     title: Recitation
     type: object
@@ -2003,6 +2296,10 @@ definitions:
       translated_name:
         name: AbdulBaset AbdulSamad
         language_name: english
+    x-stoplight:
+      id: recitation
+      name: Recitation
+      public: true
   tafsir:
     title: Tafsir
     type: object
@@ -2046,6 +2343,10 @@ definitions:
       hizb_number: 1
       rub_number: 1
       page_number: 1
+    x-stoplight:
+      id: tafsir
+      name: Tafsir
+      public: true
   translated-name:
     title: TranslatedName
     type: object
@@ -2062,6 +2363,10 @@ definitions:
     example:
       language_name: english
       name: The Opener
+    x-stoplight:
+      id: translated-name
+      name: TranslatedName
+      public: true
   translation:
     title: Translation
     type: object
@@ -2113,6 +2418,10 @@ definitions:
       hizb_number: 1
       rub_number: 1
       page_number: 1
+    x-stoplight:
+      id: translation
+      name: Translation
+      public: true
   transliteration:
     title: Transliteration
     type: object
@@ -2121,6 +2430,10 @@ definitions:
         type: string
       text:
         type: string
+    x-stoplight:
+      id: transliteration
+      name: Transliteration
+      public: true
   verse:
     title: Verse
     type: object
@@ -2231,6 +2544,10 @@ definitions:
           transliteration:
             text: bis'mi
             language_name: english
+    x-stoplight:
+      id: verse
+      name: Verse
+      public: true
   word:
     title: Word
     type: object
@@ -2307,6 +2624,10 @@ definitions:
       transliteration:
         text: bis'mi
         language_name: english
+    x-stoplight:
+      id: word
+      name: Word
+      public: true
   chapter:
     title: Chapter
     type: object
@@ -2347,6 +2668,10 @@ definitions:
       translated_name:
         language_name: english
         name: The Opener
+    x-stoplight:
+      id: chapter
+      name: Chapter
+      public: true
   resource:
     title: Resource
     type: object
@@ -2377,6 +2702,10 @@ definitions:
       translated_name:
         name: Tafsir Ibn Kathir
         language_name: english
+    x-stoplight:
+      id: resource
+      name: Resource
+      public: true
   pagination:
     title: Pagination
     type: object
@@ -2403,6 +2732,10 @@ definitions:
       next_page: 2
       total_pages=: 7
       total_records=: 7
+    x-stoplight:
+      id: pagination
+      name: Pagination
+      public: true
   juz:
     title: Juz
     type: object
@@ -2446,3 +2779,258 @@ definitions:
       verse_mapping:
         '1': 1-7
         '2': 1-141
+    x-stoplight:
+      id: juz
+      name: Juz
+      public: true
+x-stoplight:
+  version:
+    groups:
+      docs:
+        - name: Getting Started
+          description: null
+          divider: false
+          items:
+            - _id: introduction
+              type: docTextSections
+            - _id: get-notified
+              type: docTextSections
+            - _id: getting-content-in-other-languages
+              type: docTextSections
+        - divider: true
+          items: []
+          name: Routes
+        - name: Chapters
+          description: null
+          divider: false
+          items:
+            - _id: LIST-chapters
+              type: endpoints
+            - _id: GET-chapter
+              type: endpoints
+            - _id: info
+              type: endpoints
+        - name: Verses
+          description: |-
+            Get list of #model:J83wDRc48FrARPHBY
+
+            You can filter verses by `chapter`, `page`, `juz`, `rub`, and `hizb`. 
+
+            ### Customizing the results
+
+            API will send minimal ayah and words fields, ayah #model:XCinMTfQdCrC3D3vH, #model:D7oy5DF6aGMhfLwDB or #model:knzdXGgyjYnAqbhGX is also not included by default. You can customize the results using following query strings.
+
+            - `words` words are inlcuded by default, pass any fasly value(false, f, 0) if you don't want to include ayah words
+
+            - `translations` comma separated ids of translations you want to fetch for each ayah. See #endpoint:N4JAF8phDshhyrBHs endpoint to fetch list of available translations.
+
+            - `tafsirs` comma seperated ids of tafsirs you want to fetch for each ayah. See #endpoint:5YnxJJGPMCLnM6PNE endpoint to fetch list of available tafsirs.
+
+            - `audio` single integer value of recitaiton you want to fetch for each ayah. See #endpoint:HLbauN2sdGitPQPPL endpoint for available recitations.
+
+            - `fields` comma seperated list of  #model:J83wDRc48FrARPHBY fields. Use this query string if you need to fetch more fields of each ayah.
+
+            - `word_fields` api is sending `code_v1` QCF font for words. Use this query string if you need to fetch other fields of each words. e.g `word_fields=text_uthmani` will return Uthmani text of each word.
+
+            - `translation_fields` if you need to fetch more fields of translations. See translation model for available fields.
+
+            - `tafsir_fields` if you need to fetch more fields for tafsir.
+          divider: false
+          items:
+            - _id: GET_verses-bychapter-chapternumber
+              type: endpoints
+            - _id: GET_verses-bypage-pagenumber
+              type: endpoints
+            - _id: GET_verses-byjuz-juznumber
+              type: endpoints
+            - _id: GET_verses-byhizb-hizbnumber
+              type: endpoints
+            - _id: GET_verses-byrub-rubnumber
+              type: endpoints
+            - _id: GET_verses-bykey-versekey
+              type: endpoints
+            - _id: GET_verses-random
+              type: endpoints
+            - _id: AoW5BcJzyBWe7x2Qb
+              type: endpoints
+        - name: Juz
+          description: null
+          divider: false
+          items:
+            - _id: GET_juzs
+              type: endpoints
+        - divider: false
+          items:
+            - _id: QURAN-verses-indopak
+              type: endpoints
+            - _id: YqaS25nwPQxYfP8Kn
+              type: endpoints
+            - _id: f2T4t5CBnkxwuWZ5Q
+              type: endpoints
+            - _id: QURAN-verses-uthmani
+              type: endpoints
+            - _id: jGs7wsHJiBXR6TcRc
+              type: endpoints
+            - _id: QURAN-verses-uthmani_simple
+              type: endpoints
+            - _id: QURAN-verses-uthmani
+              type: endpoints
+            - _id: QURAN-verses-Imlaei
+              type: endpoints
+            - _id: QURAN-verses-Imlaei
+              type: endpoints
+            - _id: recitations
+              type: endpoints
+            - _id: recitations
+              type: endpoints
+            - _id: recitations
+              type: endpoints
+          name: Quran
+          description: |-
+            All endpoints in this group are designed to fetch one complete translation, tafsir, recitation or ayah text of whole Quran. 
+
+            You can download whole Clear Quran translation or Tasir ibe e Kathir in json format. We'll add more format later on, like down a sqlite dump instead of json.
+
+
+            If you don't need to fetch content of whole Quran, you can use query string to filter specific surah, pages, juz, hiz or rub as well.
+        - divider: false
+          items:
+            - _id: BFFudhky6dWQsF9we
+              type: endpoints
+          name: Tafsirs
+        - name: Tafsirs
+          description: null
+          divider: false
+          items:
+            - _id: b3WB4bKZfSWcw4e7m
+              type: endpoints
+            - _id: 5sRz3THY2vaZgZpof
+              type: endpoints
+        - divider: false
+          items:
+            - _id: eLvpfGQNAhncCxBdr
+              type: endpoints
+          name: Translations
+        - name: Resources
+          description: null
+          divider: false
+          items:
+            - _id: recitations
+              type: endpoints
+            - _id: RECITATION-info
+              type: endpoints
+            - _id: translations
+              type: endpoints
+            - _id: RECITATION-info
+              type: endpoints
+            - _id: tafsirs
+              type: endpoints
+            - _id: TAFSIR-info
+              type: endpoints
+            - _id: RECITATION-styles
+              type: endpoints
+            - _id: languages
+              type: endpoints
+            - _id: CHAPTER-info
+              type: endpoints
+            - _id: VERSE-media
+              type: endpoints
+        - name: Search
+          description: null
+          divider: false
+          items:
+            - _id: GET_search
+              type: endpoints
+        - name: Models
+          description: null
+          divider: false
+          items:
+            - _id: pagination
+              type: schemas
+            - _id: chapter
+              type: schemas
+            - _id: d3vNhGtgepN6JkpX9
+              type: schemas
+            - _id: chapter-info
+              type: schemas
+            - _id: verse
+              type: schemas
+            - _id: word
+              type: schemas
+            - _id: translation
+              type: schemas
+            - _id: transliteration
+              type: schemas
+            - _id: tafsir
+              type: schemas
+            - _id: audiofile
+              type: schemas
+            - _id: recitation
+              type: schemas
+            - _id: language
+              type: schemas
+            - _id: D2sPwqvz2Nhex4gxe
+              type: schemas
+            - _id: translated-name
+              type: schemas
+            - _id: media-content
+              type: schemas
+            - _id: author
+              type: schemas
+            - _id: resource
+              type: schemas
+            - _id: juz
+              type: schemas
+      traits: []
+      tests: []
+      savedEntries: []
+  functions: {}
+  textSections:
+    introduction:
+      id: introduction
+      name: Introduction
+      content: |-
+        <h1 align="center"> ﷽</h1>
+
+        ## Quran.com v4 api 
+
+
+        Welcome to version 4 of Quran API. Below you will find a list of the available resources in our API. If you need help or found any bug, please head over to our [repo](https://github.com/quran/quran.com-api) and open an issue.
+
+        #### Getting notified on api changes
+
+        If you're using quran.com api, please fill in your app information here #docTextSection:rAMuqXfkdWkjv2jmH
+      public: true
+    get-notified:
+      id: get-notified
+      name: Subscribe to Quran.com API updates
+      content: |-
+        # Get notified on api changes 
+
+        Please fil in this form and we'll notify you whenever we change something in the api. 
+
+        Could be a bug fix, released new version or added a new route in the api.
+
+
+        <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfVLqcJVnx9IvW0YhVduwgPQnG4bmptmRFRm65KYylVLEogAw/viewform?embedded=true" width="640" height="880" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+      public: true
+    getting-content-in-other-languages:
+      id: getting-content-in-other-languages
+      name: Getting content in other languages
+      content: |-
+        API by defult send Translated names of #model:aC7ed7aoTAZEKLCGF, #model:wc8vsnXdQpa7bpWa4, #model:sPq4bZJQ5hqar4gmB translation, and names of some other resources in English. 
+
+
+        You can use `language` query string in most api calls to fetch content in other langages. 
+
+        For example this api call
+        `/v4/chapters/1/info?language=ur` will send chapter info in Urdu language.
+
+        and `/api/v4/verses/by_chapter/1?language=ur&words=true` will send word by word translation in Urdu language.
+
+        For list of available languages and their iso codes, see  #endpoint:EZsWyDnekGaDKaCpt endpoint.
+      public: true
+  mock:
+    enabled: false
+    dynamic: false
+x-tests: {}
