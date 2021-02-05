@@ -42,9 +42,7 @@ namespace :v4 do
     get :'verses/imlaei', action: 'verses_text', script: 'text_imlaei'
     get :'verses/imlaei_simple', action: 'verses_text', script: 'text_imlaei_simple'
     get :'verses/code_v1', action: 'verses_text', script: 'code_v1'
-
-    # TODO: Naveed. V2 codes are buggy, fix them before exposing via api
-    # get :'verses/code_v2', action: 'verses_text', script: 'code_v1'
+    get :'verses/code_v2', action: 'verses_text', script: 'code_v2'
     # TODO: Naveed. add Qaloon and other Qira'at
   end
 
@@ -72,6 +70,16 @@ namespace :v4 do
 
   # tafsir routes, by juz, chapter, page
   scope 'tafsirs/:resource_id', controller: 'tafsirs' do
+    get 'by_chapter/:chapter_number', action: 'by_chapter'
+    get 'by_page/:page_number', action: 'by_page'
+    get 'by_juz/:juz_number', action: 'by_juz'
+    get 'by_rub/:rub_number', action: 'by_rub'
+    get 'by_hizb/:hizb_number', action: 'by_hizb'
+    get 'by_ayah/:ayah_key', action: 'by_ayah'
+  end
+
+  # tafsir routes, by juz, chapter, page
+  scope 'recitations/:recitation_id', controller: 'recitations' do
     get 'by_chapter/:chapter_number', action: 'by_chapter'
     get 'by_page/:page_number', action: 'by_page'
     get 'by_juz/:juz_number', action: 'by_juz'

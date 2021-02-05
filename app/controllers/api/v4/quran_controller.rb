@@ -9,15 +9,16 @@ module Api::V4
         'text_indopak',
         'text_imlaei',
         'text_imlaei_simple',
-        'code_v1'
+        'code_v1',
+        'code_v2'
     ]
 
     def translation
       @translations = if (@resource = fetch_translation_resource)
-                        Translation.order('verse_id ASC').where(resource_filters(@resource))
-                      else
-                        []
-                      end
+        Translation.order('verse_id ASC').where(resource_filters(@resource))
+      else
+        []
+      end
 
       @fields = ['verse_id', 'verse_key']
 
@@ -26,10 +27,10 @@ module Api::V4
 
     def tafsir
       @tafsirs = if (@resource = fetch_tafsir_resource)
-                   Tafsir.order('verse_id ASC').where(resource_filters(@resource))
-                 else
-                   []
-                 end
+        Tafsir.order('verse_id ASC').where(resource_filters(@resource))
+      else
+        []
+      end
 
       @fields = ['verse_id', 'verse_key']
 
@@ -38,13 +39,13 @@ module Api::V4
 
     def recitation
       @audio_files = if (@recitation = fetch_approved_recitation)
-                       filters = resource_filters
-                       filters[:recitation_id] = @recitation.id
+        filters = resource_filters
+        filters[:recitation_id] = @recitation.id
 
-                       @audio_files = AudioFile.order('verse_id ASC').where(filters)
-                     else
-                       []
-                     end
+        @audio_files = AudioFile.order('verse_id ASC').where(filters)
+      else
+        []
+      end
       render
     end
 
@@ -65,7 +66,6 @@ module Api::V4
     end
 
     protected
-
     def fetch_script_type
       script = params[:script]
 

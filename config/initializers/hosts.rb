@@ -6,5 +6,5 @@ Rails.application.config.hosts += [
 ]
 
 if Rails.env.development?
-  Rails.application.config.hosts +=['.loca.lt', 'ngrok.io', 'localhost']
+  Rails.application.config.hosts +=['.loca.lt', '.ngrok.io', 'localhost']
 end
