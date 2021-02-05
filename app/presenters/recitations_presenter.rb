@@ -13,7 +13,8 @@ class RecitationsPresenter < BasePresenter
       'format',
       'url',
       'segments',
-      'duration'
+      'duration',
+      'id'
   ]
 
   def initialize(params)

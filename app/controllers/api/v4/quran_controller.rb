@@ -14,38 +14,41 @@ module Api::V4
     ]
 
     def translation
-      @translations = if (@resource = fetch_translation_resource)
-        Translation.order('verse_id ASC').where(resource_filters(@resource))
-      else
-        []
-      end
+      @presenter = TranslationsPresenter.new(params)
 
-      @fields = ['verse_id', 'verse_key']
+      @translations = if (@resource = fetch_translation_resource)
+                        Translation.order('verse_id ASC').where(resource_filters(@resource))
+                      else
+                        []
+                      end
 
       render
     end
 
     def tafsir
-      @tafsirs = if (@resource = fetch_tafsir_resource)
-        Tafsir.order('verse_id ASC').where(resource_filters(@resource))
-      else
-        []
-      end
+      @presenter = TafsirsPresenter.new(params)
 
-      @fields = ['verse_id', 'verse_key']
+      @tafsirs = if (@resource = fetch_tafsir_resource)
+                   Tafsir.order('verse_id ASC').where(resource_filters(@resource))
+                 else
+                   []
+                 end
 
       render
     end
 
     def recitation
-      @audio_files = if (@recitation = fetch_approved_recitation)
-        filters = resource_filters
-        filters[:recitation_id] = @recitation.id
+      @presenter = RecitationsPresenter.new(params)
 
-        @audio_files = AudioFile.order('verse_id ASC').where(filters)
-      else
-        []
-      end
+      @audio_files = if (@recitation = fetch_approved_recitation)
+                       filters = resource_filters
+                       filters[:recitation_id] = @recitation.id
+
+                       @audio_files = AudioFile.order('verse_id ASC').where(filters)
+                     else
+                       []
+                     end
+
       render
     end
 
@@ -66,6 +69,7 @@ module Api::V4
     end
 
     protected
+
     def fetch_script_type
       script = params[:script]
 

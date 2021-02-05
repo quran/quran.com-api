@@ -1,8 +1,13 @@
+fields = @presenter.audio_fields
+
 json.object! do
   json.audio_files do
     json.array! @audio_files do |audio_file|
       json.object! do
-        json.extract! audio_file, :id, :verse_id, :verse_key, :url, :duration, :segments
+        json.extract! audio_file,
+                      :verse_key,
+                      :url,
+                      *fields
       end
     end
   end

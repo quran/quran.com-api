@@ -69,9 +69,11 @@ class VersesPresenter < BasePresenter
 
   def random_verse(language)
     filters = {
-        page_number: params[:page_number],
         chapter_id: params[:chapter_number],
-        juz_number: params[:juz_number]
+        page_number: params[:page_number],
+        juz_number: params[:juz_number],
+        hizb_number: params[:hizb_number],
+        rub_number: params[:rub_number]
     }.compact
 
     @finder.random_verse(
