@@ -12,7 +12,8 @@ class VersesPresenter < BasePresenter
       'text_uthmani_tajweed',
       'image_url',
       'image_width',
-      'code_v1'
+      'code_v1',
+      'code_v2'
   ]
 
   WORDS_FIELDS = [
@@ -25,6 +26,7 @@ class VersesPresenter < BasePresenter
       'text_uthmani_simple',
       'text_uthmani_tajweed',
       'code_v1',
+      'code_v2',
       'verse_key',
       'class_name',
       'location'

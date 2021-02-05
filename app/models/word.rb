@@ -56,11 +56,11 @@ class Word < ApplicationRecord
 
   default_scope { order 'position asc' }
 
-  def code_v1
+  def hex_to_code_v1
     "&#x#{code_hex};"
   end
 
-  def code_v2
+  def hex_to_code_v2
     "&#x#{code_hex_v3};"
   end
 
