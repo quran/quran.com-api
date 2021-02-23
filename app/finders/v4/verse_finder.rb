@@ -12,7 +12,8 @@ class V4::VerseFinder < ::VerseFinder
     load_audio(audio) if audio
     load_tafsirs(tafsirs) if tafsirs.present?
 
-    @results.sample
+    words_ordering = words ? ', words.position ASC, word_translations.priority ASC' : ''
+    @results.order("verses.verse_index ASC #{words_ordering}".strip).sample
   end
 
   def find_by_key(key, language_code, words: true, tafsirs: false, translations: false, audio: false)
@@ -23,7 +24,8 @@ class V4::VerseFinder < ::VerseFinder
     load_audio(audio) if audio
     load_tafsirs(tafsirs) if tafsirs.present?
 
-    @results.first
+    words_ordering = words ? ', words.position ASC, word_translations.priority ASC' : ''
+    @results.order("verses.verse_index ASC #{words_ordering}".strip).first
   end
 
   def load_verses(filter, language_code, words: true, tafsirs: false, translations: false, audio: false)
@@ -34,7 +36,6 @@ class V4::VerseFinder < ::VerseFinder
     load_tafsirs(tafsirs) if tafsirs.present?
 
     words_ordering = words ? ', words.position ASC, word_translations.priority ASC' : ''
-
     @results.order("verses.verse_index ASC #{words_ordering}".strip)
   end
 
