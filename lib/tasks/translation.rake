@@ -5,9 +5,14 @@ namespace :translation do
     # NOTE: place file(translation.txt) in tasks directory, fill these variables and ran the rake task to import translation. Each line should have single verse translation in order
     # Its one time operation, index and performance don't count
 
-    author_name = 'Mustafa Khattab'
-    localized_name = 'Mustafa Khattab'
+    author_name = 'Abul Ala Maududi'
+    localized_name = 'Abul Ala Maududi'
     language = Language.find_by(iso_code: 'en') # English
+
+    author_name = 'King Fahad Quran Complex'
+    localized_name = 'King Fahad Quran Complex'
+    language = Language.find_by(iso_code: 'indonesian') # Indonesian
+
     data_source = DataSource.where(name: 'Quran.com').first_or_create
 
     author = Author.where(name: author_name).first_or_create
