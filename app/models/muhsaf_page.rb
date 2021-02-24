@@ -1,0 +1,2 @@
+class MuhsafPage < ApplicationRecord
+end

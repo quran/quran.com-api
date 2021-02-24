@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_19_010529) do
+ActiveRecord::Schema.define(version: 2021_02_24_062456) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -257,6 +257,17 @@ ActiveRecord::Schema.define(version: 2019_03_19_010529) do
     t.index ["resource_type", "resource_id"], name: "index_media_contents_on_resource_type_and_resource_id"
   end
 
+  create_table "muhsaf_pages", force: :cascade do |t|
+    t.integer "page_number"
+    t.json "verse_mapping"
+    t.integer "first_verse_id"
+    t.integer "last_verse_id"
+    t.integer "verses_count"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["page_number"], name: "index_muhsaf_pages_on_page_number"
+  end
+
   create_table "recitation", primary_key: "recitation_id", id: :serial, force: :cascade do |t|
     t.integer "reciter_id", null: false
     t.integer "style_id"
@@ -384,8 +395,10 @@ ActiveRecord::Schema.define(version: 2019_03_19_010529) do
     t.string "locale"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "is_default", default: false
     t.index ["chapter_id", "slug"], name: "index_slugs_on_chapter_id_and_slug"
     t.index ["chapter_id"], name: "index_slugs_on_chapter_id"
+    t.index ["is_default"], name: "index_slugs_on_is_default"
   end
 
   create_table "source", primary_key: "source_id", id: :integer, default: nil, force: :cascade do |t|

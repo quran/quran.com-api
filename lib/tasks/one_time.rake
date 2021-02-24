@@ -69,4 +69,31 @@ namespace :one_time do
       juz.save
     end
   end
+
+  task create_pages: :environment do
+    1.upto(604).each do |page_num|
+      page = MuhsafPage.where(page_number: page_num).first_or_initialize
+      verses = Verse.order("verse_index ASC").where(page_number: page_num)
+      if verses.size == 0
+        puts "WAAAAA, #{page_num}"
+      end
+      page.first_verse_id = verses.first.id
+      page.last_verse_id = verses.last.id
+      page.verses_count = verses.size
+
+      map = {}
+
+      verses.each do |verse|
+        if map[verse.chapter_id]
+          next
+        end
+
+        chapter_verses = verses.where(chapter_id: verse.chapter_id)
+        map[verse.chapter_id] = "#{chapter_verses.first.verse_number}-#{chapter_verses.last.verse_number}"
+      end
+
+      page.verse_mapping = map
+      page.save
+    end
+  end
 end
