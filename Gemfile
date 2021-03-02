@@ -5,12 +5,12 @@ ruby '3.0.0'
 
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-gem 'rails', '~> 6.1'
+gem 'rails', '~> 6.1', '>= 6.1.2.1'
 
 # Use postgresql as the database for Active Record
 gem 'pg', '>= 0.18', '< 2.0'
 
-gem 'active_model_serializers', '~> 0.10.0'
+gem 'active_model_serializers', '~> 0.10.12'
 gem 'turbostreamer', '>= 1.9'
 
 # Http request
@@ -80,14 +80,14 @@ group :development do
 end
 
 group :test, :development do
-  gem 'annotate'
+  gem 'annotate', '>= 3.1.1'
   gem 'guard-rspec', '= 4.7.3'
   gem 'guard-spork'
   gem 'rspec-rails', '= 4.0.2'
   gem 'shoulda-matchers', '~> 4.0'
   gem 'simplecov', require: false
   gem 'factory_bot_rails', '>= 6.1.0'
-  gem 'rubocop-rails_config'
+  gem 'rubocop-rails_config', '>= 1.1.3'
   gem 'rubocop-rspec'
   gem 'spork'
   gem 'watchr'
