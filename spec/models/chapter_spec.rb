@@ -4,16 +4,20 @@
 #
 #  id               :integer          not null, primary key
 #  bismillah_pre    :boolean
-#  revelation_order :integer
-#  revelation_place :string
-#  name_complex     :string
+#  chapter_number   :integer
 #  name_arabic      :string
+#  name_complex     :string
 #  name_simple      :string
 #  pages            :string
+#  revelation_order :integer
+#  revelation_place :string
 #  verses_count     :integer
-#  chapter_number   :integer
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
+#
+# Indexes
+#
+#  index_chapters_on_chapter_number  (chapter_number)
 #
 
 # frozen_string_literal: true

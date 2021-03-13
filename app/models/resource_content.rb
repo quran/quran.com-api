@@ -6,20 +6,35 @@
 #
 #  id                    :integer          not null, primary key
 #  approved              :boolean
-#  author_id             :integer
-#  data_source_id        :integer
 #  author_name           :string
-#  resource_type         :string
-#  sub_type              :string
-#  name                  :string
-#  description           :text
 #  cardinality_type      :string
-#  language_id           :integer
+#  description           :text
 #  language_name         :string
+#  name                  :string
+#  priority              :integer
+#  resource_info         :text
+#  resource_type         :string
+#  slug                  :string
+#  sub_type              :string
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null
-#  slug                  :string
+#  author_id             :integer
+#  data_source_id        :integer
+#  language_id           :integer
 #  mobile_translation_id :integer
+#
+# Indexes
+#
+#  index_resource_contents_on_approved               (approved)
+#  index_resource_contents_on_author_id              (author_id)
+#  index_resource_contents_on_cardinality_type       (cardinality_type)
+#  index_resource_contents_on_data_source_id         (data_source_id)
+#  index_resource_contents_on_language_id            (language_id)
+#  index_resource_contents_on_mobile_translation_id  (mobile_translation_id)
+#  index_resource_contents_on_priority               (priority)
+#  index_resource_contents_on_resource_type          (resource_type)
+#  index_resource_contents_on_slug                   (slug)
+#  index_resource_contents_on_sub_type               (sub_type)
 #
 
 class ResourceContent < ApplicationRecord

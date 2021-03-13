@@ -6,9 +6,13 @@
 #
 #  id         :integer          not null, primary key
 #  name       :string
-#  parent_id  :integer
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  parent_id  :integer
+#
+# Indexes
+#
+#  index_topics_on_parent_id  (parent_id)
 #
 
 class Topic < ApplicationRecord

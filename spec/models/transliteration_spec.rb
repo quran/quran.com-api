@@ -3,14 +3,20 @@
 # Table name: transliterations
 #
 #  id                  :integer          not null, primary key
-#  resource_type       :string
-#  resource_id         :integer
-#  language_id         :integer
-#  text                :text
 #  language_name       :string
-#  resource_content_id :integer
+#  resource_type       :string
+#  text                :text
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
+#  language_id         :integer
+#  resource_content_id :integer
+#  resource_id         :integer
+#
+# Indexes
+#
+#  index_transliterations_on_language_id                    (language_id)
+#  index_transliterations_on_resource_content_id            (resource_content_id)
+#  index_transliterations_on_resource_type_and_resource_id  (resource_type,resource_id)
 #
 
 # frozen_string_literal: true
