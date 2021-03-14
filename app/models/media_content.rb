@@ -5,18 +5,24 @@
 # Table name: media_contents
 #
 #  id                  :integer          not null, primary key
-#  resource_type       :string
-#  resource_id         :integer
-#  url                 :text
+#  author_name         :string
 #  duration            :string
 #  embed_text          :text
-#  provider            :string
-#  language_id         :integer
 #  language_name       :string
-#  author_name         :string
-#  resource_content_id :integer
+#  provider            :string
+#  resource_type       :string
+#  url                 :text
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
+#  language_id         :integer
+#  resource_content_id :integer
+#  resource_id         :integer
+#
+# Indexes
+#
+#  index_media_contents_on_language_id                    (language_id)
+#  index_media_contents_on_resource_content_id            (resource_content_id)
+#  index_media_contents_on_resource_type_and_resource_id  (resource_type,resource_id)
 #
 
 class MediaContent < ApplicationRecord

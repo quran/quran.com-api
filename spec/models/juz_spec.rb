@@ -2,13 +2,20 @@
 #
 # Table name: juzs
 #
-#  id            :integer          not null, primary key
-#  juz_number    :integer
-#  name_simple   :string
-#  name_arabic   :string
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
-#  verse_mapping :json
+#  id             :integer          not null, primary key
+#  juz_number     :integer
+#  verse_mapping  :json
+#  verses_count   :integer
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#  first_verse_id :integer
+#  last_verse_id  :integer
+#
+# Indexes
+#
+#  index_juzs_on_first_verse_id  (first_verse_id)
+#  index_juzs_on_juz_number      (juz_number)
+#  index_juzs_on_last_verse_id   (last_verse_id)
 #
 
 # frozen_string_literal: true
