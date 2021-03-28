@@ -105,6 +105,7 @@ ActiveRecord::Schema.define(version: 2021_03_13_031213) do
     t.integer "torrent_seeders", default: 0
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "resource_content_id"
   end
 
   create_table "audio_related_recitations", force: :cascade do |t|

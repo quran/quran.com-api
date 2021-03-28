@@ -11,4 +11,5 @@
 #  audio_recitation_id :integer
 #
 class Audio::ChangeLog < ApplicationRecord
+  belongs_to :audio_recitation, class_name: 'Audio::Recitation', optional: true
 end
