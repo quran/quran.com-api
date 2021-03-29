@@ -12,6 +12,8 @@ class CreateAudioRecitations < ActiveRecord::Migration[6.1]
       t.string :torrent_info_hash
       t.integer :torrent_leechers, default: 0
       t.integer :torrent_seeders, default: 0
+      t.integer :resource_content_id, index: true
+      t.integer :recitation_style_id, index: true
 
       t.timestamps
     end

@@ -5,7 +5,7 @@ class RestApi::ParamLookahead
 
   # A singleton, so that misses don't come with overhead.
   def null_lookahead
-    @null_lookhaead ||=RestApi::NullLookahead.new
+    @null_lookhaead ||= RestApi::NullLookahead.new
   end
 
   def initialize(params)

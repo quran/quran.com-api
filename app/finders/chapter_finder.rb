@@ -6,7 +6,7 @@ class ChapterFinder
   end
 
   def all_with_translated_names(language_code = 'en')
-    language = Language.find_with_id_or_iso_code( language_code)
+    language = Language.find_with_id_or_iso_code(language_code)
     chapters = Chapter.includes(:translated_name)
 
     # Eager load translated names to avoid n+1 queries

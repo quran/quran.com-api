@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: audio_change_logs
@@ -11,4 +13,5 @@
 #  audio_recitation_id :integer
 #
 class Audio::ChangeLog < ApplicationRecord
+  belongs_to :audio_recitation, class_name: 'Audio::Recitation', optional: true
 end
