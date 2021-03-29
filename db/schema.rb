@@ -56,9 +56,11 @@ ActiveRecord::Schema.define(version: 2021_03_13_031213) do
     t.jsonb "metadata", default: {}
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "resource_content_id"
     t.index ["audio_recitation_id"], name: "index_audio_chapter_audio_files_on_audio_recitation_id"
     t.index ["chapter_id"], name: "index_audio_chapter_audio_files_on_chapter_id"
     t.index ["format"], name: "index_audio_chapter_audio_files_on_format"
+    t.index ["resource_content_id"], name: "index_audio_chapter_audio_files_on_resource_content_id"
   end
 
   create_table "audio_files", id: :serial, force: :cascade do |t|
@@ -106,6 +108,8 @@ ActiveRecord::Schema.define(version: 2021_03_13_031213) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "resource_content_id"
+    t.integer "recitation_style_id"
+    t.index ["recitation_style_id"], name: "index_audio_recitations_on_recitation_style_id"
   end
 
   create_table "audio_related_recitations", force: :cascade do |t|

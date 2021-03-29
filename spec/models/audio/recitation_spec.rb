@@ -15,8 +15,13 @@
 #  torrent_seeders     :integer          default(0)
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
+#  recitation_style_id :integer
 #  resource_content_id :integer
 #  section_id          :integer
+#
+# Indexes
+#
+#  index_audio_recitations_on_recitation_style_id  (recitation_style_id)
 #
 require 'rails_helper'
 

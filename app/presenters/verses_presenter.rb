@@ -88,7 +88,7 @@ class VersesPresenter < BasePresenter
   def find_verse(filter, language)
     case filter
     when 'by_key'
-      @finder.find_by_key(
+      @finder.find_with_key(
         params[:verse_key],
           language,
           tafsirs: fetch_tafsirs,

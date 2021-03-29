@@ -1,0 +1,3 @@
+json.array! @presenter.audio_files do |audio_file|
+  json.partial! 'audio_file', audio_file: audio_file
+end

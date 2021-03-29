@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Api::V4
-  class ChaptersController < ApiController
+  class Audio::RecitationsController < ApiController
     before_action :init_presenter
 
     def index
@@ -12,9 +12,17 @@ module Api::V4
       render
     end
 
+    def related
+      render
+    end
+
+    def audio_files
+      render
+    end
+
     protected
     def init_presenter
-      @presenter = ChapterPresenter.new(params, fetch_locale)
+      @presenter = ::Audio::RecitationPresenter.new(params)
     end
   end
 end

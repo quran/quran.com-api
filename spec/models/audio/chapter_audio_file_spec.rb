@@ -17,12 +17,14 @@
 #  updated_at          :datetime         not null
 #  audio_recitation_id :integer
 #  chapter_id          :integer
+#  resource_content_id :integer
 #
 # Indexes
 #
 #  index_audio_chapter_audio_files_on_audio_recitation_id  (audio_recitation_id)
 #  index_audio_chapter_audio_files_on_chapter_id           (chapter_id)
 #  index_audio_chapter_audio_files_on_format               (format)
+#  index_audio_chapter_audio_files_on_resource_content_id  (resource_content_id)
 #
 require 'rails_helper'
 

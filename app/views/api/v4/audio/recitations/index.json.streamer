@@ -1,0 +1,3 @@
+json.array! @presenter.recitations do |recitation|
+  json.partial! 'recitation', recitation: recitation
+end

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Api::V4
-  class ChaptersController < ApiController
+  class Audio::ChaptersController < ApiController
     before_action :init_presenter
 
     def index
@@ -14,7 +14,7 @@ module Api::V4
 
     protected
     def init_presenter
-      @presenter = ChapterPresenter.new(params, fetch_locale)
+      @presenter = ChapterPresenter.new(params, 'en')
     end
   end
 end

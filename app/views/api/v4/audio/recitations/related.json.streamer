@@ -1,0 +1,7 @@
+json.array! @presenter.related do |related|
+  json.object! do
+    json.extract! related,
+                  :id,
+                  :name
+  end
+end
