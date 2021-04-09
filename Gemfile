@@ -54,7 +54,7 @@ gem 'tzinfo-data'
 # Detect the language
 gem 'whatlanguage'
 
-gem 'rubocop', require: false
+gem 'rubocop', '>= 1.7.0', require: false
 
 gem 'sentry-raven', group: [:production]
 
@@ -87,8 +87,8 @@ group :test, :development do
   gem 'shoulda-matchers', '~> 4.0'
   gem 'simplecov', require: false
   gem 'factory_bot_rails', '>= 6.1.0'
-  gem 'rubocop-rails_config'
-  gem 'rubocop-rspec'
+  gem 'rubocop-rails_config', '>= 1.1.3'
+  gem 'rubocop-rspec', '>= 2.1.0'
   gem 'spork'
   gem 'watchr'
 end
