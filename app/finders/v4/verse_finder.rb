@@ -63,7 +63,7 @@ class V4::VerseFinder < ::VerseFinder
 
       @results = Verse
                      .where(chapter_id: params[:chapter_number].to_i.abs)
-                     .where('verses.verse_number >= ? AND verses.verse_number <= ?', verse_start.to_i, verse_end.to_i)
+                     .where('verses.verse_number >= ? AND verses.verse_number < ?', verse_start.to_i, verse_end.to_i)
     else
       @results = Verse.where('1=0')
     end
@@ -140,7 +140,6 @@ class V4::VerseFinder < ::VerseFinder
     to = params[:to].presence ? params[:to].to_i.abs : nil
     verse_to = min(to || total_verses, total_verses)
     params[:to] = verse_to
-
     min((start + per_page), verse_to)
   end
 
