@@ -51,7 +51,7 @@ class VerseFinder
   end
 
   def total_pages
-    (total_verses / per_page).ceil
+    (total_verses / per_page.to_f).ceil
   end
 
   def total_verses
