@@ -1,0 +1,22 @@
+json.object! do
+  json.id chapter.id
+  json.page chapter.pages
+  json.bismillah_pre chapter.bismillah_pre
+  json.ayat chapter.verses_count
+
+  json.name do
+    json.object! do
+      json.complex chapter.name_complex
+      json.simple chapter.name_simple
+      json.english chapter.translated_name.name
+      json.arabic chapter.name_arabic
+    end
+  end
+
+  json.revelation do
+    json.object! do
+      json.place chapter.revelation_place
+      json.order chapter.revelation_order
+    end
+  end
+end

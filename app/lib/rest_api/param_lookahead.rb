@@ -4,7 +4,9 @@ class RestApi::ParamLookahead
   attr_reader :params
 
   # A singleton, so that misses don't come with overhead.
-  NULL_LOOKAHEAD = RestApi::NullLookahead.new
+  def null_lookahead
+    @null_lookhaead ||= RestApi::NullLookahead.new
+  end
 
   def initialize(params)
     @params = params
@@ -27,7 +29,7 @@ class RestApi::ParamLookahead
         RestApi::ParamLookahead.new(params[attribute])
       when String
         if ActiveRecord::Type::Boolean::FALSE_VALUES.include?(query)
-          NULL_LOOKAHEAD
+          null_lookahead
         else
           RestApi::ParamLookahead.new(query)
         end
@@ -35,7 +37,7 @@ class RestApi::ParamLookahead
         RestApi::ParamLookahead.new(query)
       end
     else
-      NULL_LOOKAHEAD
+      null_lookahead
     end
   end
 end

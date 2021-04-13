@@ -17,10 +17,10 @@ module Api::V4
       @presenter = TranslationsPresenter.new(params)
 
       @translations = if (@resource = fetch_translation_resource)
-                        Translation.order('verse_id ASC').where(resource_filters(@resource))
-                      else
-                        []
-                      end
+        Translation.order('verse_id ASC').where(resource_filters(@resource))
+      else
+        []
+      end
 
       render
     end
@@ -29,10 +29,10 @@ module Api::V4
       @presenter = TafsirsPresenter.new(params)
 
       @tafsirs = if (@resource = fetch_tafsir_resource)
-                   Tafsir.order('verse_id ASC').where(resource_filters(@resource))
-                 else
-                   []
-                 end
+        Tafsir.order('verse_id ASC').where(resource_filters(@resource))
+      else
+        []
+      end
 
       render
     end
@@ -41,13 +41,13 @@ module Api::V4
       @presenter = RecitationsPresenter.new(params)
 
       @audio_files = if (@recitation = fetch_approved_recitation)
-                       filters = resource_filters
-                       filters[:recitation_id] = @recitation.id
+        filters = resource_filters
+        filters[:recitation_id] = @recitation.id
 
-                       @audio_files = AudioFile.order('verse_id ASC').where(filters)
-                     else
-                       []
-                     end
+        @audio_files = AudioFile.order('verse_id ASC').where(filters)
+      else
+        []
+      end
 
       render
     end
@@ -69,7 +69,6 @@ module Api::V4
     end
 
     protected
-
     def fetch_script_type
       script = params[:script]
 

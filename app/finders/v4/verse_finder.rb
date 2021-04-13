@@ -16,7 +16,7 @@ class V4::VerseFinder < ::VerseFinder
     @results.order("verses.verse_index ASC #{words_ordering}".strip).sample
   end
 
-  def find_by_key(key, language_code, words: true, tafsirs: false, translations: false, audio: false)
+  def find_with_key(key, language_code, words: true, tafsirs: false, translations: false, audio: false)
     @results = Verse.where(verse_key: key).limit(1)
 
     load_translations(translations) if translations.present?
@@ -63,7 +63,7 @@ class V4::VerseFinder < ::VerseFinder
 
       @results = Verse
                      .where(chapter_id: params[:chapter_number].to_i.abs)
-                     .where('verses.verse_number >= ? AND verses.verse_number <= ?', verse_start.to_i, verse_end.to_i)
+                     .where('verses.verse_number >= ? AND verses.verse_number < ?', verse_start.to_i, verse_end.to_i)
     else
       @results = Verse.where('1=0')
     end
@@ -120,7 +120,7 @@ class V4::VerseFinder < ::VerseFinder
 
       @results = rescope_verses('verse_index')
           .where(juz_number: juz.juz_number)
-          .where('verses.verse_index >= ? AND verses.verse_index <= ?', verse_start.to_i, verse_end.to_i)
+          .where('verses.verse_index >= ? AND verses.verse_index < ?', verse_start.to_i, verse_end.to_i)
     else
       Verse.where('1=0')
     end
@@ -140,12 +140,11 @@ class V4::VerseFinder < ::VerseFinder
     to = params[:to].presence ? params[:to].to_i.abs : nil
     verse_to = min(to || total_verses, total_verses)
     params[:to] = verse_to
-
     min((start + per_page), verse_to)
   end
 
   def load_words(word_translation_lang)
-    language = Language.find_with_id_or_iso_code( word_translation_lang)
+    language = Language.find_with_id_or_iso_code(word_translation_lang)
 
     words_with_default_translation = @results.where(word_translations: { language_id: Language.default.id })
 

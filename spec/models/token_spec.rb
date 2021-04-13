@@ -2,12 +2,14 @@
 #
 # Table name: tokens
 #
-#  id           :integer          not null, primary key
-#  text_madani  :string
-#  text_clean   :string
-#  text_indopak :string
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
+#  id                   :integer          not null, primary key
+#  text_imlaei          :string
+#  text_imlaei_simple   :string
+#  text_indopak         :string
+#  text_uthmani         :string
+#  text_uthmani_tajweed :string
+#  created_at           :datetime         not null
+#  updated_at           :datetime         not null
 #
 
 # frozen_string_literal: true

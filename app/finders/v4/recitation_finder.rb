@@ -9,7 +9,6 @@ class V4::RecitationFinder < V4::VerseFinder
   end
 
   protected
-
   def load_recitation_range(filter)
     results = send("fetch_#{filter}", recitation)
 

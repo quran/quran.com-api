@@ -1,4 +1,18 @@
 namespace :v4 do
+  # QuanicAudio api routes
+  namespace :audio do
+    # https://quranicaudio.com/api/surahs
+    # https://quranicaudio.com/api/surahs/1
+
+    get :qaris, to: 'recitations#index'
+    get 'qaris/:id', to: 'recitations#show'
+    get 'qaris/related/:id', to: 'recitations#related'
+    get 'qaris/:id/audio_files/:ext', to: 'recitations#audio_files'
+    get :sections, to: 'sections#index'
+    get :surahs, to: 'chapters#index'
+    get '/surahs/:id', to: 'chapters#show'
+  end
+
   get :search, to: 'search#search'
   get :suggest, to: 'suggest#suggest'
 

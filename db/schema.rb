@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_24_062456) do
+ActiveRecord::Schema.define(version: 2021_03_13_031213) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -30,6 +30,37 @@ ActiveRecord::Schema.define(version: 2021_02_24_062456) do
     t.boolean "continuous"
     t.index ["verse_id"], name: "index_arabic_transliterations_on_verse_id"
     t.index ["word_id"], name: "index_arabic_transliterations_on_word_id"
+  end
+
+  create_table "audio_change_logs", force: :cascade do |t|
+    t.integer "audio_recitation_id"
+    t.datetime "date"
+    t.text "mini_desc"
+    t.text "rss_desc"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "audio_chapter_audio_files", force: :cascade do |t|
+    t.integer "chapter_id"
+    t.integer "audio_recitation_id"
+    t.integer "total_files"
+    t.integer "stream_count"
+    t.integer "download_count"
+    t.integer "file_size"
+    t.integer "bit_rate"
+    t.integer "duration"
+    t.string "file_name"
+    t.string "format"
+    t.string "mime_type"
+    t.jsonb "metadata", default: {}
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "resource_content_id"
+    t.index ["audio_recitation_id"], name: "index_audio_chapter_audio_files_on_audio_recitation_id"
+    t.index ["chapter_id"], name: "index_audio_chapter_audio_files_on_chapter_id"
+    t.index ["format"], name: "index_audio_chapter_audio_files_on_format"
+    t.index ["resource_content_id"], name: "index_audio_chapter_audio_files_on_resource_content_id"
   end
 
   create_table "audio_files", id: :serial, force: :cascade do |t|
@@ -60,6 +91,39 @@ ActiveRecord::Schema.define(version: 2021_02_24_062456) do
     t.index ["rub_number"], name: "index_audio_files_on_rub_number"
     t.index ["verse_id"], name: "index_audio_files_on_verse_id"
     t.index ["verse_key"], name: "index_audio_files_on_verse_key"
+  end
+
+  create_table "audio_recitations", force: :cascade do |t|
+    t.string "name"
+    t.string "arabic_name"
+    t.string "relative_path"
+    t.string "file_formats"
+    t.integer "section_id"
+    t.integer "home"
+    t.text "description"
+    t.string "torrent_filename"
+    t.string "torrent_info_hash"
+    t.integer "torrent_leechers", default: 0
+    t.integer "torrent_seeders", default: 0
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "resource_content_id"
+    t.integer "recitation_style_id"
+    t.index ["recitation_style_id"], name: "index_audio_recitations_on_recitation_style_id"
+  end
+
+  create_table "audio_related_recitations", force: :cascade do |t|
+    t.integer "audio_recitation_id"
+    t.integer "related_audio_recitation_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["audio_recitation_id", "related_audio_recitation_id"], name: "index_audio_related_recitation"
+  end
+
+  create_table "audio_sections", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "author", primary_key: "author_id", id: :integer, default: -> { "nextval('_author_author_id_seq'::regclass)" }, force: :cascade do |t|

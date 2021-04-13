@@ -2,25 +2,19 @@
 
 module Api::V4
   class ChaptersController < ApiController
+    before_action :init_presenter
+
     def index
-      @chapters = chapters
-      render json: @chapters
+      render
     end
 
     def show
-      @chapter = chapter
-      render json: @chapter
+      render
     end
 
     protected
-    def chapters
-      finder = ChapterFinder.new
-      finder.all_with_translated_names(fetch_locale)
-    end
-
-    def chapter
-      finder = ChapterFinder.new
-      finder.find_with_translated_name(params[:id], fetch_locale)
+    def init_presenter
+      @presenter = ChapterPresenter.new(params, fetch_locale)
     end
   end
 end

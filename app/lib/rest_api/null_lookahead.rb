@@ -14,7 +14,7 @@ class RestApi::NullLookahead < RestApi::ParamLookahead
   end
 
   def selection(*)
-    NULL_LOOKAHEAD
+    null_lookahead
   end
 
   def selections(*)

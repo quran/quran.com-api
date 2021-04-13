@@ -5,10 +5,15 @@
 # Table name: word_roots
 #
 #  id         :integer          not null, primary key
-#  word_id    :integer
-#  root_id    :integer
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  root_id    :integer
+#  word_id    :integer
+#
+# Indexes
+#
+#  index_word_roots_on_root_id  (root_id)
+#  index_word_roots_on_word_id  (word_id)
 #
 
 class WordRoot < ApplicationRecord
