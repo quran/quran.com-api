@@ -1778,6 +1778,30 @@
               "deprecationReason": null
             },
             {
+              "name": "v1Page",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "v2Page",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "verseIndex",
               "description": null,
               "args": [],
@@ -2023,6 +2047,30 @@
               "type": {
                 "kind": "OBJECT",
                 "name": "WordTranslation",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "v1Page",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "v2Page",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Int",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -3049,9 +3097,9 @@
   "extensions": {
     "tracing": {
       "version": 1,
-      "startTime": "2021-01-15T18:32:59.648Z",
-      "endTime": "2021-01-15T18:32:59.711Z",
-      "duration": 63406944,
+      "startTime": "2021-04-22T20:04:02.292Z",
+      "endTime": "2021-04-22T20:04:02.355Z",
+      "duration": 62495946,
       "execution": {
         "resolvers": []
       }

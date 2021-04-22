@@ -197,6 +197,8 @@ type Verse {
     """
     translationIds: String!
   ): [Translation!]
+  v1Page: Int
+  v2Page: Int
   verseIndex: Int
   verseKey: String
   verseNumber: Int
@@ -227,6 +229,8 @@ type Word {
   word translation in given language. If translation for give language doesn't exist, we'll fallback to English translation
   """
   translation: WordTranslation
+  v1Page: Int
+  v2Page: Int
   verseId: Int
   verseKey: String
 }
