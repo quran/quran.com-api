@@ -13,7 +13,6 @@ json.object! do
       json.object! do
         json.extract! verse, :id,
                       :verse_number,
-                      :page_number,
                       :verse_key,
                       :juz_number,
                       :hizb_number,

@@ -26,6 +26,9 @@
 #  text_uthmani         :string
 #  text_uthmani_simple  :string
 #  text_uthmani_tajweed :string
+#  tr_continuous        :boolean          default(FALSE)
+#  ur_transliteration   :string           default("")
+#  v2_page              :integer
 #  verse_key            :string
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null

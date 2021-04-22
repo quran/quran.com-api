@@ -7,7 +7,6 @@ json.object! do
                 :audio_url,
                 :char_type_name,
                 :line_number,
-                :page_number,
                 *fields
 
   json.translation do

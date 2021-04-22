@@ -53,6 +53,7 @@ class V4::VerseFinder < ::VerseFinder
   end
 
   protected
+
   def fetch_by_chapter
     if chapter = Chapter.find_by(id: params[:chapter_number].to_i.abs)
       @total_records = chapter.verses_count
@@ -62,8 +63,8 @@ class V4::VerseFinder < ::VerseFinder
       @next_page = current_page + 1 if verse_end < params[:to]
 
       @results = Verse
-                     .where(chapter_id: params[:chapter_number].to_i.abs)
-                     .where('verses.verse_number >= ? AND verses.verse_number < ?', verse_start.to_i, verse_end.to_i)
+                   .where(chapter_id: params[:chapter_number].to_i.abs)
+                   .where('verses.verse_number >= ? AND verses.verse_number <= ?', verse_start.to_i, verse_end.to_i)
     else
       @results = Verse.where('1=0')
     end
@@ -81,7 +82,7 @@ class V4::VerseFinder < ::VerseFinder
 
   def fetch_by_rub
     results = rescope_verses('verse_index')
-                  .where(rub_number: params[:rub_number].to_i.abs)
+                .where(rub_number: params[:rub_number].to_i.abs)
 
     @total_records = results.size
     @results = results.limit(per_page).offset((current_page - 1) * per_page)
@@ -95,7 +96,7 @@ class V4::VerseFinder < ::VerseFinder
 
   def fetch_by_hizb
     results = rescope_verses('verse_index')
-                  .where(hizb_number: params[:hizb_number].to_i.abs)
+                .where(hizb_number: params[:hizb_number].to_i.abs)
 
     @total_records = results.size
     @results = results.limit(per_page).offset((current_page - 1) * per_page)
@@ -119,8 +120,8 @@ class V4::VerseFinder < ::VerseFinder
       end
 
       @results = rescope_verses('verse_index')
-          .where(juz_number: juz.juz_number)
-          .where('verses.verse_index >= ? AND verses.verse_index < ?', verse_start.to_i, verse_end.to_i)
+                   .where(juz_number: juz.juz_number)
+                   .where('verses.verse_index >= ? AND verses.verse_index < ?', verse_start.to_i, verse_end.to_i)
     else
       Verse.where('1=0')
     end
@@ -131,16 +132,15 @@ class V4::VerseFinder < ::VerseFinder
       from = 1
     end
 
-    start = from + (current_page - 1) * per_page
-
-    min(start, total_verses)
+    from + (current_page - 1) * per_page
   end
 
   def verse_pagination_end(start, total_verses)
     to = params[:to].presence ? params[:to].to_i.abs : nil
     verse_to = min(to || total_verses, total_verses)
     params[:to] = verse_to
-    min((start + per_page), verse_to)
+
+    min((start + per_page - 1), verse_to)
   end
 
   def load_words(word_translation_lang)
@@ -150,9 +150,9 @@ class V4::VerseFinder < ::VerseFinder
 
     if language
       @results = @results
-                     .where(word_translations: { language_id: language.id })
-                     .or(words_with_default_translation)
-                     .eager_load(words: eager_load_words)
+                   .where(word_translations: { language_id: language.id })
+                   .or(words_with_default_translation)
+                   .eager_load(words: eager_load_words)
     else
       @results = words_with_default_translation.eager_load(words: eager_load_words)
     end
@@ -160,20 +160,20 @@ class V4::VerseFinder < ::VerseFinder
 
   def load_translations(translations)
     @results = @results
-                   .where(translations: { resource_content_id: translations })
-                   .eager_load(:translations)
+                 .where(translations: { resource_content_id: translations })
+                 .eager_load(:translations)
   end
 
   def load_tafsirs(tafsirs)
     @results = @results
-                   .where(tafsirs: { resource_content_id: tafsirs })
-                   .eager_load(:tafsirs)
+                 .where(tafsirs: { resource_content_id: tafsirs })
+                 .eager_load(:tafsirs)
   end
 
   def load_audio(recitation)
     @results = @results
-                   .where(audio_files: { recitation_id: recitation })
-                   .eager_load(:audio_file)
+                 .where(audio_files: { recitation_id: recitation })
+                 .eager_load(:audio_file)
   end
 
   def rescope_verses(by)

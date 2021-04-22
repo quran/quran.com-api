@@ -22,7 +22,10 @@ module Types
     field :rub_number, Integer, null: true
     field :sajdah_type, String, null: true
     field :sajdah_number, Integer, null: true
+
     field :page_number, Integer, null: true
+    field :v1_page, Integer, null: true
+    field :v2_page, Integer, null: true
 
     field :image_url, String, null: true
     field :image_width, Integer, null: true

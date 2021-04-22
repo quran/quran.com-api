@@ -3,61 +3,66 @@
 class VersesPresenter < BasePresenter
   attr_reader :lookahead, :finder
   VERSE_FIELDS = [
-      'chapter_id',
-      'text_indopak',
-      'text_imlaei_simple',
-      'text_imlaei',
-      'text_uthmani',
-      'text_uthmani_simple',
-      'text_uthmani_tajweed',
-      'image_url',
-      'image_width',
-      'code_v1',
-      'code_v2'
+    'chapter_id',
+    'text_indopak',
+    'text_imlaei_simple',
+    'text_imlaei',
+    'text_uthmani',
+    'text_uthmani_simple',
+    'text_uthmani_tajweed',
+    'image_url',
+    'image_width',
+    'code_v1',
+    'code_v2',
+    'page_number',
+    'v1_page',
+    'v2_page'
   ]
 
   WORDS_FIELDS = [
-      'verse_id',
-      'chapter_id',
-      'text_uthmani',
-      'text_indopak',
-      'text_imlaei_simple',
-      'text_imlaei',
-      'text_uthmani_simple',
-      'text_uthmani_tajweed',
-      'code_v1',
-      'code_v2',
-      'verse_key',
-      'class_name',
-      'location'
+    'verse_id',
+    'chapter_id',
+    'text_uthmani',
+    'text_indopak',
+    'text_imlaei_simple',
+    'text_imlaei',
+    'text_uthmani_simple',
+    'text_uthmani_tajweed',
+    'code_v1',
+    'code_v2',
+    'verse_key',
+    'class_name',
+    'location',
+    'v1_page',
+    'v2_page'
   ]
 
   TRANSLATION_FIELDS = [
-      'chapter_id',
-      'verse_number',
-      'verse_key',
-      'juz_number',
-      'hizb_number',
-      'rub_number',
-      'page_number',
-      'resource_name',
-      'language_name',
-      'language_id',
-      'id'
+    'chapter_id',
+    'verse_number',
+    'verse_key',
+    'juz_number',
+    'hizb_number',
+    'rub_number',
+    'page_number',
+    'resource_name',
+    'language_name',
+    'language_id',
+    'id'
   ]
 
   TAFSIR_FIELDS = [
-      'chapter_id',
-      'verse_number',
-      'verse_key',
-      'juz_number',
-      'hizb_number',
-      'rub_number',
-      'page_number',
-      'resource_name',
-      'language_name',
-      'language_id',
-      'id'
+    'chapter_id',
+    'verse_number',
+    'verse_key',
+    'juz_number',
+    'hizb_number',
+    'rub_number',
+    'page_number',
+    'resource_name',
+    'language_name',
+    'language_id',
+    'id'
   ]
 
   def initialize(params, lookahead)
@@ -69,19 +74,19 @@ class VersesPresenter < BasePresenter
 
   def random_verse(language)
     filters = {
-        chapter_id: params[:chapter_number],
-        page_number: params[:page_number],
-        juz_number: params[:juz_number],
-        hizb_number: params[:hizb_number],
-        rub_number: params[:rub_number]
+      chapter_id: params[:chapter_number],
+      page_number: params[:page_number],
+      juz_number: params[:juz_number],
+      hizb_number: params[:hizb_number],
+      rub_number: params[:rub_number]
     }.compact
 
     @finder.random_verse(
       filters,
-        language,
-        tafsirs: fetch_tafsirs,
-        translations: fetch_translations,
-        audio: fetch_audio
+      language,
+      tafsirs: fetch_tafsirs,
+      translations: fetch_translations,
+      audio: fetch_audio
     )
   end
 
@@ -90,10 +95,10 @@ class VersesPresenter < BasePresenter
     when 'by_key'
       @finder.find_with_key(
         params[:verse_key],
-          language,
-          tafsirs: fetch_tafsirs,
-          translations: fetch_translations,
-          audio: fetch_audio
+        language,
+        tafsirs: fetch_tafsirs,
+        translations: fetch_translations,
+        audio: fetch_audio
       )
     end
   end
@@ -177,6 +182,7 @@ class VersesPresenter < BasePresenter
   end
 
   protected
+
   def fetch_tafsirs
     if params[:tafsirs]
       params[:tafsirs].to_s.split(',')
@@ -189,14 +195,14 @@ class VersesPresenter < BasePresenter
         translations = params[:translations].to_s.split(',')
 
         approved_translations = ResourceContent
-                                    .approved
-                                    .translations
-                                    .one_verse
+                                  .approved
+                                  .translations
+                                  .one_verse
 
         params[:translations] = approved_translations
-                                    .where(id: translations)
-                                    .or(approved_translations.where(slug: translations))
-                                    .pluck(:id)
+                                  .where(id: translations)
+                                  .or(approved_translations.where(slug: translations))
+                                  .pluck(:id)
         params[:translations]
       end
     end

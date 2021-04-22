@@ -56,8 +56,12 @@ module Api::V4
       @script_type = fetch_script_type
       @extra_fields = []
 
-      if ['code_v1', 'code_v2'].include? @script_type
-        @extra_fields << :page_number
+      if 'code_v1' == @script_type
+        @extra_fields << :v1_page
+      end
+
+      if 'code_v2' == @script_type
+        @extra_fields << :v2_page
       end
 
       @verses = Verse

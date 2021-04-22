@@ -21,6 +21,7 @@
 #  text_uthmani         :string
 #  text_uthmani_simple  :string
 #  text_uthmani_tajweed :text
+#  v2_page              :integer
 #  verse_index          :integer
 #  verse_key            :string
 #  verse_number         :integer
@@ -61,6 +62,8 @@ class Verse < ApplicationRecord
   has_one :audio_file
 
   default_scope { order 'verses.verse_number asc' }
+
+  alias_attribute :v1_page, :page_number
 
   def self.find_by_id_or_key(id)
     where(verse_key: id).or(where(id: id)).first
