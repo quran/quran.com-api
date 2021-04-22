@@ -19,6 +19,7 @@
 #  text_uthmani         :string
 #  text_uthmani_simple  :string
 #  text_uthmani_tajweed :text
+#  v2_page              :integer
 #  verse_index          :integer
 #  verse_key            :string
 #  verse_number         :integer

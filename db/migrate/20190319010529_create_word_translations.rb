@@ -69,6 +69,9 @@ class CreateWordTranslations < ActiveRecord::Migration[5.2]
    add_column :words, :code_v1, :string
    add_column :words, :code_v2, :string
 
+   add_column :verses, :v2_page, :integer
+   add_column :words, :v2_page, :integer
+
    add_index :juzs, :first_verse_id
    add_index :juzs, :last_verse_id
   end

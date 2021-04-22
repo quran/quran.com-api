@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_13_031213) do
+ActiveRecord::Schema.define(version: 2021_04_21_004059) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -701,6 +701,7 @@ ActiveRecord::Schema.define(version: 2021_03_13_031213) do
     t.text "text_uthmani_tajweed"
     t.string "code_v1"
     t.string "code_v2"
+    t.integer "v2_page"
     t.index ["chapter_id"], name: "index_verses_on_chapter_id"
     t.index ["verse_index"], name: "index_verses_on_verse_index"
     t.index ["verse_key"], name: "index_verses_on_verse_key"
@@ -860,6 +861,9 @@ ActiveRecord::Schema.define(version: 2021_03_13_031213) do
     t.string "en_transliteration"
     t.string "code_v1"
     t.string "code_v2"
+    t.boolean "tr_continuous", default: false
+    t.string "ur_transliteration", default: ""
+    t.integer "v2_page"
     t.index ["chapter_id"], name: "index_words_on_chapter_id"
     t.index ["char_type_id"], name: "index_words_on_char_type_id"
     t.index ["location"], name: "index_words_on_location"

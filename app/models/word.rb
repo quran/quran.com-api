@@ -28,6 +28,9 @@
 #  text_uthmani         :string
 #  text_uthmani_simple  :string
 #  text_uthmani_tajweed :string
+#  tr_continuous        :boolean          default(FALSE)
+#  ur_transliteration   :string           default("")
+#  v2_page              :integer
 #  verse_key            :string
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
@@ -73,15 +76,5 @@ class Word < ApplicationRecord
 
   default_scope { order 'position asc' }
 
-  def hex_to_code_v1
-    "&#x#{code_hex};"
-  end
-
-  def hex_to_code_v2
-    "&#x#{code_hex_v3};"
-  end
-
-  def class_name
-    "p#{page_number}"
-  end
+  alias_attribute :v1_page, :page_number
 end
