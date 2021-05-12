@@ -42,7 +42,7 @@ gem 'parallel'
 
 gem 'prose'
 
-gem 'puma', '~> 4.1'
+gem 'puma', '~> 4.3', '>= 4.3.8'
 
 gem 'rack-cors'
 
