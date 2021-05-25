@@ -9,6 +9,11 @@ json.object! do
                 :line_number,
                 *fields
 
+  if qcf_font_version
+    json.page_number word.qcf_page_number(qcf_font_version)
+    json.line_number word.qcf_line_number(qcf_font_version)
+  end
+
   json.translation do
     json.object! do
       json.extract! word.word_translation, :text, :language_name

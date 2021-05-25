@@ -77,4 +77,20 @@ class Word < ApplicationRecord
   default_scope { order 'position asc' }
 
   alias_attribute :v1_page, :page_number
+
+  def qcf_page_number(version)
+    if :v1 == version
+      v1_page
+    else
+      v2_page
+    end
+  end
+
+  def qcf_line_number(version)
+    if :v1 == version
+      line_number
+    else
+      line_v2
+    end
+  end
 end

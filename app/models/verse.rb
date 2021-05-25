@@ -68,4 +68,12 @@ class Verse < ApplicationRecord
   def self.find_by_id_or_key(id)
     where(verse_key: id).or(where(id: id)).first
   end
+
+  def qcf_page_number(version)
+    if :v1 == version
+      v1_page
+    else
+      v2_page
+    end
+  end
 end

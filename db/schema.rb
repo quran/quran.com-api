@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_21_004059) do
+ActiveRecord::Schema.define(version: 2021_03_13_031213) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -205,6 +205,15 @@ ActiveRecord::Schema.define(version: 2021_04_21_004059) do
     t.string "url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "feedbacks", force: :cascade do |t|
+    t.string "name"
+    t.string "email"
+    t.string "url"
+    t.text "message"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "file", primary_key: "file_id", id: :integer, default: -> { "nextval('_file_file_id_seq'::regclass)" }, force: :cascade do |t|
@@ -861,8 +870,6 @@ ActiveRecord::Schema.define(version: 2021_04_21_004059) do
     t.string "en_transliteration"
     t.string "code_v1"
     t.string "code_v2"
-    t.boolean "tr_continuous", default: false
-    t.string "ur_transliteration", default: ""
     t.integer "v2_page"
     t.index ["chapter_id"], name: "index_words_on_chapter_id"
     t.index ["char_type_id"], name: "index_words_on_char_type_id"
