@@ -34,7 +34,8 @@ class VersesPresenter < BasePresenter
     'code_v2',
     'v1_page',
     'v2_page',
-    'line_number'
+    'line_number',
+    'line_v2'
   ]
 
   TRANSLATION_FIELDS = [
