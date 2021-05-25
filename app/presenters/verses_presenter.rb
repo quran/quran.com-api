@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class VersesPresenter < BasePresenter
-  attr_reader :lookahead, :finder
+  attr_reader :lookahead, :finder, :qcf_font_version
   VERSE_FIELDS = [
     'chapter_id',
     'text_indopak',
@@ -28,13 +28,13 @@ class VersesPresenter < BasePresenter
     'text_imlaei',
     'text_uthmani_simple',
     'text_uthmani_tajweed',
+    'verse_key',
+    'location',
     'code_v1',
     'code_v2',
-    'verse_key',
-    'class_name',
-    'location',
     'v1_page',
-    'v2_page'
+    'v2_page',
+    'line_number'
   ]
 
   TRANSLATION_FIELDS = [
@@ -120,11 +120,30 @@ class VersesPresenter < BasePresenter
   def word_fields
     strong_memoize :word_fields do
       if (fields = params[:word_fields]).presence
-        fields.split(',').select do |field|
+        fields = sanitize_query_fields(fields.split(','))
+
+        # If client has requested v1 or v2 codes
+        # Remove line_number and page_number
+        # We'll return these fields based on font version
+        if fields.include?('code_v1')
+          @qcf_font_version = :v1
+          fields.delete('line_number')
+          fields.delete('page_number')
+        elsif fields.include?('code_v2')
+          @qcf_font_version = :v2
+          fields.delete('line_number')
+          fields.delete('page_number')
+        else
+          @qcf_font_version = nil
+        end
+
+        fields.select do |field|
           WORDS_FIELDS.include?(field)
         end
       else
-        ['code_v1']
+        @qcf_font_version = :v1
+
+        ['code_v1', 'page_number']
       end
     end
   end

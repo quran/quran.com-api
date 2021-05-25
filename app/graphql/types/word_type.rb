@@ -11,7 +11,6 @@ module Types
     field :text_simple, String, null: true
     field :text_imlaei, String, null: true
     field :verse_key, String, null: true
-    field :class_name, String, null: true
     field :line_number, Integer, null: true
     field :code, String, null: true
     field :location, String, null: true

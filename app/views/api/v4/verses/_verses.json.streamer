@@ -6,6 +6,7 @@ fields = @presenter.verse_fields
 word_fields = @presenter.word_fields
 tafsir_fields = @presenter.tafsir_fields
 translation_fields = @presenter.translation_fields
+qcf_font_version = @presenter.qcf_font_version
 
 json.object! do
   json.verses do
@@ -20,9 +21,13 @@ json.object! do
                       :sajdah_type,
                       :sajdah_number, *fields
 
+        if qcf_font_version
+          json.page_number verse.qcf_page_number(qcf_font_version)
+        end
+
         if include_words
           json.words do
-            json.array! verse.words, partial: 'word', as: :word, locals: {fields: word_fields}
+            json.array! verse.words, partial: 'word', as: :word, locals: {fields: word_fields, qcf_font_version: qcf_font_version}
           end
         end
 

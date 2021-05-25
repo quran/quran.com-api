@@ -12,4 +12,10 @@ class BasePresenter
   delegate :next_page,
            :current_page,
            :per_page, :total_records, :total_pages, to: :finder
+
+  def sanitize_query_fields(fields)
+    fields.compact_blank.map do |field|
+      field.underscore.strip
+    end
+  end
 end
