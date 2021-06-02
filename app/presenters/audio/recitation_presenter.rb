@@ -6,7 +6,7 @@ class Audio::RecitationPresenter < BasePresenter
   end
 
   def approved_recitations
-    Audio::Recitation.active
+    Audio::Recitation.approved
   end
 
   def recitation
