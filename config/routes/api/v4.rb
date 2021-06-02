@@ -106,7 +106,7 @@ namespace :v4 do
   # Surah audio
   scope 'chapter_recitations/:id', controller: 'chapter_recitations' do
     get '/', action: 'index'
-    get 'by_chapter/:chapter_number', action: 'by_chapter'
+    get '/:chapter_number', action: 'by_chapter'
   end
 
   get 'ping', to: 'ping#ping'
