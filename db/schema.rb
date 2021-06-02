@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_13_031213) do
+ActiveRecord::Schema.define(version: 2021_06_01_190923) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -109,6 +109,7 @@ ActiveRecord::Schema.define(version: 2021_03_13_031213) do
     t.datetime "updated_at", precision: 6, null: false
     t.integer "resource_content_id"
     t.integer "recitation_style_id"
+    t.integer "files_size"
     t.index ["recitation_style_id"], name: "index_audio_recitations_on_recitation_style_id"
   end
 
@@ -330,6 +331,14 @@ ActiveRecord::Schema.define(version: 2021_03_13_031213) do
     t.index ["resource_type", "resource_id"], name: "index_media_contents_on_resource_type_and_resource_id"
   end
 
+  create_table "muhsaf", force: :cascade do |t|
+    t.string "name", null: false
+    t.text "description"
+    t.integer "lines_per_page"
+    t.boolean "is_default", default: false
+    t.index ["is_default"], name: "index_muhsaf_on_is_default"
+  end
+
   create_table "muhsaf_pages", force: :cascade do |t|
     t.integer "page_number"
     t.json "verse_mapping"
@@ -339,6 +348,44 @@ ActiveRecord::Schema.define(version: 2021_03_13_031213) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["page_number"], name: "index_muhsaf_pages_on_page_number"
+  end
+
+  create_table "muhsaf_word_positions", force: :cascade do |t|
+    t.integer "mushaf_id"
+    t.integer "word_id"
+    t.integer "line_number"
+    t.integer "page_number"
+    t.integer "position_in_line"
+    t.integer "position_in_page"
+    t.index ["mushaf_id", "word_id"], name: "index_muhsaf_word_positions_on_mushaf_id_and_word_id"
+  end
+
+  create_table "muhsafs", force: :cascade do |t|
+    t.string "name", null: false
+    t.text "description"
+    t.integer "lines_per_page"
+    t.boolean "is_default", default: false
+    t.string "default_font_name"
+    t.index ["is_default"], name: "index_muhsafs_on_is_default"
+  end
+
+  create_table "mushaf_word_positions", force: :cascade do |t|
+    t.integer "mushaf_id"
+    t.integer "word_id"
+    t.integer "line_number"
+    t.integer "page_number"
+    t.integer "position_in_line"
+    t.integer "position_in_page"
+    t.index ["mushaf_id", "word_id"], name: "index_mushaf_word_positions_on_mushaf_id_and_word_id"
+  end
+
+  create_table "mushafs", force: :cascade do |t|
+    t.string "name", null: false
+    t.text "description"
+    t.integer "lines_per_page"
+    t.boolean "is_default", default: false
+    t.string "default_font_name"
+    t.index ["is_default"], name: "index_mushafs_on_is_default"
   end
 
   create_table "recitation", primary_key: "recitation_id", id: :serial, force: :cascade do |t|
@@ -781,6 +828,16 @@ ActiveRecord::Schema.define(version: 2021_03_13_031213) do
     t.index ["word_id"], name: "index_word_lemmas_on_word_id"
   end
 
+  create_table "word_page_positions", force: :cascade do |t|
+    t.integer "mushaf_id"
+    t.integer "word_id"
+    t.integer "line_number"
+    t.integer "page_number"
+    t.integer "position_in_line"
+    t.integer "position_in_page"
+    t.index ["mushaf_id", "word_id"], name: "index_word_page_positions_on_mushaf_id_and_word_id"
+  end
+
   create_table "word_root", primary_key: ["word_id", "root_id", "position"], force: :cascade do |t|
     t.integer "word_id", null: false
     t.integer "root_id", null: false
@@ -871,6 +928,7 @@ ActiveRecord::Schema.define(version: 2021_03_13_031213) do
     t.string "code_v1"
     t.string "code_v2"
     t.integer "v2_page"
+    t.integer "line_v2"
     t.index ["chapter_id"], name: "index_words_on_chapter_id"
     t.index ["char_type_id"], name: "index_words_on_char_type_id"
     t.index ["location"], name: "index_words_on_location"

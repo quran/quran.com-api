@@ -1,0 +1,15 @@
+json.object! do
+  json.reciters do
+    json.array! @presenter.recitations do |recitation|
+      json.object! do
+        json.extract! recitation,
+                      :id,
+                      :name,
+                      :arabic_name,
+                      :relative_path
+        json.format recitation.file_formats
+        json.files_size recitation.files_size
+      end
+    end
+  end
+end

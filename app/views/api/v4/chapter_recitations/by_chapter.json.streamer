@@ -1,0 +1,5 @@
+json.object! do
+  json.audio_file do
+    json.partial! 'audio_file', audio_file: @presenter.chapter_audio_file
+  end
+end
