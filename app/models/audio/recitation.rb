@@ -35,4 +35,6 @@ class Audio::Recitation < ApplicationRecord
   has_many :related_recitations, class_name: 'Audio::Recitation', through: :related, source: :related_audio_recitation
   belongs_to :section, class_name: 'Audio::Section'
   belongs_to :recitation_style, optional: true
+
+  scope :approved, -> { where(approved: true) }
 end
