@@ -16,6 +16,7 @@
 #  image_blob           :text
 #  image_url            :string
 #  line_number          :integer
+#  line_v2              :integer
 #  location             :string
 #  page_number          :integer
 #  pause_name           :string
@@ -26,8 +27,6 @@
 #  text_uthmani         :string
 #  text_uthmani_simple  :string
 #  text_uthmani_tajweed :string
-#  tr_continuous        :boolean          default(FALSE)
-#  ur_transliteration   :string           default("")
 #  v2_page              :integer
 #  verse_key            :string
 #  created_at           :datetime         not null

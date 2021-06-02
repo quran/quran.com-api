@@ -174,7 +174,12 @@ class VersesPresenter < BasePresenter
   end
 
   def verses(filter, language)
-    finder.load_verses(filter, language, words: render_words?, tafsirs: fetch_tafsirs, translations: fetch_translations, audio: fetch_audio)
+    finder.load_verses(filter,
+                       language,
+                       words: render_words?,
+                       tafsirs: fetch_tafsirs,
+                       translations: fetch_translations,
+                       audio: fetch_audio)
   end
 
   def render_words?

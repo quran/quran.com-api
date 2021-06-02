@@ -6,6 +6,7 @@
 #  arabic_name         :string
 #  description         :text
 #  file_formats        :string
+#  files_size          :integer
 #  home                :integer
 #  name                :string
 #  relative_path       :string
