@@ -20,7 +20,7 @@ gem 'graphql', '1.11.4'
 gem 'graphql-schema_comparator'
 gem 'graphql-playground', github: 'naveed-ahmad/graphql-playground-rails'
 
-gem 'cld3', '>= 3.4.1'
+gem 'cld3', '>= 3.4.2'
 
 # Elasticsearch
 # using excon as faraday adapter (net::http breaks)

@@ -100,8 +100,8 @@ GEM
     case_transform (0.2)
       activesupport
     childprocess (4.0.0)
-    cld3 (3.4.1)
-      ffi (>= 1.1.0, < 1.15.0)
+    cld3 (3.4.2)
+      ffi (>= 1.1.0, < 1.16.0)
     coderay (1.1.3)
     coercible (1.0.0)
       descendants_tracker (~> 0.0.1)
@@ -395,7 +395,7 @@ DEPENDENCIES
   bootsnap (>= 1.4.2)
   bullet
   byebug
-  cld3 (>= 3.4.1)
+  cld3 (>= 3.4.2)
   derailed_benchmarks
   elasticsearch-model (>= 7.1.1)
   excon

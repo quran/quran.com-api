@@ -5,6 +5,7 @@ json.object! do
     json.array! @translations do |translation|
       json.object! do
         json.extract! translation,
+                      :id,
                       :resource_id,
                       *fields,
                       :text
