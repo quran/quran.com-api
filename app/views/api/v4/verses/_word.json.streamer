@@ -6,12 +6,14 @@ json.object! do
                 :position,
                 :audio_url,
                 :char_type_name,
-                :line_number,
                 *fields
 
   if qcf_font_version
     json.page_number word.qcf_page_number(qcf_font_version)
     json.line_number word.qcf_line_number(qcf_font_version)
+  else
+    json.page_number word.page_number
+    json.line_number word.line_number
   end
 
   json.translation do

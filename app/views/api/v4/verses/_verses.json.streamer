@@ -23,6 +23,8 @@ json.object! do
 
         if qcf_font_version
           json.page_number verse.qcf_page_number(qcf_font_version)
+        else
+          json.page_number verse.page_number
         end
 
         if include_words
