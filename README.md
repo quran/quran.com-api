@@ -5,6 +5,8 @@
 #### Requirements
 - Rails 5.0.1
 - Elasticsearch 5.0.1
+- Ruby 3.0.0
+- Rails 6.1.3.2
 
 #### Installations
 Gems:
