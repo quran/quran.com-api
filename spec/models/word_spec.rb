@@ -21,6 +21,14 @@
 #  page_number          :integer
 #  pause_name           :string
 #  position             :integer
+#  qpc_uthmani_bazzi    :string
+#  qpc_uthmani_doori    :string
+#  qpc_uthmani_hafs     :string
+#  qpc_uthmani_qaloon   :string
+#  qpc_uthmani_qumbul   :string
+#  qpc_uthmani_shouba   :string
+#  qpc_uthmani_soosi    :string
+#  qpc_uthmani_warsh    :string
 #  text_imlaei          :string
 #  text_imlaei_simple   :string
 #  text_indopak         :string

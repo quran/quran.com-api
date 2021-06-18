@@ -9,7 +9,7 @@
 #  download_count      :integer
 #  duration            :integer
 #  file_name           :string
-#  file_size           :integer
+#  file_size           :float
 #  format              :string
 #  metadata            :jsonb
 #  mime_type           :string

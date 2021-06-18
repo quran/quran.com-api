@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_01_190923) do
+ActiveRecord::Schema.define(version: 2021_06_10_002849) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -47,7 +47,7 @@ ActiveRecord::Schema.define(version: 2021_06_01_190923) do
     t.integer "total_files"
     t.integer "stream_count"
     t.integer "download_count"
-    t.integer "file_size"
+    t.float "file_size"
     t.integer "bit_rate"
     t.integer "duration"
     t.string "file_name"
@@ -110,6 +110,10 @@ ActiveRecord::Schema.define(version: 2021_06_01_190923) do
     t.integer "resource_content_id"
     t.integer "recitation_style_id"
     t.integer "files_size"
+    t.boolean "approved", default: false
+    t.integer "priority"
+    t.index ["approved"], name: "index_audio_recitations_on_approved"
+    t.index ["priority"], name: "index_audio_recitations_on_priority"
     t.index ["recitation_style_id"], name: "index_audio_recitations_on_recitation_style_id"
   end
 
@@ -331,14 +335,6 @@ ActiveRecord::Schema.define(version: 2021_06_01_190923) do
     t.index ["resource_type", "resource_id"], name: "index_media_contents_on_resource_type_and_resource_id"
   end
 
-  create_table "muhsaf", force: :cascade do |t|
-    t.string "name", null: false
-    t.text "description"
-    t.integer "lines_per_page"
-    t.boolean "is_default", default: false
-    t.index ["is_default"], name: "index_muhsaf_on_is_default"
-  end
-
   create_table "muhsaf_pages", force: :cascade do |t|
     t.integer "page_number"
     t.json "verse_mapping"
@@ -350,32 +346,19 @@ ActiveRecord::Schema.define(version: 2021_06_01_190923) do
     t.index ["page_number"], name: "index_muhsaf_pages_on_page_number"
   end
 
-  create_table "muhsaf_word_positions", force: :cascade do |t|
-    t.integer "mushaf_id"
-    t.integer "word_id"
-    t.integer "line_number"
-    t.integer "page_number"
-    t.integer "position_in_line"
-    t.integer "position_in_page"
-    t.index ["mushaf_id", "word_id"], name: "index_muhsaf_word_positions_on_mushaf_id_and_word_id"
-  end
-
-  create_table "muhsafs", force: :cascade do |t|
-    t.string "name", null: false
-    t.text "description"
-    t.integer "lines_per_page"
-    t.boolean "is_default", default: false
-    t.string "default_font_name"
-    t.index ["is_default"], name: "index_muhsafs_on_is_default"
-  end
-
   create_table "mushaf_word_positions", force: :cascade do |t|
     t.integer "mushaf_id"
     t.integer "word_id"
+    t.integer "verse_id"
+    t.text "text"
+    t.integer "char_type_id"
+    t.string "char_type_name"
     t.integer "line_number"
     t.integer "page_number"
+    t.integer "position_in_verse"
     t.integer "position_in_line"
     t.integer "position_in_page"
+    t.index ["mushaf_id", "verse_id", "position_in_verse"], name: "index_on_mushad_word_position"
     t.index ["mushaf_id", "word_id"], name: "index_mushaf_word_positions_on_mushaf_id_and_word_id"
   end
 
@@ -386,6 +369,17 @@ ActiveRecord::Schema.define(version: 2021_06_01_190923) do
     t.boolean "is_default", default: false
     t.string "default_font_name"
     t.index ["is_default"], name: "index_mushafs_on_is_default"
+  end
+
+  create_table "mushas_pages", force: :cascade do |t|
+    t.integer "page_number"
+    t.json "verse_mapping"
+    t.integer "first_verse_id"
+    t.integer "last_verse_id"
+    t.integer "verses_count"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["page_number"], name: "index_mushas_pages_on_page_number"
   end
 
   create_table "recitation", primary_key: "recitation_id", id: :serial, force: :cascade do |t|
@@ -758,6 +752,14 @@ ActiveRecord::Schema.define(version: 2021_06_01_190923) do
     t.string "code_v1"
     t.string "code_v2"
     t.integer "v2_page"
+    t.string "qpc_uthmani_hafs"
+    t.string "qpc_uthmani_qaloon"
+    t.string "qpc_uthmani_shouba"
+    t.string "qpc_uthmani_warsh"
+    t.string "qpc_uthmani_doori"
+    t.string "qpc_uthmani_qumbul"
+    t.string "qpc_uthmani_bazzi"
+    t.string "qpc_uthmani_soosi"
     t.index ["chapter_id"], name: "index_verses_on_chapter_id"
     t.index ["verse_index"], name: "index_verses_on_verse_index"
     t.index ["verse_key"], name: "index_verses_on_verse_key"
@@ -826,16 +828,6 @@ ActiveRecord::Schema.define(version: 2021_06_01_190923) do
     t.datetime "updated_at", null: false
     t.index ["lemma_id"], name: "index_word_lemmas_on_lemma_id"
     t.index ["word_id"], name: "index_word_lemmas_on_word_id"
-  end
-
-  create_table "word_page_positions", force: :cascade do |t|
-    t.integer "mushaf_id"
-    t.integer "word_id"
-    t.integer "line_number"
-    t.integer "page_number"
-    t.integer "position_in_line"
-    t.integer "position_in_page"
-    t.index ["mushaf_id", "word_id"], name: "index_word_page_positions_on_mushaf_id_and_word_id"
   end
 
   create_table "word_root", primary_key: ["word_id", "root_id", "position"], force: :cascade do |t|
@@ -929,6 +921,14 @@ ActiveRecord::Schema.define(version: 2021_06_01_190923) do
     t.string "code_v2"
     t.integer "v2_page"
     t.integer "line_v2"
+    t.string "qpc_uthmani_hafs"
+    t.string "qpc_uthmani_qaloon"
+    t.string "qpc_uthmani_shouba"
+    t.string "qpc_uthmani_warsh"
+    t.string "qpc_uthmani_doori"
+    t.string "qpc_uthmani_qumbul"
+    t.string "qpc_uthmani_bazzi"
+    t.string "qpc_uthmani_soosi"
     t.index ["chapter_id"], name: "index_words_on_chapter_id"
     t.index ["char_type_id"], name: "index_words_on_char_type_id"
     t.index ["location"], name: "index_words_on_location"
