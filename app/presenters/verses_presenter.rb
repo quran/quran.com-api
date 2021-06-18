@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class VersesPresenter < BasePresenter
-  attr_reader :lookahead, :finder, :qcf_font_version
+  attr_reader :lookahead, :finder, :mushaf_type
   VERSE_FIELDS = [
     'chapter_id',
     'text_indopak',
@@ -10,6 +10,7 @@ class VersesPresenter < BasePresenter
     'text_uthmani',
     'text_uthmani_simple',
     'text_uthmani_tajweed',
+    'qpc_uthmani_hafs',
     'image_url',
     'image_width',
     'code_v1',
@@ -28,6 +29,7 @@ class VersesPresenter < BasePresenter
     'text_imlaei',
     'text_uthmani_simple',
     'text_uthmani_tajweed',
+    'qpc_uthmani_hafs',
     'verse_key',
     'location',
     'code_v1',
@@ -35,7 +37,8 @@ class VersesPresenter < BasePresenter
     'v1_page',
     'v2_page',
     'line_number',
-    'line_v2'
+    'line_v2',
+    'line_v1'
   ]
 
   TRANSLATION_FIELDS = [
@@ -71,6 +74,10 @@ class VersesPresenter < BasePresenter
 
     @lookahead = lookahead
     @finder = V4::VerseFinder.new(params)
+  end
+
+  def get_mushaf_type
+    @mushaf_type || :v1
   end
 
   def random_verse(language)
@@ -122,27 +129,13 @@ class VersesPresenter < BasePresenter
     strong_memoize :word_fields do
       if (fields = params[:word_fields]).presence
         fields = sanitize_query_fields(fields.split(','))
-
-        # If client has requested v1 or v2 codes
-        # Remove line_number and page_number
-        # We'll return these fields based on font version
-        if fields.include?('code_v1')
-          @qcf_font_version = :v1
-          fields.delete('line_number')
-          fields.delete('page_number')
-        elsif fields.include?('code_v2')
-          @qcf_font_version = :v2
-          fields.delete('line_number')
-          fields.delete('page_number')
-        else
-          @qcf_font_version = nil
-        end
+        detect_mushaf_type(fields)
 
         fields.select do |field|
           WORDS_FIELDS.include?(field)
         end
       else
-        @qcf_font_version = :v1
+        @mushaf_type = :v1
 
         ['code_v1', 'page_number']
       end
@@ -207,6 +200,26 @@ class VersesPresenter < BasePresenter
   end
 
   protected
+
+  def detect_mushaf_type(fields)
+    if fields.include?('code_v2')
+      @mushaf_type = :v2
+    elsif fields.include?('text_uthmani')
+      @mushaf_type = :uthmani
+    elsif fields.include?('text_indopak')
+      @mushaf_type = :indopak
+    elsif fields.include?('text_imlaei_simple')
+      @mushaf_type = :imlaei_simple
+    elsif fields.include?('text_imlaei')
+      @mushaf_type = :imlaei
+    elsif fields.include?('text_uthmani_tajweed')
+      @mushaf_type = :uthmani_tajweed
+    elsif fields.include?('qpc_uthmani_hafs')
+      @mushaf_type = :qpc_uthmani_hafs
+    else
+      @mushaf_type = :v1
+    end
+  end
 
   def fetch_tafsirs
     if params[:tafsirs]

@@ -6,7 +6,7 @@ fields = @presenter.verse_fields
 word_fields = @presenter.word_fields
 tafsir_fields = @presenter.tafsir_fields
 translation_fields = @presenter.translation_fields
-qcf_font_version = @presenter.qcf_font_version
+mushaf_type = @presenter.get_mushaf_type
 
 json.object! do
   json.verses do
@@ -21,15 +21,11 @@ json.object! do
                       :sajdah_type,
                       :sajdah_number, *fields
 
-        if qcf_font_version
-          json.page_number verse.qcf_page_number(qcf_font_version)
-        else
-          json.page_number verse.page_number
-        end
+        json.page_number verse.get_page_number(mushaf_type)
 
         if include_words
           json.words do
-            json.array! verse.words, partial: 'word', as: :word, locals: {fields: word_fields, qcf_font_version: qcf_font_version}
+            json.array! verse.words, partial: 'word', as: :word, locals: { fields: word_fields, mushaf_type: mushaf_type }
           end
         end
 
@@ -43,13 +39,13 @@ json.object! do
 
         if include_translations
           json.translations do
-            json.array! verse.translations, partial: 'translation', as: :translation, locals: {fields: translation_fields}
+            json.array! verse.translations, partial: 'translation', as: :translation, locals: { fields: translation_fields }
           end
         end
 
         if include_tafsirs
           json.tafsirs do
-            json.array! verse.tafsirs, partial: 'tafsir', as: :tafsir, locals: {fields: tafsir_fields}
+            json.array! verse.tafsirs, partial: 'tafsir', as: :tafsir, locals: { fields: tafsir_fields }
           end
         end
       end
