@@ -5,6 +5,8 @@ module Slugable
 
   included do
     has_many :slugs
+    # for eager loading
+    has_one :slug
 
     def self.find_using_slug(slug)
       joins(:slugs).where('slugs.slug': slug).first || find_by(id: slug)

@@ -1,6 +1,6 @@
-namespace :v3 do
-  get 'ping', to: 'ping#ping'
+# frozen_string_literal: true
 
+namespace :v3 do
   resources :foot_notes, only: :show
 
   resources :chapters, only: [:index, :show] do
@@ -32,4 +32,6 @@ namespace :v3 do
 
   get 'search', to: 'search#search'
   get 'suggest', to: 'search#suggest'
+  get 'ping', to: 'ping#ping'
+  get '/', to: 'ping#ping'
 end

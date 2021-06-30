@@ -1,0 +1,24 @@
+fields = @presenter.audio_fields
+
+json.object! do
+  json.audio_files do
+    json.array! @audio_files do |audio|
+      json.object! do
+        json.extract! audio,
+        :verse_key,
+                      *fields,
+                      :url
+      end
+    end
+  end
+
+  json.pagination do
+    json.object! do
+      json.per_page @presenter.per_page
+      json.current_page @presenter.current_page
+      json.next_page @presenter.next_page
+      json.total_pages @presenter.total_pages
+      json.total_records @presenter.total_records
+    end
+  end
+end

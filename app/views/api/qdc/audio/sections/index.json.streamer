@@ -1,0 +1,3 @@
+json.array! @presenter.sections do |section|
+  json.partial! 'section', section: section
+end

@@ -1,0 +1,6 @@
+json.object! do
+  json.extract! tafsir,
+                :id,
+                :resource_id,
+                :text, *fields
+end

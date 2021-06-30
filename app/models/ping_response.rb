@@ -7,6 +7,7 @@ class PingResponse
         versions: {
             v3: 'https://quran.api-docs.io/v3/getting-started/introduction',
             v4: 'https://quran.api-docs.io/v4/getting-started/introduction',
+            qdc: 'https://quran.api-docs.io/qdc/getting-started/introduction',
             graphql: 'https://api.quran.com/graphql-playground'
         }
     }

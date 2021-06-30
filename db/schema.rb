@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_10_002849) do
+ActiveRecord::Schema.define(version: 2021_06_28_093435) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -127,6 +127,11 @@ ActiveRecord::Schema.define(version: 2021_06_10_002849) do
 
   create_table "audio_sections", force: :cascade do |t|
     t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "audio_segments", force: :cascade do |t|
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -480,6 +485,7 @@ ActiveRecord::Schema.define(version: 2021_06_10_002849) do
     t.integer "mobile_translation_id"
     t.integer "priority"
     t.text "resource_info"
+    t.string "resource_id"
     t.index ["approved"], name: "index_resource_contents_on_approved"
     t.index ["author_id"], name: "index_resource_contents_on_author_id"
     t.index ["cardinality_type"], name: "index_resource_contents_on_cardinality_type"
@@ -487,6 +493,7 @@ ActiveRecord::Schema.define(version: 2021_06_10_002849) do
     t.index ["language_id"], name: "index_resource_contents_on_language_id"
     t.index ["mobile_translation_id"], name: "index_resource_contents_on_mobile_translation_id"
     t.index ["priority"], name: "index_resource_contents_on_priority"
+    t.index ["resource_id"], name: "index_resource_contents_on_resource_id"
     t.index ["resource_type"], name: "index_resource_contents_on_resource_type"
     t.index ["slug"], name: "index_resource_contents_on_slug"
     t.index ["sub_type"], name: "index_resource_contents_on_sub_type"
