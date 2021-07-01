@@ -9,7 +9,7 @@ module Qdc
     end
 
     def chapters
-      finder.all_with_translated_names(locale)
+      finder.all_with_eager_load(locale: locale)
     end
 
     def chapter

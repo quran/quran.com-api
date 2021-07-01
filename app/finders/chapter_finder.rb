@@ -2,19 +2,15 @@
 
 class ChapterFinder
   def find_and_eager_load(id_or_slug, locale: 'en')
-    with_translated_name = all_with_translated_names(locale)
+    with_translated_name = all_with_eager_load(locale: locale)
     with_slug = eager_load_slugs(with_translated_name, locale: locale)
 
     with_slug.find_using_slug(id_or_slug)
   end
 
-  def find_with_translated_name(id_or_slug, language_code = 'en')
-    all_with_translated_names(language_code).find_using_slug(id_or_slug)
-  end
-
-  def all_with_translated_names(language_code = 'en')
-    language = Language.find_with_id_or_iso_code(language_code)
-    chapters = Chapter.includes(:translated_name)
+  def all_with_eager_load(locale: 'en')
+    language = Language.find_with_id_or_iso_code(locale)
+    chapters = Chapter.includes(:translated_name, :default_slug)
 
     # Eager load translated names to avoid n+1 queries
     # Fallback to english translated names
