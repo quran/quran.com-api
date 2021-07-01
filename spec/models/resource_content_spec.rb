@@ -20,6 +20,7 @@
 #  data_source_id        :integer
 #  language_id           :integer
 #  mobile_translation_id :integer
+#  resource_id           :string
 #
 # Indexes
 #
@@ -30,6 +31,7 @@
 #  index_resource_contents_on_language_id            (language_id)
 #  index_resource_contents_on_mobile_translation_id  (mobile_translation_id)
 #  index_resource_contents_on_priority               (priority)
+#  index_resource_contents_on_resource_id            (resource_id)
 #  index_resource_contents_on_resource_type          (resource_type)
 #  index_resource_contents_on_slug                   (slug)
 #  index_resource_contents_on_sub_type               (sub_type)

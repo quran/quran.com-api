@@ -132,8 +132,23 @@ ActiveRecord::Schema.define(version: 2021_06_28_093435) do
   end
 
   create_table "audio_segments", force: :cascade do |t|
+    t.bigint "audio_file_id"
+    t.bigint "chapter_id"
+    t.bigint "verse_id"
+    t.integer "verse_number"
+    t.integer "start_timestamp"
+    t.integer "end_timestamp"
+    t.string "segments", default: [], array: true
+    t.integer "duration"
+    t.float "percentile"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["audio_file_id", "verse_number"], name: "index_audio_segments_on_audio_file_id_and_verse_number"
+    t.index ["audio_file_id"], name: "index_audio_segments_on_audio_file_id"
+    t.index ["chapter_id"], name: "index_audio_segments_on_chapter_id"
+    t.index ["end_timestamp"], name: "index_audio_segments_on_end_timestamp"
+    t.index ["start_timestamp"], name: "index_audio_segments_on_start_timestamp"
+    t.index ["verse_id"], name: "index_audio_segments_on_verse_id"
   end
 
   create_table "author", primary_key: "author_id", id: :integer, default: -> { "nextval('_author_author_id_seq'::regclass)" }, force: :cascade do |t|
