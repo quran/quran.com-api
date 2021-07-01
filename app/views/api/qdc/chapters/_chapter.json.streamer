@@ -1,0 +1,25 @@
+json.object! do
+  json.extract! chapter, :id,
+                :revelation_place,
+                :revelation_order,
+                :bismillah_pre,
+                :name_simple,
+                :name_complex,
+                :name_arabic,
+                :verses_count,
+                :pages
+
+  if render_slugs
+    json.slugs chapter.slugs do |slug|
+      json.object! do
+        json.extract! slug, :slug, :locale, :is_default
+      end
+    end
+  end
+
+  json.translated_name do
+    json.object! do
+      json.extract! chapter.translated_name, :language_name, :name
+    end
+  end
+end

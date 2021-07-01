@@ -1,0 +1,6 @@
+json.object! do
+  json.extract! translation,
+                :id,
+                :resource_id,
+                :text, *fields
+end

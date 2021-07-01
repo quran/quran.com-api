@@ -1,0 +1,18 @@
+json.object! do
+  json.qari_id audio_file.audio_recitation_id
+  json.surah_id audio_file.chapter_id
+  json.file_name audio_file.file_name
+  json.filenum audio_file.total_files
+  json.extension audio_file.format
+  json.stream_count audio_file.stream_count
+  json.download_count audio_file.download_count
+  json.metadata audio_file.metadata
+
+  json.format do
+    json.object! do
+      json.size audio_file.file_size
+      json.duration audio_file.duration
+      json.bit_rate audio_file.bit_rate
+    end
+  end
+end

@@ -1,0 +1,23 @@
+fields = @presenter.translation_fields
+
+json.object! do
+  json.translations do
+    json.array! @translations do |translation|
+      json.object! do
+        json.extract! translation,
+                      :resource_id,
+                      *fields,
+                      :text
+      end
+    end
+  end
+
+  if @resource
+    json.meta do
+      json.object! do
+        json.translation_name @resource.name
+        json.author_name @resource.author_name
+      end
+    end
+  end
+end

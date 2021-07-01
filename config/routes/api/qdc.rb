@@ -1,4 +1,4 @@
-namespace :v4 do
+namespace :qdc do
   # QuanicAudio api routes
   namespace :audio do
     # https://quranicaudio.com/api/surahs
@@ -111,4 +111,4 @@ namespace :v4 do
 
   get 'ping', to: 'ping#ping'
   get '/', to: 'ping#ping'
-end
+  end
