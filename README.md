@@ -1,10 +1,11 @@
-# Quran.com API [![SLACK](http://i.imgur.com/Lk5HsBo.png)](https://quranslack.herokuapp.com)
+# Quran.com API [Join Quran.com community](https://quran-community.herokuapp.com)
 
 [![Code Climate](https://codeclimate.com/github/quran/quran.com-api.png)](https://codeclimate.com/github/quran/quran.com-api)
 
 #### Requirements
 - Rails 5.0.1
 - Elasticsearch 5.0.1
+- Ruby 3.0.0
 
 #### Installations
 Gems:
@@ -45,8 +46,8 @@ http://localhost:3000/api/v3/chapters/1/verses
 
 https://quran.api-docs.io/v3
 
-## Slack
-Signup at https://quranslack.herokuapp.com to be added to the Slack group
+## Community
+Join Quran.com community here https://quran-community.herokuapp.com
 
 
 Tests
