@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_10_002849) do
+ActiveRecord::Schema.define(version: 2021_07_01_102905) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -112,8 +112,10 @@ ActiveRecord::Schema.define(version: 2021_06_10_002849) do
     t.integer "files_size"
     t.boolean "approved", default: false
     t.integer "priority"
+    t.integer "qirat_type_id"
     t.index ["approved"], name: "index_audio_recitations_on_approved"
     t.index ["priority"], name: "index_audio_recitations_on_priority"
+    t.index ["qirat_type_id"], name: "index_audio_recitations_on_qirat_type_id"
     t.index ["recitation_style_id"], name: "index_audio_recitations_on_recitation_style_id"
   end
 
@@ -402,6 +404,13 @@ ActiveRecord::Schema.define(version: 2021_06_10_002849) do
     t.index ["page_number"], name: "index_mushas_pages_on_page_number"
   end
 
+  create_table "qirat_types", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "recitation", primary_key: "recitation_id", id: :serial, force: :cascade do |t|
     t.integer "reciter_id", null: false
     t.integer "style_id"
@@ -423,6 +432,8 @@ ActiveRecord::Schema.define(version: 2021_06_10_002849) do
     t.string "style"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "qirat_type_id"
+    t.index ["qirat_type_id"], name: "index_recitations_on_qirat_type_id"
     t.index ["recitation_style_id"], name: "index_recitations_on_recitation_style_id"
     t.index ["reciter_id"], name: "index_recitations_on_reciter_id"
     t.index ["resource_content_id"], name: "index_recitations_on_resource_content_id"

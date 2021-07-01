@@ -20,6 +20,7 @@
 #  torrent_seeders     :integer          default(0)
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
+#  qirat_type_id       :integer
 #  recitation_style_id :integer
 #  resource_content_id :integer
 #  section_id          :integer
@@ -28,6 +29,7 @@
 #
 #  index_audio_recitations_on_approved             (approved)
 #  index_audio_recitations_on_priority             (priority)
+#  index_audio_recitations_on_qirat_type_id        (qirat_type_id)
 #  index_audio_recitations_on_recitation_style_id  (recitation_style_id)
 #
 class Audio::Recitation < ApplicationRecord

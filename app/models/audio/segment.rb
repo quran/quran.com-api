@@ -25,4 +25,7 @@
 #  index_audio_segments_on_verse_id                        (verse_id)
 #
 class Audio::Segment < ApplicationRecord
+  belongs_to :verse
+  belongs_to :chapter
+  belongs_to :audio_file, class_name: 'Audio::ChapterAudioFile'
 end
