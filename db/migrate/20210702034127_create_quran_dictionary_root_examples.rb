@@ -12,9 +12,11 @@ class CreateQuranDictionaryRootExamples < ActiveRecord::Migration[6.1]
       t.integer :segment_last_word_timestamp
 
       t.integer :word_id
+      t.integer :verse_id
 
       t.references :word_root, index: { name: :index_on_dict_word_example_id }
       t.index :word_id
+      t.index :verse_id
 
       t.timestamps
     end
