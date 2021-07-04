@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_01_102905) do
+ActiveRecord::Schema.define(version: 2021_07_02_034140) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -232,6 +232,48 @@ ActiveRecord::Schema.define(version: 2021_07_01_102905) do
     t.string "url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "dictionary_root_definitions", force: :cascade do |t|
+    t.integer "definition_type"
+    t.text "description"
+    t.bigint "word_root_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["word_root_id"], name: "index_dict_word_definition"
+  end
+
+  create_table "dictionary_root_examples", force: :cascade do |t|
+    t.string "word_arabic"
+    t.string "word_translation"
+    t.string "segment_arabic"
+    t.string "segment_translation"
+    t.integer "segment_first_word_id"
+    t.integer "segment_last_word_id"
+    t.integer "segment_first_word_timestamp"
+    t.integer "segment_last_word_timestamp"
+    t.integer "word_id"
+    t.bigint "word_root_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["word_id"], name: "index_dictionary_root_examples_on_word_id"
+    t.index ["word_root_id"], name: "index_on_dict_word_example_id"
+  end
+
+  create_table "dictionary_word_roots", force: :cascade do |t|
+    t.integer "frequency"
+    t.integer "root_number"
+    t.string "english_trilateral"
+    t.string "arabic_trilateral"
+    t.string "cover_url"
+    t.text "description"
+    t.integer "root_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["arabic_trilateral"], name: "index_dictionary_word_roots_on_arabic_trilateral"
+    t.index ["english_trilateral"], name: "index_dictionary_word_roots_on_english_trilateral"
+    t.index ["root_id"], name: "index_dictionary_word_roots_on_root_id"
+    t.index ["root_number"], name: "index_dictionary_word_roots_on_root_number"
   end
 
   create_table "feedbacks", force: :cascade do |t|
