@@ -7,8 +7,9 @@ class CreateAudioSegments < ActiveRecord::Migration[6.1]
       t.belongs_to :verse, index: true
 
       t.integer :verse_number
-      t.integer :start_timestamp, index: true # MS
-      t.integer :end_timestamp, index: true # MS
+      t.integer :start_timestamp # MS
+      t.integer :end_timestamp # MS
+      t.integer :surah_recitation_id
 
       t.string :segments, array: true, default: []
       t.integer :duration # Seconds
@@ -17,6 +18,9 @@ class CreateAudioSegments < ActiveRecord::Migration[6.1]
       t.timestamps
     end
 
+    add_index :audio_segments, [:audio_file_id, :start_timestamp, :end_timestamp], name: 'index_on_audio_segments_timing'
     add_index :audio_segments, [:audio_file_id, :verse_number]
+    add_index :audio_segments, [:surah_recitation_id, :chapter_id]
+    add_index :audio_segments, :surah_recitation_id
   end
 end
