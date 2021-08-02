@@ -133,26 +133,6 @@ ActiveRecord::Schema.define(version: 2021_07_02_034140) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "audio_segments", force: :cascade do |t|
-    t.bigint "audio_file_id"
-    t.bigint "chapter_id"
-    t.bigint "verse_id"
-    t.integer "verse_number"
-    t.integer "start_timestamp"
-    t.integer "end_timestamp"
-    t.string "segments", default: [], array: true
-    t.integer "duration"
-    t.float "percentile"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["audio_file_id", "verse_number"], name: "index_audio_segments_on_audio_file_id_and_verse_number"
-    t.index ["audio_file_id"], name: "index_audio_segments_on_audio_file_id"
-    t.index ["chapter_id"], name: "index_audio_segments_on_chapter_id"
-    t.index ["end_timestamp"], name: "index_audio_segments_on_end_timestamp"
-    t.index ["start_timestamp"], name: "index_audio_segments_on_start_timestamp"
-    t.index ["verse_id"], name: "index_audio_segments_on_verse_id"
-  end
-
   create_table "author", primary_key: "author_id", id: :integer, default: -> { "nextval('_author_author_id_seq'::regclass)" }, force: :cascade do |t|
     t.text "url", array: true
     t.text "name", null: false
@@ -256,6 +236,8 @@ ActiveRecord::Schema.define(version: 2021_07_02_034140) do
     t.bigint "word_root_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "verse_id"
+    t.index ["verse_id"], name: "index_dictionary_root_examples_on_verse_id"
     t.index ["word_id"], name: "index_dictionary_root_examples_on_word_id"
     t.index ["word_root_id"], name: "index_on_dict_word_example_id"
   end
@@ -397,17 +379,6 @@ ActiveRecord::Schema.define(version: 2021_07_02_034140) do
     t.index ["language_id"], name: "index_media_contents_on_language_id"
     t.index ["resource_content_id"], name: "index_media_contents_on_resource_content_id"
     t.index ["resource_type", "resource_id"], name: "index_media_contents_on_resource_type_and_resource_id"
-  end
-
-  create_table "muhsaf_pages", force: :cascade do |t|
-    t.integer "page_number"
-    t.json "verse_mapping"
-    t.integer "first_verse_id"
-    t.integer "last_verse_id"
-    t.integer "verses_count"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["page_number"], name: "index_muhsaf_pages_on_page_number"
   end
 
   create_table "mushaf_word_positions", force: :cascade do |t|
@@ -554,11 +525,13 @@ ActiveRecord::Schema.define(version: 2021_07_02_034140) do
     t.integer "priority"
     t.text "resource_info"
     t.string "resource_id"
+    t.jsonb "meta_data", default: {}
     t.index ["approved"], name: "index_resource_contents_on_approved"
     t.index ["author_id"], name: "index_resource_contents_on_author_id"
     t.index ["cardinality_type"], name: "index_resource_contents_on_cardinality_type"
     t.index ["data_source_id"], name: "index_resource_contents_on_data_source_id"
     t.index ["language_id"], name: "index_resource_contents_on_language_id"
+    t.index ["meta_data"], name: "index_resource_contents_on_meta_data", using: :gin
     t.index ["mobile_translation_id"], name: "index_resource_contents_on_mobile_translation_id"
     t.index ["priority"], name: "index_resource_contents_on_priority"
     t.index ["resource_id"], name: "index_resource_contents_on_resource_id"

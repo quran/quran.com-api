@@ -200,7 +200,6 @@ class VersesPresenter < BasePresenter
   end
 
   protected
-
   def detect_mushaf_type(fields)
     if fields.include?('code_v2')
       @mushaf_type = :v2

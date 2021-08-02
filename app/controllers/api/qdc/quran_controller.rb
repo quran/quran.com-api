@@ -3,14 +3,14 @@
 module Api::Qdc
   class QuranController < ApiController
     VERSE_AVAILABLE_SCRIPTS = [
-        'text_uthmani',
-        'text_uthmani_simple',
-        'text_uthmani_tajweed',
-        'text_indopak',
-        'text_imlaei',
-        'text_imlaei_simple',
-        'code_v1',
-        'code_v2'
+      'text_uthmani',
+      'text_uthmani_simple',
+      'text_uthmani_tajweed',
+      'text_indopak',
+      'text_imlaei',
+      'text_imlaei_simple',
+      'code_v1',
+      'code_v2'
     ]
 
     def translation
@@ -65,9 +65,9 @@ module Api::Qdc
       end
 
       @verses = Verse
-                    .unscope(:order)
-                    .order('verse_index ASC').where(resource_filters)
-                    .select(:id, :verse_key, @script_type, *@extra_fields)
+                  .unscope(:order)
+                  .order('verse_index ASC').where(resource_filters)
+                  .select(:id, :verse_key, @script_type, *@extra_fields)
 
       render
     end
@@ -85,21 +85,27 @@ module Api::Qdc
 
     def resource_filters(resource = nil)
       {
-          resource_content_id: resource&.id,
-          chapter_id: params[:chapter_number],
-          juz_number: params[:juz_number],
-          hizb_number: params[:hizb_number],
-          rub_number: params[:rub_number],
-          page_number: params[:page_number],
-          verse_key: params[:verse_key]
+        resource_content_id: resource&.id,
+        chapter_id: chapter&.id,
+        juz_number: params[:juz_number],
+        hizb_number: params[:hizb_number],
+        rub_number: params[:rub_number],
+        page_number: params[:page_number],
+        verse_key: params[:verse_key]
       }.compact
     end
 
     def fetch_approved_recitation
       list = Recitation
-                 .approved
+               .approved
 
       list.where(id: params[:recitation_id]).first
+    end
+
+    def chapter
+      if params[:chapter_number]
+        Chapter.find_using_slug(params[:chapter_number])
+      end
     end
   end
 end

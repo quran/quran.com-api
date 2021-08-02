@@ -26,6 +26,9 @@ namespace :qdc do
   get 'juzs', to: 'juzs#index'
   get 'juzs/:id', to: 'juzs#show'
 
+  # Advance copy
+  get 'verses/advance_copy', to: 'advance_copy#index'
+
   # Footnote
   get 'foot_notes/:id', to: 'foot_notes#show'
 
@@ -33,6 +36,7 @@ namespace :qdc do
   namespace :resources do
     get :translations
     get 'translations/:translation_id/info', action: 'translation_info'
+    get 'translations/filter', action: 'filter'
     get :tafsirs
     get 'tafsirs/:tafsir_id/info', action: 'tafsir_info'
     get :recitations
@@ -69,6 +73,7 @@ namespace :qdc do
     get 'by_rub/:rub_number', action: 'by_rub'
     get 'by_hizb/:hizb_number', action: 'by_hizb'
     get 'by_key/:verse_key', action: 'by_key'
+    get :filter
 
     get 'random', action: 'random'
   end

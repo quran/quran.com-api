@@ -1,0 +1,17 @@
+json.object! do
+  json.extract! translation,
+                :id,
+                :resource_id,
+                *fields
+  json.text @presenter.format_translation_text(translation)
+  
+  if include_footnotes
+    json.footnotes do
+      json.object! do
+        translation.foot_notes.each_with_index do |foot_note, index|
+          json.set! index+1, @presenter.format_footnote_text(foot_note)
+        end
+      end
+    end
+  end
+end

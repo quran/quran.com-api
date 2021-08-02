@@ -2,7 +2,7 @@
 
 class Audio::RecitationPresenter < BasePresenter
   def recitations
-    Audio::Recitation.all
+    Audio::Recitation.order('name ASC')
   end
 
   def approved_recitations
