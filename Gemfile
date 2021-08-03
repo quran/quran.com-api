@@ -62,7 +62,6 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'pry-rails'
   gem 'apollo-tracing'
-  # gem 'zeus'
 end
 
 group :development do
