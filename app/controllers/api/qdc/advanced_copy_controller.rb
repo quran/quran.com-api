@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Api::Qdc
-  class AdvanceCopyController < ApiController
+  class AdvancedCopyController < ApiController
     before_action :init_presenter
 
     def index

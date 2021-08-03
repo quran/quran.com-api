@@ -27,7 +27,7 @@ namespace :qdc do
   get 'juzs/:id', to: 'juzs#show'
 
   # Advance copy
-  get 'verses/advance_copy', to: 'advance_copy#index'
+  get 'verses/advanced_copy', to: 'advanced_copy#index'
 
   # Footnote
   get 'foot_notes/:id', to: 'foot_notes#show'

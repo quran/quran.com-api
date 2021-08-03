@@ -18,8 +18,6 @@ json.object! do
                       :verse_key,
                       *fields
 
-        json.page_number verse.get_page_number(mushaf_type)
-
         if include_words
           json.words do
             json.array! verse.words, partial: 'word', as: :word, locals: { fields: word_fields, mushaf_type: mushaf_type }
