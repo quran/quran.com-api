@@ -105,7 +105,6 @@ module Api::V4
       render
     end
 
-    protected
     def fetch_script_type
       script = params[:script]
 

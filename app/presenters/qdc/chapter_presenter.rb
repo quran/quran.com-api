@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Qdc
   class ChapterPresenter < BasePresenter
     attr_reader :locale
@@ -17,7 +18,6 @@ module Qdc
     end
 
     protected
-
     def finder
       ChapterFinder.new
     end

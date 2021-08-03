@@ -2,7 +2,16 @@ json.object! do
   json.info do
     json.object! do
       json.id @tafsir.id
+      json.name @tafsir.name
+      json.author_name @tafsir.author_name
       json.info @tafsir.resource_info
+
+      json.translated_name do
+        translated_name = @tafsir.translated_name
+        json.object! do
+          json.extract! translated_name, :name, :language_name
+        end
+      end
     end
   end
 end

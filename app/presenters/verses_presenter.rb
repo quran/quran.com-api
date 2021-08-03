@@ -200,7 +200,6 @@ class VersesPresenter < BasePresenter
   end
 
   protected
-
   def detect_mushaf_type(fields)
     if fields.include?('code_v2')
       @mushaf_type = :v2
@@ -223,7 +222,18 @@ class VersesPresenter < BasePresenter
 
   def fetch_tafsirs
     if params[:tafsirs]
-      params[:tafsirs].to_s.split(',')
+      tafsirs = params[:tafsirs].to_s.split(',')
+
+      approved_tafsirs = ResourceContent
+                                .approved
+                                .tafsirs
+                                .one_verse
+
+      params[:tafsirs] = approved_tafsirs
+                                .where(id: tafsirs)
+                                .pluck(:id)
+
+      params[:tafsirs]
     end
   end
 

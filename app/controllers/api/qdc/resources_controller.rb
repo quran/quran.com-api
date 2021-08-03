@@ -8,15 +8,13 @@ module Api::Qdc
     end
 
     def translations
-      list = ResourceContent
-                 .eager_load(:translated_name)
-                 .one_verse
-                 .translations
-                 .approved
-                 .order('priority ASC')
+      load_translations
+      render
+    end
 
-      @translations = eager_load_translated_name(list)
-
+    def filter
+      translation_ids = params[:translations].to_s.split(',')
+      @translations = load_translations.where(id: translation_ids)
       render
     end
 
@@ -28,11 +26,11 @@ module Api::Qdc
 
     def tafsirs
       list = ResourceContent
-                 .eager_load(:translated_name)
-                 .one_verse
-                 .tafsirs
-                 .approved
-                 .order('priority ASC')
+               .eager_load(:translated_name)
+               .one_verse
+               .tafsirs
+               .approved
+               .order('priority ASC')
 
       @tafsirs = eager_load_translated_name(list)
 
@@ -46,9 +44,9 @@ module Api::Qdc
 
     def recitations
       list = Recitation
-                 .eager_load(reciter: :translated_name)
-                 .approved
-                 .order('translated_names.language_priority desc')
+               .eager_load(reciter: :translated_name)
+               .approved
+               .order('translated_names.language_priority desc')
 
       @recitations = eager_load_translated_name(list)
 
@@ -57,11 +55,14 @@ module Api::Qdc
 
     def recitation_info
       @recitation = Recitation
-                       .includes(:resource_content)
-                       .approved
-                       .find(params[:recitation_id])
+                      .approved
+                      .find(params[:recitation_id])
 
-      @resource = @recitation.resource_content
+      # Load translated name
+      resource = ResourceContent
+                   .eager_load(:translated_name)
+                   .where(id: @recitation.resource_content_id)
+      @resource = eager_load_translated_name(resource).first
 
       render
     end
@@ -72,10 +73,10 @@ module Api::Qdc
 
     def chapter_infos
       list = ResourceContent
-                 .eager_load(:translated_name)
-                 .chapter_info
-                 .one_chapter
-                 .approved
+               .eager_load(:translated_name)
+               .chapter_info
+               .one_chapter
+               .approved
 
       @chapter_infos = eager_load_translated_name(list)
 
@@ -84,9 +85,9 @@ module Api::Qdc
 
     def verse_media
       @media = ResourceContent
-                   .includes(:language)
-                   .media
-                   .one_verse.approved
+                 .includes(:language)
+                 .media
+                 .one_verse.approved
 
       render
     end
@@ -106,6 +107,17 @@ module Api::Qdc
     end
 
     protected
+    def load_translations
+      list = ResourceContent
+               .eager_load(:translated_name)
+               .one_verse
+               .translations
+               .approved
+               .order('priority ASC')
+
+      @translations = eager_load_translated_name(list)
+    end
+
     def fetch_script_type
       script = params[:script]
 

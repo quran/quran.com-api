@@ -3,6 +3,7 @@ class CreateAudioSegments < ActiveRecord::Migration[6.1]
     # Store per ayah segments info of audio files
     create_table :audio_segments do |t|
       t.belongs_to :audio_file
+      t.belongs_to :surah_recitation
       t.belongs_to :chapter, index: true
       t.belongs_to :verse, index: true
 
@@ -11,7 +12,7 @@ class CreateAudioSegments < ActiveRecord::Migration[6.1]
       t.integer :end_timestamp # MS
       t.integer :surah_recitation_id
 
-      t.string :segments, array: true, default: []
+      t.jsonb :segments, default: {}
       t.integer :duration # Seconds
       t.float :percentile # % of total audio file duration
 

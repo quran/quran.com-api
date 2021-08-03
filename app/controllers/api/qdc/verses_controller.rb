@@ -5,6 +5,10 @@ module Api::Qdc
     before_action :init_presenter
     before_action :load_verses, except: [:random, :by_key]
 
+    def filter
+      render partial: 'verses'
+    end
+
     def by_chapter
       render partial: 'verses'
     end
