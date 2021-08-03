@@ -62,15 +62,6 @@ class V4::VerseFinder < ::VerseFinder
                 .order('verses.verse_index asc')
                 .where('verses.verse_index >= :from AND verses.verse_index <= :to', from: verse_from, to: verse_to)
 
-=begin
-    if (translation_ids.present?)
-      @verses = @verses
-                  .where(translations: { resource_content_id: translation_ids })
-                  .eager_load(translations: :foot_notes)
-                  .order('translations.priority ASC')
-    end
-=end
-
     @verses
   end
 
