@@ -68,7 +68,7 @@ class V4::VerseFinder < ::VerseFinder
   def fetch_filter
     utils = QuranUtils::VerseRanges.new
     ids = utils.get_ids_from_ranges(params[:filters])
-    results = Verse.where(id: ids)
+    results = Verse.unscoped.where(id: ids)
 
     @total_records = results.size
     @results = results.limit(per_page).offset((current_page - 1) * per_page)
