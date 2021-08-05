@@ -29,5 +29,6 @@
 class Audio::Segment < ApplicationRecord
   belongs_to :verse
   belongs_to :chapter
+  belongs_to :surah_recitation, class_name: 'Audio::Recitation'
   belongs_to :audio_file, class_name: 'Audio::ChapterAudioFile'
 end

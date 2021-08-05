@@ -87,17 +87,17 @@ class Verse < ApplicationRecord
 
   def get_text(version)
     case version
-    when :code_v1
+    when :v1, :code_v1
       code_v1
-    when :code_v2
+    when :v2, :code_v2
       code_v2
-    when :text_uthmani
+    when :text_uthmani, :uthmani
       text_uthmani
-    when :text_uthmani_tajweed
+    when :uthmani_tajweed, :text_uthmani_tajweed
       text_uthmani_tajweed
-    when :text_indopak
+    when :indopak, :text_indopak
       text_indopak
-    when :qpc_uthmani_hafs
+    when :uthmani_hafs, :qpc_uthmani_hafs
       qpc_uthmani_hafs
     end
   end

@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 module Api::Qdc
-  class ChapterRecitationsController < ApiController
+  class Audio::ChapterRecitationsController < ApiController
     before_action :init_presenter
 
-    def by_chapter
+    def recitations
       render
     end
 
