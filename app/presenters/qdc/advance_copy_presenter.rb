@@ -68,8 +68,6 @@ module Qdc
         @mushaf_type = :uthmani_tajweed
       elsif fields.include?('qpc_uthmani_hafs')
         @mushaf_type = :qpc_uthmani_hafs
-      else
-        @mushaf_type = :uthmani
       end
     end
 
