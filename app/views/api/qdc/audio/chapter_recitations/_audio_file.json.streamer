@@ -2,7 +2,8 @@ json.object! do
   json.extract! audio_file, :id,
                 :chapter_id,
                 :file_size,
-                :format
+                :format,
+                :duration
 
   json.audio_url audio_file.audio_url(relative_path: recitation.relative_path)
 end

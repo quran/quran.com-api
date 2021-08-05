@@ -1,13 +1,22 @@
 namespace :qdc do
-  # QuanicAudio api routes
   namespace :audio do
     # https://quranicaudio.com/api/surahs
     # https://quranicaudio.com/api/surahs/1
 
+    # Surah audio
+    get 'recitations', to: 'chapter_recitations#recitations'
+    get 'audio_files/:recitation_id', to: 'chapter_recitations#index'
+
+    # Segments
+    get 'segments/:audio_file_id', to: 'segments#index'
+    get 'segments/:audio_file_id/lookup_ayah', to: 'segments#lookup_ayah'
+    get 'segments/:audio_file_id/ayah_percentile', to: 'segments#percentile'
+
+    # QuanicAudio api routes
     get :qaris, to: 'recitations#index'
-    get 'qaris/:id', to: 'recitations#show'
-    get 'qaris/related/:id', to: 'recitations#related'
-    get 'qaris/:id/audio_files/:ext', to: 'recitations#audio_files'
+    get 'qaris/:recitation_id', to: 'recitations#show'
+    get 'qaris/related/:recitation_id', to: 'recitations#related'
+    get 'qaris/:recitation_id/audio_files/:ext', to: 'recitations#audio_files'
     get :sections, to: 'sections#index'
     get :surahs, to: 'chapters#index'
     get '/surahs/:id', to: 'chapters#show'
@@ -28,6 +37,7 @@ namespace :qdc do
 
   # Advance copy
   get 'verses/advanced_copy', to: 'advanced_copy#index'
+  get 'verses/advanced_copy/raw_text', to: 'advanced_copy#raw_text'
 
   # Footnote
   get 'foot_notes/:id', to: 'foot_notes#show'
@@ -108,12 +118,6 @@ namespace :qdc do
     get 'by_ayah/:ayah_key', action: 'by_ayah'
   end
 
-  # Surah audio
-  scope 'chapter_recitations/:id', controller: 'chapter_recitations' do
-    get '/', action: 'index'
-    get '/:chapter_number', action: 'by_chapter'
-  end
-
   get 'ping', to: 'ping#ping'
   get '/', to: 'ping#ping'
-  end
+end

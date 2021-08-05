@@ -1,7 +1,0 @@
-recitation = @presenter.approved_recitation
-
-json.object! do
-  json.audio_file do
-    json.partial! 'audio_file', audio_file: @presenter.chapter_audio_file, recitation: recitation
-  end
-end

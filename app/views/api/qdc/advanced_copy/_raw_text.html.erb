@@ -1,0 +1,23 @@
+<%
+  include_arabic = true
+  include_footnote = @presenter.include_footnote?
+  include_translations = false
+%>
+
+<% @verses.each do |verse| %>
+<%= verse.verse_key %>
+<%= verse.text_uthmani.strip if include_arabic %>
+
+<% if include_translations %>
+    <% verse.translations.each do |tr| %>
+      <%= @presenter.format_translation_text(tr).html_safe %>
+      — <%= tr.resource_name %>
+      <% if include_footnote %>
+
+        <% tr.foot_notes.each_with_index do |foot_note, index| %>
+          [<%= index + 1 %>]<%= @presenter.format_footnote_text foot_note %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
