@@ -37,7 +37,6 @@ namespace :qdc do
 
   # Advance copy
   get 'verses/advanced_copy', to: 'advanced_copy#index'
-  get 'verses/advanced_copy/raw_text', to: 'advanced_copy#raw_text'
 
   # Footnote
   get 'foot_notes/:id', to: 'foot_notes#show'

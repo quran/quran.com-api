@@ -1,3 +1,0 @@
-json.object! do
-  json.text raw render(partial: 'raw_text', formats: ['html']).strip
-end

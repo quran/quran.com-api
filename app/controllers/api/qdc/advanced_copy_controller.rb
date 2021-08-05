@@ -8,10 +8,6 @@ module Api::Qdc
       render
     end
 
-    def raw_text
-      render
-    end
-
     protected
     def init_presenter
       lookahead = RestApi::ParamLookahead.new(params)

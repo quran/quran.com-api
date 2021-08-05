@@ -53,14 +53,19 @@ class V4::VerseFinder < ::VerseFinder
   end
 
   protected
-  def fetch_advance_copy
-    verse_from = QuranUtils::Quran.get_ayah_id_from_key(params[:from])
-    verse_to = QuranUtils::Quran.get_ayah_id_from_key(params[:to])
 
-    @verses = Verse
-                .unscoped
-                .order('verses.verse_index asc')
-                .where('verses.verse_index >= :from AND verses.verse_index <= :to', from: verse_from, to: verse_to)
+  def fetch_advance_copy
+    if params[:from] && params[:to]
+      verse_from = QuranUtils::Quran.get_ayah_id_from_key(params[:from])
+      verse_to = QuranUtils::Quran.get_ayah_id_from_key(params[:to])
+
+      @verses = Verse
+                  .unscoped
+                  .order('verses.verse_index asc')
+                  .where('verses.verse_index >= :from AND verses.verse_index <= :to', from: verse_from, to: verse_to)
+    else
+      @verses = Verse.none
+    end
 
     @verses
   end
@@ -94,7 +99,7 @@ class V4::VerseFinder < ::VerseFinder
     else
       @total_records = 0
       @next_page = nil
-      @results = Verse.where('1=0')
+      @results = Verse.none
     end
 
     @results
