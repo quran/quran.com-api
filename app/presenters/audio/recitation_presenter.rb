@@ -75,4 +75,14 @@ class Audio::RecitationPresenter < BasePresenter
     # Abdellatif wants to call it reciter_id
     params[:reciter_id] || params[:recitation_id]
   end
+
+  def verse_id
+    strong_memoize :verse_id do
+      return params[:verse_id].to_i if params[:verse_id]
+
+      if (key = params[:verse_key])
+        QuranUtils::Quran.get_ayah_id_from_key(key)
+      end
+    end
+  end
 end

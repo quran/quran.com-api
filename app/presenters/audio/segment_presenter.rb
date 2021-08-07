@@ -36,16 +36,6 @@ class Audio::SegmentPresenter < Audio::RecitationPresenter
       .where(filters).order('verse_number ASC')
   end
 
-  def verse_id
-    strong_memoize :verse_id do
-      return params[:verse_id].to_i if params[:verse_id]
-
-      if (key = params[:verse_key])
-        QuranUtils::Quran.get_ayah_id_from_key(key)
-      end
-    end
-  end
-
   def timestamp_from
     params[:timestamp].to_i if params[:timestamp].present?
   end
