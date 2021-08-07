@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_02_034140) do
+ActiveRecord::Schema.define(version: 2021_08_05_135452) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -57,6 +57,8 @@ ActiveRecord::Schema.define(version: 2021_07_02_034140) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "resource_content_id"
+    t.integer "duration_ms"
+    t.string "audio_url"
     t.index ["audio_recitation_id"], name: "index_audio_chapter_audio_files_on_audio_recitation_id"
     t.index ["chapter_id"], name: "index_audio_chapter_audio_files_on_chapter_id"
     t.index ["format"], name: "index_audio_chapter_audio_files_on_format"
@@ -131,6 +133,28 @@ ActiveRecord::Schema.define(version: 2021_07_02_034140) do
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "audio_segments", force: :cascade do |t|
+    t.bigint "audio_file_id"
+    t.bigint "surah_recitation_id"
+    t.bigint "chapter_id"
+    t.bigint "verse_id"
+    t.integer "verse_number"
+    t.integer "start_timestamp"
+    t.integer "end_timestamp"
+    t.jsonb "segments", default: []
+    t.integer "duration"
+    t.float "percentile"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "verse_key"
+    t.index ["audio_file_id", "start_timestamp", "end_timestamp"], name: "index_on_audio_segments_timing"
+    t.index ["audio_file_id"], name: "index_audio_segments_on_audio_file_id"
+    t.index ["chapter_id"], name: "index_audio_segments_on_chapter_id"
+    t.index ["surah_recitation_id", "chapter_id", "verse_id", "verse_number"], name: "index_on_audio_segments_chapter"
+    t.index ["surah_recitation_id"], name: "index_audio_segments_on_surah_recitation_id"
+    t.index ["verse_id"], name: "index_audio_segments_on_verse_id"
   end
 
   create_table "author", primary_key: "author_id", id: :integer, default: -> { "nextval('_author_author_id_seq'::regclass)" }, force: :cascade do |t|

@@ -17,7 +17,23 @@ json.object! do
     end
   end
 
-  json.default_slug do |slug|
+  if render_translated_names
+    json.translated_names chapter.translated_names do |translated_name|
+      json.object! do
+        json.extract! translated_name, :language_name, :name
+      end
+    end
+  end
+
+  if render_info
+    json.chapter_info do
+      json.object! do
+        json.extract! @presenter.chapter_info, :source, :text, :short_text
+      end
+    end
+  end
+
+  json.default_slug do
     json.object! do
       json.extract! chapter.default_slug, :slug, :locale
     end

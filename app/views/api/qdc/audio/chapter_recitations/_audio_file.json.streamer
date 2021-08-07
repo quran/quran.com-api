@@ -3,7 +3,7 @@ json.object! do
                 :chapter_id,
                 :file_size,
                 :format,
-                :duration
+                :audio_url
 
-  json.audio_url audio_file.audio_url(relative_path: recitation.relative_path)
+  json.duration audio_file.duration_ms
 end
