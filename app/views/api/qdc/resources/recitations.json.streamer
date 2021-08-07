@@ -1,0 +1,19 @@
+json.object! do
+  json.recitations do
+    json.array! @recitations do |recitation|
+      json.object! do
+        json.extract! recitation,
+                      :id,
+                      :reciter_name,
+                      :style
+
+        json.translated_name do
+          translated_name = recitation.reciter.translated_name
+          json.object! do
+            json.extract! translated_name, :name, :language_name
+          end
+        end
+      end
+    end
+  end
+end

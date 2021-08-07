@@ -3,11 +3,13 @@
 # Table name: audio_chapter_audio_files
 #
 #  id                  :bigint           not null, primary key
+#  audio_url           :string
 #  bit_rate            :integer
 #  download_count      :integer
 #  duration            :integer
+#  duration_ms         :integer
 #  file_name           :string
-#  file_size           :integer
+#  file_size           :float
 #  format              :string
 #  metadata            :jsonb
 #  mime_type           :string

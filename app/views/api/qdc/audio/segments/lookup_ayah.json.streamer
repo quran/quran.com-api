@@ -1,0 +1,18 @@
+segment = @presenter.lookup_ayah
+
+json.object! do
+  json.result do
+    json.object! do
+      if segment
+        json.set! segment.verse_key do
+          json.object! do
+            json.start_timestamp segment.start_timestamp
+            json.end_timestamp segment.end_timestamp
+            json.duration segment.duration
+            json.segments segment.segments
+          end
+        end
+      end
+    end
+  end
+end

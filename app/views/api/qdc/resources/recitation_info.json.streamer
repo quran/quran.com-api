@@ -1,0 +1,16 @@
+json.object! do
+  json.info do
+    json.object! do
+      json.id @recitation.id
+      json.reciter_name @recitation.reciter_name
+      json.info @resource.resource_info
+
+      json.translated_name do
+        translated_name = @resource.translated_name
+        json.object! do
+          json.extract! translated_name, :name, :language_name
+        end
+      end
+    end
+  end
+end

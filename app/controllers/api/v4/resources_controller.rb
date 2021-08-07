@@ -2,6 +2,11 @@
 
 module Api::V4
   class ResourcesController < ApiController
+    def chapter_reciters
+      @presenter = ::Audio::RecitationPresenter.new(params)
+      render
+    end
+
     def translations
       list = ResourceContent
                  .eager_load(:translated_name)
@@ -100,7 +105,6 @@ module Api::V4
       render
     end
 
-    protected
     def fetch_script_type
       script = params[:script]
 

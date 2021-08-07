@@ -41,6 +41,7 @@ namespace :v4 do
     get :languages
     get :chapter_infos
     get :verse_media
+    get :chapter_reciters
   end
 
   # routes for fetching all records of one resource.
@@ -102,5 +103,12 @@ namespace :v4 do
     get 'by_ayah/:ayah_key', action: 'by_ayah'
   end
 
+  # Surah audio
+  scope 'chapter_recitations/:id', controller: 'chapter_recitations' do
+    get '/', action: 'index'
+    get '/:chapter_number', action: 'by_chapter'
+  end
+
   get 'ping', to: 'ping#ping'
+  get '/', to: 'ping#ping'
 end

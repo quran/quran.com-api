@@ -1,0 +1,9 @@
+if @presenter.render_raw_response?
+  json.object! do
+    json.result render(partial: 'raw_response', formats: ['html'])
+  end
+else
+  json.object! do
+    json.result render('json_response')
+  end
+end

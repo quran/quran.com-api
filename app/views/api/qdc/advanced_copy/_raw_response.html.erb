@@ -1,0 +1,14 @@
+<%
+  # NOTE: Please don't "Fix" indentation of this file. We don't want indentation in the result
+  include_arabic = @presenter.include_mushaf?
+  include_footnote = @presenter.include_footnote?
+  include_translations = @presenter.include_translations?
+  mushaf_type = @presenter.get_mushaf_type
+%>
+
+<% @verses.each do |verse| %>
+<%= verse.verse_key %>
+<%= verse.get_text(mushaf_type) if include_arabic %>
+
+<%= render 'translations', verse: verse, include_footnote: include_footnote if include_translations %>
+<% end %>

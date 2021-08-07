@@ -1,0 +1,16 @@
+json.object! do
+  json.extract! recitation,
+                :id,
+                :name,
+                :arabic_name,
+                :relative_path,
+                :file_formats,
+                :section_id,
+                :description,
+                :torrent_filename,
+                :torrent_info_hash,
+                :torrent_seeders,
+                :torrent_leechers
+
+  json.home recitation.home?
+end

@@ -9,12 +9,14 @@
 #  style               :string
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
+#  qirat_type_id       :integer
 #  recitation_style_id :integer
 #  reciter_id          :integer
 #  resource_content_id :integer
 #
 # Indexes
 #
+#  index_recitations_on_qirat_type_id        (qirat_type_id)
 #  index_recitations_on_recitation_style_id  (recitation_style_id)
 #  index_recitations_on_reciter_id           (reciter_id)
 #  index_recitations_on_resource_content_id  (resource_content_id)

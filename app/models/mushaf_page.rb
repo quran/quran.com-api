@@ -17,5 +17,5 @@
 #
 #  index_muhsaf_pages_on_page_number  (page_number)
 #
-class MuhsafPage < ApplicationRecord
+class MushafPage < ApplicationRecord
 end

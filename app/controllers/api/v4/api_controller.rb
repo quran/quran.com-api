@@ -24,23 +24,30 @@ module Api::V4
                      .one_verse
                      .approved
 
-      find_resource(approved, params[:translation_id])
+      find_resource(approved, params[:translation_id], true)
     end
 
     def fetch_tafsir_resource
       approved = ResourceContent
-                     .tafsirs
-                     .one_verse
-                     .approved
+                  .eager_load(:translated_name)
+                  .tafsirs
+                  .one_verse
+                  .approved
 
-      find_resource(approved, params[:tafsir_id])
+      find_resource(approved, params[:tafsir_id], true)
     end
 
-    def find_resource(list, key)
+    def find_resource(list, key, load_translated_name = false)
       with_ids = list.where(id: key.to_i)
       with_slug = list.where(slug: key)
 
-      with_ids.or(with_slug).first
+      list = with_ids.or(with_slug)
+
+      if load_translated_name
+        list = eager_load_translated_name(list.eager_load(:translated_name))
+      end
+
+      list.first
     end
   end
 end

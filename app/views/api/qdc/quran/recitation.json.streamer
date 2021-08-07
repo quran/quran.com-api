@@ -1,0 +1,23 @@
+fields = @presenter.audio_fields
+
+json.object! do
+  json.audio_files do
+    json.array! @audio_files do |audio_file|
+      json.object! do
+        json.extract! audio_file,
+                      :verse_key,
+                      :url,
+                      *fields
+      end
+    end
+  end
+
+  if @recitation
+    json.meta do
+      json.object! do
+        json.reciter_name @recitation.reciter_name
+        json.recitation_style @recitation.style
+      end
+    end
+  end
+end

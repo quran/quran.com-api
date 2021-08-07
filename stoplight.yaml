@@ -1,4 +1,3 @@
-## https://api.stoplight.io/v1/versions/h5SSRB7BdLAHLPLjT/export/stoplight.yaml
 swagger: '2.0'
 info:
   version: v4
@@ -12,6 +11,111 @@ schemes:
 produces:
   - application/json
 paths:
+  '/chapter_recitations/{id}/{chapter_number}':
+    parameters:
+      - name: id
+        in: path
+        description: |-
+          Id of reciter for which you want to get the recitations. You can fetch list of all reciters from this endpoint
+
+          #endpoint:ZQvDmxKn7fQwLrAfy
+        required: true
+        type: number
+      - name: chapter_number
+        in: path
+        required: true
+        type: number
+        minimum: 1
+        maximum: 114
+    get:
+      operationId: LIST-chapters
+      summary: Get single Surah audio for specific reciter
+      tags:
+        - Chapters
+      description: 'Get list of #model:Qi27pabqjXibG5CtZ for specific reciter'
+      responses:
+        '200':
+          description: ''
+          schema:
+            type: object
+            properties:
+              audio_file:
+                $ref: '#/definitions/chapter-recitation'
+          examples:
+            application/json:
+              audio_file:
+                id: 43
+                chapter_id: 22
+                file_size: 19779712
+                format: mp3
+                total_files: 1
+                audio_url: 'https://download.quranicaudio.com/quran/abdullaah_3awwaad_al-juhaynee//022.mp3'
+      x-stoplight:
+        id: LIST-chapters
+        beforeScript: null
+        afterScript: null
+        public: true
+        mock:
+          enabled: false
+          dynamic: false
+          statusCode: 200
+  '/chapter_recitations/{id}':
+    parameters:
+      - name: id
+        in: path
+        description: |-
+          Id of reciter for which you want to get the recitations. You can fetch list of all reciters from this endpoint
+
+          #endpoint:ZQvDmxKn7fQwLrAfy
+        required: true
+        type: number
+    get:
+      operationId: LIST-chapters
+      summary: List of all surah audio files for specific reciter
+      tags:
+        - Chapters
+      description: 'Get list of #model:Qi27pabqjXibG5CtZ for specific reciter'
+      parameters:
+        - name: language
+          in: query
+          type: string
+          default: en
+      responses:
+        '200':
+          description: ''
+          schema:
+            type: object
+            properties:
+              audio_files:
+                type: array
+                items:
+                  $ref: '#/definitions/chapter-recitation'
+            required:
+              - audio_files
+          examples:
+            application/json:
+              audio_files:
+                - id: 43
+                  chapter_id: 22
+                  file_size: 19779712
+                  format: mp3
+                  total_files: 1
+                  audio_url: 'https://download.quranicaudio.com/quran/abdullaah_3awwaad_al-juhaynee//022.mp3'
+                - id: 87
+                  chapter_id: 44
+                  file_size: 6453376
+                  format: mp3
+                  total_files: 1
+                  audio_url: 'https://download.quranicaudio.com/quran/abdullaah_3awwaad_al-juhaynee//044.mp3'
+      x-stoplight:
+        id: LIST-chapters
+        beforeScript: null
+        afterScript: null
+        public: true
+        mock:
+          enabled: false
+          dynamic: false
+          statusCode: 200
   /chapters:
     get:
       operationId: LIST-chapters
@@ -1337,44 +1441,44 @@ paths:
   /quran/verses/imlaei:
     get:
       operationId: QURAN-verses-Imlaei
-      summary: Get Imlaei Script of ayah
+      summary: Get Imlaei Simple text of ayah
       tags:
         - Quran
-      description: 'Get Imlaei script of ayah. Use query strings to filter results, leave all query string blank if you want to fetch Imlaei script of whole Quran.'
+      description: Get Imlaei simple script(without tashkiq/diacritical marks) of ayah.
       parameters:
         - name: chapter_number
           in: query
-          description: If you want to get Imlaei script of a specific surah.
+          description: If you want to get text of a specific surah.
           type: integer
           minimum: 1
           maximum: 114
         - name: juz_number
           in: query
-          description: If you want to get Imlaei script of a specific juz.
+          description: If you want to get text of a specific juz.
           type: integer
           minimum: 1
           maximum: 30
         - name: page_number
           in: query
-          description: If you want to get Imlaei script of a Madani Muhsaf page
+          description: If you want to get text of a Madani Muhsaf page
           type: integer
           minimum: 1
           maximum: 604
         - name: hizb_number
           in: query
-          description: If you want to get Imlaei script of a specific hizb.
+          description: If you want to get text of a specific hizb.
           type: integer
           minimum: 1
           maximum: 60
         - name: rub_number
           in: query
-          description: If you want to get Imlaei script of a specific rub.
+          description: If you want to get text of a specific rub.
           type: integer
           minimum: 1
           maximum: 240
         - name: verse_key
           in: query
-          description: If you want to get Imlaei script of a specific ayah.
+          description: If you want to get text of a specific ayah.
           type: string
       responses:
         '200':
@@ -1402,6 +1506,47 @@ paths:
       x-stoplight:
         id: QURAN-verses-Imlaei
         beforeScript: null
+        afterScript: null
+        public: true
+        mock:
+          enabled: false
+          dynamic: false
+          statusCode: 200
+  /resources/recitations:
+    get:
+      operationId: recitations
+      summary: Recitations
+      tags:
+        - Quran
+      description: Get list of available Recitations.
+      parameters:
+        - name: language
+          in: query
+          description: Name of reciters in specific language. Will fallback to English if we don't have names in specific language.
+          type: string
+          default: en
+      responses:
+        '200':
+          description: ''
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/recitation'
+          examples:
+            application/json:
+              recitations:
+                - id: 1
+                  reciter_name: AbdulBaset AbdulSamad
+                  style: Mujawwad
+                  translated_name:
+                    name: AbdulBaset AbdulSamad
+                    language_name: english
+      x-stoplight:
+        id: recitations
+        beforeScript: |-
+          function (ctx, request) {
+            // Your javascript code here.
+          }
         afterScript: null
         public: true
         mock:
@@ -1513,13 +1658,108 @@ paths:
           enabled: false
           dynamic: false
           statusCode: 200
-  /resources/recitations:
+  '/quran/translations/{translation_id}':
+    parameters:
+      - name: translation_id
+        in: path
+        description: Recitation id
+        required: true
+        type: number
     get:
       operationId: recitations
-      summary: Recitations
+      summary: Get a single translation
       tags:
         - Quran
-      description: Get list of available Recitations.
+      description: |-
+        Get a single #model:XCinMTfQdCrC3D3vH of all ayah.
+
+        See #endpoint:N4JAF8phDshhyrBHs endpoint to fetch available translations.
+
+        You can also include more fields of translation using `fields` query string.
+      parameters:
+        - name: fields
+          in: query
+          description: comma seperated fields of translation.
+          type: string
+        - name: chapter_number
+          in: query
+          description: If you want to get translation of a specific surah.
+          type: integer
+          minimum: 1
+          maximum: 114
+        - name: juz_number
+          in: query
+          description: If you want to get translation of a specific juz.
+          type: integer
+          minimum: 1
+          maximum: 30
+        - name: page_number
+          in: query
+          description: If you want to get translation of a Madani Muhsaf page
+          type: integer
+          minimum: 1
+          maximum: 604
+        - name: hizb_number
+          in: query
+          description: If you want to get translation of a specific hizb.
+          type: integer
+          minimum: 1
+          maximum: 60
+        - name: rub_number
+          in: query
+          description: If you want to get translation of a specific rub.
+          type: integer
+          minimum: 1
+          maximum: 240
+        - name: verse_key
+          in: query
+          description: If you want to get translation of a specific ayah.
+          type: string
+      responses:
+        '200':
+          description: ''
+          schema:
+            type: object
+            properties:
+              translations:
+                type: array
+                items:
+                  $ref: '#/definitions/translation'
+              meta:
+                type: object
+                properties:
+                  translation_name:
+                    type: string
+                  author_name:
+                    type:
+                      - 'null'
+                      - string
+            required:
+              - translations
+          examples:
+            application/json:
+              translations:
+                - resource_id: 131
+                  text: 'In the Name of Allah—the Most Compassionate, Most Merciful.'
+              meta:
+                translation_name: 'Dr. Mustafa Khattab, the Clear Quran'
+                author_name: Dr. Mustafa Khattab
+      x-stoplight:
+        id: recitations
+        beforeScript: null
+        afterScript: null
+        public: true
+        mock:
+          enabled: false
+          dynamic: false
+          statusCode: 200
+  /resources/chapter_reciters:
+    get:
+      operationId: recitations
+      summary: List of Chapter Reciters
+      tags:
+        - Quran
+      description: 'Get list of #model:Q4runBANeeCjwqfcT.'
       parameters:
         - name: language
           in: query
@@ -1530,18 +1770,33 @@ paths:
         '200':
           description: ''
           schema:
-            type: array
-            items:
-              $ref: '#/definitions/recitation'
+            type: object
+            properties:
+              reciters:
+                type: array
+                items:
+                  $ref: '#/definitions/chapter-reciters'
           examples:
             application/json:
-              recitations:
-                - id: 1
-                  reciter_name: AbdulBaset AbdulSamad
-                  style: Mujawwad
-                  translated_name:
-                    name: AbdulBaset AbdulSamad
-                    language_name: english
+              reciters:
+                - id: 3
+                  name: Abu Bakr al-Shatri
+                  arabic_name: أبو بكر الشاطرى
+                  relative_path: abu_bakr_ash-shaatree/
+                  format: mp3
+                  files_size: 1258422528
+                - id: 4
+                  name: Sa`ud ash-Shuraym
+                  arabic_name: سعود الشريم
+                  relative_path: sa3ood_al-shuraym/
+                  format: mp3
+                  files_size: 1258422528
+                - id: 5
+                  name: Mishari Rashid al-`Afasy
+                  arabic_name: مشاري راشد العفاسي
+                  relative_path: mishaari_raashid_al_3afaasee/
+                  format: mp3
+                  files_size: 1258422528
       x-stoplight:
         id: recitations
         beforeScript: |-
@@ -1641,101 +1896,6 @@ paths:
               meta:
                 tafsir_name: Tafsir Ibn Kathir
                 author_name: Hafiz Ibn Kathir
-      x-stoplight:
-        id: recitations
-        beforeScript: null
-        afterScript: null
-        public: true
-        mock:
-          enabled: false
-          dynamic: false
-          statusCode: 200
-  '/quran/translations/{translation_id}':
-    parameters:
-      - name: translation_id
-        in: path
-        description: Recitation id
-        required: true
-        type: number
-    get:
-      operationId: recitations
-      summary: Get a single translation
-      tags:
-        - Quran
-      description: |-
-        Get a single #model:XCinMTfQdCrC3D3vH of all ayah.
-
-        See #endpoint:N4JAF8phDshhyrBHs endpoint to fetch available translations.
-
-        You can also include more fields of translation using `fields` query string.
-      parameters:
-        - name: fields
-          in: query
-          description: comma seperated fields of translation.
-          type: string
-        - name: chapter_number
-          in: query
-          description: If you want to get translation of a specific surah.
-          type: integer
-          minimum: 1
-          maximum: 114
-        - name: juz_number
-          in: query
-          description: If you want to get translation of a specific juz.
-          type: integer
-          minimum: 1
-          maximum: 30
-        - name: page_number
-          in: query
-          description: If you want to get translation of a Madani Muhsaf page
-          type: integer
-          minimum: 1
-          maximum: 604
-        - name: hizb_number
-          in: query
-          description: If you want to get translation of a specific hizb.
-          type: integer
-          minimum: 1
-          maximum: 60
-        - name: rub_number
-          in: query
-          description: If you want to get translation of a specific rub.
-          type: integer
-          minimum: 1
-          maximum: 240
-        - name: verse_key
-          in: query
-          description: If you want to get translation of a specific ayah.
-          type: string
-      responses:
-        '200':
-          description: ''
-          schema:
-            type: object
-            properties:
-              translations:
-                type: array
-                items:
-                  $ref: '#/definitions/translation'
-              meta:
-                type: object
-                properties:
-                  translation_name:
-                    type: string
-                  author_name:
-                    type:
-                      - 'null'
-                      - string
-            required:
-              - translations
-          examples:
-            application/json:
-              translations:
-                - resource_id: 131
-                  text: 'In the Name of Allah—the Most Compassionate, Most Merciful.'
-              meta:
-                translation_name: 'Dr. Mustafa Khattab, the Clear Quran'
-                author_name: Dr. Mustafa Khattab
       x-stoplight:
         id: recitations
         beforeScript: null
@@ -1910,18 +2070,364 @@ paths:
           enabled: false
           dynamic: false
           statusCode: 200
-  '/resources/translations/{translation_id}/info':
+  '/recitations/{recitation_id}/by_chapter/{chapter_number}':
     parameters:
-      - name: translation_id
+      - name: recitation_id
+        in: path
+        description: 'Recitation Id, you can get list of all ayah by ayah recitations using this endpoint #endpoint:HLbauN2sdGitPQPPL'
+        required: true
+        type: number
+      - name: chapter_number
+        in: path
+        required: true
+        type: number
+        minimum: 1
+        maximum: 114
+    get:
+      operationId: LIST-surah-recitation
+      summary: Get Ayah recitations for specific Surah
+      tags:
+        - Audio Recitations
+      description: 'Get list of ayah #model:knzdXGgyjYnAqbhGX for a Surah.'
+      responses:
+        '200':
+          description: ''
+          schema:
+            type: object
+            properties:
+              audio_files:
+                type: array
+                items:
+                  $ref: '#/definitions/audiofile'
+              pagination:
+                $ref: '#/definitions/pagination'
+          examples:
+            application/json:
+              audio_files:
+                - verse_key: '1:1'
+                  url: AbdulBaset/Mujawwad/mp3/001001.mp3
+                - verse_key: '1:2'
+                  url: AbdulBaset/Mujawwad/mp3/001002.mp3
+                - verse_key: '1:3'
+                  url: AbdulBaset/Mujawwad/mp3/001003.mp3
+              pagination:
+                per_page: 10
+                current_page: 1
+                next_page: 2
+                total_pages: 2
+                total_records: 20
+      x-stoplight:
+        id: LIST-surah-recitation
+        beforeScript: null
+        afterScript: null
+        public: true
+        mock:
+          enabled: false
+          dynamic: false
+          statusCode: 200
+  '/recitations/{recitation_id}/by_juz/{juz_number}':
+    parameters:
+      - name: recitation_id
+        in: path
+        description: 'Recitation Id, you can get list of all ayah by ayah recitations using this endpoint #endpoint:HLbauN2sdGitPQPPL'
+        required: true
+        type: number
+      - name: juz_number
+        in: path
+        required: true
+        type: number
+        minimum: 1
+        maximum: 30
+    get:
+      operationId: LIST-juz-recitaiton
+      summary: Get Ayah recitations for specific Juz
+      tags:
+        - Audio Recitations
+      description: 'Get list of ayah #model:knzdXGgyjYnAqbhGX for a juz.'
+      responses:
+        '200':
+          description: ''
+          schema:
+            type: object
+            properties:
+              audio_files:
+                type: array
+                items:
+                  $ref: '#/definitions/audiofile'
+              pagination:
+                $ref: '#/definitions/pagination'
+            required:
+              - audio_files
+              - pagination
+          examples:
+            application/json:
+              audio_files:
+                - verse_key: '1:1'
+                  url: AbdulBaset/Mujawwad/mp3/001001.mp3
+                - verse_key: '1:2'
+                  url: AbdulBaset/Mujawwad/mp3/001002.mp3
+                - verse_key: '1:3'
+                  url: AbdulBaset/Mujawwad/mp3/001003.mp3
+              pagination:
+                per_page: 10
+                current_page: 1
+                next_page: 2
+                total_pages: 2
+                total_records: 20
+      x-stoplight:
+        id: LIST-juz-recitaiton
+        beforeScript: null
+        afterScript: null
+        public: true
+        mock:
+          enabled: false
+          dynamic: false
+          statusCode: 200
+  '/recitations/{recitation_id}/by_page/{page_number}':
+    parameters:
+      - name: recitation_id
+        in: path
+        description: 'Recitation Id, you can get list of all ayah by ayah recitations using this endpoint #endpoint:HLbauN2sdGitPQPPL'
+        required: true
+        type: number
+      - name: page_number
+        in: path
+        required: true
+        type: number
+        minimum: 1
+        maximum: 604
+    get:
+      operationId: LIST-page-recitaiton
+      summary: Get Ayah recitations for specific Madani Mushaf page
+      tags:
+        - Audio Recitations
+      description: 'Get list of ayah #model:knzdXGgyjYnAqbhGX for a Madani Mushaf page.'
+      responses:
+        '200':
+          description: ''
+          schema:
+            type: object
+            properties:
+              audio_files:
+                type: array
+                items:
+                  $ref: '#/definitions/audiofile'
+              pagination:
+                $ref: '#/definitions/pagination'
+            required:
+              - audio_files
+              - pagination
+          examples:
+            application/json:
+              audio_files:
+                - verse_key: '1:1'
+                  url: AbdulBaset/Mujawwad/mp3/001001.mp3
+                - verse_key: '1:2'
+                  url: AbdulBaset/Mujawwad/mp3/001002.mp3
+                - verse_key: '1:3'
+                  url: AbdulBaset/Mujawwad/mp3/001003.mp3
+              pagination:
+                per_page: 10
+                current_page: 1
+                next_page: 2
+                total_pages: 15
+                total_records: 148
+      x-stoplight:
+        id: LIST-page-recitaiton
+        beforeScript: null
+        afterScript: null
+        public: true
+        mock:
+          enabled: false
+          dynamic: false
+          statusCode: 200
+  '/recitations/{recitation_id}/by_rub/{rub_number}':
+    parameters:
+      - name: recitation_id
+        in: path
+        description: 'Recitation Id, you can get list of all ayah by ayah recitations using this endpoint #endpoint:HLbauN2sdGitPQPPL'
+        required: true
+        type: number
+      - name: rub_number
+        in: path
+        required: true
+        type: number
+        minimum: 1
+        maximum: 240
+    get:
+      operationId: LIST-rub-recitaiton
+      summary: Get Ayah recitations for specific Rub
+      tags:
+        - Audio Recitations
+      description: 'Get list of ayah #model:knzdXGgyjYnAqbhGX for a Rub.'
+      responses:
+        '200':
+          description: ''
+          schema:
+            type: object
+            properties:
+              audio_files:
+                type: array
+                items:
+                  $ref: '#/definitions/audiofile'
+              pagination:
+                $ref: '#/definitions/pagination'
+            required:
+              - audio_files
+              - pagination
+          examples:
+            application/json:
+              audio_files:
+                - verse_key: '1:1'
+                  url: AbdulBaset/Mujawwad/mp3/001001.mp3
+                - verse_key: '1:2'
+                  url: AbdulBaset/Mujawwad/mp3/001002.mp3
+                - verse_key: '1:3'
+                  url: AbdulBaset/Mujawwad/mp3/001003.mp3
+              pagination:
+                per_page: 10
+                current_page: 1
+                next_page: 2
+                total_pages: 15
+                total_records: 148
+      x-stoplight:
+        id: LIST-rub-recitaiton
+        beforeScript: null
+        afterScript: null
+        public: true
+        mock:
+          enabled: false
+          dynamic: false
+          statusCode: 200
+  '/recitations/{recitation_id}/by_hizb/{hizb_number}':
+    parameters:
+      - name: recitation_id
+        in: path
+        description: 'Recitation Id, you can get list of all ayah by ayah recitations using this endpoint #endpoint:HLbauN2sdGitPQPPL'
+        required: true
+        type: number
+      - name: hizb_number
+        in: path
+        required: true
+        type: number
+        minimum: 1
+        maximum: 60
+    get:
+      operationId: LIST-hizb-recitaiton
+      summary: Get Ayah recitations for specific Hizb
+      tags:
+        - Audio Recitations
+      description: 'Get list of ayah #model:knzdXGgyjYnAqbhGX for a Hizb.'
+      responses:
+        '200':
+          description: ''
+          schema:
+            type: object
+            properties:
+              audio_files:
+                type: array
+                items:
+                  $ref: '#/definitions/audiofile'
+              pagination:
+                $ref: '#/definitions/pagination'
+            required:
+              - audio_files
+              - pagination
+          examples:
+            application/json:
+              audio_files:
+                - verse_key: '1:1'
+                  url: AbdulBaset/Mujawwad/mp3/001001.mp3
+                - verse_key: '1:2'
+                  url: AbdulBaset/Mujawwad/mp3/001002.mp3
+                - verse_key: '1:3'
+                  url: AbdulBaset/Mujawwad/mp3/001003.mp3
+              pagination:
+                per_page: 10
+                current_page: 1
+                next_page: 2
+                total_pages: 15
+                total_records: 148
+      x-stoplight:
+        id: LIST-hizb-recitaiton
+        beforeScript: null
+        afterScript: null
+        public: true
+        mock:
+          enabled: false
+          dynamic: false
+          statusCode: 200
+  '/recitations/{recitation_id}/by_ayah/{ayah_key}':
+    parameters:
+      - name: recitation_id
+        in: path
+        description: 'Recitation Id, you can get list of all ayah by ayah recitations using this endpoint #endpoint:HLbauN2sdGitPQPPL'
+        required: true
+        type: number
+      - name: ayah_key
+        in: path
+        description: 'Ayah key is combination of surah number and  ayah number. e.g 1:1 will be first Ayah of first Surah'
+        required: true
+        type: string
+        minimum: 1
+        maximum: 60
+    get:
+      operationId: LIST-ayah-recitaiton
+      summary: Get Ayah recitations for specific Ayah
+      tags:
+        - Audio Recitations
+      description: 'Get list of ayah #model:knzdXGgyjYnAqbhGX for a Hizb.'
+      responses:
+        '200':
+          description: ''
+          schema:
+            type: object
+            properties:
+              audio_files:
+                type: array
+                items:
+                  $ref: '#/definitions/audiofile'
+              pagination:
+                $ref: '#/definitions/pagination'
+            required:
+              - audio_files
+              - pagination
+          examples:
+            application/json:
+              audio_files:
+                - verse_key: '1:1'
+                  url: AbdulBaset/Mujawwad/mp3/001001.mp3
+                - verse_key: '1:2'
+                  url: AbdulBaset/Mujawwad/mp3/001002.mp3
+                - verse_key: '1:3'
+                  url: AbdulBaset/Mujawwad/mp3/001003.mp3
+              pagination:
+                per_page: 10
+                current_page: 1
+                next_page: 2
+                total_pages: 15
+                total_records: 148
+      x-stoplight:
+        id: LIST-ayah-recitaiton
+        beforeScript: null
+        afterScript: null
+        public: true
+        mock:
+          enabled: false
+          dynamic: false
+          statusCode: 200
+  '/resources/recitations/{recitation_id}/info':
+    parameters:
+      - name: recitation_id
         in: path
         required: true
         type: string
     get:
       operationId: RECITATION-info
-      summary: Translation Info
+      summary: Recitation Info
       tags:
         - Resources
-      description: 'Get information of a specific translation. Could include detail about the author, publishing date and publisher etc.'
+      description: 'Get information of a specific recitation. Could include detail about the reciter, recitation style. When and who recorded it etc.'
       responses:
         '200':
           description: ''
@@ -1951,18 +2457,18 @@ paths:
           enabled: false
           dynamic: false
           statusCode: 200
-  '/resources/recitations/{recitation_id}/info':
+  '/resources/translations/{translation_id}/info':
     parameters:
-      - name: recitation_id
+      - name: translation_id
         in: path
         required: true
         type: string
     get:
       operationId: RECITATION-info
-      summary: Recitation Info
+      summary: Translation Info
       tags:
         - Resources
-      description: 'Get information of a specific recitation. Could include detail about the reciter, recitation style. When and who recorded it etc.'
+      description: 'Get information of a specific translation. Could include detail about the author, publishing date and publisher etc.'
       responses:
         '200':
           description: ''
@@ -3013,6 +3519,69 @@ definitions:
       id: juz
       name: Juz
       public: true
+  chapter-recitation:
+    title: Chapter Recitation
+    type: object
+    properties:
+      id:
+        type: integer
+      chapter_id:
+        type: integer
+      file_size:
+        type: integer
+      format:
+        type: string
+      total_files:
+        type: integer
+      audio_url:
+        type: string
+    example:
+      id: 1
+      chapter_id: 1
+      file_size: 710784
+      format: mp3
+      total_files: 1
+      audio_url: 'https://download.quranicaudio.com/quran/abdullaah_3awwaad_al-juhaynee//001.mp3'
+    x-stoplight:
+      id: chapter-recitation
+      name: Chapter Recitation
+      public: true
+  chapter-reciters:
+    title: Chapter Reciters
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Reciter ID
+      name:
+        type: string
+        description: Name of reciter in English
+      arabic_name:
+        type: string
+        description: 'Reciter name in Arabic '
+      relative_path:
+        type: string
+      format:
+        type: string
+        description: Audio files format
+        default: mp3
+      files_size:
+        type: number
+        description: Total size of all audio files in KBs
+    required:
+      - id
+      - name
+    example:
+      id: 3
+      name: Abu Bakr al-Shatri
+      arabic_name: أبو بكر الشاطرى
+      relative_path: abu_bakr_ash-shaatree/
+      format: mp3
+      files_size: 1258422528
+    x-stoplight:
+      id: chapter-reciters
+      name: Chapter Reciters
+      public: true
 x-stoplight:
   version:
     groups:
@@ -3147,6 +3716,40 @@ x-stoplight:
             - _id: eLvpfGQNAhncCxBdr
               type: endpoints
           name: Translations
+        - divider: false
+          items:
+            - _id: LIST-chapters
+              type: endpoints
+            - _id: LIST-chapters
+              type: endpoints
+            - _id: LIST-surah-recitation
+              type: endpoints
+            - _id: LIST-juz-recitaiton
+              type: endpoints
+            - _id: LIST-page-recitaiton
+              type: endpoints
+            - _id: LIST-rub-recitaiton
+              type: endpoints
+            - _id: LIST-hizb-recitaiton
+              type: endpoints
+            - _id: LIST-ayah-recitaiton
+              type: endpoints
+          name: Audio Recitations
+          description: |-
+            We've two types of audio recitatins
+
+            - Surah by Surah recitations #model:Qi27pabqjXibG5CtZ
+            - Ayah by Ayah recitations  #model:knzdXGgyjYnAqbhGX
+
+
+            For Surah by surah recitation you can get #endpoint:gXoJvTg6Zy2PwYQtS or #endpoint:YbBRBR9XF5JtYNLJP
+
+            For Ayah by ayah recitations, you can get recitation for:
+
+            - Specific ayah
+            - Surah
+            - Juz
+            - Madani Mushaf page
         - name: Resources
           description: null
           divider: false
@@ -3171,6 +3774,8 @@ x-stoplight:
               type: endpoints
             - _id: VERSE-media
               type: endpoints
+            - _id: recitations
+              type: endpoints
         - name: Search
           description: null
           divider: false
@@ -3188,6 +3793,10 @@ x-stoplight:
             - _id: d3vNhGtgepN6JkpX9
               type: schemas
             - _id: chapter-info
+              type: schemas
+            - _id: chapter-recitation
+              type: schemas
+            - _id: chapter-reciters
               type: schemas
             - _id: verse
               type: schemas

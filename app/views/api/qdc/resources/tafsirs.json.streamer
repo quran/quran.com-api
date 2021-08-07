@@ -1,0 +1,21 @@
+json.object! do
+  json.tafsirs do
+    json.array! @tafsirs do |tafsir|
+      json.object! do
+        json.extract! tafsir,
+                      :id,
+                      :name,
+                      :author_name,
+                      :slug,
+                      :language_name
+
+        json.translated_name do
+          translated_name = tafsir.translated_name
+          json.object! do
+            json.extract! translated_name, :name, :language_name
+          end
+        end
+      end
+    end
+  end
+end

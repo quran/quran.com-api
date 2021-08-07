@@ -24,6 +24,7 @@ Rails.application.routes.draw do
   end
 
   namespace :api, defaults: {format: :json} do
+    draw_routes :qdc
     draw_routes :v3
     draw_routes :v4
   end

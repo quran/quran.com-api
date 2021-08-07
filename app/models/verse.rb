@@ -12,6 +12,14 @@
 #  image_width          :integer
 #  juz_number           :integer
 #  page_number          :integer
+#  qpc_uthmani_bazzi    :string
+#  qpc_uthmani_doori    :string
+#  qpc_uthmani_hafs     :string
+#  qpc_uthmani_qaloon   :string
+#  qpc_uthmani_qumbul   :string
+#  qpc_uthmani_shouba   :string
+#  qpc_uthmani_soosi    :string
+#  qpc_uthmani_warsh    :string
 #  rub_number           :integer
 #  sajdah_number        :integer
 #  sajdah_type          :string
@@ -67,5 +75,30 @@ class Verse < ApplicationRecord
 
   def self.find_by_id_or_key(id)
     where(verse_key: id).or(where(id: id)).first
+  end
+
+  def get_page_number(version)
+    if :v1 == version
+      v1_page
+    else
+      v2_page
+    end
+  end
+
+  def get_text(version)
+    case version
+    when :v1, :code_v1
+      code_v1
+    when :v2, :code_v2
+      code_v2
+    when :text_uthmani, :uthmani
+      text_uthmani
+    when :uthmani_tajweed, :text_uthmani_tajweed
+      text_uthmani_tajweed
+    when :indopak, :text_indopak
+      text_indopak
+    when :uthmani_hafs, :qpc_uthmani_hafs
+      qpc_uthmani_hafs
+    end
   end
 end

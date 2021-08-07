@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class VersesPresenter < BasePresenter
-  attr_reader :lookahead, :finder
+  attr_reader :lookahead, :finder, :mushaf_type
   VERSE_FIELDS = [
     'chapter_id',
     'text_indopak',
@@ -10,6 +10,7 @@ class VersesPresenter < BasePresenter
     'text_uthmani',
     'text_uthmani_simple',
     'text_uthmani_tajweed',
+    'qpc_uthmani_hafs',
     'image_url',
     'image_width',
     'code_v1',
@@ -28,13 +29,16 @@ class VersesPresenter < BasePresenter
     'text_imlaei',
     'text_uthmani_simple',
     'text_uthmani_tajweed',
+    'qpc_uthmani_hafs',
+    'verse_key',
+    'location',
     'code_v1',
     'code_v2',
-    'verse_key',
-    'class_name',
-    'location',
     'v1_page',
-    'v2_page'
+    'v2_page',
+    'line_number',
+    'line_v2',
+    'line_v1'
   ]
 
   TRANSLATION_FIELDS = [
@@ -70,6 +74,10 @@ class VersesPresenter < BasePresenter
 
     @lookahead = lookahead
     @finder = V4::VerseFinder.new(params)
+  end
+
+  def get_mushaf_type
+    @mushaf_type || :v1
   end
 
   def random_verse(language)
@@ -120,11 +128,16 @@ class VersesPresenter < BasePresenter
   def word_fields
     strong_memoize :word_fields do
       if (fields = params[:word_fields]).presence
-        fields.split(',').select do |field|
+        fields = sanitize_query_fields(fields.split(','))
+        detect_mushaf_type(fields)
+
+        fields.select do |field|
           WORDS_FIELDS.include?(field)
         end
       else
-        ['code_v1']
+        @mushaf_type = :v1
+
+        ['code_v1', 'page_number']
       end
     end
   end
@@ -154,7 +167,12 @@ class VersesPresenter < BasePresenter
   end
 
   def verses(filter, language)
-    finder.load_verses(filter, language, words: render_words?, tafsirs: fetch_tafsirs, translations: fetch_translations, audio: fetch_audio)
+    finder.load_verses(filter,
+                       language,
+                       words: render_words?,
+                       tafsirs: fetch_tafsirs,
+                       translations: fetch_translations,
+                       audio: fetch_audio)
   end
 
   def render_words?
@@ -182,10 +200,40 @@ class VersesPresenter < BasePresenter
   end
 
   protected
+  def detect_mushaf_type(fields)
+    if fields.include?('code_v2')
+      @mushaf_type = :v2
+    elsif fields.include?('text_uthmani')
+      @mushaf_type = :uthmani
+    elsif fields.include?('text_indopak')
+      @mushaf_type = :indopak
+    elsif fields.include?('text_imlaei_simple')
+      @mushaf_type = :imlaei_simple
+    elsif fields.include?('text_imlaei')
+      @mushaf_type = :imlaei
+    elsif fields.include?('text_uthmani_tajweed')
+      @mushaf_type = :uthmani_tajweed
+    elsif fields.include?('qpc_uthmani_hafs')
+      @mushaf_type = :qpc_uthmani_hafs
+    else
+      @mushaf_type = :v1
+    end
+  end
 
   def fetch_tafsirs
     if params[:tafsirs]
-      params[:tafsirs].to_s.split(',')
+      tafsirs = params[:tafsirs].to_s.split(',')
+
+      approved_tafsirs = ResourceContent
+                                .approved
+                                .tafsirs
+                                .one_verse
+
+      params[:tafsirs] = approved_tafsirs
+                                .where(id: tafsirs)
+                                .pluck(:id)
+
+      params[:tafsirs]
     end
   end
 

@@ -5,11 +5,13 @@
 # Table name: audio_chapter_audio_files
 #
 #  id                  :bigint           not null, primary key
+#  audio_url           :string
 #  bit_rate            :integer
 #  download_count      :integer
 #  duration            :integer
+#  duration_ms         :integer
 #  file_name           :string
-#  file_size           :integer
+#  file_size           :float
 #  format              :string
 #  metadata            :jsonb
 #  mime_type           :string
@@ -31,4 +33,13 @@
 class Audio::ChapterAudioFile < ApplicationRecord
   belongs_to :audio_recitation, class_name: 'Audio::Recitation'
   belongs_to :chapter
+
+  def audio_url(relative_path: nil)
+    path = relative_path || get_relative_path
+    "https://download.quranicaudio.com/quran/#{path}/#{file_name}"
+  end
+
+  def get_relative_path
+    audio_recitation.relative_path
+  end
 end

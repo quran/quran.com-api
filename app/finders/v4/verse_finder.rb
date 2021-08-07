@@ -54,8 +54,39 @@ class V4::VerseFinder < ::VerseFinder
 
   protected
 
+  def fetch_advance_copy
+    if params[:from] && params[:to]
+      verse_from = QuranUtils::Quran.get_ayah_id_from_key(params[:from])
+      verse_to = QuranUtils::Quran.get_ayah_id_from_key(params[:to])
+
+      @verses = Verse
+                  .unscoped
+                  .order('verses.verse_index asc')
+                  .where('verses.verse_index >= :from AND verses.verse_index <= :to', from: verse_from, to: verse_to)
+    else
+      @verses = Verse.none
+    end
+
+    @verses
+  end
+
+  def fetch_filter
+    utils = QuranUtils::VerseRanges.new
+    ids = utils.get_ids_from_ranges(params[:filters])
+    results = Verse.unscoped.where(id: ids)
+
+    @total_records = results.size
+    @results = results.limit(per_page).offset((current_page - 1) * per_page)
+
+    if current_page < total_pages
+      @next_page = current_page + 1
+    end
+
+    @results
+  end
+
   def fetch_by_chapter
-    if chapter = Chapter.find_by(id: params[:chapter_number].to_i.abs)
+    if chapter = find_chapter(params[:chapter_number])
       @total_records = chapter.verses_count
       verse_start = verse_pagination_start(@total_records)
       verse_end = verse_pagination_end(verse_start, @total_records)
@@ -63,10 +94,12 @@ class V4::VerseFinder < ::VerseFinder
       @next_page = current_page + 1 if verse_end < params[:to]
 
       @results = Verse
-                   .where(chapter_id: params[:chapter_number].to_i.abs)
+                   .where(chapter_id: chapter.id)
                    .where('verses.verse_number >= ? AND verses.verse_number <= ?', verse_start.to_i, verse_end.to_i)
     else
-      @results = Verse.where('1=0')
+      @total_records = 0
+      @next_page = nil
+      @results = Verse.none
     end
 
     @results
@@ -178,5 +211,11 @@ class V4::VerseFinder < ::VerseFinder
 
   def rescope_verses(by)
     Verse.unscope(:order).order("#{by} ASC")
+  end
+
+  def find_chapter(id_or_slug)
+    strong_memoize :_chapter do
+      Chapter.find_using_slug(id_or_slug)
+    end
   end
 end
