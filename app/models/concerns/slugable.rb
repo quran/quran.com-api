@@ -9,7 +9,12 @@ module Slugable
     has_one :default_slug, -> { where(is_default: true) }, class_name: 'Slug'
 
     def self.find_using_slug(slug)
-      joins(:slugs).where('slugs.slug': slug).first || find_by(id: slug)
+      with_slugs = joins(:slugs)
+      
+      with_slugs
+        .where('slugs.slug': slug)
+        .or(with_slugs.where(id: slug))
+        .first
     end
   end
 end

@@ -1,5 +1,8 @@
 json.object! do
   json.chapter do
-    json.partial! 'chapter', chapter: @presenter.chapter, render_slugs: true
+    json.partial! 'chapter', chapter: @presenter.chapter,
+                  render_slugs: @presenter.include_slugs?,
+                  render_translated_names: @presenter.include_translated_names?,
+                  render_info: @presenter.include_chapter_info?
   end
 end
