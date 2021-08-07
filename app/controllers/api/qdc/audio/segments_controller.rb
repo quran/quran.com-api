@@ -8,10 +8,6 @@ module Api::Qdc
       render
     end
 
-    def index
-      render
-    end
-
     def percentile
       render
     end
