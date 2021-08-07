@@ -39,12 +39,6 @@ module Qdc
 
     protected
 
-    def include_in_response?(value)
-      if value.presence
-        !ActiveRecord::Type::Boolean::FALSE_VALUES.include?(value)
-      end
-    end
-
     def finder
       ChapterFinder.new
     end

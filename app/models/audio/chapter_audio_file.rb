@@ -33,6 +33,7 @@
 class Audio::ChapterAudioFile < ApplicationRecord
   belongs_to :audio_recitation, class_name: 'Audio::Recitation'
   belongs_to :chapter
+  has_many :audio_segments, class_name: 'Audio::Segment', foreign_key: 'audio_file_id'
 
   def audio_url(relative_path: nil)
     path = relative_path || get_relative_path

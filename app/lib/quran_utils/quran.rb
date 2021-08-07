@@ -20,6 +20,21 @@ module QuranUtils
       get_ayah_key surah, ayah
     end
 
+    def self.get_chapter_id_from_verse_id(verse_id)
+      surah = nil
+
+      SURAH_AYAH.each_with_index do |surah_ayah, surah_index|
+        if verse_id <= surah_ayah
+          surah = surah_index + 1
+          break
+        else
+          verse_id = verse_id - surah_ayah
+        end
+      end
+
+      surah
+    end
+
     def self.get_ayah_id_from_key(key)
       surah, ayah = key.split(':').map(&:to_i)
 

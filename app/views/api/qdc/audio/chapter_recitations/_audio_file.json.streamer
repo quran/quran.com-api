@@ -6,4 +6,16 @@ json.object! do
                 :audio_url
 
   json.duration audio_file.duration_ms
+
+  if include_segments
+    json.verse_timings audio_file.audio_segments do |segment|
+      json.object! do
+        json.verse_key segment.verse_key
+        json.timestamp_from segment.start_timestamp
+        json.timestamp_to segment.end_timestamp
+        json.duration segment.duration_ms
+        json.segments segment.segments
+      end
+    end
+  end
 end

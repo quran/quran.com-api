@@ -4,11 +4,11 @@ module Api::Qdc
   class Audio::ChapterRecitationsController < ApiController
     before_action :init_presenter
 
-    def reciters
+    def index
       render
     end
 
-    def index
+    def reciter_audio_files
       render
     end
 

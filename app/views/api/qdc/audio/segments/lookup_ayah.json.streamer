@@ -1,17 +1,15 @@
 segment = @presenter.lookup_ayah
+include_segments = @presenter.include_segments?
 
 json.object! do
   json.result do
     json.object! do
       if segment
-        json.set! segment.verse_key do
-          json.object! do
-            json.start_timestamp segment.start_timestamp
-            json.end_timestamp segment.end_timestamp
-            json.duration segment.duration
-            json.segments segment.segments
-          end
-        end
+        json.verse_key segment.verse_key
+        json.timestamp_from segment.start_timestamp
+        json.timestamp_to segment.end_timestamp
+        json.duration segment.duration_ms
+        json.segments segment.segments if include_segments
       end
     end
   end

@@ -21,6 +21,12 @@ class BasePresenter
 
   protected
 
+  def include_in_response?(value)
+    if value.presence
+      !ActiveRecord::Type::Boolean::FALSE_VALUES.include?(value)
+    end
+  end
+
   def eager_load_translated_name(records)
     language = Language.find_by(iso_code: fetch_locale)
 

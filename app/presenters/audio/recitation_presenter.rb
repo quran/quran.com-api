@@ -36,20 +36,43 @@ class Audio::RecitationPresenter < BasePresenter
   end
 
   def approved_audio_files
-    files = approved_recitation.chapter_audio_files
+    files = approved_recitation.chapter_audio_files.order('audio_chapter_audio_files.chapter_id ASC')
 
-    if chapter_id
-      files.where(chapter_id: chapter_id)
+    files = if chapter_id
+              files.where(chapter_id: chapter_id)
+            else
+              files
+            end
+
+    if include_segments?
+      files.includes(:audio_segments).order('audio_segments.verse_id ASC')
     else
       files
     end
   end
 
+  def include_segments?
+    include_in_response? params[:segments].presence
+  end
+
+  protected
+
   def chapter_id
-    params[:chapter_number] || params[:chapter_id]
+    strong_memoize :chapter_id do
+      id = params[:chapter_number] || params[:chapter_id] || params[:chapter]
+
+      if id.present?
+        id
+      else
+        if verse_id
+          QuranUtils::Quran.get_chapter_id_from_verse_id(verse_id)
+        end
+      end
+    end
   end
 
   def recitation_id
-    params[:recitation_id]
+    # Abdellatif wants to call it reciter_id
+    params[:reciter_id] || params[:recitation_id]
   end
 end
