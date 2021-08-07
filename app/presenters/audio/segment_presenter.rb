@@ -20,7 +20,7 @@ class Audio::SegmentPresenter < BasePresenter
   end
 
   def ayah_timing_percentile
-    audio_file_segments.pluck(:percentile)
+    #audio_file_segments.pluck(:percentile)
   end
 
   protected

@@ -9,7 +9,6 @@ json.object! do
             json.start_timestamp segment.start_timestamp
             json.end_timestamp segment.end_timestamp
             json.duration segment.duration
-            json.percentile segment.percentile
             json.segments segment.segments
           end
         end

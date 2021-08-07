@@ -4,8 +4,8 @@ namespace :qdc do
     # https://quranicaudio.com/api/surahs/1
 
     # Surah audio
-    get 'recitations', to: 'chapter_recitations#recitations'
-    get 'audio_files/:recitation_id', to: 'chapter_recitations#index'
+    get 'reciters', to: 'chapter_recitations#reciters'
+    get 'reciter/:reciter_id', to: 'chapter_recitations#index'
 
     # Segments
     get 'segments/:audio_file_id', to: 'segments#index'
