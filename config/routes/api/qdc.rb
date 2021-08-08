@@ -4,8 +4,11 @@ namespace :qdc do
     # https://quranicaudio.com/api/surahs/1
 
     # Surah audio
-    get 'reciters', to: 'chapter_recitations#index'
+    get 'reciters', to: 'chapter_recitations#reciters'
     get 'reciter/:reciter_id', to: 'chapter_recitations#reciter_audio_files'
+
+    # Get timestamp
+    get 'reciter/:reciter_id/timestamp', to: 'segments#timestamp'
 
     # Segments and percentiles
     get 'reciter/:reciter_id/lookup', to: 'segments#lookup_ayah'

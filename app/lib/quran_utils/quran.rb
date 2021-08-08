@@ -38,7 +38,7 @@ module QuranUtils
     def self.get_ayah_id_from_key(key)
       surah, ayah = key.split(':').map(&:to_i)
 
-      get_ayah_id surah, ayah
+      get_ayah_id(surah, ayah) if surah && ayah
     end
 
     def self.get_ayah_id(surah, ayah)

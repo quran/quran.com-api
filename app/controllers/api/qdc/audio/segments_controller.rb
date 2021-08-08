@@ -8,6 +8,10 @@ module Api::Qdc
       render
     end
 
+    def timestamp
+      render
+    end
+
     protected
     def init_presenter
       @presenter = ::Audio::SegmentPresenter.new(params)
