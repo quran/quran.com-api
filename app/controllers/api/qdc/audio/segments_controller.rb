@@ -8,7 +8,7 @@ module Api::Qdc
       render
     end
 
-    def percentile
+    def timestamp
       render
     end
 
