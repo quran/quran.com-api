@@ -1,3 +1,0 @@
-json.object! do
-  json.result @presenter.ayah_timing_percentile
-end

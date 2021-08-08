@@ -8,10 +8,6 @@ module Api::Qdc
       render
     end
 
-    def percentile
-      render
-    end
-
     protected
     def init_presenter
       @presenter = ::Audio::SegmentPresenter.new(params)

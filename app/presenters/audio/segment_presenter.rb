@@ -5,10 +5,6 @@ class Audio::SegmentPresenter < Audio::RecitationPresenter
     filter_audio_segments.first
   end
 
-  def ayah_timing_percentile
-    []
-    #audio_file_segments.pluck(:percentile)
-  end
 
   protected
 

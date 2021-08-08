@@ -7,11 +7,10 @@ namespace :qdc do
     get 'reciters', to: 'chapter_recitations#index'
     get 'reciter/:reciter_id', to: 'chapter_recitations#reciter_audio_files'
 
-    # Segments
+    # Segments and percentiles
     get 'reciter/:reciter_id/lookup', to: 'segments#lookup_ayah'
-
-    get 'segments/:audio_file_id', to: 'segments#index'
-    get 'segments/:audio_file_id/ayah_percentile', to: 'segments#percentile'
+    get 'reciter/:reciter_id/percentiles', to: 'percentiles#cumulative_percentile'
+    get 'reciter/:reciter_id/ayah_percentiles', to: 'percentiles#ayah_duration_percentile'
 
     # QuanicAudio api routes
     get :qaris, to: 'recitations#index'
