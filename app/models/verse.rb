@@ -66,8 +66,10 @@ class Verse < ApplicationRecord
   has_many :translations
   has_many :roots, through: :words
   has_many :audio_files
+
   # for eager loading one audio
   has_one :audio_file
+  has_one :audio_segment, class_name: 'Audio::Segment'
 
   default_scope { order 'verses.verse_number asc' }
 
