@@ -43,7 +43,7 @@ json.object! do
       if include_segments
         segment = verse.audio_segment
 
-        json.verse_timings do
+        json.timestamps do
           json.object! do
             json.verse_key segment.verse_key
             json.timestamp_from segment.timestamp_from
