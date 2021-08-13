@@ -106,7 +106,7 @@ class V4::VerseFinder < ::VerseFinder
   end
 
   def fetch_by_page
-    @results = Verse.where(page_number: params[:page_number].to_i.abs)
+    @results = rescope_verses('verse_index').where(page_number: params[:page_number].to_i.abs)
     @next_page = nil
     @total_records = @results.size
 
