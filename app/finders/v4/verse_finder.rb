@@ -44,6 +44,8 @@ class V4::VerseFinder < ::VerseFinder
   end
 
   def per_page
+    return @per_page if @per_page
+
     limit = (params[:per_page] || 10).to_i.abs
     limit <= 50 ? limit : 50
   end
@@ -107,8 +109,11 @@ class V4::VerseFinder < ::VerseFinder
 
   def fetch_by_page
     @results = rescope_verses('verse_index').where(page_number: params[:page_number].to_i.abs)
+
+    # Disable pagination for by_page route
     @next_page = nil
     @total_records = @results.size
+    @per_page = @total_records
 
     @results
   end
