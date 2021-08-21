@@ -1,11 +1,17 @@
 # frozen_string_literal: true
 
 class SearchPresenter < BasePresenter
-  attr_reader :query
+  attr_reader :query,
+              :navigational_results,
+              :verses_results
 
   def initialize(params, query)
     super(params)
     @query = query
+  end
+
+  def add_navigational_results(search)
+    @navigational_results = search.results
   end
 
   def add_search_results(search_response)
@@ -15,8 +21,7 @@ class SearchPresenter < BasePresenter
   end
 
   def no_results?
-    return ture if @search.nil?
-    @search.empty?
+    @search.nil? || @search.empty?
   end
 
   def next_page

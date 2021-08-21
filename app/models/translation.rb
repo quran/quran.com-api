@@ -38,8 +38,9 @@
 #
 
 class Translation < ApplicationRecord
+  CLEAN_TEXT_REG = /<sup foot_note="?\d+"?>\d+<\/sup>[\d*\[\]]?/
+
   include LanguageFilterable
-  include TranslationSearchable
   include Resourceable
 
   belongs_to :verse
@@ -48,6 +49,7 @@ class Translation < ApplicationRecord
 
   scope :approved, -> { joins(:resource_content).where('resource_contents.approved = ?', true) }
 
-  def es_analyzer
+  def clean_text_for_es
+    text.gsub(CLEAN_TEXT_REG, '').strip
   end
 end

@@ -38,6 +38,10 @@ namespace :qdc do
   get 'juzs', to: 'juzs#index'
   get 'juzs/:id', to: 'juzs#show'
 
+  # Page
+  get 'pages', to: 'pages#index'
+  get 'pages/:id', to: 'pages#show'
+
   # Advance copy
   get 'verses/advanced_copy', to: 'advanced_copy#index'
 
