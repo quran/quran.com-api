@@ -72,7 +72,7 @@ namespace :one_time do
 
   task create_pages: :environment do
     1.upto(604).each do |page_num|
-      page = MuhsafPage.where(page_number: page_num).first_or_initialize
+      page = MushafPage.where(page_number: page_num).first_or_initialize
       verses = Verse.order("verse_index ASC").where(page_number: page_num)
       if verses.size == 0
         puts "WAAAAA, #{page_num}"
