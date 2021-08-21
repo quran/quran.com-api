@@ -17,15 +17,11 @@ module Qdc
         detect_language_code == :ar
       end
 
-      def detect_languages
-        #       CLD3 has better results than CLD2
-        #       query.split(/\s/).map do |token|
-        #       [
-        #           CLD.detect_language(token.to_s.downcase)[:code].to_s.split('-').first,
-        #           LANG_DETECTOR_CLD3.find_top_n_most_freq_langs(query.to_s, 5).map(&:language)
-        #        ] rescue nil
-        #        end.compact.flatten.uniq
+      def has_ayah_key?
+        query.match? /[\/:\\]/
+      end
 
+      def detect_languages
         LANG_DETECTOR_CLD3.find_top_n_most_freq_langs(query.to_s, 5).map do |part|
           part.language.to_s
         end
