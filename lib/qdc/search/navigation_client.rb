@@ -48,7 +48,14 @@ module Qdc
       end
 
       def sort_query
-        [{ id: { order: 'asc' } }]
+        if query.query.include?(':')
+          #
+          # Let ES decide the order if searching with ayah key
+          # 
+          []
+        else
+          [{ id: { order: 'asc' } }]
+        end
       end
 
       def source_attributes
