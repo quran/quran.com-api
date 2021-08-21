@@ -16,4 +16,5 @@
 #  index_mushafs_on_is_default  (is_default)
 #
 class Mushaf < ApplicationRecord
+  has_many :mushaf_pages
 end

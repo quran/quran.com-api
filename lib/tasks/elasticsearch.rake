@@ -4,7 +4,10 @@ namespace :elasticsearch do
 
   desc 'deletes all elasticsearch indices'
   task delete_indices: :environment do
-    Qdc::Search::ContentIndex.remove_indexes rescue nil
+    begin
+      Qdc::Search::ContentIndex.remove_indexes
+    rescue Elasticsearch::Transport::Transport::Errors::NotFound => e
+    end
 
     begin
       Verse.__elasticsearch__.delete_index!
@@ -12,9 +15,7 @@ namespace :elasticsearch do
     end
 
     begin
-      [Chapter, Juz, MuhsafPage].each do |model|
-        model.__elasticsearch__.delete_index!
-      end
+      Chapter.__elasticsearch__.delete_index!
     rescue Elasticsearch::Transport::Transport::Errors::NotFound => e
     end
 
@@ -31,24 +32,27 @@ namespace :elasticsearch do
     Rails.logger.level = :warn
 
     Verse.__elasticsearch__.create_index!
-    [Chapter, Juz, MuhsafPage].each do |model|
-      model.__elasticsearch__.create_index!
-    end
+    Chapter.__elasticsearch__.create_index!
 
-    Parallel.each([MuhsafPage, Chapter, Juz], in_processes: 3, progress: "Indexing chapters and juz data") do |model|
-      model.import
-    end
+    navigational_resources = [
+      Chapter.includes(:translated_names),
+      MushafPage,
+      Juz,
+      VerseKey.includes(:chapter)
+    ]
 
-    puts "Importing ayah"
+    process_count = Rails.env.development? ? 1 : 3
+    Parallel.each(navigational_resources, in_processes: process_count, progress: "Importing navigational data") do |model|
+      model.bulk_import_with_variation
+    end
 
     if Rails.cache.read("verses_index").nil?
       Verse.import
-      Rails.cache.write("verses_index", true, expires_in: 2.day.from_now)
+      Rails.cache.write("verses_index", true, expires_in: 1.day.from_now)
     end
 
     puts "Setting up translation indexes"
     Qdc::Search::ContentIndex.setup_language_index_classes
-
     Qdc::Search::ContentIndex.setup_indexes
 
     Language.with_translations.each do |language|

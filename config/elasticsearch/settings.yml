@@ -62,10 +62,14 @@ index:
       arabic_stemmer:
         type: stemmer
         language: arabic
-      quran_word_synonym:
+      quran_arabic_word_synonym:
         type: synonym
         expand: true
-        synonyms_path: analysis/quran_word_synonym.txt
+        synonyms_path: analysis/quran_arabic_word_synonym.txt
+      noun_synonym:
+        type: synonym
+        expand: true
+        synonyms_path: analysis/noun_synonym.txt
       shingle_filter:
         type: shingle
         min_shingle_size: 2
@@ -84,7 +88,7 @@ index:
         tokenizer: icu_tokenizer
         filter:
           - arabic_keywords
-          - quran_word_synonym
+          #- quran_arabic_word_synonym
           - arabic_normalization
           # - arabic_stemmer
           - arabic_stop
@@ -94,14 +98,14 @@ index:
         tokenizer: whitespace
         filter:
           - arabic_normalization
-          - quran_word_synonym
+          #- quran_arabic_word_synonym
           - arabic_keywords
       arabic_stemmed:
         tokenizer: whitespace
         filter:
           - arabic_normalization
           - arabic_stemmer
-          - quran_word_synonym
+          #- quran_arabic_word_synonym
           - arabic_keywords
       arabic_ngram:
         tokenizer: whitespace
@@ -119,6 +123,7 @@ index:
           - english_stop
           - english_keywords
           - english_stemmer
+          - noun_synonym
 
       arabic:
         tokenizer: whitespace
