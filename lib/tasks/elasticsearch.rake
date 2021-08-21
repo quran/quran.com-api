@@ -50,6 +50,8 @@ namespace :elasticsearch do
       Verse.import
       Rails.cache.write("verses_index", true, expires_in: 1.day.from_now)
     end
+    return
+    #TODO: fix and import translation search
 
     puts "Setting up translation indexes"
     Qdc::Search::ContentIndex.setup_language_index_classes
