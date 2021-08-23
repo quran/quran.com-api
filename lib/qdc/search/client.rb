@@ -4,7 +4,8 @@ module Qdc
     VERSES_PER_PAGE = 20
 
     class Client
-      DEBUG_ES_QUERIES = true
+      # Debug es queries only in dev environment
+      DEBUG_ES_QUERIES = Rails.env.development?
 
       attr_accessor :query,
                     :options,
