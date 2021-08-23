@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-
+module Qdc
 module Search
   class Suggest
     attr_accessor :query, :lang, :size
@@ -144,4 +144,5 @@ module Search
       processed
     end
   end
+end
 end
