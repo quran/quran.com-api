@@ -4,8 +4,8 @@ options = if ENV['ELASTICSEARCH_PORT_9200_TCP_ADDR']
             {
                 host: '127.0.0.1',
                 password: ENV['ELASTICSEARCH_PASSWORD'],
-                user: 'elastic', a: nil
+                user: ENV['ELASTICSEARCH_username']
             }
           end.merge(adapter: :typhoeus)
 
-Elasticsearch::Model.client = Elasticsearch::Client.new options.compact_blank
+Elasticsearch::Model.client = Elasticsearch::Client.new(options.compact_blank)
