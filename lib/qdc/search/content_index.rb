@@ -14,7 +14,10 @@ module Qdc
 
       def self.remove_indexes
         TRANSLATION_LANGUAGES.each do |language|
-          Verse.__elasticsearch__.delete_index! index: get_index_name(language)
+          begin
+            Verse.__elasticsearch__.delete_index! index: get_index_name(language)
+          rescue Elasticsearch::Transport::Transport::Errors::NotFound => e
+          end
         end
       end
 
@@ -35,6 +38,7 @@ module Qdc
 
         LANG_INDEX_CLASSES[language.id].import(
           batch_size: 500,
+          force: true,
           refresh: false,
           scope: 'translations',
           index: self.get_index_name(language)

@@ -61,7 +61,7 @@ namespace :elasticsearch do
 
     puts "Importing verses"
     if Rails.cache.read("verses_index").nil?
-      Verse.import
+      Verse.includes(:char_words).import
       Rails.cache.write("verses_index", true, expires_in: 1.day.from_now)
     end
 
