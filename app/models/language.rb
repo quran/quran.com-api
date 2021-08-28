@@ -24,7 +24,7 @@
 class Language < ApplicationRecord
   include NameTranslateable
 
-  scope :with_translations, -> { where 'translations_count > 0' }
+  scope :with_translations, -> { where('translations_count > 0').order('translations_count DESC') }
 
   class << self
     def default

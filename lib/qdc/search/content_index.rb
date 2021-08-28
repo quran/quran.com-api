@@ -38,7 +38,6 @@ module Qdc
 
         LANG_INDEX_CLASSES[language.id].import(
           batch_size: 500,
-          force: true,
           refresh: false,
           scope: 'translations',
           index: self.get_index_name(language)
