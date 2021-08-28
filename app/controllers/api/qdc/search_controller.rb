@@ -8,6 +8,7 @@ module Api::Qdc
       if do_search
         render
       else
+        render partial: 'error', status: 500
       end
     end
 
@@ -73,9 +74,11 @@ module Api::Qdc
       begin
         @presenter.add_search_results(content_client.search)
       rescue Faraday::ConnectionFailed => e
+        @error = e
         false
       rescue Elasticsearch::Transport::Transport::ServerError => e
         # Index not ready yet? or other ES server errors
+        @error = e
         false
       end
     end

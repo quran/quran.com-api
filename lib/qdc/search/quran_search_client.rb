@@ -19,17 +19,19 @@ module Qdc
       def initialize(query, options = {})
         super(query, options)
 
-        unless filter_translations? && filter_language?
+        if options[:translations].blank? && !filter_language?
           options[:translations] = DEFAULT_TRANSLATION
         end
       end
 
       def search
-        search = Elasticsearch::Model.search(search_definition, [], index: indexs_to_search)
+        indexes = indexes_for_search
+        search = Elasticsearch::Model.search(search_definition, [], index: indexes_for_search)
 
         # For debugging, copy the query and paste in kibana for debugging
         if DEBUG_ES_QUERIES
           File.open("last_query.json", "wb") do |f|
+            f << "indexes: #{indexes} "
             f << search_definition.to_json
           end
         end
@@ -70,10 +72,10 @@ module Qdc
         match_any << words_query
 
         if filter_language?
-          match_any << translation_query(filter_language.id, highlight_size)
+          match_any << translation_query(filter_language.id)
         else
           # 38 is default English language
-          match_any << translation_query(38, highlight_size)
+          match_any << translation_query(38)
         end
 
         {
@@ -168,11 +170,15 @@ module Qdc
         ]
       end
 
-      def translation_query(language_code, highlight_size)
+      def translation_query(language = nil)
         query = simple_match_query(fields: ["text.*"])
         filters = []
         filters.push(terms: { resource_id: filter_translations }) if filter_translations?
         filters.push(term: { language_id: filter_language.id }) if filter_language?
+
+        if language
+          filters.push(term: { language_id: language })
+        end
 
         if filters.present?
           {
@@ -217,8 +223,10 @@ module Qdc
       end
 
       def filter_language
-        if options[:language].present?
-          Language.find_with_id_or_iso_code(options[:language])
+        strong_memoize :filter_lang do
+          if options[:language].present?
+            Language.find_with_id_or_iso_code(options[:language])
+          end
         end
       end
 
@@ -240,7 +248,7 @@ module Qdc
         end.presence
       end
 
-      def indexs_to_search
+      def indexes_for_search
         indexes = ['quran_verses']
 
         if filter_language?
