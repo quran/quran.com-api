@@ -69,10 +69,12 @@ namespace :elasticsearch do
     Qdc::Search::ContentIndex.setup_language_index_classes
     Qdc::Search::ContentIndex.setup_indexes
 
-    Language.with_translations.each do |language|
+    Language.with_translations.order('translations_count DESC').each do |language|
+      if Rails.cache.read("lang_#{language.id}_index").nil?
         puts "importing translations for #{language.name}"
         Qdc::Search::ContentIndex.import_translation_for_language(language)
-        Rails.cache.write("lang_#{language.id}_index", true, expires_in: 2.day.from_now)
+        Rails.cache.write("lang_#{language.id}_index", true, expires_in: 1.day.from_now)
+      end
     end
 
     index_end = Time.now

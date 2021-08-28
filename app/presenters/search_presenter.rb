@@ -40,15 +40,20 @@ class SearchPresenter < BasePresenter
         search_result[item['verse_id']] ||= item
         search_result[item['verse_id']][:words] = prepare_verse_words(item, verses)
       else
-        search_result[item['verse_id']] ||= item.except('text', 'resource_id', 'resource_name', 'language_id', 'language_name')
-        search_result[item['verse_id']][:words] ||= prepare_verse_words(item, verses)
+        search_result[item['verse_id']] ||= {
+          result_type: 'ayah',
+          verse_key: item['verse_key'],
+          verse_id: item['verse_id']
+        }
 
+        search_result[item['verse_id']][:words] ||= prepare_verse_words(item, verses)
         search_result[item['verse_id']]['translations'] ||= []
         search_result[item['verse_id']]['translations'].push({
                                                                text: item['text'],
+                                                               id: item['id'],
                                                                resource_id: item['resource_id'],
                                                                resource_name: item['resource_name'],
-                                                               language_name: item['language']
+                                                               language_name: item['language_name']
                                                              }
         )
       end
