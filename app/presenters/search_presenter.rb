@@ -49,7 +49,7 @@ class SearchPresenter < BasePresenter
         search_result[item['verse_id']][:words] ||= prepare_verse_words(item, verses)
         search_result[item['verse_id']]['translations'] ||= []
         search_result[item['verse_id']]['translations'].push({
-                                                               text: item['text'],
+                                                               text: item['text'][0],
                                                                id: item['id'],
                                                                resource_id: item['resource_id'],
                                                                resource_name: item['resource_name'],
