@@ -4,69 +4,53 @@ module Qdc
     class QuranSearchClient < Search::Client
       TRANSLATION_LANGUAGES = Language.with_translations
       TRANSLATION_LANGUAGE_CODES = TRANSLATION_LANGUAGES.pluck(:iso_code)
+      DEFAULT_TRANSLATION = [131, 20]
 
       QURAN_SOURCE_ATTRS = [
-        'verse_path',
-        'verse_key',
-        'verse_id',
-        'type',
-        'resource_id',
+        'result_type',
         'language_id',
+        'language_name',
+        'resource_id',
         'resource_name',
-        'language_name'
-      ].freeze
-
-      QURAN_SEARCH_ATTRS = [
-        # Uthmani
-        "text_uthmani_simple.*^4",
-        "text_uthmani.*^3",
-
-        # Imlaei script
-        "text_imlaei*^4",
-        "text_imlaei_simple.*^2",
-
-        # Indopak script
-        "text_indopak",
-        "text_indopak_simple",
-
-        "verse_key.keyword",
-        "verse_path"
+        'verse_id',
+        'verse_key'
       ].freeze
 
       def initialize(query, options = {})
         super(query, options)
+
+        unless filter_translations? && filter_language?
+          options[:translations] = DEFAULT_TRANSLATION
+        end
       end
 
       def search
-        # TODO: search from relevant indexes
-        search = Elasticsearch::Model.search(search_definition, [], index: 'quran_verses,quran_content_*')
+        search = Elasticsearch::Model.search(search_definition, [], index: indexs_to_search)
 
         # For debugging, copy the query and paste in kibana for debugging
-        #File.open("last_query.json", "wb") do |f|
-        #  f << search_definition.to_json
-        #end
+        if DEBUG_ES_QUERIES
+          File.open("last_query.json", "wb") do |f|
+            f << search_definition.to_json
+          end
+        end
 
-        Search::Results.new(search, page)
-      end
-
-      def suggest
-        search = Elasticsearch::Model.search(search_definition(100, 10), [], index: 'quran_verses,quran_content_*')
-
-        # For debugging, copy the query and paste in kibana for debugging
-        #File.open("last_suggest_query.json", "wb") do |f|
-        #  f << search_definition(100, 10).to_json
-        #end
-
-        Search::Results.new(search, page)
+        Search::Results.new(search, page, result_size)
       end
 
       protected
 
-      def search_definition(highlight_size = 500, result_size = VERSES_PER_PAGE)
+      def search_definition(highlight_size = 500)
         {
           _source: source_attributes,
           query: search_query,
-          highlight: highlight(highlight_size),
+          highlight: {
+            "fields": {
+              "text": {
+                "number_of_fragments": 0,
+                "type": "fvh"
+              }
+            }
+          },
           from: page * result_size,
           size: result_size,
           sort: sort_results
@@ -75,53 +59,48 @@ module Qdc
 
       def sort_results
         [
-          { _score: { order: :desc } }
+          { _score: { order: :desc } },
+          { _id: { order: :asc } }
         ]
       end
 
       def search_query(highlight_size = 500)
         match_any = match_any_queries
-
         match_any << quran_text_query
+        match_any << words_query
 
-        #get_detected_languages_code.each do |lang|
-        #  match_any << translation_query(lang)
-        #end
+        if filter_language?
+          match_any << translation_query(filter_language.id, highlight_size)
+        else
+          # 38 is default English language
+          match_any << translation_query(38, highlight_size)
+        end
 
         {
           bool: {
-            should: match_any,
-            filter: filters
+            should: match_any
           }
         }
       end
 
       def words_query
-        [
-          {
-            nested: {
-              path: 'words',
-              query: {
-                multi_match: {
-                  query: query.query.remove_dialectic,
-                  fields: ['words.text_uthmani_simple.*'],
-                  type: "phrase"
-                }
+        {
+          nested: {
+            path: 'words',
+            ignore_unmapped: true,
+            query: {
+              multi_match: {
+                tie_breaker: 0.3,
+                type: 'best_fields',
+                query: query.query,
+                fields: ['words.*']
               }
-            }
-          },
-          {
-            nested: {
-              path: 'words',
-              query: {
-                multi_match: {
-                  query: query.query,
-                  fields: ['words.text_uthmani.*', 'words.text_imlaei.*']
-                }
-              }
+            },
+            inner_hits: {
+              _source: ["words.id", "words.qpc_uthmani_hafs"]
             }
           }
-        ]
+        }
       end
 
       def quran_text_query
@@ -152,9 +131,10 @@ module Qdc
       #
       def simple_match_query(fields: ['*'])
         {
-          "simple_query_string": {
-            "query": query.query,
-            "fields": fields
+          simple_query_string: {
+            query: query.query,
+            fields: fields,
+            default_operator: 'OR'
           }
         }
       end
@@ -180,60 +160,34 @@ module Qdc
       def match_any_queries
         [
           multi_match_query(fields: [
-            "text.autocomplete",
-            "text.autocomplete._2gram",
-            "text.autocomplete._3gram"
+            "*.autocomplete",
+            "*.autocomplete._2gram",
+            "*.autocomplete._3gram"
           ]),
-          simple_match_query,
-          match_phrase_prefix_query
+          simple_match_query
         ]
       end
 
-      def nested_translation_query(language_code, highlight_size)
-        matches = simple_match_query(fields: ["trans_#{language_code}.text.*"])
+      def translation_query(language_code, highlight_size)
+        query = simple_match_query(fields: ["text.*"])
+        filters = []
+        filters.push(terms: { resource_id: filter_translations }) if filter_translations?
+        filters.push(term: { language_id: filter_language.id }) if filter_language?
 
-        {
-          nested: {
-            path: "trans_#{language_code}",
-            score_mode: "max",
-            query: {
-              bool: {
-                should: matches,
-                minimum_should_match: '75%'
-              }
-            },
-            inner_hits: {
-              _source: ["*.resource_name", "*.resource_id", "*.language"],
-              highlight: {
-                tags_schema: 'styled',
-                fields: {
-                  "trans_#{language_code}.text.text": {
-                    fragment_size: highlight_size
-                  }
-                }
-              }
+        if filters.present?
+          {
+            bool: {
+              filter: filters,
+              should: query
             }
           }
-        }
+        else
+          query
+        end
       end
 
       def source_attributes
         QURAN_SOURCE_ATTRS
-      end
-
-      def highlight(highlight_size = 500)
-        {
-          fields: {
-            "text_uthmani.*": {
-              type: 'fvh',
-              fragment_size: highlight_size
-            },
-            "text.autocomplete": {
-
-            }
-          },
-          tags_schema: 'styled'
-        }
       end
 
       def filters
@@ -243,14 +197,6 @@ module Qdc
           query_filters.push(term: { chapter_id: options[:chapter].to_i })
         end
 
-        if filter_translation?
-          query_filters.push(term: { resource_id: options[:translation].to_i })
-        end
-
-        if filter_language?
-          query_filters.push(term: { language_id: options[:language].id })
-        end
-
         query_filters
       end
 
@@ -258,12 +204,22 @@ module Qdc
         options[:chapter].presence && options[:chapter].to_i > 0
       end
 
-      def filter_translation?
-        options[:translation].presence && options[:translation].to_i > 0
+      def filter_translations?
+        filter_translations.present?
+      end
+
+      def filter_translations
+        options[:translations].presence
       end
 
       def filter_language?
-        options[:language]
+        filter_language.present?
+      end
+
+      def filter_language
+        if options[:language].present?
+          Language.find_with_id_or_iso_code(options[:language])
+        end
       end
 
       def get_detected_languages_code
@@ -281,7 +237,19 @@ module Qdc
 
         languages.select do |lang|
           TRANSLATION_LANGUAGE_CODES.include?(lang)
-        end.presence || ['en']
+        end.presence
+      end
+
+      def indexs_to_search
+        indexes = ['quran_verses']
+
+        if filter_language?
+          indexes << "quran_#{filter_language.iso_code}"
+        else
+          indexes << 'quran_en'
+        end
+
+        indexes
       end
     end
   end

@@ -30,7 +30,6 @@ index:
       arabic_keywords:
         type: keyword_marker
         keywords:
-          - الله
           - ياسين
           - موسي
           - عيسي
@@ -98,14 +97,12 @@ index:
         tokenizer: whitespace
         filter:
           - arabic_normalization
-          #- quran_arabic_word_synonym
           - arabic_keywords
       arabic_stemmed:
         tokenizer: whitespace
         filter:
           - arabic_normalization
           - arabic_stemmer
-          #- quran_arabic_word_synonym
           - arabic_keywords
       arabic_ngram:
         tokenizer: whitespace

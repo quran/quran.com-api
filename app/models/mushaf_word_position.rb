@@ -23,6 +23,7 @@
 #  index_on_mushad_word_position                         (mushaf_id,verse_id,position_in_verse)
 #
 class MushafWordPosition < ApplicationRecord
+  #TODO: rename this to MushafLayout or something more understandable
   belongs_to :word
   belongs_to :mushaf
 end

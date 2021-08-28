@@ -25,11 +25,24 @@ namespace :elasticsearch do
   desc 'reindex elasticsearch'
   task re_index: :environment do
     require 'parallel'
+    options = {}
+
+    opts = OptionParser.new
+    opts.banner = "Usage: rake add [options]"
+    opts.on("-q", "--query ARG") { |debug| options[:debug_queries] = debug }
+    args = opts.order!(ARGV) {}
+    opts.parse!(args)
 
     ar_logger = ActiveRecord::Base.logger
-    ActiveRecord::Base.logger = Logger.new(STDOUT)
+
+    if options[:debug_queries]
+      Rails.logger.level = :warn
+      ActiveRecord::Base.logger = Logger.new(STDOUT)
+    else
+      ActiveRecord::Base.logger = nil
+    end
+
     index_start = Time.now
-    Rails.logger.level = :warn
 
     Verse.__elasticsearch__.create_index!
     Chapter.__elasticsearch__.create_index!
@@ -46,19 +59,19 @@ namespace :elasticsearch do
       model.bulk_import_with_variation
     end
 
+    puts "Importing verses"
     if Rails.cache.read("verses_index").nil?
       Verse.import
       Rails.cache.write("verses_index", true, expires_in: 1.day.from_now)
     end
-    return
-    #TODO: fix and import translation search
 
     puts "Setting up translation indexes"
     Qdc::Search::ContentIndex.setup_language_index_classes
     Qdc::Search::ContentIndex.setup_indexes
 
-    Language.with_translations.each do |language|
+    Language.with_translations.order('translations_count DESC').each do |language|
       if Rails.cache.read("lang_#{language.id}_index").nil?
+        puts "importing translations for #{language.name}"
         Qdc::Search::ContentIndex.import_translation_for_language(language)
         Rails.cache.write("lang_#{language.id}_index", true, expires_in: 2.day.from_now)
       end

@@ -10,6 +10,7 @@
 #  is_default        :boolean          default(FALSE)
 #  lines_per_page    :integer
 #  name              :string           not null
+#  pages_count       :integer
 #
 # Indexes
 #

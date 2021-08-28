@@ -25,8 +25,8 @@ Rails.application.routes.draw do
 
   namespace :api, defaults: {format: :json} do
     draw_routes :qdc
-    draw_routes :v3
     draw_routes :v4
+    draw_routes :v3
   end
 
   root to: 'api/v4/ping#ping'

@@ -14,6 +14,7 @@
 #  metadata            :jsonb
 #  mime_type           :string
 #  stream_count        :integer
+#  timing_percentiles  :string           is an Array
 #  total_files         :integer
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null

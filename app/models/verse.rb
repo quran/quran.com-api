@@ -33,6 +33,7 @@
 #  verse_index          :integer
 #  verse_key            :string
 #  verse_number         :integer
+#  words_count          :integer
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
 #  chapter_id           :integer
@@ -49,10 +50,10 @@
 #  index_verses_on_verse_number    (verse_number)
 #  index_verses_on_verse_root_id   (verse_root_id)
 #  index_verses_on_verse_stem_id   (verse_stem_id)
+#  index_verses_on_words_count     (words_count)
 #
 
 class Verse < ApplicationRecord
-  attr_accessor :highlighted_text
   include QuranSearchable
 
   belongs_to :chapter, inverse_of: :verses
@@ -62,6 +63,7 @@ class Verse < ApplicationRecord
 
   has_many :tafsirs
   has_many :words
+  has_many :char_words, -> {where char_type_id: 1}, class_name: 'Word'
   has_many :media_contents, as: :resource
   has_many :translations
   has_many :roots, through: :words
@@ -73,7 +75,11 @@ class Verse < ApplicationRecord
 
   default_scope { order 'verses.verse_number asc' }
 
+  # TODO:
+  # - remove page_number
+  # - move page number mapping to mushaf type
   alias_attribute :v1_page, :page_number
+  alias_attribute :verse_id, :id
 
   def self.find_by_id_or_key(id)
     where(verse_key: id).or(where(id: id)).first

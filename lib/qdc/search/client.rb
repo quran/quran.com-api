@@ -1,25 +1,30 @@
 # frozen_string_literal: true
 module Qdc
   module Search
-    VERSES_PER_PAGE = 20
+    VERSES_PER_PAGE = 10
 
     class Client
       # Debug es queries only in dev environment
       DEBUG_ES_QUERIES = Rails.env.development?
+      include QuranUtils::StrongMemoize
 
       attr_accessor :query,
                     :options,
                     :page,
-                    :phrase_matching,
+                    :per_page,
                     :language
 
       def initialize(query, options = {})
         @query = Qdc::Search::Query.new(query)
         @options = options
         @page = options[:page].to_i.abs
+        @per_page = options[:per_page]
         @language = options[:language]
+        @translations = options[:translations]
+      end
 
-        @phrase_matching = options[:phrase_matching]
+      def result_size
+        @per_page || VERSES_PER_PAGE
       end
 
       #     def search
