@@ -44,7 +44,7 @@ module Api::Qdc
     def do_search
       @presenter = SearchPresenter.new(params, query)
 
-      do_navigation_search
+      do_navigation_search if page.zero? || (params[:page] || params[:p]).nil?
       do_text_search
     end
 
