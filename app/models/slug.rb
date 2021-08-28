@@ -7,6 +7,7 @@
 #  id         :bigint           not null, primary key
 #  is_default :boolean          default(FALSE)
 #  locale     :string
+#  name       :string
 #  slug       :string
 #  created_at :datetime         not null
 #  updated_at :datetime         not null

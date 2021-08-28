@@ -9,7 +9,7 @@ module Qdc
       TRANSLATION_LANGUAGES = Language.with_translations
 
       def self.get_index_name(language)
-        "quran_translation_#{language.iso_code}"
+        "quran_#{language.iso_code}"
       end
 
       def self.remove_indexes
@@ -68,7 +68,6 @@ module Qdc
             index_name lang_index_name
 
             mappings dynamic: false do
-              indexes :verse_id, type: 'integer'
               indexes :language_id, type: 'keyword'
               indexes :resource_id, type: 'keyword'
               indexes :chapter_id, type: 'keyword'
@@ -100,8 +99,9 @@ module Qdc
                 resource_name: resource_name,
                 language_name: language_name,
                 verse_id: verse_id,
+                verse_key: verse_key,
                 chapter_id: chapter_id,
-                type: self.class.document_type
+                result_type: 'translation'
               }
             end
           end

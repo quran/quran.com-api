@@ -2,7 +2,6 @@
 
 module Api::Qdc
   class SearchController < ApiController
-    include LanguageBoost
     QUERY_SANITIZER = Rails::Html::WhiteListSanitizer.new
 
     def search
@@ -13,8 +12,13 @@ module Api::Qdc
     end
 
     protected
+
     def language
-      (params[:language] || params[:locale]).presence || 'en'
+      (params[:language] || params[:locale]).presence
+    end
+
+    def translations
+      params['translations'].to_s.split(',')
     end
 
     def query
@@ -22,23 +26,52 @@ module Api::Qdc
       params[:q] = QUERY_SANITIZER.sanitize(query)
     end
 
-    def size(default = 20)
-      (params[:size] || params[:s] || default).to_i
+    def size(default = 10)
+      (params[:size] || params[:s] || params[:per_page] || default).to_i.abs
     end
 
     def page
       # NODE: ES's pagination starts from 0,
       # pagy gem we're using to render pagination start pages from 1
-      (params[:page] || params[:p]).to_i.abs
+      if(p=(params[:page] || params[:p]))
+        [0, p.to_i - 1].max
+      else
+        0
+      end
     end
 
     def do_search
-      navigational_client = Qdc::Search::NavigationClient.new(query)
       @presenter = SearchPresenter.new(params, query)
+
+      do_navigation_search
+      do_text_search
+    end
+
+    def do_navigation_search
+      navigational_client = Qdc::Search::NavigationClient.new(query)
 
       begin
         results = navigational_client.search
         @presenter.add_navigational_results(results)
+      rescue Faraday::ConnectionFailed => e
+        false
+      rescue Elasticsearch::Transport::Transport::ServerError => e
+        # Index not ready yet? or other ES server errors
+        false
+      end
+    end
+
+    def do_text_search
+      content_client = Qdc::Search::QuranSearchClient.new(
+        query,
+        page: page,
+        per_page: size,
+        language: language,
+        translations: translations
+      )
+
+      begin
+        @presenter.add_search_results(content_client.search)
       rescue Faraday::ConnectionFailed => e
         false
       rescue Elasticsearch::Transport::Transport::ServerError => e

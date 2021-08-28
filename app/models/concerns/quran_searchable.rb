@@ -11,6 +11,7 @@ module QuranSearchable
     text_imlaei
     text_imlaei_simple
     text_indopak
+    qpc_uthmani_hafs
   ].freeze
 
   included do
@@ -21,30 +22,82 @@ module QuranSearchable
       File.read('config/elasticsearch/settings.yml')
     )
 
-    def verse_path
-      verse_key.sub(':', '/')
-    end
-
     def type
       'verse'
     end
 
     def as_indexed_json(_options = {})
-      as_json(
+      hash = as_json(
         only: %i[
         id
         chapter_id
         verse_key
+        words_count
         text_uthmani
         text_uthmani_simple
         text_imlaei
         text_imlaei_simple
-        text_indopak]
+        qpc_uthmani_hafs
+        text_indopak],
+        methods: [:verse_id]
       )
+      hash[:result_type] = 'ayah'
+      hash[:words] = char_words.map do |w|
+        {
+          id: w.id,
+          text_uthmani: w.text_uthmani,
+          text_uthmani_simple: w.text_uthmani_simple,
+          text_imlaei: w.text_imlaei,
+          text_imlaei_simple: w.text_imlaei_simple,
+          text_indopak: w.text_indopak,
+          qpc_uthmani_hafs: w.qpc_uthmani_hafs
+        }
+      end
+
+      hash
     end
 
     mappings dynamic: 'false' do
       indexes :chapter_id, type: 'keyword' # Used for filters, when user want to search from specific surah
+      indexes :words_count, type: 'integer' # Used for sorting ayah, short ayahs came first in the result
+      indexes :result_type, type: 'keyword'
+      indexes :words, type: 'nested', include_in_parent: true do
+        indexes :text_uthmani,
+                type: 'text',
+                term_vector: 'with_positions_offsets',
+                analyzer: 'arabic_normalized',
+                similarity: 'my_bm25'
+
+        indexes :text_uthmani_simple,
+                type: 'text',
+                term_vector: 'with_positions_offsets',
+                analyzer: 'arabic_normalized',
+                similarity: 'my_bm25'
+
+        indexes :text_imlaei,
+                type: 'text',
+                term_vector: 'with_positions_offsets',
+                analyzer: 'arabic_normalized',
+                similarity: 'my_bm25'
+
+        indexes :text_imlaei_simple,
+                type: 'text',
+                term_vector: 'with_positions_offsets',
+                analyzer: 'arabic_normalized',
+                similarity: 'my_bm25'
+
+        indexes :text_indopak,
+                type: 'text',
+                term_vector: 'with_positions_offsets',
+                analyzer: 'arabic_normalized',
+                similarity: 'my_bm25'
+
+        indexes :qpc_uthmani_hafs,
+                type: 'text',
+                term_vector: 'with_positions_offsets',
+                analyzer: 'arabic_normalized',
+                similarity: 'my_bm25'
+      end
 
       VERSE_TEXTS_ATTRIBUTES.each do |text_type|
         indexes text_type, type: 'text' do
@@ -59,8 +112,6 @@ module QuranSearchable
                   type: 'text',
                   term_vector: 'with_positions_offsets',
                   similarity: 'my_bm25'
-                  #analyzer: 'arabic_synonym_normalized',
-                  #search_analyzer: 'arabic_synonym_normalized'
 
           indexes :stemmed,
                   type: 'text',

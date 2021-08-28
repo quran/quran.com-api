@@ -31,6 +31,7 @@
 #  verse_index          :integer
 #  verse_key            :string
 #  verse_number         :integer
+#  words_count          :integer
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
 #  chapter_id           :integer
@@ -47,6 +48,7 @@
 #  index_verses_on_verse_number    (verse_number)
 #  index_verses_on_verse_root_id   (verse_root_id)
 #  index_verses_on_verse_stem_id   (verse_stem_id)
+#  index_verses_on_words_count     (words_count)
 #
 
 # frozen_string_literal: true

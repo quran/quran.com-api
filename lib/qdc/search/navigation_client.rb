@@ -2,7 +2,7 @@
 
 module Qdc
   module Search
-    class NavigationClient < Qdc::Search::QuranSearchClient
+    class NavigationClient < Qdc::Search::Client
       SOURCE_ATTRS = %w[key name result_type].freeze
       RESULT_SIZE = 20
       PREFIX_SLOP = 3

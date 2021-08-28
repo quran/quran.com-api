@@ -2,32 +2,25 @@
 module Qdc
   module Search
     class Results
-      attr_reader :result_type
+      RESULT_AYAH = 'ayah'
 
-      def initialize(search, page, search_type = nil)
+      def initialize(search, page, page_size)
         @search = search
-        @record_highlights = {}
         @result_size = 0
         @current_page = page
-        @result_type = search_type
+        @page_size = page_size
       end
 
       def results
         if empty?
           {}
         else
-          prepare_highlights
-
-          @record_highlights
+          prepare_results
         end
       end
 
-      def get_me
-        @record_highlights
-      end
-
       def pagination
-        Pagy.new(count: total_count, page: @current_page + 1, per_page: VERSES_PER_PAGE)
+        Pagy.new(count: total_count, page: @current_page + 1, items: @page_size)
       end
 
       def empty?
@@ -48,22 +41,23 @@ module Qdc
         @search.response['hits']['total']['value']
       end
 
-      def prepare_highlights
-        @search.response['hits']['hits'].each do |hit|
-          if :navigation == @result_type
-            @record_highlights[hit['_source']['url']] = fetch_navigational_highlighted_text(hit)
-          else
-            hit_source = hit['_source'].to_h
-            verse_id = hit_source['verse_id']
+      def prepare_results
+        @search.response['hits']['hits'].map do |hit|
+          document = hit['_source'].to_h
+          document['id'] = hit['_id']
 
-            @record_highlights[verse_id] ||= []
-            @record_highlights[verse_id].push(
-              hit_source.merge(
-                text: fetch_verse_highligted_text(hit['highlight'])
-              )
-            )
+          if hit['highlight']
+            document['text'] = hit['highlight']['text']
           end
-          @result_size += 1
+
+          if RESULT_AYAH == document['result_type']
+            highlighted_words = hit.dig('inner_hits', 'words', 'hits', 'hits')
+            document['highlighted_words'] = highlighted_words.map do |w|
+              w['_source']["id"]
+            end
+          end
+
+          document
         end
       end
 
@@ -75,12 +69,6 @@ module Qdc
         end
 
         highlight
-      end
-
-      def fetch_verse_highligted_text(highlight)
-        if highlight.presence
-          highlight.values[0][0]
-        end
       end
     end
   end

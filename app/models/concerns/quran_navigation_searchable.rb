@@ -23,7 +23,7 @@ module QuranNavigationSearchable
               type: 'integer'
 
       indexes :result_type,
-              type: 'text'
+              type: 'keyword'
 
       indexes :key,
               type: 'text'
@@ -86,6 +86,7 @@ module QuranNavigationSearchable
   end
 
   def chapter_document_variants
+    short_name = ""
     names = [
       name_arabic,
       name_complex,
@@ -99,7 +100,7 @@ module QuranNavigationSearchable
       "Chapter #{id}",
       "Ch #{id}",
       "#{id.ordinalize} surah"
-    ]
+    ].uniq
 
     document_name = "Surah #{name_simple}"
     (names + translated_names.pluck(:name)).flatten.map do |name|

@@ -5,17 +5,17 @@ json.object! do
   json.result do
     json.object! do
       json.navigation navigational_results
-      json.verses []
+      json.verses @presenter.verses_results
     end
   end
 
   json.pagination do
     json.object! do
-      json.per_page 15
-      json.current_page 1
-      json.next_page nil
-      json.total_pages 1
-      json.total_records 15
+      json.per_page pagy_info.items
+      json.current_page pagy_info.page
+      json.next_page pagy_info.next
+      json.total_pages pagy_info.pages
+      json.total_records pagy_info.count
     end
   end
 end

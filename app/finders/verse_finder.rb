@@ -139,9 +139,7 @@ class VerseFinder
   end
 
   def eager_load_words
-    %i[
-      word_translation
-    ]
+    :word_translation
   end
 
   def verse_pagination_start
