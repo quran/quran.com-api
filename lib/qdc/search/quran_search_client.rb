@@ -30,7 +30,7 @@ module Qdc
 
         # For debugging, copy the query and paste in kibana for debugging
         if DEBUG_ES_QUERIES
-          File.open("last_query.json", "wb") do |f|
+          File.open("es_queries/last_query.json", "wb") do |f|
             f << "indexes: #{indexes} "
             f << search_definition.to_json
           end
@@ -49,7 +49,7 @@ module Qdc
             "fields": {
               "text": {
                 "number_of_fragments": 0,
-                "type": "fvh"
+                "type": "plain"
               }
             }
           },
@@ -68,7 +68,7 @@ module Qdc
 
       def search_query(highlight_size = 500)
         match_any = match_any_queries
-        match_any << quran_text_query
+        #match_any << quran_text_query
         match_any << words_query
 
         if filter_language?
@@ -114,11 +114,7 @@ module Qdc
                   query: query.query,
                   boost: 5,
                   fields: [
-                    'text_uthmani_simple.*',
-                    'text_uthmani.*',
-                    'text_imlaei.*',
-                    'verse_key.keyword^2',
-                    'verse_path.keyword'
+                    'text_*.*',
                   ],
                   type: "phrase"
                 }
@@ -131,7 +127,7 @@ module Qdc
       #
       # https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html
       #
-      def simple_match_query(fields: ['*'])
+      def simple_match_query(fields: ['*'], op: 'OR')
         {
           simple_query_string: {
             query: query.query,
@@ -161,35 +157,38 @@ module Qdc
 
       def match_any_queries
         [
+=begin
           multi_match_query(fields: [
             "*.autocomplete",
             "*.autocomplete._2gram",
             "*.autocomplete._3gram"
           ]),
-          simple_match_query
+=end
+          simple_match_query(
+            fields: [
+              'text_uthmani.*',
+              'text_uthmani_simple.*',
+              'text_imlaei.*',
+              'text_imlaei_simple.*',
+              'text_indopak.*',
+              'qpc_uthmani_hafs.*'
+            ]
+          )
         ]
       end
 
       def translation_query(language = nil)
-        query = simple_match_query(fields: ["text.*"])
-        filters = []
-        filters.push(terms: { resource_id: filter_translations }) if filter_translations?
-        filters.push(term: { language_id: filter_language.id }) if filter_language?
+        query = simple_match_query(
+          fields: ["text"],
+          op: 'AND'
+        )
 
-        if language
-          filters.push(term: { language_id: language })
-        end
-
-        if filters.present?
-          {
-            bool: {
-              filter: filters,
-              should: query
-            }
+        {
+          bool: {
+            must: query,
+            filter: filters
           }
-        else
-          query
-        end
+        }
       end
 
       def source_attributes
@@ -201,6 +200,14 @@ module Qdc
 
         if filter_chapter?
           query_filters.push(term: { chapter_id: options[:chapter].to_i })
+        end
+
+        if filter_language?
+          query_filters.push(terms: { language_id: [filter_language.id] })
+        end
+
+        if filter_translations?
+          query_filters.push(terms: { resource_id: filter_translations })
         end
 
         query_filters

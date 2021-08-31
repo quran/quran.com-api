@@ -3,9 +3,9 @@
 module Qdc
   module Search
     class NavigationClient < Qdc::Search::Client
-      SOURCE_ATTRS = %w[key name result_type].freeze
-      RESULT_SIZE = 20
-      PREFIX_SLOP = 3
+      SOURCE_ATTRS = %w[key name result_type priority].freeze
+      RESULT_SIZE = 30
+      PREFIX_SLOP = 1
 
       def initialize(query, options = {})
         super(query, options)
@@ -30,13 +30,26 @@ module Qdc
         {
           _source: source_attributes,
           query: search_query,
-          from: page * RESULT_SIZE,
           size: RESULT_SIZE,
+          collapse: { # get uniq results for each navigation record type.
+            field: 'result_type'
+          },
           sort: sort_query
         }
       end
 
       def search_query
+        {
+          bool: {
+            should: [
+              match_phrase_query, # First preference to exact match
+              match_phrase_prefix_query # Then prefix match, this will allow us searching with partial keyword like **cav**, **baq**
+            ]
+          }
+        }
+      end
+
+      def match_phrase_prefix_query
         {
           match_phrase_prefix: {
             text: {
@@ -47,15 +60,25 @@ module Qdc
         }
       end
 
+      def match_phrase_query
+        {
+          match_phrase: {
+            text: {
+              query: query.query,
+              slop: PREFIX_SLOP
+            }
+          }
+        }
+      end
+
       def sort_query
-        if query.has_ayah_key?
-          #
-          # Let ES decide the order if searching with ayah key
-          #
-          []
-        else
-          [{ id: { order: 'asc' } }]
-        end
+        [
+          {
+            priority: {
+              order: 'asc'
+            }
+          }
+        ]
       end
 
       def source_attributes

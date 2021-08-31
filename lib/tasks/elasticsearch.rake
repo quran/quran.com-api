@@ -45,36 +45,29 @@ namespace :elasticsearch do
     index_start = Time.now
 
     Verse.__elasticsearch__.create_index!
-    Chapter.__elasticsearch__.create_index!
+    Chapter.__elasticsearch__.create_index! force: true
 
     navigational_resources = [
       Chapter.includes(:translated_names),
       MushafPage,
       Juz,
-      VerseKey.includes(:chapter)
+      VerseKey.includes(:chapter).order("verse_index ASC")
     ]
 
-    process_count = Rails.env.development? ? 1 : 3
-    Parallel.each(navigational_resources, in_processes: process_count, progress: "Importing navigational data") do |model|
+    navigational_resources.each do |model|
       model.bulk_import_with_variation
     end
 
     puts "Importing verses"
-    if Rails.cache.read("verses_index").nil?
-      Verse.includes(:char_words).import
-      Rails.cache.write("verses_index", true, expires_in: 1.day.from_now)
-    end
+    Verse.includes(:char_words).import
 
     puts "Setting up translation indexes"
     Qdc::Search::ContentIndex.setup_language_index_classes
     Qdc::Search::ContentIndex.setup_indexes
 
     Language.with_translations.order('translations_count DESC').each do |language|
-      if Rails.cache.read("lang_#{language.id}_index").nil?
-        puts "importing translations for #{language.name}"
-        Qdc::Search::ContentIndex.import_translation_for_language(language)
-        Rails.cache.write("lang_#{language.id}_index", true, expires_in: 1.day.from_now)
-      end
+      puts "importing translations for #{language.name}"
+      Qdc::Search::ContentIndex.import_translation_for_language(language)
     end
 
     index_end = Time.now
