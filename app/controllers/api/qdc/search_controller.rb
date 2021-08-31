@@ -19,7 +19,23 @@ module Api::Qdc
     end
 
     def translations
-      params['translations'].to_s.split(',')
+      strong_memoize :valid_translations do
+        # user can get translation using ids or Slug
+        translation = params[:translations].to_s.split(',')
+
+        return [] if translation.blank?
+
+        approved_translations = ResourceContent
+                                  .approved
+                                  .translations
+                                  .one_verse
+
+        params[:translations] = approved_translations
+                                  .where(id: translation)
+                                  .or(approved_translations.where(slug: translation))
+                                  .pluck(:id)
+        params[:translations]
+      end
     end
 
     def query
@@ -34,7 +50,7 @@ module Api::Qdc
     def page
       # NODE: ES's pagination starts from 0,
       # pagy gem we're using to render pagination start pages from 1
-      if(p=(params[:page] || params[:p]))
+      if (p = (params[:page] || params[:p]))
         [0, p.to_i - 1].max
       else
         0

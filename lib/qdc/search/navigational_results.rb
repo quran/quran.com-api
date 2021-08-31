@@ -28,7 +28,7 @@ module Qdc
       def prepare_results
         @search.response['hits']['hits'].map do |result|
           result['_source']
-        end.uniq
+        end
       end
     end
   end

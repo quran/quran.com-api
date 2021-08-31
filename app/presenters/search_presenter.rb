@@ -29,28 +29,28 @@ class SearchPresenter < BasePresenter
     pagination.next
   end
 
-  def verses_results
+  def get_navigational_results
+    navigational_results.map do |record|
+      record.except 'priority'
+    end
+  end
+
+  def get_verses_results
     verses = load_verses(@results.pluck("verse_id").uniq)
     search_result = {
-
     }
 
-    @results.map do |item|
-      if RESULT_AYAH == item['result_type']
-        search_result[item['verse_id']] ||= item
-        search_result[item['verse_id']][:words] = prepare_verse_words(item, verses)
-      else
-        search_result[item['verse_id']] ||= {
-          result_type: 'ayah',
-          verse_key: item['verse_key'],
-          verse_id: item['verse_id']
-        }
+    @results.each do |item|
+      search_result[item['verse_id']] ||= {
+        verse_key: item['verse_key'],
+        words: prepare_verse_words(item, verses),
+        translations: []
+      }
 
-        search_result[item['verse_id']][:words] ||= prepare_verse_words(item, verses)
-        search_result[item['verse_id']]['translations'] ||= []
-        search_result[item['verse_id']]['translations'].push({
-                                                               text: item['text'][0],
-                                                               id: item['id'],
+      if item['resource_name']
+        # Translation result
+        search_result[item['verse_id']][:translations].push({
+                                                               text: item['text'],
                                                                resource_id: item['resource_id'],
                                                                resource_name: item['resource_name'],
                                                                language_name: item['language_name']
@@ -66,16 +66,13 @@ class SearchPresenter < BasePresenter
 
   def prepare_verse_words(item, verses)
     verse = verses.detect { |v| v.id == item['verse_id'] }
-    highlighted_words = item['highlighted_words'] || []
+    highlighted_words = item['highlighted_words']
 
     verse.words.map do |w|
-      {
-        id: w.id,
-        position: w.position,
+      word = {
         audio_url: w.audio_url,
-        char_type_name: "word",
+        char_type_name: w.char_type_name,
         text: w.qpc_uthmani_hafs,
-        highlight: highlighted_words.include?(w.id),
         translation: {
           text: w.word_translation&.text,
           language_name: w.word_translation&.language_name
@@ -85,6 +82,12 @@ class SearchPresenter < BasePresenter
           language_name: 'english'
         }
       }
+
+      if highlighted_words&.include?(w.id)
+        word[:highlight] = true
+      end
+
+      word
     end
   end
 

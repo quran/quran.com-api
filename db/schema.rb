@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_26_193559) do
+ActiveRecord::Schema.define(version: 2021_08_29_180616) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -458,6 +458,20 @@ ActiveRecord::Schema.define(version: 2021_08_26_193559) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["page_number"], name: "index_mushas_pages_on_page_number"
+  end
+
+  create_table "navigation_search_records", force: :cascade do |t|
+    t.string "result_type"
+    t.string "searchable_record_type"
+    t.bigint "searchable_record_id"
+    t.string "name"
+    t.string "key"
+    t.string "text"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["result_type"], name: "index_navigation_search_records_on_result_type"
+    t.index ["searchable_record_type", "searchable_record_id"], name: "index_navigation_search_records_on_searchable_record"
+    t.index ["text"], name: "index_navigation_search_records_on_text"
   end
 
   create_table "qirat_types", force: :cascade do |t|

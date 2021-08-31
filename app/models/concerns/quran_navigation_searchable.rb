@@ -5,6 +5,7 @@ module QuranNavigationSearchable
 
   included do
     include Elasticsearch::Model
+    has_many :navigation_search_records, as: :searchable_record
 
     index_name "navigation"
     settings YAML.safe_load(
@@ -16,11 +17,16 @@ module QuranNavigationSearchable
               type: 'text',
               index_options: 'offsets',
               index_phrases: true,
-              similarity: 'my_bm25',
-              analyzer: 'english'
+              #similarity: 'my_bm25',
+              analyzer: 'english' do
+        indexes :term,
+                type: 'keyword'
+      end
 
       indexes :id,
               type: 'integer'
+
+      indexes :priority, type: 'integer'
 
       indexes :result_type,
               type: 'keyword'
@@ -39,7 +45,7 @@ module QuranNavigationSearchable
         )
 
         if response['errors']
-          errors += response['items'].select { |k, v| k.ids.first['error'] }.size
+          errors += response['items'].select { |k, v| k['status'] != 200 }.size
         end
       end
 
@@ -51,9 +57,13 @@ module QuranNavigationSearchable
         model.es_document_variations
       end.flatten
 
+      index = 0
       documents.map do |document|
+        index += 1
+
         {
           index: {
+            _id: "#{document[:priority].to_s}-#{index}",
             data: document
           }
         }
@@ -86,16 +96,28 @@ module QuranNavigationSearchable
   end
 
   def chapter_document_variants
-    short_name = ""
+    short_name = name_simple.gsub(/Al|An|-|'/, '')
+    simple = name_simple.gsub(/-|'/, ' ')
+
     names = [
+      id.to_s,
+      short_name,
+      simple,
       name_arabic,
       name_complex,
       name_simple,
       "Surat #{name_simple}",
       "Surah #{name_simple}",
+      "Sura #{name_simple}",
+
+      "Surat #{id}",
       "Surah #{id}",
       "Sura #{id}",
-      "Surat #{id}",
+
+      "Surat #{short_name}",
+      "Surah #{short_name}",
+      "Sura #{short_name}",
+
       id.to_roman,
       "Chapter #{id}",
       "Ch #{id}",
@@ -105,89 +127,77 @@ module QuranNavigationSearchable
     document_name = "Surah #{name_simple}"
     (names + translated_names.pluck(:name)).flatten.map do |name|
       {
-        text: name,
         id: id,
+        text: name,
         key: id,
         name: document_name,
-        result_type: 'surah'
+        result_type: 'surah',
+        priority: 1 + id # We're using priority for aggregrating uniq navigational hits
       }
     end
   end
 
   def juz_document_variants
-    [
-      {
-        text: "Juz #{juz_number}",
-        key: juz_number,
-        id: juz_number,
-        name: "Juz #{juz_number}",
-        result_type: 'juz'
-      },
-      {
-        text: "الجزء #{juz_number}",
-        key: juz_number,
-        id: juz_number,
-        name: "Juz #{juz_number}",
-        result_type: 'juz'
-      },
-      {
-        text: juz_number,
-        key: juz_number,
-        id: juz_number,
-        name: "Juz #{juz_number}",
-        result_type: 'juz'
-      }
+    variants = [
+      juz_number.to_s,
+      "Juz #{juz_number}",
+      "Para #{juz_number}",
     ]
-  end
 
-  def verse_document_variants
-    [{
-       text: verse_key,
-       key: verse_key,
-       id: id,
-       name: "Surah #{chapter.name_simple}, verse #{verse_number}",
-       result_type: 'ayah'
-     },
-     {
-       text: verse_key.gsub(':', '/'),
-       key: verse_key,
-       id: id,
-       name: "Surah #{chapter.name_simple}, verse #{verse_number}",
-       result_type: 'ayah'
-     }
-    ]
+    variants.map do |variant|
+      {
+        id: juz_number,
+        text: variant,
+        key: juz_number,
+        name: "Juz #{juz_number}",
+        result_type: 'juz',
+        priority: 60000 + juz_number
+      }
+    end
   end
 
   def page_document_variants
-    [
-      {
-        text: "Page #{page_number}",
-        id: id,
-        key: id,
-        name: "Page #{page_number}",
-        result_type: 'page'
-      },
-      {
-        text: "Pg #{page_number}",
-        id: id,
-        key: id,
-        name: "Page #{page_number}",
-        result_type: 'page'
-      },
-      {
-        text: "p #{page_number}",
-        id: id,
-        key: id,
-        name: "Page #{page_number}",
-        result_type: 'page'
-      },
-      {
-        text: "#{page_number}",
-        id: id,
-        key: id,
-        name: "Page #{page_number}",
-        result_type: 'page'
-      }
+    variants = [
+      page_number.to_s,
+      "Page #{page_number}",
+      "Pg #{page_number}",
+      "P #{page_number}",
+      "p#{page_number}"
     ]
+
+    variants.map do |variant|
+      {
+        id: page_number,
+        text: variant,
+        key: page_number,
+        name: "Page #{page_number}",
+        result_type: 'page',
+        priority: 50000 + page_number
+      }
+    end
+  end
+
+  def verse_document_variants
+    variants = [
+      verse_key,
+      "#{chapter_id.to_roman} #{verse_number}",
+      "chapter #{chapter_id} verse #{verse_number}",
+      "ch#{chapter_id} v#{verse_number}",
+      "ch #{chapter_id} v #{verse_number}",
+      "#{chapter.name_arabic} #{verse_number}",
+      "surah #{chapter_id} ayah #{verse_number}",
+      "ayah #{verse_number} surah #{chapter_id}"
+    ]
+
+    variants.map do |variant|
+      {
+        id: id,
+        text: variant,
+        key: verse_key,
+        name: "Surah #{chapter.name_simple}, verse #{verse_number}",
+        result_type: 'ayah',
+        priority: 100000 + id
+      }
+    end
   end
 end

@@ -2,6 +2,7 @@
 
 class ApplicationController < ActionController::API
   serialization_scope :params
+  include QuranUtils::StrongMemoize
 
   class APIValidation < StandardError; end
 

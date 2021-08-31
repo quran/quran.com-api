@@ -2,7 +2,7 @@
 module Qdc
   module Search
     class Results
-      RESULT_AYAH = 'ayah'
+      QURAN_AYAHS_INDEX = 'quran_verses'
 
       def initialize(search, page, page_size)
         @search = search
@@ -47,10 +47,10 @@ module Qdc
           document['id'] = hit['_id']
 
           if hit['highlight']
-            document['text'] = hit['highlight']['text']
+            document['text'] = hit['highlight']['text'][0]
           end
 
-          if RESULT_AYAH == document['result_type']
+          if QURAN_AYAHS_INDEX == hit['_index']
             highlighted_words = hit.dig('inner_hits', 'words', 'hits', 'hits')
             document['highlighted_words'] = highlighted_words.map do |w|
               w['_source']["id"]

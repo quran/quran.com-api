@@ -1,11 +1,10 @@
 pagy_info = @presenter.pagination
-navigational_results = @presenter.navigational_results
 
 json.object! do
   json.result do
     json.object! do
-      json.navigation navigational_results
-      json.verses @presenter.verses_results
+      json.navigation @presenter.get_navigational_results
+      json.verses @presenter.get_verses_results
     end
   end
 

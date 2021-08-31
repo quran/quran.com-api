@@ -103,8 +103,7 @@ module Qdc
                 language_name: language_name,
                 verse_id: verse_id,
                 verse_key: verse_key,
-                chapter_id: chapter_id,
-                result_type: 'translation'
+                chapter_id: chapter_id
               }
             end
           end
