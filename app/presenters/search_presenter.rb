@@ -70,17 +70,8 @@ class SearchPresenter < BasePresenter
 
     verse.words.map do |w|
       word = {
-        audio_url: w.audio_url,
         char_type_name: w.char_type_name,
         text: w.qpc_uthmani_hafs,
-        translation: {
-          text: w.word_translation&.text,
-          language_name: w.word_translation&.language_name
-        },
-        transliteration: {
-          text: w.en_transliteration,
-          language_name: 'english'
-        }
       }
 
       if highlighted_words&.include?(w.id)
@@ -92,21 +83,8 @@ class SearchPresenter < BasePresenter
   end
 
   def load_verses(ids)
-    language = word_trans_language
-    verses = Verse.where(id: ids).select('verses.id')
-    words_with_default_translation = verses.where(word_translations: { language_id: Language.default.id })
-
-    if language
-      verses = verses
-                 .where(word_translations: { language_id: language.id })
-                 .or(words_with_default_translation)
-                 .eager_load(words: :word_translation)
-    else
-      verses = words_with_default_translation
-                 .eager_load(words: :word_translation)
-    end
-
-    verses.order("words.position ASC, word_translations.priority ASC")
+    verses = Verse.where(id: ids).eager_load(:words).select('verses.id')
+    verses.order("words.position ASC")
   end
 
   def word_trans_language

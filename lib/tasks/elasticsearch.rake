@@ -68,6 +68,7 @@ namespace :elasticsearch do
     Language.with_translations.order('translations_count DESC').each do |language|
       puts "importing translations for #{language.name}"
       Qdc::Search::ContentIndex.import_translation_for_language(language)
+      sleep 2
     end
 
     index_end = Time.now
