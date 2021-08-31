@@ -45,7 +45,7 @@ namespace :elasticsearch do
     index_start = Time.now
 
     Verse.__elasticsearch__.create_index!
-    Chapter.__elasticsearch__.create_index! force: true
+    Chapter.__elasticsearch__.create_index!
 
     navigational_resources = [
       Chapter.includes(:translated_names),

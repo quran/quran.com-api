@@ -42,9 +42,6 @@ module QuranSearchable
         methods: [:verse_id]
       )
 
-      hash[:language_id] = 0
-      hash[:resource_id] = 0
-
       hash[:words] = char_words.map do |w|
         {
           id: w.id,
@@ -63,8 +60,6 @@ module QuranSearchable
     mappings dynamic: 'false' do
       indexes :chapter_id, type: 'keyword' # Used for filters, when user want to search from specific surah
       indexes :words_count, type: 'integer' # Used for sorting ayah, short ayahs came first in the result
-      indexes :language_id, type: 'keyword' # Used for filtering the translations for language and resource.
-      indexes :resource_id, type: 'keyword'
 
       indexes :words, type: 'nested', include_in_parent: true do
         indexes :text_uthmani,
