@@ -49,5 +49,9 @@ module Api::V4
 
       list.first
     end
+
+    def render_404
+      render partial: "api/errors/404", status: 404
+    end
   end
 end

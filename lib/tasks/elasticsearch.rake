@@ -48,10 +48,10 @@ namespace :elasticsearch do
     Chapter.__elasticsearch__.create_index!
 
     navigational_resources = [
-      Chapter.includes(:translated_names),
-      MushafPage,
-      Juz,
-      VerseKey.includes(:chapter).order("verse_index ASC")
+      Chapter.includes(:translated_names).order('chapter_number ASC'),
+      MushafPage.order('page_number ASC'),
+      Juz.order('juz_number ASC'),
+      VerseKey.unscope(:order).includes(:chapter).order("verses.verse_index ASC")
     ]
 
     navigational_resources.each do |model|

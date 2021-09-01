@@ -28,6 +28,8 @@ module Qdc
       def prepare_results
         @search.response['hits']['hits'].map do |result|
           result['_source']
+        end.sort_by do |result|
+          result['priority']
         end
       end
     end
