@@ -7,7 +7,6 @@ module Qdc
       DEFAULT_TRANSLATION = [131, 20]
 
       QURAN_SOURCE_ATTRS = [
-        'result_type',
         'language_id',
         'language_name',
         'resource_id',
@@ -26,7 +25,7 @@ module Qdc
 
       def search
         indexes = indexes_for_search
-        search = Elasticsearch::Model.search(search_definition, [], index: indexes_for_search)
+        search = Elasticsearch::Model.search(search_definition, [], index: indexes)
 
         # For debugging, copy the query and paste in kibana for debugging
         if DEBUG_ES_QUERIES
@@ -46,10 +45,10 @@ module Qdc
           _source: source_attributes,
           query: search_query,
           highlight: {
-            "fields": {
-              "text": {
-                "number_of_fragments": 0,
-                "type": "plain"
+            fields: {
+              text: {
+                number_of_fragments: 0,
+                type: 'plain'
               }
             }
           },

@@ -35,15 +35,49 @@ class SearchPresenter < BasePresenter
     end
   end
 
+  def get_v3_results
+    verses = load_verses(@results.pluck("verse_id").uniq)
+    search_result = {
+    }
+
+    @results.each do |item|
+      verse = verses.detect { |v| v.id == item['verse_id'] }
+
+      search_result[item['verse_id']] ||= {
+        verse_key: item['verse_key'],
+        verse_id: item['verse_id'],
+        text: verse.text_uthmani,
+        highlighted: item['ayah_text'],
+        words: prepare_verse_words(item, verse),
+        translations: []
+      }
+
+      if item['resource_name']
+        # Translation result
+        search_result[item['verse_id']][:translations].push({
+                                                              text: item['text'],
+                                                              resource_id: item['resource_id'],
+                                                              name: item['resource_name'],
+                                                              language_name: item['language_name']
+                                                            }
+        )
+      end
+    end
+
+    search_result.values
+  end
+
   def get_verses_results
     verses = load_verses(@results.pluck("verse_id").uniq)
     search_result = {
     }
 
     @results.each do |item|
+      verse = verses.detect { |v| v.id == item['verse_id'] }
+
       search_result[item['verse_id']] ||= {
         verse_key: item['verse_key'],
-        words: prepare_verse_words(item, verses),
+        words: prepare_verse_words(item, verse),
         translations: []
       }
 
@@ -64,8 +98,7 @@ class SearchPresenter < BasePresenter
 
   protected
 
-  def prepare_verse_words(item, verses)
-    verse = verses.detect { |v| v.id == item['verse_id'] }
+  def prepare_verse_words(item, verse)
     highlighted_words = item['highlighted_words']
 
     verse.words.map do |w|
@@ -83,7 +116,7 @@ class SearchPresenter < BasePresenter
   end
 
   def load_verses(ids)
-    verses = Verse.where(id: ids).eager_load(:words).select('verses.id')
+    verses = Verse.where(id: ids).eager_load(:words).select('verses.id, verses.text_uthmani')
     verses.order("words.position ASC")
   end
 
