@@ -1,28 +1,25 @@
 # frozen_string_literal: true
-
 module Search
   class Results
-    attr_reader :result_type
+    QURAN_AYAHS_INDEX = 'quran_verses'
 
-    def initialize(search, page, search_type = nil)
+    def initialize(search, page, page_size)
       @search = search
-      @record_highlights = {}
       @result_size = 0
       @current_page = page
-      @result_type = search_type
+      @page_size = page_size
     end
 
     def results
       if empty?
         {}
       else
-        preppare_heighlights
-        @record_highlights
+        prepare_results
       end
     end
 
     def pagination
-      Pagy.new(count: total_count, page: @current_page + 1, per_page: VERSES_PER_PAGE)
+      Pagy.new(count: total_count, page: @current_page + 1, items: @page_size)
     end
 
     def empty?
@@ -43,60 +40,28 @@ module Search
       @search.response['hits']['total']['value']
     end
 
-    def preppare_heighlights
-      @search.response['hits']['hits'].each do |hit|
-        if :navigation == @result_type
-          @record_highlights[hit['_source']['url']] = fetch_navigational_highlighted_text(hit)
-        else
-          @record_highlights[hit['_source']['verse_id']] = {
-              text: fetch_verse_highligted_text(hit['highlight']),
-              translations: fetch_translations(hit)
-          }
+    def prepare_results
+      @search.response['hits']['hits'].map do |hit|
+        document = hit['_source'].to_h
+        document['id'] = hit['_id']
+
+        if (highlight = hit['highlight'])
+          translation = highlight['text']
+          ayah_text = highlight['text_imlaei.text'] || highlight['text_uthmani.text'] || highlight['qpc_uthmani_hafs.text']
+
+          document['text'] = translation[0] if translation
+          document['ayah_text'] = ayah_text[0] if ayah_text
         end
-        @result_size += 1
-      end
-    end
 
-    def fetch_navigational_highlighted_text(hit)
-      if hit['highlight'].present?
-        hit['highlight'].values[0][0]
-      else
-        hit['_source']['name']
-      end
-    end
-
-    def fetch_verse_highligted_text(highlight)
-      if highlight.presence
-        highlight.values[0][0]
-      end
-    end
-
-    def fetch_translations(hit)
-      return [] if hit['inner_hits'].blank?
-
-      translations = []
-
-      hit['inner_hits'].each do |lang, inner_hit|
-        total = inner_hit['hits']['total']['value']
-
-        if total > 0
-          language = inner_hit['hits']['hits'][0]['_source']['language']
-
-          inner_hit['hits']['hits'].first(5).map do |trans_hit|
-            _source = trans_hit['_source']
-
-            translations << {
-                resource_id: _source['resource_id'],
-                resource_name: _source['resource_name'],
-                id: trans_hit['_id'],
-                text: trans_hit['highlight'].values[0][0],
-                language: language
-            }
+        if QURAN_AYAHS_INDEX == hit['_index']
+          highlighted_words = hit.dig('inner_hits', 'words', 'hits', 'hits')
+          document['highlighted_words'] = highlighted_words.map do |w|
+            w['_source']["id"]
           end
         end
-      end
 
-      translations
+        document
+      end
     end
   end
 end

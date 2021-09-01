@@ -1,4 +1,6 @@
 pagy_info = @presenter.pagination
+results = @presenter.get_v3_results
+
 json.object! do
   json.search do
     json.object! do
@@ -7,25 +9,7 @@ json.object! do
       json.current_page pagy_info.page
       json.total_pages pagy_info.pages
 
-      json.results do
-        json.array! @presenter.items do |item|
-
-          json.object! do
-            json.verse_id item.id
-            json.text item.highlighted_text
-
-            json.translations do
-              json.array! @presenter.load_translations(item) do |trans|
-                json.object! do
-                  json.name trans[:resource_name]
-                  json.id trans[:resource_id]
-                  json.text trans[:text]
-                end
-              end
-            end
-          end
-        end
-      end
+      json.results results
     end
   end
 end

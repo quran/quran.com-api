@@ -23,6 +23,7 @@
 
 class Language < ApplicationRecord
   include NameTranslateable
+  serialize :es_indexes
 
   scope :with_translations, -> { where('translations_count > 0').order('translations_count DESC') }
 
