@@ -9,7 +9,11 @@ module Api::V4
     end
 
     def show
-      render
+      if @presenter.chapter.nil?
+        render_404
+      else
+        render
+      end
     end
 
     protected

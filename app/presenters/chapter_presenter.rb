@@ -13,10 +13,13 @@ class ChapterPresenter < BasePresenter
   end
 
   def chapter
-    finder.find_and_eager_load(params[:id], locale: locale)
+    strong_memoize :chapter do
+      finder.find_and_eager_load(params[:id].strip, locale: locale)
+    end
   end
 
   protected
+
   def finder
     ChapterFinder.new
   end

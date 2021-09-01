@@ -54,7 +54,8 @@ module Qdc
           match_phrase_prefix: {
             text: {
               query: query.query,
-              slop: PREFIX_SLOP
+              slop: PREFIX_SLOP,
+              max_expansions: 1
             }
           }
         }
@@ -63,7 +64,7 @@ module Qdc
       def match_phrase_query
         {
           match_phrase: {
-            text: {
+            "text.term": {
               query: query.query,
               slop: PREFIX_SLOP
             }
@@ -73,11 +74,6 @@ module Qdc
 
       def sort_query
         [
-          {
-            priority: {
-              order: 'asc'
-            }
-          }
         ]
       end
 
