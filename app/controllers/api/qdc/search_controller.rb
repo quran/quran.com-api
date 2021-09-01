@@ -19,23 +19,21 @@ module Api::Qdc
     end
 
     def translations
-      strong_memoize :valid_translations do
-        # user can get translation using ids or Slug
-        translation = params[:translations].to_s.split(',')
+      # user can get translation using ids or Slug
+      translation = (params[:translations] || params[:filter_translations]).to_s.split(',')
 
-        return [] if translation.blank?
+      return [] if translation.blank?
 
-        approved_translations = ResourceContent
-                                  .approved
-                                  .translations
-                                  .one_verse
+      approved_translations = ResourceContent
+                                .approved
+                                .translations
+                                .one_verse
 
-        params[:translations] = approved_translations
-                                  .where(id: translation)
-                                  .or(approved_translations.where(slug: translation))
-                                  .pluck(:id)
-        params[:translations]
-      end
+      params[:translations] = approved_translations
+                                .where(id: translation)
+                                .or(approved_translations.where(slug: translation))
+                                .pluck(:id)
+      params[:translations]
     end
 
     def query
