@@ -15,7 +15,27 @@ module Api::V4
     protected
 
     def language
-      (params[:language] || params[:locale]).presence || 'en'
+      (params[:language] || params[:locale]).presence
+    end
+
+    def translations
+      strong_memoize :valid_translations do
+        # user can get translation using ids or Slug
+        translation = params[:translations].to_s.split(',')
+
+        return [] if translation.blank?
+
+        approved_translations = ResourceContent
+                                  .approved
+                                  .translations
+                                  .one_verse
+
+        params[:translations] = approved_translations
+                                  .where(id: translation)
+                                  .or(approved_translations.where(slug: translation))
+                                  .pluck(:id)
+        params[:translations]
+      end
     end
 
     def query
