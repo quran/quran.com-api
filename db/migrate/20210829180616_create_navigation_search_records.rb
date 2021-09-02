@@ -9,5 +9,11 @@ class CreateNavigationSearchRecords < ActiveRecord::Migration[6.1]
 
       t.timestamps
     end
+
+    add_column :slugs, :language_priority, :integer
+    add_index :slugs, :language_priority
+
+    add_column :slugs, :language_id, :integer
+    add_index :slugs, :language_id
   end
 end

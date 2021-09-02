@@ -15,7 +15,7 @@ module Qdc
 
     def chapter
       strong_memoize :chapter do
-        finder.find_and_eager_load(params[:id], locale: locale)
+        finder.find_and_eager_load(params[:id], locale: locale, include_slugs: include_slugs?)
       end
     end
 
