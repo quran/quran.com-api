@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_29_180616) do
+ActiveRecord::Schema.define(version: 2021_09_03_061423) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -234,6 +234,42 @@ ActiveRecord::Schema.define(version: 2021_08_29_180616) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["parent_id"], name: "index_char_types_on_parent_id"
+  end
+
+  create_table "corpus_morphology_terms", force: :cascade do |t|
+    t.string "category"
+    t.string "term"
+    t.string "arabic_grammar_name"
+    t.string "english_grammar_name"
+    t.string "urdu_grammar_name"
+    t.text "arabic_description"
+    t.text "english_description"
+    t.text "urdu_description"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["category"], name: "index_corpus_morphology_terms_on_category"
+    t.index ["term"], name: "index_corpus_morphology_terms_on_term"
+  end
+
+  create_table "corpus_word_forms", force: :cascade do |t|
+    t.bigint "word_id"
+    t.string "name"
+    t.string "arabic"
+    t.string "arabic_simple"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["word_id"], name: "index_corpus_word_forms_on_word_id"
+  end
+
+  create_table "corpus_word_grammars", force: :cascade do |t|
+    t.bigint "word_id"
+    t.integer "position"
+    t.string "text"
+    t.string "type"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["word_id", "position"], name: "index_corpus_word_grammars_on_word_id_and_position"
+    t.index ["word_id"], name: "index_corpus_word_grammars_on_word_id"
   end
 
   create_table "data_sources", id: :serial, force: :cascade do |t|
@@ -616,9 +652,15 @@ ActiveRecord::Schema.define(version: 2021_08_29_180616) do
     t.datetime "updated_at", null: false
     t.boolean "is_default", default: false
     t.string "name"
+    t.integer "priority"
+    t.integer "language_priority"
+    t.integer "language_id"
     t.index ["chapter_id", "slug"], name: "index_slugs_on_chapter_id_and_slug"
     t.index ["chapter_id"], name: "index_slugs_on_chapter_id"
     t.index ["is_default"], name: "index_slugs_on_is_default"
+    t.index ["language_id"], name: "index_slugs_on_language_id"
+    t.index ["language_priority"], name: "index_slugs_on_language_priority"
+    t.index ["priority"], name: "index_slugs_on_priority"
   end
 
   create_table "source", primary_key: "source_id", id: :integer, default: nil, force: :cascade do |t|
@@ -867,6 +909,7 @@ ActiveRecord::Schema.define(version: 2021_08_29_180616) do
     t.string "qpc_uthmani_bazzi"
     t.string "qpc_uthmani_soosi"
     t.integer "words_count"
+    t.string "text_nastaleeq_indopak"
     t.index ["chapter_id"], name: "index_verses_on_chapter_id"
     t.index ["verse_index"], name: "index_verses_on_verse_index"
     t.index ["verse_key"], name: "index_verses_on_verse_key"
@@ -1037,6 +1080,7 @@ ActiveRecord::Schema.define(version: 2021_08_29_180616) do
     t.string "qpc_uthmani_qumbul"
     t.string "qpc_uthmani_bazzi"
     t.string "qpc_uthmani_soosi"
+    t.string "text_nastaleeq_indopak"
     t.index ["chapter_id"], name: "index_words_on_chapter_id"
     t.index ["char_type_id"], name: "index_words_on_char_type_id"
     t.index ["location"], name: "index_words_on_location"
