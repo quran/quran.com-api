@@ -13,5 +13,10 @@ class CreateCorpusMorphologyTerms < ActiveRecord::Migration[6.1]
 
       t.timestamps
     end
+
+    add_column :mushafs, :qirat_type_id, :integer
+    add_column :mushafs, :enabled, :boolean
+    add_index :mushafs, :enabled
+    add_index :mushafs, :qirat_type_id
   end
 end
