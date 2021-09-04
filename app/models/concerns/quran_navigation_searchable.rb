@@ -182,11 +182,12 @@ module QuranNavigationSearchable
       verse_key,
       "#{chapter_id.to_roman} #{verse_number}",
       "chapter #{chapter_id} verse #{verse_number}",
-      "ch#{chapter_id} v#{verse_number}",
-      "ch #{chapter_id} v #{verse_number}",
+      "ch#{chapter_id} v#{verse_number}", #ch23 v2
+      "ch#{chapter_id}v#{verse_number}", #ch23v2
+      "c#{chapter_id}v#{verse_number}", #v2v3
       "#{chapter.name_arabic} #{verse_number}",
       "surah #{chapter_id} ayah #{verse_number}",
-      "ayah #{verse_number} surah #{chapter_id}"
+      "ayah #{verse_number} surah #{chapter_id}",
     ]
 
     variants.map do |variant|

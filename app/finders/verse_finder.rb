@@ -19,7 +19,9 @@ class VerseFinder
     load_audio
     load_segments
 
-    @results.order('verses.verse_index ASC, words.position ASC, word_translations.priority ASC')
+    translations_order = valid_translations.present? ? ',translations.priority ASC' : ''
+
+    @results.order("verses.verse_index ASC, words.position ASC, word_translations.priority ASC #{translations_order}".strip)
   end
 
   def per_page
@@ -60,6 +62,7 @@ class VerseFinder
   end
 
   protected
+
   def fetch_verses_range
     verse_start = verse_pagination_start
     verse_end = verse_pagination_end(verse_start)
@@ -118,20 +121,22 @@ class VerseFinder
   end
 
   def valid_translations
-    # user can get translation using ids or Slug
-    translation = params[:translations].to_s.split(',')
+    strong_memoize :translations do
+      # user can get translation using ids or Slug
+      translation = params[:translations].to_s.split(',')
 
-    return [] if translation.blank?
+      return [] if translation.blank?
 
-    approved_translations = ResourceContent
-                              .approved
-                              .translations
-                              .one_verse
+      approved_translations = ResourceContent
+                                .approved
+                                .translations
+                                .one_verse
 
-    params[:translations] = approved_translations
-                              .where(id: translation)
-                              .or(approved_translations.where(slug: translation))
-                              .pluck(:id)
+      params[:translations] = approved_translations
+                                .where(id: translation)
+                                .or(approved_translations.where(slug: translation))
+                                .pluck(:id)
+    end
   end
 
   def offset

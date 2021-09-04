@@ -13,7 +13,9 @@ class V4::VerseFinder < ::VerseFinder
     load_tafsirs(tafsirs) if tafsirs.present?
 
     words_ordering = words ? ', words.position ASC, word_translations.priority ASC' : ''
-    @results.order("verses.verse_index ASC #{words_ordering}".strip).sample
+    translations_order = translations.present? ? ',translations.priority ASC' : ''
+
+    @results.order("verses.verse_index ASC #{words_ordering} #{translations_order}".strip).sample
   end
 
   def find_with_key(key, language_code, words: true, tafsirs: false, translations: false, audio: false)
@@ -25,7 +27,9 @@ class V4::VerseFinder < ::VerseFinder
     load_tafsirs(tafsirs) if tafsirs.present?
 
     words_ordering = words ? ', words.position ASC, word_translations.priority ASC' : ''
-    @results.order("verses.verse_index ASC #{words_ordering}".strip).first
+    translations_order = translations.present? ? ',translations.priority ASC' : ''
+
+    @results.order("verses.verse_index ASC #{words_ordering} #{translations_order}".strip).first
   end
 
   def load_verses(filter, language_code, words: true, tafsirs: false, translations: false, audio: false)
@@ -36,7 +40,9 @@ class V4::VerseFinder < ::VerseFinder
     load_tafsirs(tafsirs) if tafsirs.present?
 
     words_ordering = words ? ', words.position ASC, word_translations.priority ASC' : ''
-    @results.order("verses.verse_index ASC #{words_ordering}".strip)
+    translations_order = translations.present? ? ',translations.priority ASC' : ''
+
+    @results.order("verses.verse_index ASC #{words_ordering} #{translations_order}".strip)
   end
 
   def fetch_verses_range(filter)
