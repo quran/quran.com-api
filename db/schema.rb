@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_03_061423) do
+ActiveRecord::Schema.define(version: 2021_09_04_110326) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -426,6 +426,8 @@ ActiveRecord::Schema.define(version: 2021_09_03_061423) do
     t.string "text_clean"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "words_count"
+    t.integer "uniq_words_count"
   end
 
   create_table "media_contents", id: :serial, force: :cascade do |t|
@@ -482,7 +484,11 @@ ActiveRecord::Schema.define(version: 2021_09_03_061423) do
     t.boolean "is_default", default: false
     t.string "default_font_name"
     t.integer "pages_count"
+    t.integer "qirat_type_id"
+    t.boolean "enabled"
+    t.index ["enabled"], name: "index_mushafs_on_enabled"
     t.index ["is_default"], name: "index_mushafs_on_is_default"
+    t.index ["qirat_type_id"], name: "index_mushafs_on_qirat_type_id"
   end
 
   create_table "mushas_pages", force: :cascade do |t|
@@ -642,6 +648,8 @@ ActiveRecord::Schema.define(version: 2021_09_03_061423) do
     t.string "value"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "words_count"
+    t.integer "uniq_words_count"
   end
 
   create_table "slugs", force: :cascade do |t|
@@ -679,6 +687,8 @@ ActiveRecord::Schema.define(version: 2021_09_03_061423) do
     t.string "text_clean"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "words_count"
+    t.integer "uniq_words_count"
   end
 
   create_table "style", primary_key: "style_id", id: :integer, default: -> { "nextval('_style_style_id_seq'::regclass)" }, force: :cascade do |t|
