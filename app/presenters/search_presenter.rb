@@ -4,11 +4,14 @@ class SearchPresenter < BasePresenter
   RESULT_AYAH = 'ayah'
   attr_reader :query,
               :navigational_results,
+              :results,
               :pagination
 
   def initialize(params, query)
     super(params)
     @query = query
+    @navigational_results = []
+    @results = []
   end
 
   def add_navigational_results(search)
