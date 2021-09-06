@@ -7,7 +7,6 @@
 #  language_priority :integer
 #  locale            :string
 #  name              :string
-#  priority          :integer
 #  slug              :string
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
@@ -21,7 +20,6 @@
 #  index_slugs_on_is_default           (is_default)
 #  index_slugs_on_language_id          (language_id)
 #  index_slugs_on_language_priority    (language_priority)
-#  index_slugs_on_priority             (priority)
 #
 require 'rails_helper'
 

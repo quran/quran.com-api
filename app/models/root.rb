@@ -4,12 +4,10 @@
 #
 # Table name: roots
 #
-#  id               :integer          not null, primary key
-#  uniq_words_count :integer
-#  value            :string
-#  words_count      :integer
-#  created_at       :datetime         not null
-#  updated_at       :datetime         not null
+#  id         :integer          not null, primary key
+#  value      :string
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
 #
 
 class Root < ApplicationRecord

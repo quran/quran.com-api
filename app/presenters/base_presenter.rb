@@ -41,6 +41,8 @@ class BasePresenter
   end
 
   def fetch_locale
-    params[:language].presence || params[:locale].presence || 'en'
+    strong_memoize :locale do
+      params[:language].presence || params[:locale].presence || 'en'
+    end
   end
 end

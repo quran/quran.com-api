@@ -426,8 +426,6 @@ ActiveRecord::Schema.define(version: 2021_09_04_110326) do
     t.string "text_clean"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "words_count"
-    t.integer "uniq_words_count"
   end
 
   create_table "media_contents", id: :serial, force: :cascade do |t|
@@ -486,6 +484,7 @@ ActiveRecord::Schema.define(version: 2021_09_04_110326) do
     t.integer "pages_count"
     t.integer "qirat_type_id"
     t.boolean "enabled"
+    t.integer "resource_content_id"
     t.index ["enabled"], name: "index_mushafs_on_enabled"
     t.index ["is_default"], name: "index_mushafs_on_is_default"
     t.index ["qirat_type_id"], name: "index_mushafs_on_qirat_type_id"
@@ -610,7 +609,7 @@ ActiveRecord::Schema.define(version: 2021_09_04_110326) do
     t.integer "author_id"
     t.integer "data_source_id"
     t.string "author_name"
-    t.string "resource_type"
+    t.string "resource_type_name"
     t.string "sub_type"
     t.string "name"
     t.text "description"
@@ -625,6 +624,7 @@ ActiveRecord::Schema.define(version: 2021_09_04_110326) do
     t.text "resource_info"
     t.string "resource_id"
     t.jsonb "meta_data", default: {}
+    t.string "resource_type"
     t.index ["approved"], name: "index_resource_contents_on_approved"
     t.index ["author_id"], name: "index_resource_contents_on_author_id"
     t.index ["cardinality_type"], name: "index_resource_contents_on_cardinality_type"
@@ -634,7 +634,7 @@ ActiveRecord::Schema.define(version: 2021_09_04_110326) do
     t.index ["mobile_translation_id"], name: "index_resource_contents_on_mobile_translation_id"
     t.index ["priority"], name: "index_resource_contents_on_priority"
     t.index ["resource_id"], name: "index_resource_contents_on_resource_id"
-    t.index ["resource_type"], name: "index_resource_contents_on_resource_type"
+    t.index ["resource_type_name"], name: "index_resource_contents_on_resource_type_name"
     t.index ["slug"], name: "index_resource_contents_on_slug"
     t.index ["sub_type"], name: "index_resource_contents_on_sub_type"
   end
@@ -648,8 +648,6 @@ ActiveRecord::Schema.define(version: 2021_09_04_110326) do
     t.string "value"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "words_count"
-    t.integer "uniq_words_count"
   end
 
   create_table "slugs", force: :cascade do |t|
@@ -660,7 +658,6 @@ ActiveRecord::Schema.define(version: 2021_09_04_110326) do
     t.datetime "updated_at", null: false
     t.boolean "is_default", default: false
     t.string "name"
-    t.integer "priority"
     t.integer "language_priority"
     t.integer "language_id"
     t.index ["chapter_id", "slug"], name: "index_slugs_on_chapter_id_and_slug"
@@ -668,7 +665,6 @@ ActiveRecord::Schema.define(version: 2021_09_04_110326) do
     t.index ["is_default"], name: "index_slugs_on_is_default"
     t.index ["language_id"], name: "index_slugs_on_language_id"
     t.index ["language_priority"], name: "index_slugs_on_language_priority"
-    t.index ["priority"], name: "index_slugs_on_priority"
   end
 
   create_table "source", primary_key: "source_id", id: :integer, default: nil, force: :cascade do |t|
@@ -687,8 +683,6 @@ ActiveRecord::Schema.define(version: 2021_09_04_110326) do
     t.string "text_clean"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "words_count"
-    t.integer "uniq_words_count"
   end
 
   create_table "style", primary_key: "style_id", id: :integer, default: -> { "nextval('_style_style_id_seq'::regclass)" }, force: :cascade do |t|

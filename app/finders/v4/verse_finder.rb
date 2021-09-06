@@ -167,6 +167,7 @@ class V4::VerseFinder < ::VerseFinder
                    .where(juz_number: juz.juz_number)
                    .where('verses.verse_index >= ? AND verses.verse_index < ?', verse_start.to_i, verse_end.to_i)
     else
+      @total_records = 0
       Verse.where('1=0')
     end
   end

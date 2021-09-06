@@ -4,15 +4,16 @@
 #
 # Table name: mushafs
 #
-#  id                :bigint           not null, primary key
-#  default_font_name :string
-#  description       :text
-#  enabled           :boolean
-#  is_default        :boolean          default(FALSE)
-#  lines_per_page    :integer
-#  name              :string           not null
-#  pages_count       :integer
-#  qirat_type_id     :integer
+#  id                  :bigint           not null, primary key
+#  default_font_name   :string
+#  description         :text
+#  enabled             :boolean
+#  is_default          :boolean          default(FALSE)
+#  lines_per_page      :integer
+#  name                :string           not null
+#  pages_count         :integer
+#  qirat_type_id       :integer
+#  resource_content_id :integer
 #
 # Indexes
 #
@@ -21,5 +22,6 @@
 #  index_mushafs_on_qirat_type_id  (qirat_type_id)
 #
 class Mushaf < ApplicationRecord
+  scope :approved, -> { where enabled: true }
   has_many :mushaf_pages
 end

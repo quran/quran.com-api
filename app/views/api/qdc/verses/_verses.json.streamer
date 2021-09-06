@@ -83,6 +83,22 @@ json.object! do
     end
   end
 
+  if @presenter.render_surah_info?
+    json.chapterInfo do
+      chapter_infos = @presenter.fetch_surah_infos
+      json.object! do
+        chapter_infos.each do |info|
+          json.set! info.chapter_id do
+            json.object! do
+              json.language_name info.language_name
+              json.text info.text
+            end
+          end
+        end
+      end
+    end
+  end
+
   json.pagination do
     json.object! do
       json.per_page @presenter.per_page

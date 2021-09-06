@@ -26,21 +26,20 @@ module Api::V4
     end
 
     def random
-      render partial: 'verse', locals: { verse: @presenter.random_verse(fetch_locale) }
+      render partial: 'verse', locals: { verse: @presenter.random_verse }
     end
 
     def by_key
-      render partial: 'verse', locals: { verse: @presenter.find_verse('by_key', fetch_locale) }
+      render partial: 'verse', locals: { verse: @presenter.find_verse }
     end
 
     protected
     def init_presenter
-      lookahead = RestApi::ParamLookahead.new(params)
-      @presenter = VersesPresenter.new(params, lookahead)
+      @presenter = VersesPresenter.new(params, action_name)
     end
 
     def load_verses
-      @verses = @presenter.verses(action_name, fetch_locale)
+      @verses = @presenter.verses
     end
   end
 end

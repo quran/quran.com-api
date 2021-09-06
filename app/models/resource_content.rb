@@ -15,6 +15,7 @@
 #  priority              :integer
 #  resource_info         :text
 #  resource_type         :string
+#  resource_type_name    :string
 #  slug                  :string
 #  sub_type              :string
 #  created_at            :datetime         not null
@@ -36,7 +37,7 @@
 #  index_resource_contents_on_mobile_translation_id  (mobile_translation_id)
 #  index_resource_contents_on_priority               (priority)
 #  index_resource_contents_on_resource_id            (resource_id)
-#  index_resource_contents_on_resource_type          (resource_type)
+#  index_resource_contents_on_resource_type_name     (resource_type_name)
 #  index_resource_contents_on_slug                   (slug)
 #  index_resource_contents_on_sub_type               (sub_type)
 #
@@ -77,6 +78,7 @@ class ResourceContent < ApplicationRecord
     Info = 'info'
     Video = 'video'
     Audio = 'audio'
+    Data = 'data' # General data, ()Mushaf layout info for now)
   end
 
   belongs_to :author

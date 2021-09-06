@@ -1,7 +1,11 @@
 # frozen_string_literal: true
 
 class VersesPresenter < BasePresenter
-  attr_reader :lookahead, :finder, :mushaf_type
+  attr_reader :lookahead,
+              :finder,
+              :mushaf_type,
+              :verses_filter
+
   VERSE_FIELDS = [
     'chapter_id',
     'text_indopak',
@@ -69,10 +73,11 @@ class VersesPresenter < BasePresenter
     'id'
   ]
 
-  def initialize(params, lookahead)
+  def initialize(params, filter)
     super(params)
 
-    @lookahead = lookahead
+    @verses_filter = filter
+    @lookahead = RestApi::ParamLookahead.new(params)
     @finder = V4::VerseFinder.new(params)
   end
 
@@ -80,7 +85,7 @@ class VersesPresenter < BasePresenter
     @mushaf_type || :v1
   end
 
-  def random_verse(language)
+  def random_verse
     filters = {
       chapter_id: params[:chapter_number],
       page_number: params[:page_number],
@@ -91,19 +96,19 @@ class VersesPresenter < BasePresenter
 
     @finder.random_verse(
       filters,
-      language,
+      fetch_locale,
       tafsirs: fetch_tafsirs,
       translations: fetch_translations,
       audio: fetch_audio
     )
   end
 
-  def find_verse(filter, language)
-    case filter
+  def find_verse
+    case verses_filter
     when 'by_key'
       @finder.find_with_key(
         params[:verse_key],
-        language,
+        fetch_locale,
         tafsirs: fetch_tafsirs,
         translations: fetch_translations,
         audio: fetch_audio
@@ -166,13 +171,33 @@ class VersesPresenter < BasePresenter
     end
   end
 
-  def verses(filter, language)
-    finder.load_verses(filter,
-                       language,
-                       words: render_words?,
-                       tafsirs: fetch_tafsirs,
-                       translations: fetch_translations,
-                       audio: fetch_audio)
+  def verses
+    strong_memoize :verses do
+      finder.load_verses(verses_filter,
+                         fetch_locale,
+                         words: render_words?,
+                         tafsirs: fetch_tafsirs,
+                         translations: fetch_translations,
+                         audio: fetch_audio)
+    end
+  end
+
+  def fetch_surah_infos
+    language = Language.find_with_id_or_iso_code(fetch_locale)
+    surah_infos = ChapterInfo.where(chapter_id: chapter_ids)
+    with_default_language = surah_infos.where(language_id: Language.default.id)
+
+    if language
+      surah_infos
+        .where(language_id: language.id)
+        .or(with_default_language)
+    else
+      with_default_language
+    end
+  end
+
+  def render_surah_info?
+    @lookahead.selects?('surahInfo')
   end
 
   def render_words?
@@ -206,6 +231,10 @@ class VersesPresenter < BasePresenter
   end
 
   protected
+  def chapter_ids
+    verses.pluck(:chapter_id).uniq
+  end
+
   def detect_mushaf_type(fields)
     if fields.include?('code_v2')
       @mushaf_type = :v2
@@ -231,13 +260,13 @@ class VersesPresenter < BasePresenter
       tafsirs = params[:tafsirs].to_s.split(',')
 
       approved_tafsirs = ResourceContent
-                                .approved
-                                .tafsirs
-                                .one_verse
+                           .approved
+                           .tafsirs
+                           .one_verse
 
       params[:tafsirs] = approved_tafsirs
-                                .where(id: tafsirs)
-                                .pluck(:id)
+                           .where(id: tafsirs)
+                           .pluck(:id)
 
       params[:tafsirs]
     end
