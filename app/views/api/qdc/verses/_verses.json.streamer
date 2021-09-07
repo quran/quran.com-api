@@ -95,8 +95,17 @@ json.object! do
                             :name_simple,
                             :name_complex,
                             :name_arabic,
-                            :verses_count
+                            :verses_count,
+                            :revelation_place,
+                            :revelation_order,
+                            :bismillah_pre,
+                            :pages
 
+              json.translated_names chapter.translated_names do |translated_name|
+                json.object! do
+                  json.extract! translated_name, :language_name, :name
+                end
+              end
             end
           end
         end

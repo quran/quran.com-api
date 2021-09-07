@@ -183,7 +183,21 @@ class VersesPresenter < BasePresenter
   end
 
   def fetch_chapters
-    Chapter.where(id: chapter_ids)
+    chapters = Chapter.where(id: chapter_ids).includess(:translated_name)
+    language = Language.find_with_id_or_iso_code(fetch_locale)
+
+    # Eager load translated names to avoid n+1 queries
+    # Fallback to english translated names
+    # if chapter don't have translated name for queried language
+    with_default_names = chapters
+                           .where(translated_names: { language_id: Language.default.id })
+
+    chapters
+                  .where(translated_names: { language_id: language.id })
+                  .or(
+                    with_default_names
+                  )
+                  .order('translated_names.language_priority DESC')
   end
 
   def render_surah_detail?
