@@ -101,7 +101,8 @@ json.object! do
                             :bismillah_pre,
                             :pages
 
-              json.translated_names chapter.translated_names do |translated_name|
+              json.translated_name do
+                translated_name = chapter.translated_name
                 json.object! do
                   json.extract! translated_name, :language_name, :name
                 end
