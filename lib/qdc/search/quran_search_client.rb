@@ -4,7 +4,7 @@ module Qdc
     class QuranSearchClient < Search::Client
       TRANSLATION_LANGUAGES = Language.with_translations
       TRANSLATION_LANGUAGE_CODES = TRANSLATION_LANGUAGES.pluck(:iso_code)
-      DEFAULT_TRANSLATION = [131, 20]
+      DEFAULT_TRANSLATIONS = [131, 20]
 
       QURAN_SOURCE_ATTRS = [
         'language_id',
@@ -14,14 +14,6 @@ module Qdc
         'verse_id',
         'verse_key'
       ].freeze
-
-      def initialize(query, options = {})
-        super(query, options)
-
-        if options[:translations].blank? && !filter_language?
-          options[:translations] = DEFAULT_TRANSLATION
-        end
-      end
 
       def search
         indexes = indexes_for_search
@@ -65,17 +57,10 @@ module Qdc
         ]
       end
 
-      def search_query(highlight_size = 500)
+      def search_query
         match_any = match_any_queries
-        #match_any << quran_text_query
         match_any << words_query
-
-        if filter_language?
-          match_any << translation_query(filter_language.id)
-        else
-          # 38 is default English language
-          match_any << translation_query(38)
-        end
+        match_any << translation_query
 
         {
           bool: {
@@ -176,7 +161,7 @@ module Qdc
         ]
       end
 
-      def translation_query(language = nil)
+      def translation_query
         query = simple_match_query(
           fields: ["text"],
           op: 'AND'
@@ -185,7 +170,7 @@ module Qdc
         {
           bool: {
             must: query,
-            filter: filters
+            filter: translation_filters
           }
         }
       end
@@ -194,19 +179,26 @@ module Qdc
         QURAN_SOURCE_ATTRS
       end
 
-      def filters
+      def translation_filters
         query_filters = []
+        use_default_translation_filter = true
 
         if filter_chapter?
           query_filters.push(term: { chapter_id: options[:chapter].to_i })
         end
 
-        if filter_language?
-          query_filters.push(terms: { language_id: [filter_language.id] })
+        if filter_languages?
+          query_filters.push(terms: { language_id: filter_languages.pluck(:id) })
+          use_default_translation_filter = false
         end
 
         if filter_translations?
           query_filters.push(terms: { resource_id: filter_translations })
+          use_default_translation_filter = false
+        end
+
+        if use_default_translation_filter
+          query_filters.push(terms: { resource_id: DEFAULT_TRANSLATIONS })
         end
 
         query_filters
@@ -220,18 +212,17 @@ module Qdc
         filter_translations.present?
       end
 
-      def filter_translations
-        options[:translations].presence
+      def filter_languages?
+        filter_languages.present?
       end
 
-      def filter_language?
-        filter_language.present?
-      end
-
-      def filter_language
+      def filter_languages
         strong_memoize :filter_lang do
-          if options[:language].present?
-            Language.find_with_id_or_iso_code(options[:language])
+          if options[:filter_languages].present?
+            with_iso_code = Language.where(iso_code: options[:filter_languages])
+
+            Language.where(id: options[:filter_languages])
+                    .or(with_iso_code)
           end
         end
       end
@@ -257,8 +248,10 @@ module Qdc
       def indexes_for_search
         indexes = ['quran_verses']
 
-        if filter_language?
-          indexes << "quran_#{filter_language.iso_code}"
+        if filter_languages?
+          filter_languages.each do |lang|
+            indexes << "quran_#{lang.iso_code}"
+          end
         else
           indexes << 'quran_en'
         end

@@ -11,15 +11,16 @@ module Search
                   :options,
                   :page,
                   :per_page,
-                  :language
+                  :filter_languages,
+                  :filter_translations
 
     def initialize(query, options = {})
       @query = Qdc::Search::Query.new(query)
       @options = options
       @page = options[:page].to_i.abs
       @per_page = options[:per_page]
-      @language = options[:language]
-      @translations = options[:translations]
+      @filter_languages = options[:filter_languages]
+      @filter_translations = options[:filter_translations]
     end
 
     def result_size

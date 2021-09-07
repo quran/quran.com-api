@@ -10,10 +10,8 @@ module Api::Qdc
 
     protected
     def init_presenter
-      lookahead = RestApi::ParamLookahead.new(params)
-      @presenter = Qdc::AdvanceCopyPresenter.new(params, lookahead)
-
-      @verses = @presenter.verses('advance_copy', fetch_locale)
+      @presenter = Qdc::AdvanceCopyPresenter.new(params, 'advance_copy')
+      @verses = @presenter.verses
     end
   end
 end

@@ -182,22 +182,12 @@ class VersesPresenter < BasePresenter
     end
   end
 
-  def fetch_surah_infos
-    language = Language.find_with_id_or_iso_code(fetch_locale)
-    surah_infos = ChapterInfo.where(chapter_id: chapter_ids)
-    with_default_language = surah_infos.where(language_id: Language.default.id)
-
-    if language
-      surah_infos
-        .where(language_id: language.id)
-        .or(with_default_language)
-    else
-      with_default_language
-    end
+  def fetch_chapters
+    Chapter.where(id: chapter_ids)
   end
 
-  def render_surah_info?
-    @lookahead.selects?('surahInfo')
+  def render_surah_detail?
+    @lookahead.selects?('surah_detail')
   end
 
   def render_words?

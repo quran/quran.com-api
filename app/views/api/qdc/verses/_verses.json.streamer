@@ -83,15 +83,20 @@ json.object! do
     end
   end
 
-  if @presenter.render_surah_info?
-    json.chapterInfo do
-      chapter_infos = @presenter.fetch_surah_infos
+  if @presenter.render_surah_detail?
+    json.chapters do
+      chapters = @presenter.fetch_chapters
+
       json.object! do
-        chapter_infos.each do |info|
-          json.set! info.chapter_id do
+        chapters.each do |chapter|
+          json.set! chapter.id do
             json.object! do
-              json.language_name info.language_name
-              json.text info.text
+              json.extract! chapter, :id,
+                            :name_simple,
+                            :name_complex,
+                            :name_arabic,
+                            :verses_count
+
             end
           end
         end

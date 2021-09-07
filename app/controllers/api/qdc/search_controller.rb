@@ -18,9 +18,13 @@ module Api::Qdc
       (params[:language] || params[:locale]).presence
     end
 
-    def translations
+    def filter_languages
+      params['filter_languages'].to_s.split(',')
+    end
+
+    def filter_translations
       # user can get translation using ids or Slug
-      translation = (params[:translations] || params[:filter_translations]).to_s.split(',')
+      translation = params[:filter_translations].to_s.split(',')
 
       return [] if translation.blank?
 
@@ -29,11 +33,11 @@ module Api::Qdc
                                 .translations
                                 .one_verse
 
-      params[:translations] = approved_translations
+      params[:filter_translations] = approved_translations
                                 .where(id: translation)
                                 .or(approved_translations.where(slug: translation))
                                 .pluck(:id)
-      params[:translations]
+      params[:filter_translations]
     end
 
     def query
@@ -81,8 +85,8 @@ module Api::Qdc
         query,
         page: page,
         per_page: size,
-        language: language,
-        translations: translations
+        filter_languages: filter_languages,
+        filter_translations: filter_translations
       )
 
       begin
