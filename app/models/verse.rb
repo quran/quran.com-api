@@ -65,6 +65,7 @@ class Verse < ApplicationRecord
   has_many :tafsirs
   has_many :words
   has_many :char_words, -> {where char_type_id: 1}, class_name: 'Word'
+  has_many :mushaf_words
   has_many :media_contents, as: :resource
   has_many :translations
   has_many :roots, through: :words

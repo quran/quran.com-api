@@ -12,10 +12,13 @@ tafsir_fields = @presenter.tafsir_fields
 translation_fields = @presenter.translation_fields
 mushaf_type = @presenter.get_mushaf_type
 
+verse = @presenter.random_verse
+
 json.object! do
   json.verse do
     json.object! do
-      json.extract! verse, :id,
+      json.extract! verse,
+                    :id,
                     :verse_number,
                     :verse_key,
                     :juz_number,
@@ -28,7 +31,7 @@ json.object! do
 
       if include_words
         json.words do
-          json.array! verse.mushaf_words, partial: 'word', as: :word, locals: { fields: word_fields, mushaf_type: mushaf_type }
+          json.array! verse.mushaf_words.order('position_in_page ASC'), partial: 'word', as: :word, locals: { fields: word_fields, mushaf_type: mushaf_type }
         end
       end
 

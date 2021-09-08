@@ -134,14 +134,11 @@ class VersesPresenter < BasePresenter
     strong_memoize :word_fields do
       if (fields = params[:word_fields]).presence
         fields = sanitize_query_fields(fields.split(','))
-        detect_mushaf_type(fields)
 
         fields.select do |field|
           WORDS_FIELDS.include?(field)
         end
       else
-        @mushaf_type = :v1
-
         ['code_v1', 'page_number']
       end
     end
@@ -193,11 +190,11 @@ class VersesPresenter < BasePresenter
                            .where(translated_names: { language_id: Language.default.id })
 
     chapters
-                  .where(translated_names: { language_id: language.id })
-                  .or(
-                    with_default_names
-                  )
-                  .order('translated_names.language_priority DESC')
+      .where(translated_names: { language_id: language.id })
+      .or(
+        with_default_names
+      )
+      .order('translated_names.language_priority DESC')
   end
 
   def render_surah_detail?
@@ -235,6 +232,7 @@ class VersesPresenter < BasePresenter
   end
 
   protected
+
   def chapter_ids
     verses.pluck(:chapter_id).uniq
   end

@@ -8,9 +8,9 @@ json.object! do
                 :char_type_name,
                 *fields
 
-  json.page_number word.get_page_number(mushaf_type)
-  json.line_number word.get_line_number(mushaf_type)
-  json.text word.get_text(mushaf_type)
+  json.page_number word.page_number
+  json.line_number word.line_number
+  json.text word.text
 
   json.translation do
     json.object! do

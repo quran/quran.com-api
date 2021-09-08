@@ -30,17 +30,17 @@ module Api::Qdc
     end
 
     def random
-      render partial: 'verse', locals: { verse: @presenter.random_verse }
+      render
     end
 
     def by_key
-      render partial: 'verse', locals: { verse: @presenter.find_verse('by_key') }
+      render partial: 'verse', locals: { verse: @presenter.find_verse }
     end
 
     protected
 
     def init_presenter
-      @presenter = VersesPresenter.new(params, action_name)
+      @presenter = Qdc::VersesPresenter.new(params, action_name)
     end
 
     def load_verses
