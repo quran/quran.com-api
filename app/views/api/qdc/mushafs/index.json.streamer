@@ -1,0 +1,17 @@
+json.object! do
+  json.mushafs do
+    json.array! @presenter.approved do |mushaf|
+      json.object! do
+        json.extract! mushaf,
+                      :id,
+                      :name,
+                      :description,
+                      :is_default,
+                      :lines_per_page,
+                      :pages_count
+
+        json.qirat_type mushaf.qirat_type.name
+        end
+    end
+  end
+end

@@ -52,7 +52,7 @@ namespace :qdc do
   get 'foot_notes/:id', to: 'foot_notes#show'
 
   # Mushafs
-  get :mushafs
+  get :mushafs, to: 'mushafs#index'
 
   namespace :audio do
     # https://quranicaudio.com/api/surahs

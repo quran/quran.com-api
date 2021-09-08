@@ -24,4 +24,5 @@
 class Mushaf < ApplicationRecord
   scope :approved, -> { where enabled: true }
   has_many :mushaf_pages
+  belongs_to :qirat_type
 end
