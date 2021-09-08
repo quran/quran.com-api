@@ -75,15 +75,15 @@ class Qdc::VerseFinder < ::VerseFinder
       verse_from = QuranUtils::Quran.get_ayah_id_from_key(params[:from])
       verse_to = QuranUtils::Quran.get_ayah_id_from_key(params[:to])
 
-      @verses = Verse
+      @results = Verse
                   .unscoped
                   .order('verses.verse_index asc')
                   .where('verses.verse_index >= :from AND verses.verse_index <= :to', from: verse_from, to: verse_to)
     else
-      @verses = Verse.none
+      @results = Verse.none
     end
 
-    @verses
+    @results
   end
 
   def fetch_filter

@@ -1,5 +1,5 @@
 json.object! do
   json.page do
-    json.partial! 'page', page: @mushaf_page
+    json.partial! 'page', page: @presenter.page
   end
 end

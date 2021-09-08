@@ -10,7 +10,7 @@ module Api::Qdc
 
     protected
     def init_presenter
-      @presenter = Qdc::AdvanceCopyPresenter.new(params, 'advance_copy')
+      @presenter = Qdc::AdvanceCopyPresenter.new(params)
       @verses = @presenter.verses
     end
   end
