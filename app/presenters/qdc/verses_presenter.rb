@@ -30,12 +30,6 @@ module Qdc
       @finder = Qdc::VerseFinder.new(params)
     end
 
-    def get_mushaf_type_id
-      strong_memoize :mushaf_type do
-        (params[:mushaf] || 1).to_i
-      end
-    end
-
     def word_fields
       strong_memoize :word_fields do
         if (fields = params[:word_fields]).presence
@@ -62,7 +56,7 @@ module Qdc
       @finder.random_verse(
         filters,
         fetch_locale,
-        mushaf_type: get_mushaf_type_id,
+        mushaf_type: get_mushaf_id,
         tafsirs: fetch_tafsirs,
         translations: fetch_translations,
         audio: fetch_audio
@@ -75,7 +69,7 @@ module Qdc
         @finder.find_with_key(
           params[:verse_key],
           fetch_locale,
-          mushaf_type: get_mushaf_type_id,
+          mushaf_type: get_mushaf_id,
           tafsirs: fetch_tafsirs,
           translations: fetch_translations,
           audio: fetch_audio
@@ -87,7 +81,7 @@ module Qdc
       strong_memoize :verses do
         finder.load_verses(verses_filter,
                            fetch_locale,
-                           mushaf_type: get_mushaf_type_id,
+                           mushaf_type: get_mushaf_id,
                            words: render_words?,
                            tafsirs: fetch_tafsirs,
                            translations: fetch_translations,

@@ -5,7 +5,7 @@ ruby '3.0.0'
 
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-gem 'rails', '~> 6.1', '>= 6.1.3.2'
+gem 'rails', '~> 6.1.4.1'
 
 # Use postgresql as the database for Active Record
 gem 'pg', '>= 0.18', '< 2.0'
@@ -85,8 +85,8 @@ group :test, :development do
   gem 'rspec-rails', '= 4.0.2'
   gem 'shoulda-matchers', '~> 4.0'
   gem 'simplecov', require: false
-  gem 'factory_bot_rails', '>= 6.1.0'
-  gem 'rubocop-rails_config', '>= 1.4.0'
+  gem 'factory_bot_rails', '>= 6.2.0'
+  gem 'rubocop-rails_config', '>= 1.6.0'
   gem 'rubocop-rspec', '>= 2.1.0'
   gem 'spork'
   gem 'watchr'

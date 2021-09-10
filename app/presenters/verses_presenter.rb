@@ -134,6 +134,7 @@ class VersesPresenter < BasePresenter
     strong_memoize :word_fields do
       if (fields = params[:word_fields]).presence
         fields = sanitize_query_fields(fields.split(','))
+        detect_mushaf_type(fields)
 
         fields.select do |field|
           WORDS_FIELDS.include?(field)
