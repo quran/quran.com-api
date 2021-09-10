@@ -2,14 +2,19 @@
 
 module Api::Qdc
   class PagesController < ApiController
+    before_action :init_presenter
+
     def index
-      @mushaf_pages = MushafPage.order('page_number ASC').all
       render
     end
 
     def show
-      @mushaf_page = MushafPage.find(params[:id])
       render
+    end
+
+    protected
+    def init_presenter
+      @presenter = Qdc::MushafPagePresenter.new(params)
     end
   end
 end

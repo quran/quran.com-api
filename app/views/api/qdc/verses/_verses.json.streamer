@@ -27,7 +27,7 @@ json.object! do
 
         if include_words
           json.words do
-            json.array! verse.words,
+            json.array! verse.mushaf_words,
                         partial: 'word',
                         as: :word,
                         locals: {

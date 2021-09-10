@@ -25,4 +25,8 @@ class Mushaf < ApplicationRecord
   scope :approved, -> { where enabled: true }
   has_many :mushaf_pages
   belongs_to :qirat_type
+
+  def self.default
+    where(is_default: true).first
+  end
 end
