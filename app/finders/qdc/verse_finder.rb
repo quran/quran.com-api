@@ -120,7 +120,7 @@ class Qdc::VerseFinder < ::VerseFinder
         verse_to = chapter.verses_count
       end
 
-      @total_records = max(0, (verse_to == verse_from) ? 1 : verse_to - verse_from)
+      @total_records = max(0, (verse_to == verse_from) ? 1 : (verse_to + 1) - verse_from)
       verse_start = verse_pagination_start
       verse_end = verse_pagination_end(verse_start, chapter.verses_count)
 
