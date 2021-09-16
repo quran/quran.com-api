@@ -24,6 +24,8 @@ class VerseFinder
 
   def per_page
     limit = (params[:limit] || 10).to_i.abs
+    limit = 10 if limit.zero?
+
     limit <= 50 ? limit : 50
   end
 
@@ -166,5 +168,9 @@ class VerseFinder
 
   def min(a, b)
     a < b ? a : b
+  end
+
+  def max(a, b)
+    a > b ? a : b
   end
 end

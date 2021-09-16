@@ -47,6 +47,8 @@ class Qdc::VerseFinder < ::VerseFinder
     return @per_page if @per_page
 
     limit = (params[:per_page] || 10).to_i.abs
+    limit = 10 if limit.zero?
+
     limit <= 50 ? limit : 50
   end
 
@@ -104,9 +106,23 @@ class Qdc::VerseFinder < ::VerseFinder
 
   def fetch_by_chapter
     if chapter = find_chapter(params[:chapter_number])
-      @total_records = chapter.verses_count
-      verse_start = verse_pagination_start(@total_records)
-      verse_end = verse_pagination_end(verse_start, @total_records)
+      verse_from, verse_to = nil
+
+      if params[:from].present?
+        verse_from = params[:from].to_i
+      else
+        verse_from = 1
+      end
+
+      if params[:to].present?
+        verse_to = params[:to].to_i
+      else
+        verse_to = chapter.verses_count
+      end
+
+      @total_records = max(0, (verse_to == verse_from) ? 1 : verse_to - verse_from)
+      verse_start = verse_pagination_start
+      verse_end = verse_pagination_end(verse_start, chapter.verses_count)
 
       @next_page = current_page + 1 if verse_end < params[:to]
 
@@ -181,7 +197,7 @@ class Qdc::VerseFinder < ::VerseFinder
     end
   end
 
-  def verse_pagination_start(total_verses)
+  def verse_pagination_start
     if (from = (params[:from] || 1).to_i.abs).zero?
       from = 1
     end
