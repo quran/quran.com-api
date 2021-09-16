@@ -63,9 +63,9 @@ namespace :qdc do
     get 'reciters/:reciter_id/timestamp', to: 'segments#timestamp'
 
     # Segments and percentiles
-    get 'reciter/:reciter_id/lookup', to: 'segments#lookup_ayah'
-    get 'reciter/:reciter_id/percentiles', to: 'percentiles#cumulative_percentile'
-    get 'reciter/:reciter_id/ayah_percentiles', to: 'percentiles#ayah_duration_percentile'
+    get 'reciters/:reciter_id/lookup', to: 'segments#lookup_ayah'
+    get 'reciters/:reciter_id/percentiles', to: 'percentiles#cumulative_percentile'
+    get 'reciters/:reciter_id/ayah_percentiles', to: 'percentiles#ayah_duration_percentile'
   end
 
   # routes for fetching all records of one resource.
