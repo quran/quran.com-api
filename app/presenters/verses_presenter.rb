@@ -220,12 +220,6 @@ class VersesPresenter < BasePresenter
     end
   end
 
-  def render_segments?
-    strong_memoize :include_segments do
-      @lookahead.selects?('reciter')
-    end
-  end
-
   def render_tafsirs?
     strong_memoize :tafsir do
       @lookahead.selects?('tafsirs')

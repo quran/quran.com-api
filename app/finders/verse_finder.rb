@@ -17,8 +17,6 @@ class VerseFinder
     load_translations
     load_words(language_code)
     load_audio
-    load_segments
-
     translations_order = valid_translations.present? ? ',translations.priority ASC' : ''
 
     @results.order("verses.verse_index ASC, words.position ASC, word_translations.priority ASC #{translations_order}".strip)
@@ -103,14 +101,6 @@ class VerseFinder
       @results = @results
                    .where(audio_files: { recitation_id: params[:recitation] })
                    .eager_load(:audio_file)
-    end
-  end
-
-  def load_segments
-    if params[:reciter].present?
-      @results = @results
-                   .where(audio_segments: { audio_recitation_id: params[:reciter] })
-                   .eager_load(:audio_segment)
     end
   end
 

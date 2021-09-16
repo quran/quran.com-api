@@ -4,7 +4,7 @@ class Qdc::VerseFinder < ::VerseFinder
   attr_reader :next_page,
               :total_records
 
-  def random_verse(filters, language_code, mushaf_type:, words: true, tafsirs: false, translations: false, audio: false)
+  def random_verse(filters, language_code, mushaf_type:, words: true, tafsirs: false, translations: false, reciter: false)
     @results = Verse.unscope(:order).where(filters).order('RANDOM()').limit(3)
 
     load_related_resources(
@@ -13,11 +13,11 @@ class Qdc::VerseFinder < ::VerseFinder
       words: words,
       tafsirs: tafsirs,
       translations: translations,
-      audio: audio
+      reciter: reciter
     ).sample
   end
 
-  def find_with_key(key, language_code, mushaf_type:, words: true, tafsirs: false, translations: false, audio: false)
+  def find_with_key(key, language_code, mushaf_type:, words: true, tafsirs: false, translations: false, reciter: false)
     @results = Verse.where(verse_key: key).limit(1)
 
     load_related_resources(
@@ -26,11 +26,11 @@ class Qdc::VerseFinder < ::VerseFinder
       words: words,
       tafsirs: tafsirs,
       translations: translations,
-      audio: audio
+      reciter: reciter
     ).first
   end
 
-  def load_verses(filter, language_code, mushaf_type:, words: true, tafsirs: false, translations: false, audio: false)
+  def load_verses(filter, language_code, mushaf_type:, words: true, tafsirs: false, translations: false, reciter: false)
     fetch_verses_range(filter)
 
     load_related_resources(
@@ -39,7 +39,7 @@ class Qdc::VerseFinder < ::VerseFinder
       words: words,
       tafsirs: tafsirs,
       translations: translations,
-      audio: audio
+      reciter: reciter
     )
   end
 
@@ -55,14 +55,15 @@ class Qdc::VerseFinder < ::VerseFinder
   end
 
   protected
+
   def fetch_verses_range(filter)
     @results = send("fetch_#{filter}")
   end
 
-  def load_related_resources(language:, mushaf_type:, words:,  tafsirs:, translations:, audio:)
+  def load_related_resources(language:, mushaf_type:, words:, tafsirs:, translations:, reciter:)
     load_translations(translations) if translations.present?
     load_words(language, mushaf_type) if words
-    load_audio(audio) if audio
+    load_segments(reciter) if reciter
     load_tafsirs(tafsirs) if tafsirs.present?
 
     words_ordering = words ? ', mushaf_words.position_in_page ASC, word_translations.priority ASC' : ''
@@ -76,9 +77,9 @@ class Qdc::VerseFinder < ::VerseFinder
       verse_to = QuranUtils::Quran.get_ayah_id_from_key(params[:to])
 
       @results = Verse
-                  .unscoped
-                  .order('verses.verse_index asc')
-                  .where('verses.verse_index >= :from AND verses.verse_index <= :to', from: verse_from, to: verse_to)
+                   .unscoped
+                   .order('verses.verse_index asc')
+                   .where('verses.verse_index >= :from AND verses.verse_index <= :to', from: verse_from, to: verse_to)
     else
       @results = Verse.none
     end
@@ -199,7 +200,7 @@ class Qdc::VerseFinder < ::VerseFinder
   def load_words(word_translation_lang, mushaf_type)
     language = Language.find_with_id_or_iso_code(word_translation_lang)
 
-    @results = @results.where(mushaf_words: {mushaf_id: mushaf_type})
+    @results = @results.where(mushaf_words: { mushaf_id: mushaf_type })
     words_with_default_translation = @results.where(word_translations: { language_id: Language.default.id })
 
     if language
@@ -210,6 +211,12 @@ class Qdc::VerseFinder < ::VerseFinder
     else
       @results = words_with_default_translation.eager_load(mushaf_words: eager_load_words)
     end
+  end
+
+  def load_segments(reciter)
+    @results = @results
+                 .where(audio_segments: { audio_recitation_id: reciter })
+                 .eager_load(:audio_segment)
   end
 
   def load_translations(translations)

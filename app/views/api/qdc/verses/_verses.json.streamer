@@ -1,6 +1,5 @@
 include_words = @presenter.render_words?
 include_translations = @presenter.render_translations?
-include_audio = @presenter.render_audio?
 include_tafsirs = @presenter.render_tafsirs?
 include_segments = @presenter.render_segments?
 
@@ -34,14 +33,6 @@ json.object! do
                           fields: word_fields,
                           mushaf_type: mushaf_type
                         }
-          end
-        end
-
-        if include_audio
-          json.audio do
-            json.object! do
-              json.extract! verse.audio_file, :url, :segments
-            end
           end
         end
 

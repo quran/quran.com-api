@@ -59,7 +59,7 @@ module Qdc
         mushaf_type: get_mushaf_id,
         tafsirs: fetch_tafsirs,
         translations: fetch_translations,
-        audio: fetch_audio
+        reciter: fetch_reciter
       )
     end
 
@@ -72,7 +72,7 @@ module Qdc
           mushaf_type: get_mushaf_id,
           tafsirs: fetch_tafsirs,
           translations: fetch_translations,
-          audio: fetch_audio
+          reciter: fetch_reciter
         )
       end
     end
@@ -85,7 +85,7 @@ module Qdc
                            words: render_words?,
                            tafsirs: fetch_tafsirs,
                            translations: fetch_translations,
-                           audio: fetch_audio)
+                           reciter: fetch_reciter)
       end
     end
 
@@ -120,9 +120,9 @@ module Qdc
       verses.pluck(:chapter_id).uniq
     end
 
-    def fetch_audio
-      if params[:audio]
-        params[:audio].to_i.abs
+    def fetch_reciter
+      if params[:reciter]
+        params[:reciter].to_i.abs
       end
     end
   end
