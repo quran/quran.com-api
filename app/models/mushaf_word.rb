@@ -2,7 +2,7 @@
 
 # == Schema Information
 #
-# Table name: mushaf_word_positions
+# Table name: mushaf_words
 #
 #  id                :bigint           not null, primary key
 #  char_type_name    :string
@@ -19,8 +19,9 @@
 #
 # Indexes
 #
-#  index_mushaf_word_positions_on_mushaf_id_and_word_id  (mushaf_id,word_id)
-#  index_on_mushad_word_position                         (mushaf_id,verse_id,position_in_verse)
+#  index_mushaf_words_on_mushaf_id_and_word_id  (mushaf_id,word_id)
+#  index_on_mushad_word_position                (mushaf_id,verse_id,position_in_verse)
+#  index_on_mushaf_word_position                (mushaf_id,verse_id,position_in_page)
 #
 class MushafWord < ApplicationRecord
   belongs_to :word

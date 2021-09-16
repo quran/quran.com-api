@@ -9,7 +9,9 @@
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
 #  first_verse_id :integer
+#  first_word_id  :integer
 #  last_verse_id  :integer
+#  last_word_id   :integer
 #  mushaf_id      :integer
 #
 # Indexes

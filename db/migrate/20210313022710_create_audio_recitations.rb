@@ -1,19 +1,23 @@
 class CreateAudioRecitations < ActiveRecord::Migration[6.1]
   def change
     create_table :audio_recitations do |t|
-      t.string :name
+      t.string :name, index: true
       t.string :arabic_name
-      t.string :relative_path
-      t.string :file_formats
-      t.integer :section_id
-      t.integer :home
+      t.string :relative_path, index: true
+      t.string :format
+      t.integer :section_id, index: true
       t.text :description
-      t.string :torrent_filename
-      t.string :torrent_info_hash
-      t.integer :torrent_leechers, default: 0
-      t.integer :torrent_seeders, default: 0
+      t.integer :files_count
+      t.integer :priority, index: true
+
       t.integer :resource_content_id, index: true
       t.integer :recitation_style_id, index: true
+      t.integer :reciter_id, index: true
+      t.boolean :approved, index: true
+      t.integer :segments_count
+      t.integer :files_size
+      t.integer :home
+      t.integer :qirat_type_id
 
       t.timestamps
     end

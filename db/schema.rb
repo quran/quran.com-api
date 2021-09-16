@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_04_110326) do
+ActiveRecord::Schema.define(version: 2021_09_11_071724) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -100,26 +100,29 @@ ActiveRecord::Schema.define(version: 2021_09_04_110326) do
     t.string "name"
     t.string "arabic_name"
     t.string "relative_path"
-    t.string "file_formats"
+    t.string "format"
     t.integer "section_id"
-    t.integer "home"
     t.text "description"
-    t.string "torrent_filename"
-    t.string "torrent_info_hash"
-    t.integer "torrent_leechers", default: 0
-    t.integer "torrent_seeders", default: 0
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.integer "files_count"
     t.integer "resource_content_id"
     t.integer "recitation_style_id"
-    t.integer "files_size"
-    t.boolean "approved", default: false
+    t.integer "reciter_id"
+    t.boolean "approved"
+    t.integer "home"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.integer "priority"
+    t.integer "segments_count"
+    t.integer "files_size"
     t.integer "qirat_type_id"
     t.index ["approved"], name: "index_audio_recitations_on_approved"
+    t.index ["name"], name: "index_audio_recitations_on_name"
     t.index ["priority"], name: "index_audio_recitations_on_priority"
-    t.index ["qirat_type_id"], name: "index_audio_recitations_on_qirat_type_id"
     t.index ["recitation_style_id"], name: "index_audio_recitations_on_recitation_style_id"
+    t.index ["reciter_id"], name: "index_audio_recitations_on_reciter_id"
+    t.index ["relative_path"], name: "index_audio_recitations_on_relative_path"
+    t.index ["resource_content_id"], name: "index_audio_recitations_on_resource_content_id"
+    t.index ["section_id"], name: "index_audio_recitations_on_section_id"
   end
 
   create_table "audio_related_recitations", force: :cascade do |t|
@@ -152,7 +155,6 @@ ActiveRecord::Schema.define(version: 2021_09_04_110326) do
     t.float "percentile"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["audio_file_id", "timestamp_median"], name: "index_audio_segments_on_audio_file_id_and_timestamp_median", unique: true
     t.index ["audio_file_id", "verse_number"], name: "index_audio_segments_on_audio_file_id_and_verse_number", unique: true
     t.index ["audio_file_id"], name: "index_audio_segments_on_audio_file_id"
     t.index ["audio_recitation_id", "chapter_id", "verse_id", "timestamp_median"], name: "index_on_audio_segments_median_time"
@@ -455,11 +457,13 @@ ActiveRecord::Schema.define(version: 2021_09_04_110326) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "mushaf_id"
+    t.integer "first_word_id"
+    t.integer "last_word_id"
     t.index ["mushaf_id"], name: "index_mushaf_pages_on_mushaf_id"
     t.index ["page_number"], name: "index_mushaf_pages_on_page_number"
   end
 
-  create_table "mushaf_word_positions", force: :cascade do |t|
+  create_table "mushaf_words", force: :cascade do |t|
     t.integer "mushaf_id"
     t.integer "word_id"
     t.integer "verse_id"
@@ -471,8 +475,9 @@ ActiveRecord::Schema.define(version: 2021_09_04_110326) do
     t.integer "position_in_verse"
     t.integer "position_in_line"
     t.integer "position_in_page"
+    t.index ["mushaf_id", "verse_id", "position_in_page"], name: "index_on_mushaf_word_position"
     t.index ["mushaf_id", "verse_id", "position_in_verse"], name: "index_on_mushad_word_position"
-    t.index ["mushaf_id", "word_id"], name: "index_mushaf_word_positions_on_mushaf_id_and_word_id"
+    t.index ["mushaf_id", "word_id"], name: "index_mushaf_words_on_mushaf_id_and_word_id"
   end
 
   create_table "mushafs", force: :cascade do |t|
@@ -533,6 +538,9 @@ ActiveRecord::Schema.define(version: 2021_09_04_110326) do
     t.string "style"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "arabic"
+    t.string "slug"
+    t.index ["slug"], name: "index_recitation_styles_on_slug"
   end
 
   create_table "recitations", id: :serial, force: :cascade do |t|

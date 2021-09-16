@@ -55,15 +55,12 @@ namespace :qdc do
   get :mushafs, to: 'mushafs#index'
 
   namespace :audio do
-    # https://quranicaudio.com/api/surahs
-    # https://quranicaudio.com/api/surahs/1
-
     # Surah audio
     get 'reciters', to: 'chapter_recitations#reciters'
-    get 'reciter/:reciter_id', to: 'chapter_recitations#reciter_audio_files'
+    get 'reciters/:reciter_id', to: 'chapter_recitations#reciter_audio_files'
 
-    # Get timestamp
-    get 'reciter/:reciter_id/timestamp', to: 'segments#timestamp'
+    # Get timestamp for ayah
+    get 'reciters/:reciter_id/timestamp', to: 'segments#timestamp'
 
     # Segments and percentiles
     get 'reciter/:reciter_id/lookup', to: 'segments#lookup_ayah'

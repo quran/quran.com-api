@@ -20,8 +20,10 @@ class BasePresenter
   end
 
   protected
+
   def get_mushaf_id
-    (params[:mushaf].presence || Mushaf.default.id).to_i
+    mushaf = Mushaf.find_by(id: params[:mushaf].strip) || Mushaf.default
+    mushaf.id
   end
 
   def include_in_response?(value)

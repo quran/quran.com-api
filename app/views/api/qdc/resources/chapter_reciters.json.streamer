@@ -6,10 +6,9 @@ json.object! do
                       :id,
                       :name,
                       :arabic_name,
-                      :relative_path
-
-        json.format recitation.file_formats
-        json.files_size recitation.files_size
+                      :relative_path,
+                      :format,
+                      :files_size
       end
     end
   end
