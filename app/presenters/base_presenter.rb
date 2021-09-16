@@ -22,7 +22,7 @@ class BasePresenter
   protected
 
   def get_mushaf_id
-    mushaf = Mushaf.find_by(id: params[:mushaf].strip) || Mushaf.default
+    mushaf = Mushaf.find_by(id: params[:mushaf].to_s.strip) || Mushaf.default
     mushaf.id
   end
 

@@ -9,7 +9,6 @@ class AddUniqWordsCountToStems < ActiveRecord::Migration[6.1]
     add_column :lemmas, :words_count, :integer
     add_column :lemmas, :uniq_words_count, :integer
 
-    add_column :mushafs, :resource_content_id, :integer
     rename_column :resource_contents, :resource_type, :resource_type_name
     add_column :resource_contents, :resource_type, :string
 
