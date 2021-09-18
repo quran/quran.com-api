@@ -39,10 +39,14 @@ class BasePresenter
       translated_names: { language_id: Language.default.id }
     )
 
-    records
-      .where(
-        translated_names: { language_id: language }
-      ).or(defaults).order('translated_names.language_priority DESC')
+    if language
+      records
+        .where(
+          translated_names: { language_id: language }
+        ).or(defaults).order('translated_names.language_priority DESC')
+    else
+      defaults
+    end
   end
 
   def fetch_locale

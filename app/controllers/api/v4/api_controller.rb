@@ -5,6 +5,7 @@ module Api::V4
     include ActionView::Rendering
 
     protected
+
     def eager_load_translated_name(records)
       language = Language.find_by(iso_code: fetch_locale)
 
@@ -12,27 +13,31 @@ module Api::V4
         translated_names: { language_id: Language.default.id }
       )
 
-      records
+      if language
+        records
           .where(
             translated_names: { language_id: language }
           ).or(defaults).order('translated_names.language_priority DESC')
+      else
+        defaults
+      end
     end
 
     def fetch_translation_resource
       approved = ResourceContent
-                     .translations
-                     .one_verse
-                     .approved
+                   .translations
+                   .one_verse
+                   .approved
 
       find_resource(approved, params[:translation_id], true)
     end
 
     def fetch_tafsir_resource
       approved = ResourceContent
-                  .eager_load(:translated_name)
-                  .tafsirs
-                  .one_verse
-                  .approved
+                   .eager_load(:translated_name)
+                   .tafsirs
+                   .one_verse
+                   .approved
 
       find_resource(approved, params[:tafsir_id], true)
     end
