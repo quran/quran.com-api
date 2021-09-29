@@ -41,9 +41,9 @@ json.object! do
           json.timestamps do
             json.object! do
               json.timestamp_from segment.timestamp_from
-              json.timestamp_to segment.timestamp_to
-              json.duration segment.duration_ms
-              json.segments segment.segments
+              #json.timestamp_to segment.timestamp_to
+              #json.duration segment.duration_ms
+              #json.segments segment.segments
             end
           end
         end
