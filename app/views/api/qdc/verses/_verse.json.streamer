@@ -10,7 +10,7 @@ word_fields = @presenter.word_fields
 tafsir_fields = @presenter.tafsir_fields
 translation_fields = @presenter.translation_fields
 mushaf_id = @presenter.get_mushaf_id
-``
+
 json.object! do
   json.verse do
     json.object! do

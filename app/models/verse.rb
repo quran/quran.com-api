@@ -79,9 +79,6 @@ class Verse < ApplicationRecord
 
   default_scope { order 'verses.verse_number asc' }
 
-  # TODO:
-  # - remove page_number
-  # - move page number mapping to mushaf type
   alias_attribute :v1_page, :page_number
   alias_attribute :verse_id, :id
 
