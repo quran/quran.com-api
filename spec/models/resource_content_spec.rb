@@ -2,27 +2,29 @@
 #
 # Table name: resource_contents
 #
-#  id                    :integer          not null, primary key
-#  approved              :boolean
-#  author_name           :string
-#  cardinality_type      :string
-#  description           :text
-#  language_name         :string
-#  meta_data             :jsonb
-#  name                  :string
-#  priority              :integer
-#  resource_info         :text
-#  resource_type         :string
-#  resource_type_name    :string
-#  slug                  :string
-#  sub_type              :string
-#  created_at            :datetime         not null
-#  updated_at            :datetime         not null
-#  author_id             :integer
-#  data_source_id        :integer
-#  language_id           :integer
-#  mobile_translation_id :integer
-#  resource_id           :string
+#  id                     :integer          not null, primary key
+#  approved               :boolean
+#  author_name            :string
+#  cardinality_type       :string
+#  description            :text
+#  language_name          :string
+#  meta_data              :jsonb
+#  name                   :string
+#  priority               :integer
+#  resource_info          :text
+#  resource_type          :string
+#  resource_type_name     :string
+#  slug                   :string
+#  sqlite_db              :string
+#  sqlite_db_generated_at :datetime
+#  sub_type               :string
+#  created_at             :datetime         not null
+#  updated_at             :datetime         not null
+#  author_id              :integer
+#  data_source_id         :integer
+#  language_id            :integer
+#  mobile_translation_id  :integer
+#  resource_id            :string
 #
 # Indexes
 #

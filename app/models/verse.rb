@@ -11,7 +11,9 @@
 #  image_url              :text
 #  image_width            :integer
 #  juz_number             :integer
+#  mushaf_pages_mapping   :jsonb
 #  page_number            :integer
+#  pause_words_count      :integer          default(0)
 #  qpc_uthmani_bazzi      :string
 #  qpc_uthmani_doori      :string
 #  qpc_uthmani_hafs       :string
@@ -85,6 +87,11 @@ class Verse < ApplicationRecord
 
   def self.find_by_id_or_key(id)
     where(verse_key: id).or(where(id: id)).first
+  end
+
+  # QDC api, send page number based on Mushaf
+  def get_page_number_for(mushaf:)
+    mushaf_pages_mapping[mushaf.to_s]
   end
 
   def get_page_number(version)

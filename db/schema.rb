@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_11_071724) do
+ActiveRecord::Schema.define(version: 2021_09_29_045135) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -428,6 +428,8 @@ ActiveRecord::Schema.define(version: 2021_09_11_071724) do
     t.string "text_clean"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "words_count"
+    t.integer "uniq_words_count"
   end
 
   create_table "media_contents", id: :serial, force: :cascade do |t|
@@ -633,6 +635,8 @@ ActiveRecord::Schema.define(version: 2021_09_11_071724) do
     t.string "resource_id"
     t.jsonb "meta_data", default: {}
     t.string "resource_type"
+    t.string "sqlite_db"
+    t.datetime "sqlite_db_generated_at"
     t.index ["approved"], name: "index_resource_contents_on_approved"
     t.index ["author_id"], name: "index_resource_contents_on_author_id"
     t.index ["cardinality_type"], name: "index_resource_contents_on_cardinality_type"
@@ -656,6 +660,8 @@ ActiveRecord::Schema.define(version: 2021_09_11_071724) do
     t.string "value"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "words_count"
+    t.integer "uniq_words_count"
   end
 
   create_table "slugs", force: :cascade do |t|
@@ -691,6 +697,8 @@ ActiveRecord::Schema.define(version: 2021_09_11_071724) do
     t.string "text_clean"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "words_count"
+    t.integer "uniq_words_count"
   end
 
   create_table "style", primary_key: "style_id", id: :integer, default: -> { "nextval('_style_style_id_seq'::regclass)" }, force: :cascade do |t|
@@ -922,6 +930,8 @@ ActiveRecord::Schema.define(version: 2021_09_11_071724) do
     t.string "qpc_uthmani_soosi"
     t.integer "words_count"
     t.string "text_nastaleeq_indopak"
+    t.integer "pause_words_count", default: 0
+    t.jsonb "mushaf_pages_mapping", default: {}
     t.index ["chapter_id"], name: "index_verses_on_chapter_id"
     t.index ["verse_index"], name: "index_verses_on_verse_index"
     t.index ["verse_key"], name: "index_verses_on_verse_key"

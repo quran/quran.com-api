@@ -9,7 +9,9 @@
 #  image_url              :text
 #  image_width            :integer
 #  juz_number             :integer
+#  mushaf_pages_mapping   :jsonb
 #  page_number            :integer
+#  pause_words_count      :integer          default(0)
 #  qpc_uthmani_bazzi      :string
 #  qpc_uthmani_doori      :string
 #  qpc_uthmani_hafs       :string

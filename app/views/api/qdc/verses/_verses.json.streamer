@@ -7,7 +7,7 @@ fields = @presenter.verse_fields
 word_fields = @presenter.word_fields
 tafsir_fields = @presenter.tafsir_fields
 translation_fields = @presenter.translation_fields
-mushaf_type = @presenter.get_mushaf_type
+mushaf_id = @presenter.get_mushaf_id
 
 json.object! do
   json.verses do
@@ -22,7 +22,7 @@ json.object! do
                       :sajdah_type,
                       :sajdah_number, *fields
 
-        json.page_number verse.get_page_number(mushaf_type)
+        json.page_number verse.get_page_number_for(mushaf: mushaf_id)
 
         if include_words
           json.words do
@@ -30,8 +30,7 @@ json.object! do
                         partial: 'word',
                         as: :word,
                         locals: {
-                          fields: word_fields,
-                          mushaf_type: mushaf_type
+                          fields: word_fields
                         }
           end
         end

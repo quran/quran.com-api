@@ -19,13 +19,14 @@ class BasePresenter
     end
   end
 
-  protected
-
   def get_mushaf_id
-    mushaf = Mushaf.find_by(id: params[:mushaf].to_s.strip) || Mushaf.default
-    mushaf.id
+    strong_memoize :mushaf do
+      mushaf = Mushaf.find_by(id: params[:mushaf].to_s.strip) || Mushaf.default
+      mushaf.id
+    end
   end
 
+  protected
   def include_in_response?(value)
     if value.presence
       !ActiveRecord::Type::Boolean::FALSE_VALUES.include?(value)
