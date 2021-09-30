@@ -13,7 +13,8 @@ class Qdc::VerseFinder < ::VerseFinder
       words: words,
       tafsirs: tafsirs,
       translations: translations,
-      reciter: reciter
+      reciter: reciter,
+      filter: :random
     ).sample
   end
 
@@ -26,12 +27,13 @@ class Qdc::VerseFinder < ::VerseFinder
       words: words,
       tafsirs: tafsirs,
       translations: translations,
-      reciter: reciter
+      reciter: reciter,
+      filter: :with_key
     ).first
   end
 
   def load_verses(filter, language_code, mushaf_type:, words: true, tafsirs: false, translations: false, reciter: false)
-    fetch_verses_range(filter)
+    fetch_verses_range(filter, mushaf_type)
 
     load_related_resources(
       language: language_code,
@@ -39,7 +41,8 @@ class Qdc::VerseFinder < ::VerseFinder
       words: words,
       tafsirs: tafsirs,
       translations: translations,
-      reciter: reciter
+      reciter: reciter,
+      filter: filter
     )
   end
 
@@ -58,17 +61,29 @@ class Qdc::VerseFinder < ::VerseFinder
 
   protected
 
-  def fetch_verses_range(filter)
-    @results = send("fetch_#{filter}")
+  def fetch_verses_range(filter, mushaf_type)
+    if 'by_page' == filter
+      @results = fetch_by_page(mushaf_id: mushaf_type)
+    else
+      @results = send("fetch_#{filter}")
+    end
   end
 
-  def load_related_resources(language:, mushaf_type:, words:, tafsirs:, translations:, reciter:)
+  def load_related_resources(language:, mushaf_type:, words:, tafsirs:, translations:, reciter:, filter:)
     load_translations(translations) if translations.present?
     load_words(language, mushaf_type) if words
     load_segments(reciter) if reciter
     load_tafsirs(tafsirs) if tafsirs.present?
 
-    words_ordering = words ? ', mushaf_words.position_in_page ASC, word_translations.priority ASC' : ''
+    words_ordering = if words
+                       if filter.to_s == 'by_page'
+                         ', mushaf_words.position_in_page ASC, word_translations.priority ASC'
+                       else
+                         ', mushaf_words.position_in_verse ASC, word_translations.priority ASC'
+                       end
+                     else
+                       ''
+                     end
     translations_order = translations.present? ? ',translations.priority ASC' : ''
     @results.order("verses.verse_index ASC #{words_ordering} #{translations_order}".strip)
   end
@@ -138,13 +153,21 @@ class Qdc::VerseFinder < ::VerseFinder
     @results
   end
 
-  def fetch_by_page
-    @results = rescope_verses('verse_index').where(page_number: params[:page_number].to_i.abs)
+  def fetch_by_page(mushaf_id:)
+    if mushaf_page = MushafPage.where(mushaf_id: mushaf_id, page_number: params[:page_number].to_i.abs).first
+      verse_start = mushaf_page.first_verse_id
+      verse_end = mushaf_page.last_verse_id
+      @results = rescope_verses('verse_index').where('verses.verse_index >= ? AND verses.verse_index < ?', verse_start, verse_end)
 
-    # Disable pagination for by_page route
-    @next_page = nil
-    @total_records = @results.size
-    @per_page = @total_records
+      # Disable pagination for by_page route
+      @next_page = nil
+      @total_records = @results.size
+      @per_page = @total_records
+    else
+      @total_records = 0
+      @next_page = nil
+      @results = Verse.where('1=0')
+    end
 
     @results
   end
