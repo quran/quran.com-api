@@ -9,7 +9,7 @@ module Types
     end
 
     def chapters(language: 'en')
-      ChapterFinder.new.all_with_translated_names(language)
+      ChapterFinder.new.all_with_eager_load(locale: language)
     end
 
     field :chapter, Types::ChapterType, null: false do
@@ -20,7 +20,7 @@ module Types
     end
 
     def chapter(id:, language: 'en')
-      ChapterFinder.new.find_with_translated_name(id, language)
+      ChapterFinder.new.find_and_eager_load(id, locale: language)
     end
 
     field :chapter_info, Types::ChapterInfoType, null: false do

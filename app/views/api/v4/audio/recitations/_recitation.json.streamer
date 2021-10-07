@@ -4,13 +4,9 @@ json.object! do
                 :name,
                 :arabic_name,
                 :relative_path,
-                :file_formats,
+                :format,
                 :section_id,
-                :description,
-                :torrent_filename,
-                :torrent_info_hash,
-                :torrent_seeders,
-                :torrent_leechers
+                :description
 
   json.home recitation.home?
 end

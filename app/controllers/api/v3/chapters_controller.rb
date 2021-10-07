@@ -15,12 +15,12 @@ module Api::V3
     protected
     def chapters
       finder = ChapterFinder.new
-      finder.all_with_translated_names(fetch_locale)
+      finder.all_with_eager_load(locale: fetch_locale)
     end
 
     def chapter
       finder = ChapterFinder.new
-      finder.find_with_translated_name(params[:id], fetch_locale)
+      finder.find_and_eager_load(params[:id], locale: fetch_locale)
     end
   end
 end

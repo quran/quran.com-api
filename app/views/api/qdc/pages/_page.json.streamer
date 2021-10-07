@@ -1,0 +1,9 @@
+json.object! do
+  json.extract! page,
+                :id,
+                :page_number,
+                :verse_mapping,
+                :first_verse_id,
+                :last_verse_id,
+                :verses_count
+end

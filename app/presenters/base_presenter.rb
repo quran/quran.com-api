@@ -19,8 +19,14 @@ class BasePresenter
     end
   end
 
-  protected
+  def get_mushaf_id
+    strong_memoize :mushaf do
+      mushaf = Mushaf.find_by(id: params[:mushaf].to_s.strip) || Mushaf.default
+      mushaf.id
+    end
+  end
 
+  protected
   def include_in_response?(value)
     if value.presence
       !ActiveRecord::Type::Boolean::FALSE_VALUES.include?(value)
@@ -34,13 +40,19 @@ class BasePresenter
       translated_names: { language_id: Language.default.id }
     )
 
-    records
-      .where(
-        translated_names: { language_id: language }
-      ).or(defaults).order('translated_names.language_priority DESC')
+    if language
+      records
+        .where(
+          translated_names: { language_id: language }
+        ).or(defaults).order('translated_names.language_priority DESC')
+    else
+      defaults
+    end
   end
 
   def fetch_locale
-    params[:language].presence || params[:locale].presence || 'en'
+    strong_memoize :locale do
+      params[:language].presence || params[:locale].presence || 'en'
+    end
   end
 end

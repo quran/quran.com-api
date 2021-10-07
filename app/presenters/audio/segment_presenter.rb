@@ -33,6 +33,8 @@ class Audio::SegmentPresenter < Audio::RecitationPresenter
 
   # Find timestamp range for surah, ayah or words
   def filter_timestamps(segments)
+    return [] if segments.blank?
+
     time_from, time_to = nil
 
     if verse_id
@@ -51,8 +53,8 @@ class Audio::SegmentPresenter < Audio::RecitationPresenter
       first = segments.first
       last = segments.last
 
-      time_from = first.timestamp_from
-      time_to = last.timestamp_to
+      time_from = first&.timestamp_from
+      time_to = last&.timestamp_to
     end
 
     [time_from, time_to].compact_blank

@@ -8,7 +8,7 @@ class Audio::RecitationPresenter < BasePresenter
   def approved_recitations
     audio_recitations = Audio::Recitation
                           .approved
-                          .includes(:recitation_style)
+                          .includes(:recitation_style, :qirat_type)
                           .eager_load(:translated_name)
                           .order('priority ASC')
 
@@ -72,8 +72,7 @@ class Audio::RecitationPresenter < BasePresenter
   end
 
   def recitation_id
-    # Abdellatif wants to call it reciter_id
-    params[:reciter_id] || params[:recitation_id]
+    params[:reciter_id]
   end
 
   def verse_id

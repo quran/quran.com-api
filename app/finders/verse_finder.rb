@@ -17,13 +17,15 @@ class VerseFinder
     load_translations
     load_words(language_code)
     load_audio
-    load_segments
+    translations_order = valid_translations.present? ? ',translations.priority ASC' : ''
 
-    @results.order('verses.verse_index ASC, words.position ASC, word_translations.priority ASC')
+    @results.order("verses.verse_index ASC, words.position ASC, word_translations.priority ASC #{translations_order}".strip)
   end
 
   def per_page
     limit = (params[:limit] || 10).to_i.abs
+    limit = 10 if limit.zero?
+
     limit <= 50 ? limit : 50
   end
 
@@ -60,6 +62,7 @@ class VerseFinder
   end
 
   protected
+
   def fetch_verses_range
     verse_start = verse_pagination_start
     verse_end = verse_pagination_end(verse_start)
@@ -103,14 +106,6 @@ class VerseFinder
     end
   end
 
-  def load_segments
-    if params[:reciter].present?
-      @results = @results
-                   .where(audio_segments: { audio_recitation_id: params[:reciter] })
-                   .eager_load(:audio_segment)
-    end
-  end
-
   def set_offset
     if offset.present?
       @results = @results.offset(offset)
@@ -118,20 +113,22 @@ class VerseFinder
   end
 
   def valid_translations
-    # user can get translation using ids or Slug
-    translation = params[:translations].to_s.split(',')
+    strong_memoize :translations do
+      # user can get translation using ids or Slug
+      translation = params[:translations].to_s.split(',')
 
-    return [] if translation.blank?
+      return [] if translation.blank?
 
-    approved_translations = ResourceContent
-                              .approved
-                              .translations
-                              .one_verse
+      approved_translations = ResourceContent
+                                .approved
+                                .translations
+                                .one_verse
 
-    params[:translations] = approved_translations
-                              .where(id: translation)
-                              .or(approved_translations.where(slug: translation))
-                              .pluck(:id)
+      params[:translations] = approved_translations
+                                .where(id: translation)
+                                .or(approved_translations.where(slug: translation))
+                                .pluck(:id)
+    end
   end
 
   def offset
@@ -139,9 +136,7 @@ class VerseFinder
   end
 
   def eager_load_words
-    %i[
-      word_translation
-    ]
+    :word_translation
   end
 
   def verse_pagination_start
@@ -173,5 +168,9 @@ class VerseFinder
 
   def min(a, b)
     a < b ? a : b
+  end
+
+  def max(a, b)
+    a > b ? a : b
   end
 end

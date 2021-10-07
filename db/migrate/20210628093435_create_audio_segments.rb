@@ -21,7 +21,6 @@ class CreateAudioSegments < ActiveRecord::Migration[6.1]
       t.timestamps
     end
 
-    add_index :audio_segments, [:audio_file_id, :timestamp_median], unique: true
     add_index :audio_segments, [:audio_file_id, :verse_number], unique: true
     add_index :audio_segments, [:audio_recitation_id, :chapter_id, :verse_id, :timestamp_median], name: 'index_on_audio_segments_median_time'
   end

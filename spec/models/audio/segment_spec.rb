@@ -4,27 +4,30 @@
 #
 #  id                  :bigint           not null, primary key
 #  duration            :integer
-#  end_timestamp       :integer
+#  duration_ms         :integer
 #  percentile          :float
 #  segments            :jsonb
-#  start_timestamp     :integer
+#  timestamp_from      :integer
+#  timestamp_median    :integer
+#  timestamp_to        :integer
 #  verse_key           :string
 #  verse_number        :integer
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
 #  audio_file_id       :bigint
+#  audio_recitation_id :bigint
 #  chapter_id          :bigint
-#  surah_recitation_id :bigint
 #  verse_id            :bigint
 #
 # Indexes
 #
-#  index_audio_segments_on_audio_file_id        (audio_file_id)
-#  index_audio_segments_on_chapter_id           (chapter_id)
-#  index_audio_segments_on_surah_recitation_id  (surah_recitation_id)
-#  index_audio_segments_on_verse_id             (verse_id)
-#  index_on_audio_segments_chapter              (surah_recitation_id,chapter_id,verse_id,verse_number)
-#  index_on_audio_segments_timing               (audio_file_id,start_timestamp,end_timestamp)
+#  index_audio_segments_on_audio_file_id                   (audio_file_id)
+#  index_audio_segments_on_audio_file_id_and_verse_number  (audio_file_id,verse_number) UNIQUE
+#  index_audio_segments_on_audio_recitation_id             (audio_recitation_id)
+#  index_audio_segments_on_chapter_id                      (chapter_id)
+#  index_audio_segments_on_verse_id                        (verse_id)
+#  index_audio_segments_on_verse_number                    (verse_number)
+#  index_on_audio_segments_median_time                     (audio_recitation_id,chapter_id,verse_id,timestamp_median)
 #
 require 'rails_helper'
 

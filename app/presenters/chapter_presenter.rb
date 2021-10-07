@@ -9,14 +9,17 @@ class ChapterPresenter < BasePresenter
   end
 
   def chapters
-    finder.all_with_translated_names(locale)
+    finder.all_with_eager_load(locale: locale)
   end
 
   def chapter
-    finder.find_with_translated_name(params[:id], locale)
+    strong_memoize :chapter do
+      finder.find_and_eager_load(params[:id].strip, locale: locale)
+    end
   end
 
   protected
+
   def finder
     ChapterFinder.new
   end

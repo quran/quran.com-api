@@ -2,26 +2,29 @@
 #
 # Table name: resource_contents
 #
-#  id                    :integer          not null, primary key
-#  approved              :boolean
-#  author_name           :string
-#  cardinality_type      :string
-#  description           :text
-#  language_name         :string
-#  meta_data             :jsonb
-#  name                  :string
-#  priority              :integer
-#  resource_info         :text
-#  resource_type         :string
-#  slug                  :string
-#  sub_type              :string
-#  created_at            :datetime         not null
-#  updated_at            :datetime         not null
-#  author_id             :integer
-#  data_source_id        :integer
-#  language_id           :integer
-#  mobile_translation_id :integer
-#  resource_id           :string
+#  id                     :integer          not null, primary key
+#  approved               :boolean
+#  author_name            :string
+#  cardinality_type       :string
+#  description            :text
+#  language_name          :string
+#  meta_data              :jsonb
+#  name                   :string
+#  priority               :integer
+#  resource_info          :text
+#  resource_type          :string
+#  resource_type_name     :string
+#  slug                   :string
+#  sqlite_db              :string
+#  sqlite_db_generated_at :datetime
+#  sub_type               :string
+#  created_at             :datetime         not null
+#  updated_at             :datetime         not null
+#  author_id              :integer
+#  data_source_id         :integer
+#  language_id            :integer
+#  mobile_translation_id  :integer
+#  resource_id            :string
 #
 # Indexes
 #
@@ -34,7 +37,7 @@
 #  index_resource_contents_on_mobile_translation_id  (mobile_translation_id)
 #  index_resource_contents_on_priority               (priority)
 #  index_resource_contents_on_resource_id            (resource_id)
-#  index_resource_contents_on_resource_type          (resource_type)
+#  index_resource_contents_on_resource_type_name     (resource_type_name)
 #  index_resource_contents_on_slug                   (slug)
 #  index_resource_contents_on_sub_type               (sub_type)
 #

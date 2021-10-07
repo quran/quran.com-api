@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_05_135452) do
+ActiveRecord::Schema.define(version: 2021_09_29_045135) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -59,6 +59,7 @@ ActiveRecord::Schema.define(version: 2021_08_05_135452) do
     t.integer "resource_content_id"
     t.integer "duration_ms"
     t.string "audio_url"
+    t.string "timing_percentiles", array: true
     t.index ["audio_recitation_id"], name: "index_audio_chapter_audio_files_on_audio_recitation_id"
     t.index ["chapter_id"], name: "index_audio_chapter_audio_files_on_chapter_id"
     t.index ["format"], name: "index_audio_chapter_audio_files_on_format"
@@ -99,26 +100,29 @@ ActiveRecord::Schema.define(version: 2021_08_05_135452) do
     t.string "name"
     t.string "arabic_name"
     t.string "relative_path"
-    t.string "file_formats"
+    t.string "format"
     t.integer "section_id"
-    t.integer "home"
     t.text "description"
-    t.string "torrent_filename"
-    t.string "torrent_info_hash"
-    t.integer "torrent_leechers", default: 0
-    t.integer "torrent_seeders", default: 0
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.integer "files_count"
     t.integer "resource_content_id"
     t.integer "recitation_style_id"
-    t.integer "files_size"
-    t.boolean "approved", default: false
+    t.integer "reciter_id"
+    t.boolean "approved"
+    t.integer "home"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.integer "priority"
+    t.integer "segments_count"
+    t.integer "files_size"
     t.integer "qirat_type_id"
     t.index ["approved"], name: "index_audio_recitations_on_approved"
+    t.index ["name"], name: "index_audio_recitations_on_name"
     t.index ["priority"], name: "index_audio_recitations_on_priority"
-    t.index ["qirat_type_id"], name: "index_audio_recitations_on_qirat_type_id"
     t.index ["recitation_style_id"], name: "index_audio_recitations_on_recitation_style_id"
+    t.index ["reciter_id"], name: "index_audio_recitations_on_reciter_id"
+    t.index ["relative_path"], name: "index_audio_recitations_on_relative_path"
+    t.index ["resource_content_id"], name: "index_audio_recitations_on_resource_content_id"
+    t.index ["section_id"], name: "index_audio_recitations_on_section_id"
   end
 
   create_table "audio_related_recitations", force: :cascade do |t|
@@ -137,24 +141,27 @@ ActiveRecord::Schema.define(version: 2021_08_05_135452) do
 
   create_table "audio_segments", force: :cascade do |t|
     t.bigint "audio_file_id"
-    t.bigint "surah_recitation_id"
+    t.bigint "audio_recitation_id"
     t.bigint "chapter_id"
     t.bigint "verse_id"
+    t.string "verse_key"
     t.integer "verse_number"
-    t.integer "start_timestamp"
-    t.integer "end_timestamp"
+    t.integer "timestamp_from"
+    t.integer "timestamp_to"
+    t.integer "timestamp_median"
     t.jsonb "segments", default: []
     t.integer "duration"
+    t.integer "duration_ms"
     t.float "percentile"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "verse_key"
-    t.index ["audio_file_id", "start_timestamp", "end_timestamp"], name: "index_on_audio_segments_timing"
+    t.index ["audio_file_id", "verse_number"], name: "index_audio_segments_on_audio_file_id_and_verse_number", unique: true
     t.index ["audio_file_id"], name: "index_audio_segments_on_audio_file_id"
+    t.index ["audio_recitation_id", "chapter_id", "verse_id", "timestamp_median"], name: "index_on_audio_segments_median_time"
+    t.index ["audio_recitation_id"], name: "index_audio_segments_on_audio_recitation_id"
     t.index ["chapter_id"], name: "index_audio_segments_on_chapter_id"
-    t.index ["surah_recitation_id", "chapter_id", "verse_id", "verse_number"], name: "index_on_audio_segments_chapter"
-    t.index ["surah_recitation_id"], name: "index_audio_segments_on_surah_recitation_id"
     t.index ["verse_id"], name: "index_audio_segments_on_verse_id"
+    t.index ["verse_number"], name: "index_audio_segments_on_verse_number"
   end
 
   create_table "author", primary_key: "author_id", id: :integer, default: -> { "nextval('_author_author_id_seq'::regclass)" }, force: :cascade do |t|
@@ -229,6 +236,42 @@ ActiveRecord::Schema.define(version: 2021_08_05_135452) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["parent_id"], name: "index_char_types_on_parent_id"
+  end
+
+  create_table "corpus_morphology_terms", force: :cascade do |t|
+    t.string "category"
+    t.string "term"
+    t.string "arabic_grammar_name"
+    t.string "english_grammar_name"
+    t.string "urdu_grammar_name"
+    t.text "arabic_description"
+    t.text "english_description"
+    t.text "urdu_description"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["category"], name: "index_corpus_morphology_terms_on_category"
+    t.index ["term"], name: "index_corpus_morphology_terms_on_term"
+  end
+
+  create_table "corpus_word_forms", force: :cascade do |t|
+    t.bigint "word_id"
+    t.string "name"
+    t.string "arabic"
+    t.string "arabic_simple"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["word_id"], name: "index_corpus_word_forms_on_word_id"
+  end
+
+  create_table "corpus_word_grammars", force: :cascade do |t|
+    t.bigint "word_id"
+    t.integer "position"
+    t.string "text"
+    t.string "type"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["word_id", "position"], name: "index_corpus_word_grammars_on_word_id_and_position"
+    t.index ["word_id"], name: "index_corpus_word_grammars_on_word_id"
   end
 
   create_table "data_sources", id: :serial, force: :cascade do |t|
@@ -385,6 +428,8 @@ ActiveRecord::Schema.define(version: 2021_08_05_135452) do
     t.string "text_clean"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "words_count"
+    t.integer "uniq_words_count"
   end
 
   create_table "media_contents", id: :serial, force: :cascade do |t|
@@ -405,7 +450,22 @@ ActiveRecord::Schema.define(version: 2021_08_05_135452) do
     t.index ["resource_type", "resource_id"], name: "index_media_contents_on_resource_type_and_resource_id"
   end
 
-  create_table "mushaf_word_positions", force: :cascade do |t|
+  create_table "mushaf_pages", force: :cascade do |t|
+    t.integer "page_number"
+    t.json "verse_mapping"
+    t.integer "first_verse_id"
+    t.integer "last_verse_id"
+    t.integer "verses_count"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "mushaf_id"
+    t.integer "first_word_id"
+    t.integer "last_word_id"
+    t.index ["mushaf_id"], name: "index_mushaf_pages_on_mushaf_id"
+    t.index ["page_number"], name: "index_mushaf_pages_on_page_number"
+  end
+
+  create_table "mushaf_words", force: :cascade do |t|
     t.integer "mushaf_id"
     t.integer "word_id"
     t.integer "verse_id"
@@ -417,8 +477,9 @@ ActiveRecord::Schema.define(version: 2021_08_05_135452) do
     t.integer "position_in_verse"
     t.integer "position_in_line"
     t.integer "position_in_page"
+    t.index ["mushaf_id", "verse_id", "position_in_page"], name: "index_on_mushaf_word_position"
     t.index ["mushaf_id", "verse_id", "position_in_verse"], name: "index_on_mushad_word_position"
-    t.index ["mushaf_id", "word_id"], name: "index_mushaf_word_positions_on_mushaf_id_and_word_id"
+    t.index ["mushaf_id", "word_id"], name: "index_mushaf_words_on_mushaf_id_and_word_id"
   end
 
   create_table "mushafs", force: :cascade do |t|
@@ -427,7 +488,13 @@ ActiveRecord::Schema.define(version: 2021_08_05_135452) do
     t.integer "lines_per_page"
     t.boolean "is_default", default: false
     t.string "default_font_name"
+    t.integer "pages_count"
+    t.integer "qirat_type_id"
+    t.boolean "enabled"
+    t.integer "resource_content_id"
+    t.index ["enabled"], name: "index_mushafs_on_enabled"
     t.index ["is_default"], name: "index_mushafs_on_is_default"
+    t.index ["qirat_type_id"], name: "index_mushafs_on_qirat_type_id"
   end
 
   create_table "mushas_pages", force: :cascade do |t|
@@ -439,6 +506,20 @@ ActiveRecord::Schema.define(version: 2021_08_05_135452) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["page_number"], name: "index_mushas_pages_on_page_number"
+  end
+
+  create_table "navigation_search_records", force: :cascade do |t|
+    t.string "result_type"
+    t.string "searchable_record_type"
+    t.bigint "searchable_record_id"
+    t.string "name"
+    t.string "key"
+    t.string "text"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["result_type"], name: "index_navigation_search_records_on_result_type"
+    t.index ["searchable_record_type", "searchable_record_id"], name: "index_navigation_search_records_on_searchable_record"
+    t.index ["text"], name: "index_navigation_search_records_on_text"
   end
 
   create_table "qirat_types", force: :cascade do |t|
@@ -459,6 +540,9 @@ ActiveRecord::Schema.define(version: 2021_08_05_135452) do
     t.string "style"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "arabic"
+    t.string "slug"
+    t.index ["slug"], name: "index_recitation_styles_on_slug"
   end
 
   create_table "recitations", id: :serial, force: :cascade do |t|
@@ -535,7 +619,7 @@ ActiveRecord::Schema.define(version: 2021_08_05_135452) do
     t.integer "author_id"
     t.integer "data_source_id"
     t.string "author_name"
-    t.string "resource_type"
+    t.string "resource_type_name"
     t.string "sub_type"
     t.string "name"
     t.text "description"
@@ -550,6 +634,9 @@ ActiveRecord::Schema.define(version: 2021_08_05_135452) do
     t.text "resource_info"
     t.string "resource_id"
     t.jsonb "meta_data", default: {}
+    t.string "resource_type"
+    t.string "sqlite_db"
+    t.datetime "sqlite_db_generated_at"
     t.index ["approved"], name: "index_resource_contents_on_approved"
     t.index ["author_id"], name: "index_resource_contents_on_author_id"
     t.index ["cardinality_type"], name: "index_resource_contents_on_cardinality_type"
@@ -559,7 +646,7 @@ ActiveRecord::Schema.define(version: 2021_08_05_135452) do
     t.index ["mobile_translation_id"], name: "index_resource_contents_on_mobile_translation_id"
     t.index ["priority"], name: "index_resource_contents_on_priority"
     t.index ["resource_id"], name: "index_resource_contents_on_resource_id"
-    t.index ["resource_type"], name: "index_resource_contents_on_resource_type"
+    t.index ["resource_type_name"], name: "index_resource_contents_on_resource_type_name"
     t.index ["slug"], name: "index_resource_contents_on_slug"
     t.index ["sub_type"], name: "index_resource_contents_on_sub_type"
   end
@@ -573,6 +660,8 @@ ActiveRecord::Schema.define(version: 2021_08_05_135452) do
     t.string "value"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "words_count"
+    t.integer "uniq_words_count"
   end
 
   create_table "slugs", force: :cascade do |t|
@@ -582,9 +671,14 @@ ActiveRecord::Schema.define(version: 2021_08_05_135452) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "is_default", default: false
+    t.string "name"
+    t.integer "language_priority"
+    t.integer "language_id"
     t.index ["chapter_id", "slug"], name: "index_slugs_on_chapter_id_and_slug"
     t.index ["chapter_id"], name: "index_slugs_on_chapter_id"
     t.index ["is_default"], name: "index_slugs_on_is_default"
+    t.index ["language_id"], name: "index_slugs_on_language_id"
+    t.index ["language_priority"], name: "index_slugs_on_language_priority"
   end
 
   create_table "source", primary_key: "source_id", id: :integer, default: nil, force: :cascade do |t|
@@ -603,6 +697,8 @@ ActiveRecord::Schema.define(version: 2021_08_05_135452) do
     t.string "text_clean"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "words_count"
+    t.integer "uniq_words_count"
   end
 
   create_table "style", primary_key: "style_id", id: :integer, default: -> { "nextval('_style_style_id_seq'::regclass)" }, force: :cascade do |t|
@@ -832,6 +928,10 @@ ActiveRecord::Schema.define(version: 2021_08_05_135452) do
     t.string "qpc_uthmani_qumbul"
     t.string "qpc_uthmani_bazzi"
     t.string "qpc_uthmani_soosi"
+    t.integer "words_count"
+    t.string "text_nastaleeq_indopak"
+    t.integer "pause_words_count", default: 0
+    t.jsonb "mushaf_pages_mapping", default: {}
     t.index ["chapter_id"], name: "index_verses_on_chapter_id"
     t.index ["verse_index"], name: "index_verses_on_verse_index"
     t.index ["verse_key"], name: "index_verses_on_verse_key"
@@ -839,6 +939,7 @@ ActiveRecord::Schema.define(version: 2021_08_05_135452) do
     t.index ["verse_number"], name: "index_verses_on_verse_number"
     t.index ["verse_root_id"], name: "index_verses_on_verse_root_id"
     t.index ["verse_stem_id"], name: "index_verses_on_verse_stem_id"
+    t.index ["words_count"], name: "index_verses_on_words_count"
   end
 
   create_table "view", primary_key: "view_id", id: :serial, force: :cascade do |t|
@@ -1001,6 +1102,7 @@ ActiveRecord::Schema.define(version: 2021_08_05_135452) do
     t.string "qpc_uthmani_qumbul"
     t.string "qpc_uthmani_bazzi"
     t.string "qpc_uthmani_soosi"
+    t.string "text_nastaleeq_indopak"
     t.index ["chapter_id"], name: "index_words_on_chapter_id"
     t.index ["char_type_id"], name: "index_words_on_char_type_id"
     t.index ["location"], name: "index_words_on_location"

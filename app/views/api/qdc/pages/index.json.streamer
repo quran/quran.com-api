@@ -1,0 +1,7 @@
+json.object! do
+  json.pages do
+    json.array! @presenter.pages do |page|
+      json.partial! 'page', page: page
+    end
+  end
+end

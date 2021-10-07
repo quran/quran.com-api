@@ -1,0 +1,64 @@
+# frozen_string_literal: true
+
+include_words = @presenter.render_words?
+include_translations = @presenter.render_translations?
+include_tafsirs = @presenter.render_tafsirs?
+include_segments = @presenter.render_segments?
+
+fields = @presenter.verse_fields
+word_fields = @presenter.word_fields
+tafsir_fields = @presenter.tafsir_fields
+translation_fields = @presenter.translation_fields
+mushaf_id = @presenter.get_mushaf_id
+
+verse = @presenter.random_verse
+
+json.object! do
+  json.verse do
+    json.object! do
+      json.extract! verse,
+                    :id,
+                    :verse_number,
+                    :verse_key,
+                    :juz_number,
+                    :hizb_number,
+                    :rub_number,
+                    :sajdah_type,
+                    :sajdah_number, *fields
+
+      json.page_number verse.get_page_number_for(mushaf: mushaf_id)
+
+      if include_words
+        json.words do
+          json.array! verse.mushaf_words.order('position_in_page ASC'), partial: 'word', as: :word, locals: { fields: word_fields, mushaf_type: mushaf_type }
+        end
+      end
+
+      if include_segments
+        segment = verse.audio_segment
+
+        json.timestamps do
+          json.object! do
+            json.verse_key segment.verse_key
+            json.timestamp_from segment.timestamp_from
+            json.timestamp_to segment.timestamp_to
+            json.duration segment.duration_ms
+            json.segments segment.segments
+          end
+        end
+      end
+
+      if include_translations
+        json.translations do
+          json.array! verse.translations, partial: 'translation', as: :translation, locals: { fields: translation_fields }
+        end
+      end
+
+      if include_tafsirs
+        json.tafsirs do
+          json.array! verse.tafsirs, partial: 'tafsir', as: :tafsir, locals: { fields: tafsir_fields }
+        end
+      end
+    end
+  end
+end

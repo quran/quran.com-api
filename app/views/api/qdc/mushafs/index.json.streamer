@@ -1,0 +1,12 @@
+json.object! do
+  json.mushafs do
+    json.array! @presenter.approved do |mushaf|
+      json.object! do
+        json.extract! mushaf,
+                      :id,
+                      :name,
+                      :pages_count
+      end
+    end
+  end
+end

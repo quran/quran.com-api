@@ -1,11 +1,14 @@
 # frozen_string_literal: true
 
 class ChapterFinder
-  def find_and_eager_load(id_or_slug, locale: 'en')
-    with_translated_name = all_with_eager_load(locale: locale)
-    with_slug = eager_load_slugs(with_translated_name, locale: locale)
+  def find_and_eager_load(id_or_slug, locale: 'en', include_slugs: false)
+    chapters = all_with_eager_load(locale: locale)
 
-    with_slug.find_using_slug(id_or_slug)
+    if include_slugs
+      chapters = eager_load_slugs(with_translated_name, locale: locale)
+    end
+
+    chapters.find_using_slug(id_or_slug)
   end
 
   def all_with_eager_load(locale: 'en')
@@ -27,9 +30,17 @@ class ChapterFinder
   end
 
   def eager_load_slugs(relation, locale: 'en')
-    # Force locale to en if it is blank or nil
-    locale = 'en' unless locale.presence
+    language = Language.find_with_id_or_iso_code(locale)
 
-    relation.includes(:slugs).where(slugs: { locale: locale })
+    relation = relation.includes(:slugs)
+    with_en_slugs = relation
+                      .where(slugs: { language_id: Language.default.id })
+
+    relation
+      .where(slugs: { language_id: language.id })
+      .or(
+        with_en_slugs
+      )
+      .order('slugs.language_priority DESC')
   end
 end

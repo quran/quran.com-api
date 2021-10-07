@@ -1,49 +1,4 @@
 namespace :qdc do
-  namespace :audio do
-    # https://quranicaudio.com/api/surahs
-    # https://quranicaudio.com/api/surahs/1
-
-    # Surah audio
-    get 'reciters', to: 'chapter_recitations#reciters'
-    get 'reciter/:reciter_id', to: 'chapter_recitations#reciter_audio_files'
-
-    # Get timestamp
-    get 'reciter/:reciter_id/timestamp', to: 'segments#timestamp'
-
-    # Segments and percentiles
-    get 'reciter/:reciter_id/lookup', to: 'segments#lookup_ayah'
-    get 'reciter/:reciter_id/percentiles', to: 'percentiles#cumulative_percentile'
-    get 'reciter/:reciter_id/ayah_percentiles', to: 'percentiles#ayah_duration_percentile'
-
-    # QuanicAudio api routes
-    get :qaris, to: 'recitations#index'
-    get 'qaris/:recitation_id', to: 'recitations#show'
-    get 'qaris/related/:recitation_id', to: 'recitations#related'
-    get 'qaris/:recitation_id/audio_files/:ext', to: 'recitations#audio_files'
-    get :sections, to: 'sections#index'
-    get :surahs, to: 'chapters#index'
-    get '/surahs/:id', to: 'chapters#show'
-  end
-
-  get :search, to: 'search#search'
-  get :suggest, to: 'suggest#suggest'
-
-  get :chapters, to: 'chapters#index'
-  get 'chapters/:id', to: 'chapters#show'
-
-  # Chapter info
-  get 'chapters/:id/info', to: 'chapter_infos#show'
-
-  # Juz
-  get 'juzs', to: 'juzs#index'
-  get 'juzs/:id', to: 'juzs#show'
-
-  # Advance copy
-  get 'verses/advanced_copy', to: 'advanced_copy#index'
-
-  # Footnote
-  get 'foot_notes/:id', to: 'foot_notes#show'
-
   # available resources
   namespace :resources do
     get :translations
@@ -58,6 +13,59 @@ namespace :qdc do
     get :chapter_infos
     get :verse_media
     get :chapter_reciters
+  end
+
+  get :chapters, to: 'chapters#index'
+  get 'chapters/:id', to: 'chapters#show'
+
+  # Chapter info
+  get 'chapters/:id/info', to: 'chapter_infos#show'
+
+  # Juz
+  get 'juzs', to: 'juzs#index'
+  get 'juzs/:id', to: 'juzs#show'
+
+  # Page
+  get 'pages', to: 'pages#index'
+  get 'pages/:id', to: 'pages#show'
+
+  # verses routes, by juz, chapter, page
+  namespace :verses do
+    get 'by_page/:page_number', action: 'by_page'
+    get 'by_juz/:juz_number', action: 'by_juz'
+    get 'by_chapter/:chapter_number', action: 'by_chapter'
+    get 'by_rub/:rub_number', action: 'by_rub'
+    get 'by_hizb/:hizb_number', action: 'by_hizb'
+    get 'by_key/:verse_key', action: 'by_key'
+    get :filter
+
+    get 'random', action: 'random'
+  end
+
+  get :search, to: 'search#search'
+  get :navigate, to: 'search#navigate'
+
+  # Advance copy
+  get 'verses/advanced_copy', to: 'advanced_copy#index'
+
+  # Get footnote text
+  get 'foot_notes/:id', to: 'foot_notes#show'
+
+  # Get approved Mushafs
+  get :mushafs, to: 'mushafs#index'
+
+  namespace :audio do
+    # Surah audio
+    get 'reciters', to: 'chapter_recitations#reciters'
+    get 'reciters/:reciter_id', to: 'chapter_recitations#reciter_audio_files'
+
+    # Get timestamp for ayah
+    get 'reciters/:reciter_id/timestamp', to: 'segments#timestamp'
+
+    # Segments and percentiles
+    get 'reciters/:reciter_id/lookup', to: 'segments#lookup_ayah'
+    get 'reciters/:reciter_id/percentiles', to: 'percentiles#cumulative_percentile'
+    get 'reciters/:reciter_id/ayah_percentiles', to: 'percentiles#ayah_duration_percentile'
   end
 
   # routes for fetching all records of one resource.
@@ -75,19 +83,6 @@ namespace :qdc do
     get :'verses/code_v1', action: 'verses_text', script: 'code_v1'
     get :'verses/code_v2', action: 'verses_text', script: 'code_v2'
     # TODO: Naveed. add Qaloon and other Qira'at
-  end
-
-  # verses routes, by juz, chapter, page
-  namespace :verses do
-    get 'by_page/:page_number', action: 'by_page'
-    get 'by_juz/:juz_number', action: 'by_juz'
-    get 'by_chapter/:chapter_number', action: 'by_chapter'
-    get 'by_rub/:rub_number', action: 'by_rub'
-    get 'by_hizb/:hizb_number', action: 'by_hizb'
-    get 'by_key/:verse_key', action: 'by_key'
-    get :filter
-
-    get 'random', action: 'random'
   end
 
   # translations routes, by juz, chapter, page
