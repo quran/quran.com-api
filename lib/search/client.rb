@@ -2,9 +2,11 @@
 
 module Search
   class Client
-    # Debug es queries only in dev environment
+    # Debug ES queries only in development environment
     DEBUG_ES_QUERIES = Rails.env.development?
     DEFAULT_RESULT_SIZE = 10
+    NAVIGATE_RESULT_SIZE = 30
+
     include QuranUtils::StrongMemoize
 
     attr_accessor :query,
@@ -19,6 +21,7 @@ module Search
       @options = options
       @page = options[:page].to_i.abs
       @per_page = options[:per_page]
+      @navigate_per_page = options[:per_page]
       @filter_languages = options[:filter_languages]
       @filter_translations = options[:filter_translations]
     end

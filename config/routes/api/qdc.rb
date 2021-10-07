@@ -43,15 +43,15 @@ namespace :qdc do
   end
 
   get :search, to: 'search#search'
-  get :suggest, to: 'suggest#suggest'
+  get :navigate, to: 'search#navigate'
 
   # Advance copy
   get 'verses/advanced_copy', to: 'advanced_copy#index'
 
-  # Footnote
+  # Get footnote text
   get 'foot_notes/:id', to: 'foot_notes#show'
 
-  # Mushafs
+  # Get approved Mushafs
   get :mushafs, to: 'mushafs#index'
 
   namespace :audio do

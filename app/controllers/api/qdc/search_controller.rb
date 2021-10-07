@@ -12,6 +12,15 @@ module Api::Qdc
       end
     end
 
+    def navigate
+      params[:page] = params[:p] = 0
+      @presenter = SearchPresenter.new(params, query)
+
+      do_navigation_search
+
+      render
+    end
+
     protected
 
     def language
