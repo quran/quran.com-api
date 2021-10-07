@@ -45,7 +45,8 @@ gem 'prose'
 gem 'puma', '~> 4.3', '>= 4.3.8'
 
 gem 'rack-cors'
-
+# compresses Rack responses using Google's Brotli compression algorithm
+gem 'rack-brotli'
 gem 'virtus'
 
 gem 'bootsnap', '>= 1.4.2', require: false

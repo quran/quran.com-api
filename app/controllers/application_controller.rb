@@ -19,7 +19,10 @@ class ApplicationController < ActionController::API
   end
 
   def set_cache_headers
-    expires_in 1.day, public: true
+    expires_in 7.day, public: true
+    headers['Connection'] = 'Keep-Alive'
+    # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security
+    headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains; preload'
   end
 
   def eager_load_translated_name(records)

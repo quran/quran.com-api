@@ -30,6 +30,10 @@ module QuranAPI
     # the framework and any gems in your application.
 
     # Only loads a smaller set of middleware suitable for API only apps.
+    # https://github.com/marcotc/rack-brotli/issues/4
+    config.middleware.use Rack::Deflater
+    config.middleware.use Rack::Brotli
+
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
