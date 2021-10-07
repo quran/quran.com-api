@@ -17,7 +17,6 @@ module QuranNavigationSearchable
               type: 'text',
               index_options: 'offsets',
               index_phrases: true,
-              #similarity: 'my_bm25',
               analyzer: 'english' do
         indexes :term,
                 type: 'keyword'
@@ -179,15 +178,16 @@ module QuranNavigationSearchable
 
   def verse_document_variants
     variants = [
-      verse_key,
-      "#{chapter_id.to_roman} #{verse_number}",
-      "chapter #{chapter_id} verse #{verse_number}",
+      verse_key, # 1:2
+      "#{chapter_id} #{verse_number}", # "1 2"
+      "#{chapter_id.to_roman} #{verse_number}", # X 1
+      "chapter #{chapter_id} verse #{verse_number}", # chapter 1 verse 2
       "ch#{chapter_id} v#{verse_number}", #ch23 v2
       "ch#{chapter_id}v#{verse_number}", #ch23v2
       "c#{chapter_id}v#{verse_number}", #v2v3
-      "#{chapter.name_arabic} #{verse_number}",
-      "surah #{chapter_id} ayah #{verse_number}",
-      "ayah #{verse_number} surah #{chapter_id}",
+      "#{chapter.name_arabic} #{verse_number}", # الفاتحة 1
+      "surah #{chapter_id} ayah #{verse_number}", # surah 1 ayah 1
+      "ayah #{verse_number} surah #{chapter_id}", # ayah 1 surah 1
     ]
 
     variants.map do |variant|

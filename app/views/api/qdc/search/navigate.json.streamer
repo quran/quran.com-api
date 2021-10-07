@@ -1,0 +1,7 @@
+json.object! do
+  json.result do
+    json.object! do
+      json.navigation @presenter.get_navigational_results
+    end
+  end
+end

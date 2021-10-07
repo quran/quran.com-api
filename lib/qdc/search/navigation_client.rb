@@ -4,7 +4,6 @@ module Qdc
   module Search
     class NavigationClient < Qdc::Search::Client
       SOURCE_ATTRS = %w[key name result_type priority].freeze
-      RESULT_SIZE = 30
       PREFIX_SLOP = 1
 
       def initialize(query, options = {})
@@ -29,8 +28,8 @@ module Qdc
       def search_definition
         {
           _source: source_attributes,
-          query: search_query,
-          size: RESULT_SIZE,
+          query: navigate_query,
+          size: navigate_result_size,
           collapse: { # get uniq results for each navigation record type.
             field: 'result_type'
           },
@@ -38,7 +37,7 @@ module Qdc
         }
       end
 
-      def search_query
+      def navigate_query
         {
           bool: {
             should: [
@@ -47,6 +46,10 @@ module Qdc
             ]
           }
         }
+      end
+
+      def navigate_result_size
+        @navigate_per_page || NAVIGATE_RESULT_SIZE
       end
 
       def match_phrase_prefix_query
