@@ -2,12 +2,12 @@
 
 json.object! do
   json.extract! word,
-                :id,
                 :position,
                 :audio_url,
                 :char_type_name,
                 *fields
 
+  json.id word.word_id
   json.page_number word.page_number
   json.line_number word.line_number
   json.text word.text
