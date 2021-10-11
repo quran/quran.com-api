@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 json.object! do
+  json.id word.word_id
   json.extract! word,
                 :position,
                 :audio_url,
                 :char_type_name,
                 *fields
 
-  json.id word.word_id
   json.page_number word.page_number
   json.line_number word.line_number
   json.text word.text
