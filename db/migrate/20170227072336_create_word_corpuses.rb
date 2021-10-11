@@ -5,7 +5,7 @@ class CreateWordCorpuses < ActiveRecord::Migration[5.0]
       t.string :location
       t.text :description
       t.string :image_src
-      t.jsonb :segments
+      t.jsonb :segments_data, default: {}
 
       t.timestamps
     end

@@ -157,7 +157,7 @@ class Qdc::VerseFinder < ::VerseFinder
     if mushaf_page = MushafPage.where(mushaf_id: mushaf_id, page_number: params[:page_number].to_i.abs).first
       verse_start = mushaf_page.first_verse_id
       verse_end = mushaf_page.last_verse_id
-      @results = rescope_verses('verse_index').where('verses.verse_index >= ? AND verses.verse_index < ?', verse_start, verse_end)
+      @results = rescope_verses('verse_index').where('verses.verse_index >= ? AND verses.verse_index <= ?', verse_start, verse_end)
 
       # Disable pagination for by_page route
       @next_page = nil
