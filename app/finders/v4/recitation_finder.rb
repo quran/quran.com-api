@@ -9,11 +9,12 @@ class V4::RecitationFinder < V4::VerseFinder
   end
 
   protected
+
   def load_recitation_range(filter)
     results = send("fetch_#{filter}", recitation)
 
     results = results.limit(per_page)
-                  .offset((current_page - 1) * per_page)
+                     .offset((current_page - 1) * per_page)
 
     if current_page < total_pages
       @next_page = current_page + 1
@@ -23,12 +24,12 @@ class V4::RecitationFinder < V4::VerseFinder
   end
 
   def fetch_by_chapter(recitation)
-    if chapter = Chapter.find_by(id: params[:chapter_number].to_i.abs)
+    if chapter = Chapter.find_using_slug(params[:chapter_number])
       @total_records = chapter.verses_count
       results = filter_audio_files(recitation)
-                    .where(chapter_id: params[:chapter_number].to_i.abs)
+                  .where(chapter_id: params[:chapter_number].to_i.abs)
     else
-      results = AudioFile.where('1=0')
+      raise RestApi::RecordNotFound.new("Surah not found")
     end
 
     results
@@ -36,7 +37,7 @@ class V4::RecitationFinder < V4::VerseFinder
 
   def fetch_by_page(recitation)
     results = filter_audio_files(recitation)
-                  .where(page_number: params[:page_number].to_i.abs)
+                .where(page_number: params[:page_number].to_i.abs)
 
     @total_records = results.size
 
@@ -45,7 +46,7 @@ class V4::RecitationFinder < V4::VerseFinder
 
   def fetch_by_rub(recitation)
     results = filter_audio_files(recitation)
-                  .where(rub_number: params[:rub_number].to_i.abs)
+                .where(rub_number: params[:rub_number].to_i.abs)
 
     @total_records = results.size
 
@@ -54,7 +55,7 @@ class V4::RecitationFinder < V4::VerseFinder
 
   def fetch_by_hizb(recitation)
     results = filter_audio_files(recitation)
-                  .where(hizb_number: params[:hizb_number].to_i.abs)
+                .where(hizb_number: params[:hizb_number].to_i.abs)
 
     @total_records = results.size
     results
@@ -65,11 +66,11 @@ class V4::RecitationFinder < V4::VerseFinder
       @total_records = juz.verses_count
 
       results = filter_audio_files(recitation)
-                    .where(juz_number: juz.juz_number)
+                  .where(juz_number: juz.juz_number)
 
       results
     else
-      AudioFile.where('1=0')
+      raise RestApi::RecordNotFound.new("Juz not found")
     end
   end
 

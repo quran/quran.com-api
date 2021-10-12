@@ -1,4 +1,4 @@
 json.object! do
   json.status 404
-  json.error 'not found'
+  json.error message || 'not found'
 end

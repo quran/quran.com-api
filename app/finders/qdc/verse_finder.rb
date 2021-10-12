@@ -35,7 +35,7 @@ class Qdc::VerseFinder < ::VerseFinder
   def load_verses(filter, language_code, mushaf_type:, words: true, tafsirs: false, translations: false, reciter: false)
     fetch_verses_range(filter, mushaf_type)
 
-    load_related_resources(
+    results = load_related_resources(
       language: language_code,
       mushaf_type: mushaf_type,
       words: words,
@@ -44,6 +44,16 @@ class Qdc::VerseFinder < ::VerseFinder
       reciter: reciter,
       filter: filter
     )
+
+    if 'by_page' == filter
+      #
+      # NOTE: in 16 lines mushaf ayahs could span into multiple pages
+      # and we need to restrict words that are on requested page.
+      #
+      results.where(mushaf_words: {page_number: params[:page_number].to_i})
+    else
+      results
+    end
   end
 
   def per_page
