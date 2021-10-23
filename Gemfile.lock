@@ -255,7 +255,7 @@ GEM
       pry (~> 0.13.0)
     pry-rails (0.3.9)
       pry (>= 0.10.4)
-    puma (4.3.8)
+    puma (4.3.9)
       nio4r (~> 2.0)
     racc (1.5.2)
     rack (2.2.3)
@@ -431,7 +431,7 @@ DEPENDENCIES
   prose
   pry-byebug
   pry-rails
-  puma (~> 4.3, >= 4.3.8)
+  puma (~> 4.3)
   rack-brotli
   rack-cors
   rails (~> 6.1.4.1)
