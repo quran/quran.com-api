@@ -42,7 +42,7 @@ gem 'parallel'
 
 gem 'prose'
 
-gem 'puma', '~> 4.3', '>= 4.3.9'
+gem 'puma', '~> 4.3'
 
 gem 'rack-cors'
 # compresses Rack responses using Google's Brotli compression algorithm
