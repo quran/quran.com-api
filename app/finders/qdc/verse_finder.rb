@@ -87,15 +87,16 @@ class Qdc::VerseFinder < ::VerseFinder
 
     words_ordering = if words
                        if filter.to_s == 'by_page'
-                         ', mushaf_words.position_in_page ASC, word_translations.priority ASC'
+                         'mushaf_words.position_in_page ASC, word_translations.priority ASC, '
                        else
-                         ', mushaf_words.position_in_verse ASC, word_translations.priority ASC'
+                         'mushaf_words.position_in_verse ASC, word_translations.priority ASC, '
                        end
                      else
                        ''
                      end
-    translations_order = translations.present? ? ',translations.priority ASC' : ''
-    @results.order("verses.verse_index ASC #{words_ordering} #{translations_order}".strip)
+
+    translations_order = translations.present? ? 'translations.priority ASC, ' : ''
+    @results.order("#{words_ordering} #{translations_order} verses.verse_index ASC".strip)
   end
 
   def fetch_advance_copy
@@ -252,7 +253,7 @@ class Qdc::VerseFinder < ::VerseFinder
     @results = @results.where(mushaf_words: { mushaf_id: mushaf_type })
     words_with_default_translation = @results.where(word_translations: { language_id: Language.default.id })
 
-    if language
+    if language.nil? || language.default?
       @results = @results
                    .where(word_translations: { language_id: language.id })
                    .or(words_with_default_translation)
