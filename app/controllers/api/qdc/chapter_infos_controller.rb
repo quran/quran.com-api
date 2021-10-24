@@ -9,8 +9,10 @@ module Api::Qdc
 
     protected
     def chapter_info
+      chapter = ChapterFinder.new().find_and_eager_load(params[:id], locale: 'en')
+
       ChapterInfo
-          .where(chapter_id: params[:id])
+          .where(chapter_id: chapter.id)
           .filter_by_language_or_default(fetch_locale)
     end
   end

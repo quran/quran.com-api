@@ -3,18 +3,18 @@
 class RecitationsPresenter < BasePresenter
   attr_reader :finder
   FIELDS = [
-      'chapter_id',
-      'verse_number',
-      'verse_key',
-      'juz_number',
-      'hizb_number',
-      'rub_number',
-      'page_number',
-      'format',
-      'url',
-      'segments',
-      'duration',
-      'id'
+    'chapter_id',
+    'verse_number',
+    'verse_key',
+    'juz_number',
+    'hizb_number',
+    'rub_number',
+    'page_number',
+    'format',
+    'url',
+    'segments',
+    'duration',
+    'id'
   ]
 
   def initialize(params)
@@ -34,22 +34,24 @@ class RecitationsPresenter < BasePresenter
   end
 
   def audio_files(filter)
-    finder.load_audio(filter, recitation_id)
+    if (id = recitation_id)
+      finder.load_audio(filter, id)
+    else
+      raise RestApi::RecordNotFound.new("Recitation not found")
+    end
   end
 
   protected
+
   def recitation_id
     strong_memoize :approved_recitation do
       if params[:recitation_id]
         recitation = params[:recitation_id].to_s.strip
 
         approved = Recitation
-                   .approved
+                     .approved
 
         params[:recitation_id] = approved.where(id: recitation).first&.id
-        params[:recitation_id]
-      else
-        []
       end
     end
   end

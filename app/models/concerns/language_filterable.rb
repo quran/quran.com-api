@@ -10,7 +10,11 @@ module LanguageFilterable
     def self.filter_by_language_or_default(language = 'en')
       language = Language.find_with_id_or_iso_code(language)
 
-      find_by(language: language) || find_by(language: Language.default)
+      if language.nil?
+        find_by(language: Language.default)
+      else
+        find_by(language: language)
+      end
     end
   end
 end

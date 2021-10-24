@@ -2,16 +2,17 @@
 
 class ApplicationController < ActionController::API
   serialization_scope :params
+  include ActionController::Caching
   include QuranUtils::StrongMemoize
 
-  class APIValidation < StandardError; end
+  before_action :set_cache_headers, except: :random
 
-  rescue_from APIValidation, with: :throw_the_error
-  before_action :set_cache_headers
+  rescue_from RestApi::RecordNotFound, with: :render_404
 
-  private
-  def throw_the_error(error)
-    render json: { error: error.message }, status: :not_found
+  protected
+
+  def render_404(error)
+    render partial: "api/errors/404", locals: { message: error.message }, status: :not_found
   end
 
   def fetch_locale
@@ -31,9 +32,15 @@ class ApplicationController < ActionController::API
       translated_names: { language_id: Language.default.id }
     )
 
-    records
-      .where(
-        translated_names: { language_id: language }
-      ).or(defaults).order('translated_names.language_priority DESC')
+    if language.nil? || language.default?
+      defaults
+    else
+      records
+        .where(
+          translated_names: { language_id: language }
+        )
+        .or(defaults)
+        .order('translated_names.language_priority DESC')
+    end
   end
 end

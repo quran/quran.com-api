@@ -32,9 +32,11 @@ module Qdc
     end
 
     def chapter_info
-      ChapterInfo
-        .where(chapter_id: chapter.id)
-        .filter_by_language_or_default(fetch_locale)
+      info = ChapterInfo
+               .where(chapter_id: chapter.id)
+               .filter_by_language_or_default(fetch_locale)
+
+      info || raise(RestApi::RecordNotFound.new("Surah not found"))
     end
 
     protected

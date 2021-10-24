@@ -27,6 +27,10 @@ class Language < ApplicationRecord
 
   scope :with_translations, -> { where('translations_count > 0').order('translations_count DESC') }
 
+  def default?
+    iso_code == 'en'
+  end
+
   class << self
     def default
       Language.find_by(iso_code: :en)

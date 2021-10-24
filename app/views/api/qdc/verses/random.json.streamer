@@ -30,7 +30,7 @@ json.object! do
 
       if include_words
         json.words do
-          json.array! verse.mushaf_words.order('position_in_page ASC'), partial: 'word', as: :word, locals: { fields: word_fields, mushaf_type: mushaf_type }
+          json.array! verse.mushaf_words.order('position_in_verse ASC'), partial: 'word', as: :word, locals: { fields: word_fields }
         end
       end
 

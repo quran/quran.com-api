@@ -8,7 +8,7 @@ class ChapterFinder
       chapters = eager_load_slugs(with_translated_name, locale: locale)
     end
 
-    chapters.find_using_slug(id_or_slug)
+    chapters.find_using_slug(id_or_slug) || raise(RestApi::RecordNotFound.new("Surah not found"))
   end
 
   def all_with_eager_load(locale: 'en')
@@ -21,12 +21,15 @@ class ChapterFinder
     with_default_names = chapters
                            .where(translated_names: { language_id: Language.default.id })
 
-    @chapters = chapters
-                  .where(translated_names: { language_id: language.id })
-                  .or(
-                    with_default_names
-                  )
-                  .order('translated_names.language_priority DESC')
+    chapters = if language.nil? || language.default?
+                 with_default_names
+               else
+                 chapters
+                   .where(translated_names: { language_id: language.id })
+                   .or(with_default_names)
+               end
+
+    @chapters = chapters.order('translated_names.language_priority DESC')
   end
 
   def eager_load_slugs(relation, locale: 'en')

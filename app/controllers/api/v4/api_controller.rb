@@ -5,24 +5,6 @@ module Api::V4
     include ActionView::Rendering
 
     protected
-
-    def eager_load_translated_name(records)
-      language = Language.find_by(iso_code: fetch_locale)
-
-      defaults = records.where(
-        translated_names: { language_id: Language.default.id }
-      )
-
-      if language
-        records
-          .where(
-            translated_names: { language_id: language }
-          ).or(defaults).order('translated_names.language_priority DESC')
-      else
-        defaults
-      end
-    end
-
     def fetch_translation_resource
       approved = ResourceContent
                    .translations
@@ -53,10 +35,6 @@ module Api::V4
       end
 
       list.first
-    end
-
-    def render_404
-      render partial: "api/errors/404", status: 404
     end
   end
 end

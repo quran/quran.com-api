@@ -35,7 +35,7 @@ class Qdc::VerseFinder < ::VerseFinder
   def load_verses(filter, language_code, mushaf_type:, words: true, tafsirs: false, translations: false, reciter: false)
     fetch_verses_range(filter, mushaf_type)
 
-    load_related_resources(
+    results = load_related_resources(
       language: language_code,
       mushaf_type: mushaf_type,
       words: words,
@@ -44,6 +44,16 @@ class Qdc::VerseFinder < ::VerseFinder
       reciter: reciter,
       filter: filter
     )
+
+    if 'by_page' == filter
+      #
+      # NOTE: in 16 lines mushaf ayahs could span into multiple pages
+      # and we need to restrict words that are on requested page.
+      #
+      results.where(mushaf_words: {page_number: params[:page_number].to_i})
+    else
+      results
+    end
   end
 
   def per_page
@@ -77,15 +87,16 @@ class Qdc::VerseFinder < ::VerseFinder
 
     words_ordering = if words
                        if filter.to_s == 'by_page'
-                         ', mushaf_words.position_in_page ASC, word_translations.priority ASC'
+                         'mushaf_words.position_in_page ASC, word_translations.priority ASC, '
                        else
-                         ', mushaf_words.position_in_verse ASC, word_translations.priority ASC'
+                         'mushaf_words.position_in_verse ASC, word_translations.priority ASC, '
                        end
                      else
                        ''
                      end
-    translations_order = translations.present? ? ',translations.priority ASC' : ''
-    @results.order("verses.verse_index ASC #{words_ordering} #{translations_order}".strip)
+
+    translations_order = translations.present? ? 'translations.priority ASC, ' : ''
+    @results.order("#{words_ordering} #{translations_order} verses.verse_index ASC".strip)
   end
 
   def fetch_advance_copy
@@ -242,7 +253,7 @@ class Qdc::VerseFinder < ::VerseFinder
     @results = @results.where(mushaf_words: { mushaf_id: mushaf_type })
     words_with_default_translation = @results.where(word_translations: { language_id: Language.default.id })
 
-    if language
+    if language.nil? || language.default?
       @results = @results
                    .where(word_translations: { language_id: language.id })
                    .or(words_with_default_translation)
