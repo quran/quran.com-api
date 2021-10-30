@@ -972,6 +972,7 @@ ActiveRecord::Schema.define(version: 2021_09_29_045135) do
     t.json "segments"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.jsonb "segments_data"
     t.index ["word_id"], name: "index_word_corpuses_on_word_id"
   end
 

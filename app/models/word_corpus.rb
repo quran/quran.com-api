@@ -4,14 +4,15 @@
 #
 # Table name: word_corpuses
 #
-#  id          :integer          not null, primary key
-#  description :text
-#  image_src   :string
-#  location    :string
-#  segments    :json
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
-#  word_id     :integer
+#  id            :integer          not null, primary key
+#  description   :text
+#  image_src     :string
+#  location      :string
+#  segments      :json
+#  segments_data :jsonb
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  word_id       :integer
 #
 # Indexes
 #

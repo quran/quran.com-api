@@ -1,4 +1,4 @@
-class CreateMushafWords < ActiveRecordMigration[6.1]
+class CreateMushafWords < ActiveRecord::Migration[6.1]
   def change
     create_table :mushaf_words do |t|
       t.integer :mushaf_id

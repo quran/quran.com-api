@@ -65,6 +65,7 @@ class Verse < ApplicationRecord
   belongs_to :verse_stem
 
   has_many :tafsirs
+  has_many :verse_pages
   has_many :words
   has_many :char_words, -> {where char_type_id: 1}, class_name: 'Word'
   has_many :mushaf_words
