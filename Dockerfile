@@ -40,5 +40,5 @@ RUN yarn install --silent --no-progress --no-audit --no-optional
 
 RUN mkdir -p /var/www/quran/tmp/pids/
 
-EXPOSE 3000
+EXPOSE 80
 CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]
