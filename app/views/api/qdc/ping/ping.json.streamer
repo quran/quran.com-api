@@ -2,3 +2,4 @@ json.object! do
   json.message PingResponse.message
   json.versions PingResponse.versions
 end
+

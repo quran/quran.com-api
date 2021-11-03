@@ -3,7 +3,7 @@
 module Api::V3
   class PingController < ApiController
     def ping
-      render json: PingResponse.to_json, status: :ok
+      render
     end
   end
 end
