@@ -18,7 +18,6 @@ namespace :v3 do
   end
 
   resources :juzs, only: [:show, :index]
-  resources :pages, only: [:show]
 
   namespace :options do
     get :default
@@ -26,7 +25,6 @@ namespace :v3 do
     get :recitations
     get :tafsirs
     get :languages
-    get :media_content
     get :chapter_info
   end
 
