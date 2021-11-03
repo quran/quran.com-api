@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Api::V3
-  class AudioFilesController < ApplicationController
+  class AudioFilesController < ApiController
     def index
       chapter = Chapter.find(params[:chapter_id])
       verse = chapter.verses.find(params[:verse_id])

@@ -10,7 +10,6 @@ gem 'rails', '~> 6.1.4.1'
 # Use postgresql as the database for Active Record
 gem 'pg', '>= 0.18', '< 2.0'
 
-gem 'active_model_serializers', '~> 0.10.12'
 gem 'turbostreamer', '>= 1.9'
 
 # Http request
@@ -63,6 +62,7 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'pry-rails'
   gem 'apollo-tracing'
+  gem 'solargraph'
 end
 
 group :development do

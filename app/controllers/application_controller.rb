@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 class ApplicationController < ActionController::API
-  serialization_scope :params
   include ActionController::Caching
   include QuranUtils::StrongMemoize
+  include ActionView::Rendering
 
   before_action :set_cache_headers, except: :random
 

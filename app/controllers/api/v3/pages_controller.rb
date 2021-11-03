@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Api::V3
-  class PagesController < ApplicationController
+  class PagesController < ApiController
     def show
       verses = Verse
                  .where(page_number: params[:id])

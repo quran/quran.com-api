@@ -2,22 +2,26 @@
 #
 # Table name: tafsirs
 #
-#  id                  :integer          not null, primary key
-#  hizb_number         :integer
-#  juz_number          :integer
-#  language_name       :string
-#  page_number         :integer
-#  resource_name       :string
-#  rub_number          :integer
-#  text                :text
-#  verse_key           :string
-#  verse_number        :integer
-#  created_at          :datetime         not null
-#  updated_at          :datetime         not null
-#  chapter_id          :integer
-#  language_id         :integer
-#  resource_content_id :integer
-#  verse_id            :integer
+#  id                   :integer          not null, primary key
+#  group_verse_key_from :string
+#  group_verse_key_to   :string
+#  group_verses_count   :integer
+#  hizb_number          :integer
+#  juz_number           :integer
+#  language_name        :string
+#  page_number          :integer
+#  resource_name        :string
+#  rub_number           :integer
+#  text                 :text
+#  verse_key            :string
+#  verse_number         :integer
+#  created_at           :datetime         not null
+#  updated_at           :datetime         not null
+#  chapter_id           :integer
+#  group_tafsir_id      :integer
+#  language_id          :integer
+#  resource_content_id  :integer
+#  verse_id             :integer
 #
 # Indexes
 #

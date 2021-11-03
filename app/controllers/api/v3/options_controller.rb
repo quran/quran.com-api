@@ -1,13 +1,9 @@
 # frozen_string_literal: true
 
 module Api
-  class V3::OptionsController < ApplicationController
+  class V3::OptionsController < ApiController
     # GET options/default
     def default
-      # Defaults:
-      # Translation: Sahih International(English)
-      # Recitation: Qari Abdul Baset(Mujawwad style)
-      # Media: Bayyinah ( 61 )
       render json: { translations: [21], language: 'en', recitation: 1, media: 61 }
     end
 

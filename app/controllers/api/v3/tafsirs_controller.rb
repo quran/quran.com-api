@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Api::V3
-  class TafsirsController < ApplicationController
+  class TafsirsController < ApiController
     # GET /chapter_id/verses/verse_number/tafsirs/tafsir_id
     def show
       tafsir = Tafsir

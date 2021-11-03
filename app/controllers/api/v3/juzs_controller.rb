@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Api::V3
-  class JuzsController < ApplicationController
+  class JuzsController < ApiController
     def index
       juzs = Juz.all
 

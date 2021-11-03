@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Api::V3
-  class VersesController < ApplicationController
+  class VersesController < ApiController
     # GET /chapter-id-or-slug/verses
     # GET /1/verses
     # GET /surah-al-fatihah/verses
@@ -18,9 +18,8 @@ module Api::V3
     # GET /1/verses/1
     # GET /surah-al-fatihah/verses/1
     def show
-      finder = VerseFinder.new(params)
-
-      render json: finder.find(params[:id], fetch_locale), include: '**'
+      #finder = VerseFinder.new(params)
+      render
     end
 
     private
