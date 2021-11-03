@@ -1,0 +1,91 @@
+json.object! do
+  json.extract! verse, :id,
+                :verse_number,
+                :chapter_id,
+                :verse_key,
+                :text_indopak,
+                :juz_number,
+                :hizb_number,
+                :rub_number,
+                :sajdah_number,
+                :page_number
+
+  json.sajdah verse.sajdah_type
+  json.text_madani verse.text_uthmani
+
+  if include_image
+    json.image do
+      json.object! do
+        json.url verse.image_url
+        json.width verse.image_width
+      end
+    end
+  else
+    json.words do
+      json.array! verse.words do |word|
+        json.object! do
+          json.extract! word, :id,
+                        :position,
+                        :text_indopak,
+                        :verse_key,
+                        :line_number,
+                        :page_number
+
+          json.code "&#x#{word.code_hex};"
+          json.class_name "p#{word.page_number}"
+          json.text_madani word.text_uthmani
+          json.char_type word.char_type_name
+
+          json.transliteration do
+            json.object! do
+              json.text word.en_transliteration
+              json.language_name 'english'
+            end
+          end
+
+          json.translation do
+            translation = word.word_translation
+            json.object! do
+              json.language_name translation.language_name
+              json.text translation.text
+            end
+          end
+
+          json.audio do
+            json.object! do
+              json.url word.audio_url
+            end
+          end
+
+        end
+      end
+    end
+  end
+
+  if include_audio
+    json.audio do
+      audio_file = verse.audio_file
+      json.object! do
+        json.extract! audio_file,
+                      :url,
+                      :duration,
+                      :segments,
+                      :format
+      end
+    end
+  end
+
+  if include_translations
+    json.translations do
+      json.array! verse.translations do |translation|
+        json.object! do
+          json.id translation.id
+          json.language_name translation.language_name
+          json.text translation.text
+          json.resource_name translation.resource_name
+          json.resource_id translation.resource_content_id
+        end
+      end
+    end
+  end
+end

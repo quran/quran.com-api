@@ -7,22 +7,21 @@ module Api::V3
     # GET /surah-al-fatihah/verses
     def index
       finder = VerseFinder.new(params)
-      verses = finder.load_verses(fetch_locale)
+      @verses = finder.load_verses(fetch_locale)
+      @pagination = pagination_dict(finder)
 
-      render json: verses,
-             meta: pagination_dict(finder),
-             include: '**'
+      render
     end
 
     # GET /chapter-id-or-slug/verses/verse-number
     # GET /1/verses/1
     # GET /surah-al-fatihah/verses/1
     def show
-      #finder = VerseFinder.new(params)
       render
     end
 
     private
+
     def pagination_dict(finder)
       {
         current_page: finder.current_page,

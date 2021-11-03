@@ -50,7 +50,9 @@ class VerseFinder
   end
 
   def current_page
-    @current_page ||= (params[:page].to_i <= 1 ? 1 : params[:page].to_i)
+    strong_memoize :current_page do
+      (params[:page].to_i <= 1 ? 1 : params[:page].to_i)
+    end
   end
 
   def total_pages
@@ -158,15 +160,15 @@ class VerseFinder
   end
 
   def chapter
-    return @chapter if @chapter
+    strong_memoize :chapter do
+      if chapter = Chapter.find_using_slug(params[:chapter_id])
+        params[:chapter_id] = chapter.id
+      else
+        raise_not_found("Surah not found")
+      end
 
-    if @chapter = Chapter.find_using_slug(params[:chapter_id])
-      params[:chapter_id] = @chapter.id
-    else
-      raise_not_found("Surah not found")
+      chapter
     end
-
-    @chapter
   end
 
   def min(a, b)
