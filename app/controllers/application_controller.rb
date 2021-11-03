@@ -11,8 +11,8 @@ class ApplicationController < ActionController::API
 
   protected
 
-  def render_404(error)
-    render partial: "api/errors/404", locals: { message: error.message }, status: :not_found
+  def render_404(error=nil)
+    render partial: "api/errors/404", locals: { message: error.to_s }, status: :not_found
   end
 
   def fetch_locale

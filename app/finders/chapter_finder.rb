@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 class ChapterFinder
+  def find(id_or_slug)
+    Chapter.find_using_slug(id_or_slug) || raise(RestApi::RecordNotFound.new("Surah not found"))
+  end
+
   def find_and_eager_load(id_or_slug, locale: 'en', include_slugs: false)
     chapters = all_with_eager_load(locale: locale)
 

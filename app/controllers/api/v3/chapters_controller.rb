@@ -10,7 +10,7 @@ module Api::V3
 
     def show
       if @presenter.chapter.nil?
-        render_404
+        render_404("Surah not found")
       else
         render
       end
