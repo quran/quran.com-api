@@ -10,6 +10,9 @@ class ApplicationController < ActionController::API
   rescue_from RestApi::RecordNotFound, with: :render_404
 
   protected
+  def raise_not_found(message)
+    raise RestApi::RecordNotFound.new(message)
+  end
 
   def render_404(error=nil)
     render partial: "api/errors/404", locals: { message: error.to_s }, status: :not_found

@@ -9,7 +9,7 @@ class VerseFinder
   end
 
   def find(verse_number, language_code = 'en')
-    load_verses(language_code).find_by(verse_number: verse_number)
+    load_verses(language_code).find_by(verse_number: verse_number) || raise_not_found("Ayah not found")
   end
 
   def load_verses(language_code)
@@ -160,8 +160,11 @@ class VerseFinder
   def chapter
     return @chapter if @chapter
 
-    @chapter = Chapter.find_using_slug(params[:chapter_id])
-    params[:chapter_id] = @chapter.id
+    if @chapter = Chapter.find_using_slug(params[:chapter_id])
+      params[:chapter_id] = @chapter.id
+    else
+      raise_not_found("Surah not found")
+    end
 
     @chapter
   end
@@ -172,5 +175,9 @@ class VerseFinder
 
   def max(a, b)
     a > b ? a : b
+  end
+
+  def raise_not_found(message)
+    raise RestApi::RecordNotFound.new(message)
   end
 end
