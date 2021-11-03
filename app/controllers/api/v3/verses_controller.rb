@@ -17,6 +17,9 @@ module Api::V3
     # GET /1/verses/1
     # GET /surah-al-fatihah/verses/1
     def show
+      finder = VerseFinder.new(params)
+      @verse = finder.find(params[:id], fetch_locale)
+
       render
     end
 
