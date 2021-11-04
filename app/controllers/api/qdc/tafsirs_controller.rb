@@ -26,12 +26,13 @@ module Api::Qdc
     end
 
     def by_ayah
-      render partial: 'tafsirs'
+      render
     end
 
     protected
+
     def init_presenter
-      @presenter = TafsirsPresenter.new(params)
+      @presenter = Qdc::TafsirsPresenter.new(params)
     end
 
     def load_tafsirs

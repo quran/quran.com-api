@@ -1,0 +1,47 @@
+fields = @presenter.tafsir_fields
+tafsir = @tafsirs
+include_words = @presenter.render_words?
+verse_fields = @presenter.verse_fields
+word_fields = @presenter.word_fields
+verses = @presenter.load_verses(tafsir.group_verse_key_from, tafsir.group_verse_key_to)
+
+json.object! do
+  json.tafsir do
+    json.object! do
+      json.extract! tafsir,
+                    :resource_id,
+                    *fields,
+                    :text,
+                    :resource_name
+
+      json.translated_name do
+        json.object! do
+        end
+      end
+
+      json.verses do
+        json.object! do
+        verses.each do |verse|
+          json.set! verse.verse_key do
+            json.object! do
+              json.extract! verse,
+                            :id, *verse_fields
+
+              if include_words
+                json.words do
+                  json.array! verse.mushaf_words,
+                              partial: 'api/qdc/verses/word',
+                              as: :word,
+                              locals: {
+                                fields: word_fields
+                              }
+                end
+                end
+              end
+            end
+          end
+        end
+      end
+    end
+  end
+end
