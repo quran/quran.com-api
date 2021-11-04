@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
 module Api::V3
-  class SearchController < ApplicationController
+  class SearchController < ApiController
     QUERY_SANITIZER = Rails::Html::WhiteListSanitizer.new
-    include ActionView::Rendering
 
     def search
       if do_search

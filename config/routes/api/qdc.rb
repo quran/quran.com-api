@@ -73,7 +73,6 @@ namespace :qdc do
   namespace :quran do
     get 'translations/:translation_id', action: 'translation'
     get :'tafsirs/:tafsir_id', action: 'tafsir'
-    get :'recitations/:recitation_id', action: 'recitation'
     get :'verses/uthmani', action: 'verses_text', script: 'text_uthmani'
     get :'verses/uthmani_simple', action: 'verses_text', script: 'text_uthmani_simple'
     get :'verses/uthmani_tajweed', action: 'verses_text', script: 'text_uthmani_tajweed'
@@ -97,16 +96,6 @@ namespace :qdc do
 
   # tafsir routes, by juz, chapter, page
   scope 'tafsirs/:resource_id', controller: 'tafsirs' do
-    get 'by_chapter/:chapter_number', action: 'by_chapter'
-    get 'by_page/:page_number', action: 'by_page'
-    get 'by_juz/:juz_number', action: 'by_juz'
-    get 'by_rub/:rub_number', action: 'by_rub'
-    get 'by_hizb/:hizb_number', action: 'by_hizb'
-    get 'by_ayah/:ayah_key', action: 'by_ayah'
-  end
-
-  # tafsir routes, by juz, chapter, page
-  scope 'recitations/:recitation_id', controller: 'recitations' do
     get 'by_chapter/:chapter_number', action: 'by_chapter'
     get 'by_page/:page_number', action: 'by_page'
     get 'by_juz/:juz_number', action: 'by_juz'

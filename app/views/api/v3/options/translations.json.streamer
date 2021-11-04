@@ -1,0 +1,21 @@
+json.object! do
+  json.translations do
+    json.array! @translations do |translation|
+      json.object! do
+        json.extract! translation,
+                      :id,
+                      :name,
+                      :author_name,
+                      :slug,
+                      :language_name
+
+        json.translated_name do
+          translated_name = translation.translated_name
+          json.object! do
+            json.extract! translated_name, :name, :language_name
+          end
+        end
+      end
+    end
+  end
+end

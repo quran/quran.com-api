@@ -1,0 +1,15 @@
+if @recitation
+  json.object! do
+    json.audio_file do
+      json.partial! 'audio_file', audio_file: @audio_files
+    end
+  end
+else
+  json.object! do
+    json.audio_files do
+      json.array! @audio_files do |audio_file|
+        json.partial! 'audio_file', audio_file: audio_file
+      end
+    end
+  end
+end

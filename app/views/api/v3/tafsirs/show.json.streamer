@@ -1,0 +1,13 @@
+json.object! do
+  json.tafsir do
+    json.object! do
+      json.extract! @tafsir,
+                    :id,
+                    :text,
+                    :verse_id,
+                    :language_name,
+                    :resource_name,
+                    :verse_key
+    end
+  end
+end

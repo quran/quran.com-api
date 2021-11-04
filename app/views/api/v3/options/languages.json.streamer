@@ -1,0 +1,22 @@
+json.object! do
+  json.languages do
+    json.array! @languages do |language|
+      json.object! do
+        json.extract! language,
+                      :id,
+                      :name,
+                      :iso_code,
+                      :native_name,
+                      :direction,
+                      :translations_count
+
+        json.translated_name do
+          translated_name = language.translated_name
+          json.object! do
+            json.extract! translated_name, :name, :language_name
+          end
+        end
+      end
+    end
+  end
+end

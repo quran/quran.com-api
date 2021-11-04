@@ -1,0 +1,13 @@
+include_image = params[:text_type] == 'image'
+include_translations = params[:translations].present?
+include_audio = params[:recitation].present?
+
+json.object! do
+  json.verse do
+    json.partial! 'verse',
+                  verse: @verse,
+                  include_image: include_image,
+                  include_translations: include_translations,
+                  include_audio: include_audio
+  end
+end

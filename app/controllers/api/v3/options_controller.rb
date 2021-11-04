@@ -1,32 +1,31 @@
 # frozen_string_literal: true
 
-module Api
-  class V3::OptionsController < ApplicationController
+module Api::V3
+  class OptionsController < ApiController
     # GET options/default
     def default
-      # Defaults:
-      # Translation: Sahih International(English)
-      # Recitation: Qari Abdul Baset(Mujawwad style)
-      # Media: Bayyinah ( 61 )
-      render json: { translations: [21], language: 'en', recitation: 1, media: 61 }
+      render
     end
 
     # GET options/languages
     def languages
       list = Language.with_translations.eager_load(:translated_name)
-      languages = eager_load_translated_name(list)
+      @languages = eager_load_translated_name(list)
 
-      render json: languages
+      render
     end
 
     # GET options/translations
     def translations
-      resources = ResourceContent
-                    .translations
-                    .one_verse
-                    .approved
+      list = ResourceContent
+               .eager_load(:translated_name)
+               .one_verse
+               .translations
+               .approved
+               .order('priority ASC')
 
-      render json: resources, root: 'translations'
+      @translations = eager_load_translated_name(list)
+      render
     end
 
     # GET options/recitations
@@ -36,9 +35,9 @@ module Api
                .approved
                .order('translated_names.language_priority desc')
 
-      reciters = eager_load_translated_name(list)
+      @recitations = eager_load_translated_name(list)
 
-      render json: reciters
+      render
     end
 
     # GET options/chapter_info
@@ -49,32 +48,22 @@ module Api
                .one_chapter
                .approved
 
-      resources = eager_load_translated_name(list)
-
-      render json: resources, root: 'chapter_info'
-    end
-
-    # GET options/media_content
-    def media_content
-      resources = ResourceContent
-                    .includes(:language)
-                    .media
-                    .one_verse.approved
-
-      render json: resources, root: 'media'
+      @chapter_infos = eager_load_translated_name(list)
+      render
     end
 
     # GET options/tafsirs
     def tafsirs
       list = ResourceContent
                .eager_load(:translated_name)
-               .tafsirs
                .one_verse
+               .tafsirs
                .approved
+               .order('priority ASC')
 
-      resources = eager_load_translated_name(list)
+      @tafsirs = eager_load_translated_name(list)
 
-      render json: resources, root: 'tafsirs'
+      render
     end
   end
 end

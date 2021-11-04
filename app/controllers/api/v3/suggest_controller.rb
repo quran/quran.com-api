@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Api::V3
-  class SuggestController < ApplicationController
+  class SuggestController < ApiController
     def index
       if query.nil?
         render status: :bad_request, json: [].to_json
@@ -14,6 +14,7 @@ module Api::V3
       Search::Suggest.new(query, lang: language).get_suggestions
     end
 
+    protected
     def language
       params[:l] || params[:language] || 'en'
     end

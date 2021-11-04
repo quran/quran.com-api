@@ -49,8 +49,9 @@ class Qdc::VerseFinder < ::VerseFinder
       #
       # NOTE: in 16 lines mushaf ayahs could span into multiple pages
       # and we need to restrict words that are on requested page.
-      #
-      results.where(mushaf_words: {page_number: params[:page_number].to_i})
+      # TODO: allow clients to choose if they want all words of ayah or only words for page
+      # for now, returning whole ayah
+      results #.where(mushaf_words: {page_number: params[:page_number].to_i})
     else
       results
     end

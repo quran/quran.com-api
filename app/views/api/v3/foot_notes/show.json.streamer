@@ -1,0 +1,10 @@
+json.object! do
+  json.foot_note do
+    json.object! do
+      json.extract! @foot_note,
+                    :id,
+                    :text,
+                    :language_name
+    end
+  end
+end

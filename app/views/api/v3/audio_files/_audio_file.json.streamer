@@ -1,0 +1,7 @@
+json.object! do
+  json.extract! audio_file,
+                :url,
+                :duration,
+                :segments,
+                :format
+end

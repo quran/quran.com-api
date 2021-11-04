@@ -760,6 +760,10 @@ ActiveRecord::Schema.define(version: 2021_09_29_045135) do
     t.integer "hizb_number"
     t.integer "rub_number"
     t.integer "page_number"
+    t.string "group_verse_key_from"
+    t.string "group_verse_key_to"
+    t.integer "group_verses_count"
+    t.integer "group_tafsir_id"
     t.index ["chapter_id", "verse_number"], name: "index_tafsirs_on_chapter_id_and_verse_number"
     t.index ["chapter_id"], name: "index_tafsirs_on_chapter_id"
     t.index ["hizb_number"], name: "index_tafsirs_on_hizb_number"
@@ -878,6 +882,15 @@ ActiveRecord::Schema.define(version: 2021_09_29_045135) do
     t.string "text_clean"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "verse_pages", force: :cascade do |t|
+    t.integer "verse_id"
+    t.integer "page_id"
+    t.integer "page_number"
+    t.integer "mushaf_id"
+    t.index ["page_number", "mushaf_id"], name: "index_verse_pages_on_page_number_and_mushaf_id"
+    t.index ["verse_id"], name: "index_verse_pages_on_verse_id"
   end
 
   create_table "verse_roots", id: :serial, force: :cascade do |t|

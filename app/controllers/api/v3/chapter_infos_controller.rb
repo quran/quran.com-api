@@ -1,12 +1,22 @@
 # frozen_string_literal: true
 
 module Api::V3
-  class ChapterInfosController < ApplicationController
+  class ChapterInfosController < ApiController
     # GET /chapters/1/info
     def show
-      chapter_info = ChapterInfo.where(chapter_id: params[:id]).filter_by_language_or_default(params[:language])
+      @chapter_info = chapter_info
+      render
+    end
 
-      render json: chapter_info
+    protected
+
+    def chapter_info
+      finder = ChapterFinder.new
+      chapter = finder.find(params[:id])
+
+      ChapterInfo
+        .where(chapter_id: chapter.id)
+        .filter_by_language_or_default(fetch_locale)
     end
   end
 end

@@ -1,0 +1,5 @@
+json.object! do
+  json.translations  [21]
+  json.language  'en'
+  json.recitation  1
+end

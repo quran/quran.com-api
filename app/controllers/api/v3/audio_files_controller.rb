@@ -1,19 +1,24 @@
 # frozen_string_literal: true
 
 module Api::V3
-  class AudioFilesController < ApplicationController
+  class AudioFilesController < ApiController
     def index
-      chapter = Chapter.find(params[:chapter_id])
       verse = chapter.verses.find(params[:verse_id])
-      data = verse.audio_files
-      data = data.find_by(recitation_id: recitation) if recitation.present?
+      @audio_files = verse.audio_files
+      @recitation = recitation
+      @audio_files = @audio_files.find_by(recitation_id: @recitation) if @recitation.present?
 
-      render json: data
+      render
     end
 
     private
     def recitation
       params[:recitation]
+    end
+
+    def chapter
+      finder = ChapterFinder.new
+      finder.find(params[:chapter_id])
     end
   end
 end

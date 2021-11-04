@@ -1,0 +1,15 @@
+include_image = params[:text_type] == 'image'
+include_translations = params[:translations].present?
+include_audio = params[:recitation].present?
+
+json.object! do
+  json.verses do
+    json.array! @verses, partial: 'verse', as: :verse, locals: {
+      include_image: include_image,
+      include_translations: include_translations,
+      include_audio: include_audio
+    }
+  end
+
+  json.pagination @pagination
+end

@@ -1,18 +1,21 @@
 # frozen_string_literal: true
 
 class ApplicationController < ActionController::API
-  serialization_scope :params
   include ActionController::Caching
   include QuranUtils::StrongMemoize
+  include ActionView::Rendering
 
   before_action :set_cache_headers, except: :random
 
   rescue_from RestApi::RecordNotFound, with: :render_404
 
   protected
+  def raise_not_found(message)
+    raise RestApi::RecordNotFound.new(message)
+  end
 
-  def render_404(error)
-    render partial: "api/errors/404", locals: { message: error.message }, status: :not_found
+  def render_404(error=nil)
+    render partial: "api/errors/404", locals: { message: error.to_s }, status: :not_found
   end
 
   def fetch_locale

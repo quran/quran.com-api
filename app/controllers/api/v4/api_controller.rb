@@ -2,8 +2,6 @@
 
 module Api::V4
   class ApiController < ApplicationController
-    include ActionView::Rendering
-
     protected
     def fetch_translation_resource
       approved = ResourceContent

@@ -1,17 +1,16 @@
 # frozen_string_literal: true
 
 module Api::V3
-  class VersesController < ApplicationController
+  class VersesController < ApiController
     # GET /chapter-id-or-slug/verses
     # GET /1/verses
     # GET /surah-al-fatihah/verses
     def index
       finder = VerseFinder.new(params)
-      verses = finder.load_verses(fetch_locale)
+      @verses = finder.load_verses(fetch_locale)
+      @pagination = pagination_dict(finder)
 
-      render json: verses,
-             meta: pagination_dict(finder),
-             include: '**'
+      render
     end
 
     # GET /chapter-id-or-slug/verses/verse-number
@@ -19,11 +18,13 @@ module Api::V3
     # GET /surah-al-fatihah/verses/1
     def show
       finder = VerseFinder.new(params)
+      @verse = finder.find(params[:id], fetch_locale)
 
-      render json: finder.find(params[:id], fetch_locale), include: '**'
+      render
     end
 
     private
+
     def pagination_dict(finder)
       {
         current_page: finder.current_page,
