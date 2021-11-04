@@ -15,5 +15,11 @@ class AddMushafPagesToVerses < ActiveRecord::Migration[6.1]
     add_column :tafsirs, :group_verse_key_to, :string
     add_column :tafsirs, :group_verses_count, :integer
     add_column :tafsirs, :group_tafsir_id, :integer
+
+    add_column :tafsirs, :start_verse_id, :integer
+    add_column :tafsirs, :end_verse_id, :integer
+
+    add_index :tafsirs, :start_verse_id
+    add_index :tafsirs, :end_verse_id
   end
 end

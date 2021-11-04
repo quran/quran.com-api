@@ -101,6 +101,10 @@ class Qdc::VerseFinder < ::VerseFinder
   end
 
   def fetch_advance_copy
+    fetch_range
+  end
+
+  def fetch_range
     if params[:from] && params[:to]
       verse_from = QuranUtils::Quran.get_ayah_id_from_key(params[:from])
       verse_to = QuranUtils::Quran.get_ayah_id_from_key(params[:to])
