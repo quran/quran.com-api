@@ -67,7 +67,7 @@ class Verse < ApplicationRecord
   has_many :tafsirs
   has_many :verse_pages
   has_many :words
-  has_many :char_words, -> {where char_type_id: 1}, class_name: 'Word'
+  has_many :char_words, -> { where char_type_id: 1 }, class_name: 'Word'
   has_many :mushaf_words
   has_many :media_contents, as: :resource
   has_many :translations
@@ -84,7 +84,11 @@ class Verse < ApplicationRecord
   alias_attribute :verse_id, :id
 
   def self.find_by_id_or_key(id)
-    where(verse_key: id).or(where(id: id)).first
+    if id.to_s.include? ':'
+      where(verse_key: id).first
+    else
+      where(verse_key: id).or(where(id: id.to_s)).first
+    end
   end
 
   # QDC api, send page number based on Mushaf

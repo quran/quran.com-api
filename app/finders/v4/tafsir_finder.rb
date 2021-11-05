@@ -80,7 +80,7 @@ class V4::TafsirFinder < V4::VerseFinder
 
   def fetch_by_ayah(resource_id)
     @total_records = 1
-    verse = Verse.find_by_id_or_key(params[:ayah_key]) || raise_not_found("Ayah not found")
+    verse = Verse.find_by_id_or_key(params[:ayah_key].to_s) || raise_not_found("Ayah not found")
 
     filter_tafsirs(resource_id)
       .where(":ayah >= start_verse_id AND :ayah <= end_verse_id ", ayah: verse.id)
