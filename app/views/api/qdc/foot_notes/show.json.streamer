@@ -4,7 +4,8 @@ json.object! do
       json.extract! @foot_note,
                     :id,
                     :text,
-                    :language_name
+                    :language_name,
+                    :language_id
     end
   end
 end

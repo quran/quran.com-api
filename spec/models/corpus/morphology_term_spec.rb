@@ -19,5 +19,8 @@
 #  index_corpus_morphology_terms_on_category  (category)
 #  index_corpus_morphology_terms_on_term      (term)
 #
-class Corpus::MorphologyTerm < ApplicationRecord
+require 'rails_helper'
+
+RSpec.describe Corpus::MorphologyTerm, type: :model do
+  pending "add some examples to (or delete) #{__FILE__}"
 end

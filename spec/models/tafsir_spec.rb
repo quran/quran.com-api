@@ -18,21 +18,25 @@
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
 #  chapter_id           :integer
+#  end_verse_id         :integer
 #  group_tafsir_id      :integer
 #  language_id          :integer
 #  resource_content_id  :integer
+#  start_verse_id       :integer
 #  verse_id             :integer
 #
 # Indexes
 #
 #  index_tafsirs_on_chapter_id                   (chapter_id)
 #  index_tafsirs_on_chapter_id_and_verse_number  (chapter_id,verse_number)
+#  index_tafsirs_on_end_verse_id                 (end_verse_id)
 #  index_tafsirs_on_hizb_number                  (hizb_number)
 #  index_tafsirs_on_juz_number                   (juz_number)
 #  index_tafsirs_on_language_id                  (language_id)
 #  index_tafsirs_on_page_number                  (page_number)
 #  index_tafsirs_on_resource_content_id          (resource_content_id)
 #  index_tafsirs_on_rub_number                   (rub_number)
+#  index_tafsirs_on_start_verse_id               (start_verse_id)
 #  index_tafsirs_on_verse_id                     (verse_id)
 #  index_tafsirs_on_verse_key                    (verse_key)
 #
