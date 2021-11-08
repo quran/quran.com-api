@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_29_045135) do
+ActiveRecord::Schema.define(version: 2021_11_05_124202) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -238,21 +238,6 @@ ActiveRecord::Schema.define(version: 2021_09_29_045135) do
     t.index ["parent_id"], name: "index_char_types_on_parent_id"
   end
 
-  create_table "corpus_morphology_terms", force: :cascade do |t|
-    t.string "category"
-    t.string "term"
-    t.string "arabic_grammar_name"
-    t.string "english_grammar_name"
-    t.string "urdu_grammar_name"
-    t.text "arabic_description"
-    t.text "english_description"
-    t.text "urdu_description"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["category"], name: "index_corpus_morphology_terms_on_category"
-    t.index ["term"], name: "index_corpus_morphology_terms_on_term"
-  end
-
   create_table "corpus_word_forms", force: :cascade do |t|
     t.bigint "word_id"
     t.string "name"
@@ -448,6 +433,131 @@ ActiveRecord::Schema.define(version: 2021_09_29_045135) do
     t.index ["language_id"], name: "index_media_contents_on_language_id"
     t.index ["resource_content_id"], name: "index_media_contents_on_resource_content_id"
     t.index ["resource_type", "resource_id"], name: "index_media_contents_on_resource_type_and_resource_id"
+  end
+
+  create_table "morphology_derived_words", force: :cascade do |t|
+    t.bigint "verse_id"
+    t.bigint "word_id"
+    t.bigint "derived_word_id"
+    t.bigint "word_verb_from_id"
+    t.string "form_name"
+    t.string "en_transliteration"
+    t.string "en_translation"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["derived_word_id"], name: "index_morphology_derived_words_on_derived_word_id"
+    t.index ["verse_id"], name: "index_morphology_derived_words_on_verse_id"
+    t.index ["word_id"], name: "index_morphology_derived_words_on_word_id"
+    t.index ["word_verb_from_id"], name: "index_morphology_derived_words_on_word_verb_from_id"
+  end
+
+  create_table "morphology_grammar_concepts", force: :cascade do |t|
+    t.string "english"
+    t.string "arabic"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["arabic"], name: "index_morphology_grammar_concepts_on_arabic"
+    t.index ["english"], name: "index_morphology_grammar_concepts_on_english"
+  end
+
+  create_table "morphology_grammar_patterns", force: :cascade do |t|
+    t.string "english"
+    t.string "arabic"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["arabic"], name: "index_morphology_grammar_patterns_on_arabic"
+    t.index ["english"], name: "index_morphology_grammar_patterns_on_english"
+  end
+
+  create_table "morphology_grammar_terms", force: :cascade do |t|
+    t.string "category"
+    t.string "term"
+    t.string "arabic_grammar_name"
+    t.string "english_grammar_name"
+    t.string "urdu_grammar_name"
+    t.text "arabic_description"
+    t.text "english_description"
+    t.text "urdu_description"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["category"], name: "index_morphology_grammar_terms_on_category"
+    t.index ["term"], name: "index_morphology_grammar_terms_on_term"
+  end
+
+  create_table "morphology_word_grammar_concepts", force: :cascade do |t|
+    t.bigint "word_id"
+    t.bigint "grammar_concept_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["grammar_concept_id"], name: "index_morphology_word_grammar_concepts_on_grammar_concept_id"
+    t.index ["word_id"], name: "index_morphology_word_grammar_concepts_on_word_id"
+  end
+
+  create_table "morphology_word_parts", force: :cascade do |t|
+    t.bigint "word_id"
+    t.bigint "root_id"
+    t.bigint "topic_id"
+    t.bigint "lemma_id"
+    t.bigint "grammar_concept_id"
+    t.bigint "grammar_role_id"
+    t.bigint "grammar_sub_role_id"
+    t.bigint "grammar_term_id"
+    t.string "grammar_term_key"
+    t.string "grammar_term_name"
+    t.string "part_of_speech_key"
+    t.string "part_of_speech_name"
+    t.integer "position"
+    t.string "text_uthmani"
+    t.string "grammar_term_desc_english"
+    t.string "grammar_term_desc_arabic"
+    t.string "pos_tags"
+    t.string "root_name"
+    t.string "lemma_name"
+    t.string "verb_form"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["grammar_concept_id"], name: "index_morphology_word_parts_on_grammar_concept_id"
+    t.index ["grammar_role_id"], name: "index_morphology_word_parts_on_grammar_role_id"
+    t.index ["grammar_sub_role_id"], name: "index_morphology_word_parts_on_grammar_sub_role_id"
+    t.index ["grammar_term_id"], name: "index_morphology_word_parts_on_grammar_term_id"
+    t.index ["lemma_id"], name: "index_morphology_word_parts_on_lemma_id"
+    t.index ["part_of_speech_key"], name: "index_morphology_word_parts_on_part_of_speech_key"
+    t.index ["pos_tags"], name: "index_morphology_word_parts_on_pos_tags"
+    t.index ["position"], name: "index_morphology_word_parts_on_position"
+    t.index ["root_id"], name: "index_morphology_word_parts_on_root_id"
+    t.index ["topic_id"], name: "index_morphology_word_parts_on_topic_id"
+    t.index ["word_id"], name: "index_morphology_word_parts_on_word_id"
+  end
+
+  create_table "morphology_word_verb_forms", force: :cascade do |t|
+    t.bigint "word_id"
+    t.string "name"
+    t.string "value"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["name"], name: "index_morphology_word_verb_forms_on_name"
+    t.index ["word_id"], name: "index_morphology_word_verb_forms_on_word_id"
+  end
+
+  create_table "morphology_words", force: :cascade do |t|
+    t.bigint "word_id"
+    t.bigint "verse_id"
+    t.bigint "grammar_pattern_id"
+    t.bigint "grammar_base_pattern_id"
+    t.integer "words_count_for_root"
+    t.integer "words_count_for_lemma"
+    t.integer "words_count_for_stem"
+    t.string "location"
+    t.text "description"
+    t.string "case"
+    t.string "case_reason"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["grammar_base_pattern_id"], name: "index_morphology_words_on_grammar_base_pattern_id"
+    t.index ["grammar_pattern_id"], name: "index_morphology_words_on_grammar_pattern_id"
+    t.index ["location"], name: "index_morphology_words_on_location"
+    t.index ["verse_id"], name: "index_morphology_words_on_verse_id"
+    t.index ["word_id"], name: "index_morphology_words_on_word_id"
   end
 
   create_table "mushaf_pages", force: :cascade do |t|
@@ -764,14 +874,18 @@ ActiveRecord::Schema.define(version: 2021_09_29_045135) do
     t.string "group_verse_key_to"
     t.integer "group_verses_count"
     t.integer "group_tafsir_id"
+    t.integer "start_verse_id"
+    t.integer "end_verse_id"
     t.index ["chapter_id", "verse_number"], name: "index_tafsirs_on_chapter_id_and_verse_number"
     t.index ["chapter_id"], name: "index_tafsirs_on_chapter_id"
+    t.index ["end_verse_id"], name: "index_tafsirs_on_end_verse_id"
     t.index ["hizb_number"], name: "index_tafsirs_on_hizb_number"
     t.index ["juz_number"], name: "index_tafsirs_on_juz_number"
     t.index ["language_id"], name: "index_tafsirs_on_language_id"
     t.index ["page_number"], name: "index_tafsirs_on_page_number"
     t.index ["resource_content_id"], name: "index_tafsirs_on_resource_content_id"
     t.index ["rub_number"], name: "index_tafsirs_on_rub_number"
+    t.index ["start_verse_id"], name: "index_tafsirs_on_start_verse_id"
     t.index ["verse_id"], name: "index_tafsirs_on_verse_id"
     t.index ["verse_key"], name: "index_tafsirs_on_verse_key"
   end
@@ -1133,6 +1247,16 @@ ActiveRecord::Schema.define(version: 2021_09_29_045135) do
   add_foreign_key "file", "recitation", primary_key: "recitation_id", name: "_file_recitation_id_fkey", on_update: :cascade, on_delete: :cascade
   add_foreign_key "image", "ayah", column: "ayah_key", primary_key: "ayah_key", name: "image_ayah_key_fkey", on_update: :cascade, on_delete: :cascade
   add_foreign_key "image", "resource", primary_key: "resource_id", name: "image_resource_id_fkey", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "morphology_derived_words", "verses"
+  add_foreign_key "morphology_derived_words", "words"
+  add_foreign_key "morphology_word_grammar_concepts", "words"
+  add_foreign_key "morphology_word_parts", "lemmas"
+  add_foreign_key "morphology_word_parts", "roots"
+  add_foreign_key "morphology_word_parts", "topics"
+  add_foreign_key "morphology_word_parts", "words"
+  add_foreign_key "morphology_word_verb_forms", "words"
+  add_foreign_key "morphology_words", "verses"
+  add_foreign_key "morphology_words", "words"
   add_foreign_key "recitation", "reciter", primary_key: "reciter_id", name: "recitation_reciter_id_fkey", on_update: :cascade, on_delete: :cascade
   add_foreign_key "recitation", "style", primary_key: "style_id", name: "recitation_style_id_fkey", on_update: :cascade, on_delete: :cascade
   add_foreign_key "resource", "author", primary_key: "author_id", name: "resource_author_id_fkey", on_update: :cascade, on_delete: :cascade
