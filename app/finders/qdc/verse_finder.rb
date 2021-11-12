@@ -259,12 +259,12 @@ class Qdc::VerseFinder < ::VerseFinder
     words_with_default_translation = @results.where(word_translations: { language_id: Language.default.id })
 
     if language.nil? || language.default?
+      @results = words_with_default_translation.eager_load(mushaf_words: eager_load_words)
+    else
       @results = @results
                    .where(word_translations: { language_id: language.id })
                    .or(words_with_default_translation)
                    .eager_load(mushaf_words: eager_load_words)
-    else
-      @results = words_with_default_translation.eager_load(mushaf_words: eager_load_words)
     end
   end
 

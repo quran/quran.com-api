@@ -493,7 +493,7 @@ ActiveRecord::Schema.define(version: 2021_11_05_124202) do
     t.index ["word_id"], name: "index_morphology_word_grammar_concepts_on_word_id"
   end
 
-  create_table "morphology_word_parts", force: :cascade do |t|
+  create_table "morphology_word_segments", force: :cascade do |t|
     t.bigint "word_id"
     t.bigint "root_id"
     t.bigint "topic_id"
@@ -516,17 +516,17 @@ ActiveRecord::Schema.define(version: 2021_11_05_124202) do
     t.string "verb_form"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["grammar_concept_id"], name: "index_morphology_word_parts_on_grammar_concept_id"
-    t.index ["grammar_role_id"], name: "index_morphology_word_parts_on_grammar_role_id"
-    t.index ["grammar_sub_role_id"], name: "index_morphology_word_parts_on_grammar_sub_role_id"
-    t.index ["grammar_term_id"], name: "index_morphology_word_parts_on_grammar_term_id"
-    t.index ["lemma_id"], name: "index_morphology_word_parts_on_lemma_id"
-    t.index ["part_of_speech_key"], name: "index_morphology_word_parts_on_part_of_speech_key"
-    t.index ["pos_tags"], name: "index_morphology_word_parts_on_pos_tags"
-    t.index ["position"], name: "index_morphology_word_parts_on_position"
-    t.index ["root_id"], name: "index_morphology_word_parts_on_root_id"
-    t.index ["topic_id"], name: "index_morphology_word_parts_on_topic_id"
-    t.index ["word_id"], name: "index_morphology_word_parts_on_word_id"
+    t.index ["grammar_concept_id"], name: "index_morphology_word_segments_on_grammar_concept_id"
+    t.index ["grammar_role_id"], name: "index_morphology_word_segments_on_grammar_role_id"
+    t.index ["grammar_sub_role_id"], name: "index_morphology_word_segments_on_grammar_sub_role_id"
+    t.index ["grammar_term_id"], name: "index_morphology_word_segments_on_grammar_term_id"
+    t.index ["lemma_id"], name: "index_morphology_word_segments_on_lemma_id"
+    t.index ["part_of_speech_key"], name: "index_morphology_word_segments_on_part_of_speech_key"
+    t.index ["pos_tags"], name: "index_morphology_word_segments_on_pos_tags"
+    t.index ["position"], name: "index_morphology_word_segments_on_position"
+    t.index ["root_id"], name: "index_morphology_word_segments_on_root_id"
+    t.index ["topic_id"], name: "index_morphology_word_segments_on_topic_id"
+    t.index ["word_id"], name: "index_morphology_word_segments_on_word_id"
   end
 
   create_table "morphology_word_verb_forms", force: :cascade do |t|
@@ -1250,10 +1250,10 @@ ActiveRecord::Schema.define(version: 2021_11_05_124202) do
   add_foreign_key "morphology_derived_words", "verses"
   add_foreign_key "morphology_derived_words", "words"
   add_foreign_key "morphology_word_grammar_concepts", "words"
-  add_foreign_key "morphology_word_parts", "lemmas"
-  add_foreign_key "morphology_word_parts", "roots"
-  add_foreign_key "morphology_word_parts", "topics"
-  add_foreign_key "morphology_word_parts", "words"
+  add_foreign_key "morphology_word_segments", "lemmas"
+  add_foreign_key "morphology_word_segments", "roots"
+  add_foreign_key "morphology_word_segments", "topics"
+  add_foreign_key "morphology_word_segments", "words"
   add_foreign_key "morphology_word_verb_forms", "words"
   add_foreign_key "morphology_words", "verses"
   add_foreign_key "morphology_words", "words"

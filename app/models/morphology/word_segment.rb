@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: morphology_word_parts
+# Table name: morphology_word_segments
 #
 #  id                        :bigint           not null, primary key
 #  grammar_term_desc_arabic  :string
@@ -28,17 +28,17 @@
 #
 # Indexes
 #
-#  index_morphology_word_parts_on_grammar_concept_id   (grammar_concept_id)
-#  index_morphology_word_parts_on_grammar_role_id      (grammar_role_id)
-#  index_morphology_word_parts_on_grammar_sub_role_id  (grammar_sub_role_id)
-#  index_morphology_word_parts_on_grammar_term_id      (grammar_term_id)
-#  index_morphology_word_parts_on_lemma_id             (lemma_id)
-#  index_morphology_word_parts_on_part_of_speech_key   (part_of_speech_key)
-#  index_morphology_word_parts_on_pos_tags             (pos_tags)
-#  index_morphology_word_parts_on_position             (position)
-#  index_morphology_word_parts_on_root_id              (root_id)
-#  index_morphology_word_parts_on_topic_id             (topic_id)
-#  index_morphology_word_parts_on_word_id              (word_id)
+#  index_morphology_word_segments_on_grammar_concept_id   (grammar_concept_id)
+#  index_morphology_word_segments_on_grammar_role_id      (grammar_role_id)
+#  index_morphology_word_segments_on_grammar_sub_role_id  (grammar_sub_role_id)
+#  index_morphology_word_segments_on_grammar_term_id      (grammar_term_id)
+#  index_morphology_word_segments_on_lemma_id             (lemma_id)
+#  index_morphology_word_segments_on_part_of_speech_key   (part_of_speech_key)
+#  index_morphology_word_segments_on_pos_tags             (pos_tags)
+#  index_morphology_word_segments_on_position             (position)
+#  index_morphology_word_segments_on_root_id              (root_id)
+#  index_morphology_word_segments_on_topic_id             (topic_id)
+#  index_morphology_word_segments_on_word_id              (word_id)
 #
 # Foreign Keys
 #
