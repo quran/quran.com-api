@@ -7,6 +7,7 @@
 #  grammar_term_desc_english :string
 #  grammar_term_key          :string
 #  grammar_term_name         :string
+#  hidden                    :boolean
 #  lemma_name                :string
 #  part_of_speech_key        :string
 #  part_of_speech_name       :string

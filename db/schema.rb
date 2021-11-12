@@ -516,6 +516,7 @@ ActiveRecord::Schema.define(version: 2021_11_05_124202) do
     t.string "verb_form"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "hidden"
     t.index ["grammar_concept_id"], name: "index_morphology_word_segments_on_grammar_concept_id"
     t.index ["grammar_role_id"], name: "index_morphology_word_segments_on_grammar_role_id"
     t.index ["grammar_sub_role_id"], name: "index_morphology_word_segments_on_grammar_sub_role_id"
