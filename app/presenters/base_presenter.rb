@@ -20,13 +20,21 @@ class BasePresenter
   end
 
   def get_mushaf_id
-    strong_memoize :mushaf do
-      mushaf = Mushaf.find_by(id: params[:mushaf].to_s.strip) || Mushaf.default
-      mushaf.id
-    end
+    get_mushaf.id
   end
 
   protected
+
+  def get_mushaf
+    strong_memoize :mushaf do
+      mushaf = if params[:mushaf].presence
+                 Mushaf.approved.find_by(id: params[:mushaf].to_s.strip)
+               end
+
+      mushaf || Mushaf.default
+    end
+  end
+
   def include_in_response?(value)
     if value.presence
       !ActiveRecord::Type::Boolean::FALSE_VALUES.include?(value)
