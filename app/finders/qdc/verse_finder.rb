@@ -63,7 +63,7 @@ class Qdc::VerseFinder < ::VerseFinder
 
   def per_page
     strong_memoize :per_page do
-      if params[:per_page] == 'all'
+      if params[:per_page].to_s.strip == 'all'
         total_records
       else
         limit = (params[:per_page] || RECORDS_PER_PAGE).to_i.abs
