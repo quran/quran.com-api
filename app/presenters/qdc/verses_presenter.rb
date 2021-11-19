@@ -55,7 +55,7 @@ module Qdc
 
       @finder.random_verse(
         filters,
-        fetch_locale,
+        fetch_word_translation_language,
         mushaf_type: get_mushaf_id,
         tafsirs: fetch_tafsirs,
         translations: fetch_translations,
@@ -68,7 +68,7 @@ module Qdc
       when 'by_key'
         @finder.find_with_key(
           params[:verse_key],
-          fetch_locale,
+          fetch_word_translation_language,
           mushaf_type: get_mushaf_id,
           tafsirs: fetch_tafsirs,
           translations: fetch_translations,
@@ -80,7 +80,7 @@ module Qdc
     def verses
       strong_memoize :verses do
         finder.load_verses(verses_filter,
-                           fetch_locale,
+                           fetch_word_translation_language,
                            mushaf_type: get_mushaf_id,
                            words: render_words?,
                            tafsirs: fetch_tafsirs,

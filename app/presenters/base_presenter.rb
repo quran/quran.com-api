@@ -63,4 +63,10 @@ class BasePresenter
       params[:language].presence || params[:locale].presence || 'en'
     end
   end
+
+  def fetch_word_translation_language
+    strong_memoize :word_trans_language do
+      params[:word_translation_language].presence || 'en'
+    end
+  end
 end

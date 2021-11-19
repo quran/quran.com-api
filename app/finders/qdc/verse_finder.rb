@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class Qdc::VerseFinder < ::VerseFinder
+  MAX_RECORDS_PER_PAGE = 50
+  RECORDS_PER_PAGE = 10
+
   attr_reader :next_page,
               :total_records
 
@@ -51,19 +54,23 @@ class Qdc::VerseFinder < ::VerseFinder
       # and we need to restrict words that are on requested page.
       # TODO: allow clients to choose if they want all words of ayah or only words for page
       # for now, returning whole ayah
-      results #.where(mushaf_words: {page_number: params[:page_number].to_i})
+      # .where(mushaf_words: {page_number: params[:page_number].to_i})
+      results
     else
       results
     end
   end
 
   def per_page
-    return @per_page if @per_page
-
-    limit = (params[:per_page] || 10).to_i.abs
-    limit = 10 if limit.zero?
-
-    limit <= 50 ? limit : 50
+    strong_memoize :per_page do
+      if params[:per_page] == 'all'
+        total_records
+      else
+        limit = (params[:per_page] || RECORDS_PER_PAGE).to_i.abs
+        limit = RECORDS_PER_PAGE if limit.zero?
+        MAX_RECORDS_PER_PAGE ? limit : RECORDS_PER_PAGE
+      end
+    end
   end
 
   def total_pages
@@ -137,8 +144,6 @@ class Qdc::VerseFinder < ::VerseFinder
 
   def fetch_by_chapter
     if chapter = find_chapter(params[:chapter_number])
-      verse_from, verse_to = nil
-
       if params[:from].present?
         verse_from = params[:from].to_i
       else
