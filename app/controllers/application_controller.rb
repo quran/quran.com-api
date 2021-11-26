@@ -6,10 +6,15 @@ class ApplicationController < ActionController::API
   include ActionView::Rendering
 
   before_action :set_cache_headers, except: :random
+  before_action :set_default_response_format
 
   rescue_from RestApi::RecordNotFound, with: :render_404
 
   protected
+  def set_default_response_format
+    request.format = :json
+  end
+
   def raise_not_found(message)
     raise RestApi::RecordNotFound.new(message)
   end
