@@ -8,7 +8,7 @@ json.object! do
                       :arabic_name,
                       :relative_path
 
-        json.format recitation.file_formats
+        json.format recitation.format
         json.files_size recitation.files_size
       end
     end
