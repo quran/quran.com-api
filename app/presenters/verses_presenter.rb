@@ -216,13 +216,13 @@ class VersesPresenter < BasePresenter
 
   def render_audio?
     strong_memoize :auido do
-      @lookahead.selects?('audio')
+      @lookahead.selects?('audio') && fetch_audio
     end
   end
 
   def render_tafsirs?
     strong_memoize :tafsir do
-      @lookahead.selects?('tafsirs')
+      @lookahead.selects?('tafsirs') && fetch_tafsirs.present?
     end
   end
 
@@ -289,8 +289,10 @@ class VersesPresenter < BasePresenter
   end
 
   def fetch_audio
-    if params[:audio]
-      params[:audio].to_i.abs
+    strong_memoize :fetch_audio do
+      if params[:audio] && params[:audio].to_i > 0
+        Recitation.approved.find_by(id: params[:audio].to_i)&.id
+      end
     end
   end
 end

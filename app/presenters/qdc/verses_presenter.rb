@@ -51,7 +51,7 @@ module Qdc
         juz_number: params[:juz_number],
         hizb_number: params[:hizb_number],
         rub_number: params[:rub_number]
-      }.compact
+      }.compact_blank
 
       @finder.random_verse(
         filters,
@@ -110,7 +110,7 @@ module Qdc
 
     def render_segments?
       strong_memoize :include_segments do
-        @lookahead.selects?('reciter')
+        @lookahead.selects?('reciter') && fetch_reciter
       end
     end
 
@@ -121,8 +121,10 @@ module Qdc
     end
 
     def fetch_reciter
-      if params[:reciter]
-        params[:reciter].to_i.abs
+      strong_memoize :fetch_reciter do
+        if params[:reciter] && params[:reciter].to_i > 0
+          Audio::Recitation.approved.find_by(id: params[:reciter].to_i)&.id
+        end
       end
     end
   end
