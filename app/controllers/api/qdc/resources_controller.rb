@@ -19,9 +19,11 @@ module Api::Qdc
     end
 
     def translation_info
-      @translation = fetch_translation_resource
-
-      render
+      if @translation = fetch_translation_resource
+        render
+      else
+        render_404("Translation not found")
+      end
     end
 
     def tafsirs
@@ -38,8 +40,11 @@ module Api::Qdc
     end
 
     def tafsir_info
-      @tafsir = fetch_tafsir_resource
-      render
+      if @tafsir = fetch_tafsir_resource
+        render
+      else
+        render_404("Tafsir not found")
+      end
     end
 
     def recitations
@@ -56,15 +61,18 @@ module Api::Qdc
     def recitation_info
       @recitation = Recitation
                       .approved
-                      .find(params[:recitation_id])
+                      .find_by(id: params[:recitation_id])
 
       # Load translated name
       resource = ResourceContent
                    .eager_load(:translated_name)
-                   .where(id: @recitation.resource_content_id)
-      @resource = eager_load_translated_name(resource).first
+                   .where(id: @recitation&.resource_content_id)
 
-      render
+      if @resource = eager_load_translated_name(resource).first
+        render
+      else
+        render_404("Recitation not found")
+      end
     end
 
     def recitation_styles
@@ -107,6 +115,7 @@ module Api::Qdc
     end
 
     protected
+
     def load_translations
       list = ResourceContent
                .eager_load(:translated_name)

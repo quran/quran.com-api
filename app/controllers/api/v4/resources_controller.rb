@@ -9,11 +9,11 @@ module Api::V4
 
     def translations
       list = ResourceContent
-                 .eager_load(:translated_name)
-                 .one_verse
-                 .translations
-                 .approved
-                 .order('priority ASC')
+               .eager_load(:translated_name)
+               .one_verse
+               .translations
+               .approved
+               .order('priority ASC')
 
       @translations = eager_load_translated_name(list)
 
@@ -21,18 +21,20 @@ module Api::V4
     end
 
     def translation_info
-      @translation = fetch_translation_resource
-
-      render
+      if @translation = fetch_translation_resource
+        render
+      else
+        render_404("Translation not found")
+      end
     end
 
     def tafsirs
       list = ResourceContent
-                 .eager_load(:translated_name)
-                 .one_verse
-                 .tafsirs
-                 .approved
-                 .order('priority ASC')
+               .eager_load(:translated_name)
+               .one_verse
+               .tafsirs
+               .approved
+               .order('priority ASC')
 
       @tafsirs = eager_load_translated_name(list)
 
@@ -40,15 +42,18 @@ module Api::V4
     end
 
     def tafsir_info
-      @tafsir = fetch_tafsir_resource
-      render
+      if @tafsir = fetch_tafsir_resource
+        render
+      else
+        render_404("Tafsir not found")
+      end
     end
 
     def recitations
       list = Recitation
-                 .eager_load(reciter: :translated_name)
-                 .approved
-                 .order('translated_names.language_priority desc')
+               .eager_load(reciter: :translated_name)
+               .approved
+               .order('translated_names.language_priority desc')
 
       @recitations = eager_load_translated_name(list)
 
@@ -57,13 +62,15 @@ module Api::V4
 
     def recitation_info
       @recitation = Recitation
-                       .includes(:resource_content)
-                       .approved
-                       .find(params[:recitation_id])
+                      .includes(:resource_content)
+                      .approved
+                      .find_by(id: params[:recitation_id])
 
-      @resource = @recitation.resource_content
-
-      render
+      if @resource = @recitation&.get_resource_content
+        render
+      else
+        render_404("Recitation not found")
+      end
     end
 
     def recitation_styles
@@ -72,10 +79,10 @@ module Api::V4
 
     def chapter_infos
       list = ResourceContent
-                 .eager_load(:translated_name)
-                 .chapter_info
-                 .one_chapter
-                 .approved
+               .eager_load(:translated_name)
+               .chapter_info
+               .one_chapter
+               .approved
 
       @chapter_infos = eager_load_translated_name(list)
 
@@ -84,9 +91,9 @@ module Api::V4
 
     def verse_media
       @media = ResourceContent
-                   .includes(:language)
-                   .media
-                   .one_verse.approved
+                 .includes(:language)
+                 .media
+                 .one_verse.approved
 
       render
     end

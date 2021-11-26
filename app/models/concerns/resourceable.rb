@@ -11,7 +11,15 @@ module Resourceable
     resource_content_id
   end
 
+  def get_resource_content
+    if respond_to? :resource_content_id
+      ResourceContent.find(resource_content_id)
+    else
+      resource_content
+    end
+  end
+
   def resource_name
-    self['resource_name'] || resource_content.name
+    self['resource_name'] || get_resource_content.name
   end
 end
