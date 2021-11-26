@@ -16,11 +16,11 @@ class Audio::RecitationPresenter < BasePresenter
   end
 
   def recitation
-    Audio::Recitation.find(recitation_id)
+    Audio::Recitation.find_by(id: recitation_id) || raise_404("Recitation not found")
   end
 
   def approved_recitation
-    approved_recitations.find(recitation_id)
+    approved_recitations.find_by(id: recitation_id) || raise_404("Recitation not found")
   end
 
   def related

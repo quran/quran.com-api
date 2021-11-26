@@ -37,7 +37,7 @@ class RecitationsPresenter < BasePresenter
     if (id = recitation_id)
       finder.load_audio(filter, id)
     else
-      raise RestApi::RecordNotFound.new("Recitation not found")
+      raise_404("Recitation not found")
     end
   end
 

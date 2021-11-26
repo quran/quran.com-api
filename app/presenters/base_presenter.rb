@@ -25,6 +25,10 @@ class BasePresenter
 
   protected
 
+  def raise_404(message)
+    raise RestApi::RecordNotFound.new(message)
+  end
+
   def get_mushaf
     strong_memoize :mushaf do
       mushaf = if params[:mushaf].presence

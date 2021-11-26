@@ -36,7 +36,7 @@ module Qdc
                .where(chapter_id: chapter.id)
                .filter_by_language_or_default(fetch_locale)
 
-      info || raise(RestApi::RecordNotFound.new("Surah not found"))
+      info || raise_404("Surah not found")
     end
 
     protected
