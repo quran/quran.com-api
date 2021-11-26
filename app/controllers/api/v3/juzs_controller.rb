@@ -8,8 +8,13 @@ module Api::V3
     end
 
     def show
-      @juz = Juz.find(params[:id])
-      render
+      @juz = Juz.find_by(id: params[:id])
+
+      if @juz.nil?
+        render_404("Juz not found")
+      else
+        render
+      end
     end
   end
 end
