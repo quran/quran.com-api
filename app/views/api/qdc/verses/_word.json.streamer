@@ -5,12 +5,16 @@ json.object! do
   json.extract! word,
                 :position,
                 :audio_url,
-                :char_type_name,
                 *fields
 
+  json.char_type word.char_type_name
   json.page_number word.page_number
   json.line_number word.line_number
   json.text word.text
+
+  if word.css_class
+    json.css_class word.css_class
+  end
 
   json.translation do
     json.object! do

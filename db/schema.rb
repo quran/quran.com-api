@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_05_124202) do
+ActiveRecord::Schema.define(version: 2021_12_01_203417) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -588,6 +588,8 @@ ActiveRecord::Schema.define(version: 2021_11_05_124202) do
     t.integer "position_in_verse"
     t.integer "position_in_line"
     t.integer "position_in_page"
+    t.string "css_style"
+    t.string "css_class"
     t.index ["mushaf_id", "verse_id", "position_in_page"], name: "index_on_mushaf_word_position"
     t.index ["mushaf_id", "verse_id", "position_in_verse"], name: "index_on_mushad_word_position"
     t.index ["mushaf_id", "word_id"], name: "index_mushaf_words_on_mushaf_id_and_word_id"

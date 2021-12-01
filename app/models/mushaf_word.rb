@@ -6,6 +6,8 @@
 #
 #  id                :bigint           not null, primary key
 #  char_type_name    :string
+#  css_class         :string
+#  css_style         :string
 #  line_number       :integer
 #  page_number       :integer
 #  position_in_line  :integer
