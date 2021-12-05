@@ -7,7 +7,7 @@ json.object! do
                 :audio_url,
                 *fields
 
-  json.char_type word.char_type_name
+  json.char_type_name word.char_type_name
   json.page_number word.get_page_number(mushaf_type)
   json.line_number word.get_line_number(mushaf_type)
   json.text word.get_text(mushaf_type)
