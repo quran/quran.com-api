@@ -6,22 +6,17 @@ class ChapterFinder
   end
 
   def find_and_eager_load(id_or_slug, locale: 'en', include_slugs: false)
-    chapters = all_with_eager_load(locale: locale)
+    chapters = all_with_eager_load(locale: locale, include_slugs: include_slugs)
 
-    if include_slugs
-      chapters = eager_load_slugs(with_translated_name, locale: locale)
-    end
-
-    chapters.find_using_slug(id_or_slug) || raise(RestApi::RecordNotFound.new("Surah not found"))
+    chapters.find_using_slug(id_or_slug, chapters) || raise(RestApi::RecordNotFound.new("Surah not found"))
   end
 
-  def all_with_eager_load(locale: 'en')
+  def all_with_eager_load(locale: 'en', include_slugs: false)
     language = Language.find_with_id_or_iso_code(locale)
-    chapters = Chapter.includes(:translated_name, :default_slug)
+    chapters = Chapter.includes(chapter_eager_loads(include_slugs))
 
     # Eager load translated names to avoid n+1 queries
-    # Fallback to english translated names
-    # if chapter don't have translated name for queried language
+    # Fallback to english if chapter don't have translated name for queried language
     with_default_names = chapters
                            .where(translated_names: { language_id: Language.default.id })
 
@@ -33,21 +28,38 @@ class ChapterFinder
                    .or(with_default_names)
                end
 
+    if !include_slugs
+      # Fix slugs order and language
+      chapters = load_language_slug(chapters, locale: locale)
+    end
+
     @chapters = chapters.order('translated_names.language_priority DESC')
   end
 
-  def eager_load_slugs(relation, locale: 'en')
+  def load_language_slug(relation, locale: 'en')
     language = Language.find_with_id_or_iso_code(locale)
 
-    relation = relation.includes(:slugs)
     with_en_slugs = relation
                       .where(slugs: { language_id: Language.default.id })
 
-    relation
-      .where(slugs: { language_id: language.id })
-      .or(
-        with_en_slugs
-      )
-      .order('slugs.language_priority DESC')
+    if language
+      relation.where(slugs: { language_id: language.id }).or(with_en_slugs).order('slugs.language_priority DESC')
+    else
+      with_en_slugs
+    end
+  end
+
+  protected
+
+  def chapter_eager_loads(include_slugs)
+    eager_load = [:translated_name]
+
+    if include_slugs
+      eager_load.push :slugs
+    else
+      eager_load.push :default_slug
+    end
+
+    eager_load
   end
 end
