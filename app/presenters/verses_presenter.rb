@@ -221,7 +221,7 @@ class VersesPresenter < BasePresenter
   end
 
   def render_tafsirs?
-    strong_memoize :tafsir do
+    strong_memoize :show_tafsir do
       @lookahead.selects?('tafsirs') && fetch_tafsirs.present?
     end
   end
@@ -253,24 +253,25 @@ class VersesPresenter < BasePresenter
   end
 
   def fetch_tafsirs
-    if params[:tafsirs]
-      tafsirs = params[:tafsirs].to_s.split(',')
+    strong_memoize :approved_tafsirs do
+      if params[:tafsirs]
+        tafsirs = params[:tafsirs].to_s.split(',')
+        approved_tafsirs = ResourceContent
+                             .approved
+                             .tafsirs
+                             .one_verse
 
-      approved_tafsirs = ResourceContent
-                           .approved
-                           .tafsirs
-                           .one_verse
+        params[:tafsirs] = approved_tafsirs
+                             .where(id: tafsirs)
+                             .pluck(:id)
 
-      params[:tafsirs] = approved_tafsirs
-                           .where(id: tafsirs)
-                           .pluck(:id)
-
-      params[:tafsirs]
+        params[:tafsirs]
+      end
     end
   end
 
   def fetch_translations
-    strong_memoize :approve_translations do
+    strong_memoize :approved_translations do
       if params[:translations]
         translations = params[:translations].to_s.split(',')
 
