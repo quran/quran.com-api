@@ -9,12 +9,8 @@ module Slugable
     has_one :default_slug, class_name: 'Slug'
 
     def self.find_using_slug(slug, items = nil)
-      with_slugs = items || joins(:slugs)
-
-      with_slugs
-        .where('slugs.slug': slug)
-        .or(with_slugs.where(id: slug))
-        .first
+      slugged = Slug.where(slug: CGI::unescape(slug)).first
+      (items || Chapter).where(id: [slugged&.chapter_id, slug]).first
     end
   end
 end
