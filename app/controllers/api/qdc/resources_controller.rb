@@ -29,7 +29,6 @@ module Api::Qdc
     def tafsirs
       list = ResourceContent
                .eager_load(:translated_name)
-               .one_verse
                .tafsirs
                .approved
                .order('priority ASC')
