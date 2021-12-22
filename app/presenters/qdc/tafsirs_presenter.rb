@@ -67,7 +67,6 @@ module Qdc
           approved_Tafsirs = ResourceContent
                                .approved
                                .tafsirs
-                               .one_verse
 
           params[:resource_id] = approved_Tafsirs
                                    .where(id: tafsir)
