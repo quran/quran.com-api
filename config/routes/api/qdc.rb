@@ -6,13 +6,14 @@ namespace :qdc do
     get 'translations/filter', action: 'filter'
     get :tafsirs
     get 'tafsirs/:tafsir_id/info', action: 'tafsir_info'
+    # TODO: move to audio
     get :recitations
     get 'recitations/:recitation_id/info', action: 'recitation_info'
+    # TODO: move to audio
     get :recitation_styles
     get :languages
     get :chapter_infos
     get :verse_media
-    get :chapter_reciters
   end
 
   get :chapters, to: 'chapters#index'

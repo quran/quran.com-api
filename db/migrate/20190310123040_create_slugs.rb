@@ -10,3 +10,4 @@ class CreateSlugs < ActiveRecord::Migration[5.2]
     add_index :slugs, [:chapter_id, :slug]
   end
 end
+

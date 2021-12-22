@@ -14,8 +14,12 @@ class CreateAudioSegments < ActiveRecord::Migration[6.1]
       t.integer :timestamp_median # MS
 
       t.jsonb :segments, default: []
+      t.jsonb :relative_segments, default: []
+
       t.integer :duration # Seconds
-      t.integer :duration_ms
+      t.integer :silent_duration
+      t.integer :relative_silent_duration
+
       t.float :percentile # % of total audio file duration
 
       t.timestamps

@@ -1,12 +1,14 @@
 fields = @presenter.tafsir_fields
+tafsirs = @presenter.find_tafsir(action_name)
 
 json.object! do
   json.tafsirs do
-    json.array! @tafsirs do |tafsir|
+    json.array! tafsirs do |tafsir|
       json.object! do
         json.extract! tafsir,
                       :id,
                       :resource_id,
+                      :verse_key,
                       *fields,
                       :text
       end

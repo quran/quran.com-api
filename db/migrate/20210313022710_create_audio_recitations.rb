@@ -14,7 +14,8 @@ class CreateAudioRecitations < ActiveRecord::Migration[6.1]
       t.integer :recitation_style_id, index: true
       t.integer :reciter_id, index: true
       t.boolean :approved, index: true
-      t.integer :segments_count
+      t.boolean :lock_segments, default: false
+      t.integer :segment_locked
       t.integer :files_size
       t.integer :home
       t.integer :qirat_type_id

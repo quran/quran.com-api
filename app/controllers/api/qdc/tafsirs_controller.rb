@@ -3,7 +3,6 @@
 module Api::Qdc
   class TafsirsController < ApiController
     before_action :init_presenter
-    before_action :load_tafsirs
 
     def by_chapter
       render partial: 'tafsirs'
@@ -33,10 +32,6 @@ module Api::Qdc
 
     def init_presenter
       @presenter = Qdc::TafsirsPresenter.new(params)
-    end
-
-    def load_tafsirs
-      @tafsirs = @presenter.tafsirs(action_name)
     end
   end
 end

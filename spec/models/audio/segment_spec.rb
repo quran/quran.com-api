@@ -2,22 +2,25 @@
 #
 # Table name: audio_segments
 #
-#  id                  :bigint           not null, primary key
-#  duration            :integer
-#  duration_ms         :integer
-#  percentile          :float
-#  segments            :jsonb
-#  timestamp_from      :integer
-#  timestamp_median    :integer
-#  timestamp_to        :integer
-#  verse_key           :string
-#  verse_number        :integer
-#  created_at          :datetime         not null
-#  updated_at          :datetime         not null
-#  audio_file_id       :bigint
-#  audio_recitation_id :bigint
-#  chapter_id          :bigint
-#  verse_id            :bigint
+#  id                                      :bigint           not null, primary key
+#  duration                                :integer
+#  duration_ms                             :integer
+#  percentile                              :float
+#  relative_segments                       :jsonb
+#  segments                                :jsonb
+#  silent_duration                         :integer
+#  silent_durrelative_silent_durationation :integer
+#  timestamp_from                          :integer
+#  timestamp_median                        :integer
+#  timestamp_to                            :integer
+#  verse_key                               :string
+#  verse_number                            :integer
+#  created_at                              :datetime         not null
+#  updated_at                              :datetime         not null
+#  audio_file_id                           :bigint
+#  audio_recitation_id                     :bigint
+#  chapter_id                              :bigint
+#  verse_id                                :bigint
 #
 # Indexes
 #

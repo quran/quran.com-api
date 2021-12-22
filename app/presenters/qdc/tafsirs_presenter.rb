@@ -32,7 +32,19 @@ module Qdc
       end
     end
 
-    def tafsirs(filter)
+    def resource_translated_name
+      language = Language.find_by(iso_code: fetch_locale)
+      names = TranslatedName.where(resource_id: resource_id, resource_type: 'ResourceContent')
+      en_name = names.where(language_id: Language.default.id)
+
+      if language
+        names.where(language_id: language).or(en_name).order('language_priority DESC').first
+      else
+        en_name.first
+      end
+    end
+
+    def find_tafsir(filter)
       finder.load_tafsirs(filter, resource_id)
     end
 
@@ -40,9 +52,9 @@ module Qdc
       verse_finder = Qdc::VerseFinder.new(from: from, to: to)
 
       verse_finder.load_verses('range',
-                           fetch_locale,
-                           mushaf_type: get_mushaf_id,
-                           words: render_words?)
+                               fetch_locale,
+                               mushaf_type: get_mushaf_id,
+                               words: render_words?)
     end
 
     protected

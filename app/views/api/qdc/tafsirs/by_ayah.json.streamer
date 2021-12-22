@@ -1,9 +1,10 @@
 fields = @presenter.tafsir_fields
-tafsir = @tafsirs
+tafsir = @presenter.find_tafsir(action_name)
 include_words = @presenter.render_words?
 verse_fields = @presenter.verse_fields
 word_fields = @presenter.word_fields
 verses = @presenter.load_verses(tafsir.group_verse_key_from, tafsir.group_verse_key_to)
+translated_name = @presenter.resource_translated_name
 
 json.object! do
   json.tafsir do
@@ -35,13 +36,15 @@ json.object! do
       json.extract! tafsir,
                     :resource_id,
                     *fields,
-                    :resource_name,
-                    :text
+                    :resource_name
 
       json.translated_name do
         json.object! do
+          json.extract! translated_name, :name, :language_name
         end
       end
+
+      json.text tafsir.text
     end
   end
 end
