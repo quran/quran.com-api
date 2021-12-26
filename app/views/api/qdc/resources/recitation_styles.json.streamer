@@ -4,6 +4,7 @@ json.object! do
       json.mujawwad "Mujawwad is a melodic style of Holy Quran recitation"
       json.murattal "Murattal is at a slower pace, used for study and practice"
       json.muallim "Muallim is teaching style recitation of Holy Quran"
+      json.ijaza "Quran Recitation Ijazah is a certification that authorizes its holder to teach Quran recitation (reading) and can be awarded by an already certified Imam or scholar (endless chain). The learner obtains this certificate after reciting (reading) the whole Quran with Tajweed in the presence of the certified tutor."
     end
   end
 end

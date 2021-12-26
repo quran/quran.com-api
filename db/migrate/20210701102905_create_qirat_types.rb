@@ -3,6 +3,7 @@ class CreateQiratTypes < ActiveRecord::Migration[6.1]
     create_table :qirat_types do |t|
       t.string :name
       t.text :description
+      t.integer :audio_recitations_count
 
       t.timestamps
     end
