@@ -3,7 +3,7 @@ class CreateReciters < ActiveRecord::Migration[5.0]
     create_table :reciters do |t|
       t.string :name
       t.text :description
-      t.integer :audio_recitations_count
+      t.integer :recitations_count, default: 0
 
       t.timestamps
     end
