@@ -9,6 +9,7 @@ json.object! do
                       :id,
                       :resource_id,
                       :verse_key,
+                      :language_id,
                       *fields,
                       :text
       end
