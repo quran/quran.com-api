@@ -12,6 +12,7 @@ json.object! do
                       :language_id,
                       *fields,
                       :text
+        json.slug @presenter.resource_slug
       end
     end
   end

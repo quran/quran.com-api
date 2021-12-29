@@ -36,8 +36,9 @@ json.object! do
       json.extract! tafsir,
                     :resource_id,
                     *fields,
-                    :resource_name, :language_id
-
+                    :resource_name,
+                    :language_id
+      json.slug @presenter.resource_slug
       json.translated_name do
         json.object! do
           json.extract! translated_name, :name, :language_name
