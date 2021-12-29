@@ -16,7 +16,7 @@ json.object! do
     json.meta do
       json.object! do
         json.reciter_name @recitation.reciter_name
-        json.recitation_style @recitation.name
+        json.recitation_style @recitation.recitation_style&.name
       end
     end
   end

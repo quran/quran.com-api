@@ -66,7 +66,7 @@ module Qdc
     def find_verse
       case verses_filter
       when 'by_key'
-        @finder.find_with_key(
+        result = @finder.find_with_key(
           params[:verse_key],
           fetch_word_translation_language,
           mushaf_type: get_mushaf_id,
@@ -74,6 +74,9 @@ module Qdc
           translations: fetch_translations,
           reciter: fetch_reciter
         )
+
+        raise_404("Ayah not found") unless result
+        result
       end
     end
 

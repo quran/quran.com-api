@@ -106,13 +106,16 @@ class VersesPresenter < BasePresenter
   def find_verse
     case verses_filter
     when 'by_key'
-      @finder.find_with_key(
+      result = @finder.find_with_key(
         params[:verse_key],
         fetch_locale,
         tafsirs: fetch_tafsirs,
         translations: fetch_translations,
         audio: fetch_audio
       )
+      raise_404("Ayah not found") unless result
+
+      result
     end
   end
 

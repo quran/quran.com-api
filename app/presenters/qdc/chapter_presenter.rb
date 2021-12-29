@@ -10,7 +10,7 @@ module Qdc
     end
 
     def chapters
-      finder.all_with_eager_load(locale: locale)
+      finder.all_with_eager_load(locale: locale, include_slugs: include_slugs?)
     end
 
     def chapter
