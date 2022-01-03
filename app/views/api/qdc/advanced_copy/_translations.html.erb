@@ -1,6 +1,8 @@
 <% verse.translations.each do |tr| %>
 <%= @presenter.format_translation_text(tr).html_safe %>
+<% if include_translator_name %>
 — <%= tr.resource_name %>
+<% end %>
 
 <% if include_footnote %>
 <% tr.foot_notes.each_with_index do |foot_note, index| %>

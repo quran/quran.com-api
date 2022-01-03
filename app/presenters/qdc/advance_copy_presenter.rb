@@ -39,6 +39,14 @@ module Qdc
       end
     end
 
+    def include_translator_name?
+      strong_memoize :include_translator_name do
+        name = params[:translator_name].to_s.presence
+
+        name.nil? || !ActiveRecord::Type::Boolean::FALSE_VALUES.include?(name)
+      end
+    end
+
     def include_translations?
       translation_ids.present?
     end
