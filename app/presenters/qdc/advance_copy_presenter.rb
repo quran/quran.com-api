@@ -47,6 +47,14 @@ module Qdc
       end
     end
 
+    def include_ayah_key?
+      strong_memoize :include_ayah_key do
+        key = params[:ayah_key].to_s.presence
+
+        key.nil? || !ActiveRecord::Type::Boolean::FALSE_VALUES.include?(key)
+      end
+    end
+
     def include_translations?
       translation_ids.present?
     end

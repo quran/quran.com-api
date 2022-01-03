@@ -4,10 +4,11 @@
   include_footnote = @presenter.include_footnote?
   include_translations = @presenter.include_translations?
   include_translator_name = @presenter.include_translator_name?
+  include_ayah_key = @presenter.include_ayah_key?
 %>
 
 <% @verses.each do |verse| %>
-<%= verse.verse_key %>
+<%= verse.verse_key if include_ayah_key %>
 <%= verse.mushaf_words.pluck(:text).join(' ') if include_arabic %>
 
 <%= render 'translations', verse: verse, include_translator_name: include_translator_name, include_footnote: include_footnote if include_translations %>
