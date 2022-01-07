@@ -6,7 +6,7 @@ class CreateAudioChapterAudioFiles < ActiveRecord::Migration[6.1]
       t.integer :total_files
       t.integer :stream_count
       t.integer :download_count
-      t.integer :file_size
+      t.float :file_size
       t.integer :bit_rate
       t.integer :duration
 

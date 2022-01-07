@@ -12,14 +12,6 @@
 #  mushaf_pages_mapping   :jsonb
 #  page_number            :integer
 #  pause_words_count      :integer          default(0)
-#  qpc_uthmani_bazzi      :string
-#  qpc_uthmani_doori      :string
-#  qpc_uthmani_hafs       :string
-#  qpc_uthmani_qaloon     :string
-#  qpc_uthmani_qumbul     :string
-#  qpc_uthmani_shouba     :string
-#  qpc_uthmani_soosi      :string
-#  qpc_uthmani_warsh      :string
 #  rub_number             :integer
 #  sajdah_number          :integer
 #  sajdah_type            :string
@@ -27,6 +19,8 @@
 #  text_imlaei_simple     :string
 #  text_indopak           :string
 #  text_nastaleeq_indopak :string
+#  text_qpc_hafs          :string
+#  text_qpc_nastaleeq     :string
 #  text_uthmani           :string
 #  text_uthmani_simple    :string
 #  text_uthmani_tajweed   :text

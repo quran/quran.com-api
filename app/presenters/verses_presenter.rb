@@ -14,7 +14,7 @@ class VersesPresenter < BasePresenter
     'text_uthmani',
     'text_uthmani_simple',
     'text_uthmani_tajweed',
-    'qpc_uthmani_hafs',
+    'text_qpc_hafs',
     'image_url',
     'image_width',
     'code_v1',
@@ -33,7 +33,7 @@ class VersesPresenter < BasePresenter
     'text_imlaei',
     'text_uthmani_simple',
     'text_uthmani_tajweed',
-    'qpc_uthmani_hafs',
+    'text_qpc_hafs',
     'verse_key',
     'location',
     'code_v1',
@@ -248,8 +248,8 @@ class VersesPresenter < BasePresenter
       @mushaf_type = :imlaei
     elsif fields.include?('text_uthmani_tajweed')
       @mushaf_type = :uthmani_tajweed
-    elsif fields.include?('qpc_uthmani_hafs')
-      @mushaf_type = :qpc_uthmani_hafs
+    elsif fields.include?('qpc_uthmani_hafs') || fields.include?('text_qpc_hafs')
+      @mushaf_type = :text_qpc_hafs
     else
       @mushaf_type = :v1
     end

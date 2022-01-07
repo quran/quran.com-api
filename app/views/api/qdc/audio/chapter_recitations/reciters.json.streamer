@@ -6,7 +6,6 @@ json.object! do
       json.object! do
         json.id reciter.id
         json.name reciter.name
-        json.relative_path reciter.relative_path
 
         json.style do
           json.object! do

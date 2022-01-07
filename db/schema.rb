@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_01_203417) do
+ActiveRecord::Schema.define(version: 2022_01_05_034635) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -115,6 +115,7 @@ ActiveRecord::Schema.define(version: 2021_12_01_203417) do
     t.integer "segments_count"
     t.integer "files_size"
     t.integer "qirat_type_id"
+    t.boolean "segment_locked", default: false
     t.index ["approved"], name: "index_audio_recitations_on_approved"
     t.index ["name"], name: "index_audio_recitations_on_name"
     t.index ["priority"], name: "index_audio_recitations_on_priority"
@@ -155,6 +156,9 @@ ActiveRecord::Schema.define(version: 2021_12_01_203417) do
     t.float "percentile"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "silent_duration"
+    t.jsonb "relative_segments", default: []
+    t.integer "relative_silent_duration"
     t.index ["audio_file_id", "verse_number"], name: "index_audio_segments_on_audio_file_id_and_verse_number", unique: true
     t.index ["audio_file_id"], name: "index_audio_segments_on_audio_file_id"
     t.index ["audio_recitation_id", "chapter_id", "verse_id", "timestamp_median"], name: "index_on_audio_segments_median_time"
@@ -174,6 +178,7 @@ ActiveRecord::Schema.define(version: 2021_12_01_203417) do
     t.string "url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "resource_contents_count", default: 0
   end
 
   create_table "ayah", primary_key: "ayah_key", id: :text, force: :cascade do |t|
@@ -610,7 +615,7 @@ ActiveRecord::Schema.define(version: 2021_12_01_203417) do
     t.index ["qirat_type_id"], name: "index_mushafs_on_qirat_type_id"
   end
 
-  create_table "mushas_pages", force: :cascade do |t|
+  create_table "mushaf_pages", force: :cascade do |t|
     t.integer "page_number"
     t.json "verse_mapping"
     t.integer "first_verse_id"
@@ -618,7 +623,7 @@ ActiveRecord::Schema.define(version: 2021_12_01_203417) do
     t.integer "verses_count"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["page_number"], name: "index_mushas_pages_on_page_number"
+    t.index ["page_number"], name: "index_mushaf_pages_on_page_number"
   end
 
   create_table "navigation_search_records", force: :cascade do |t|
@@ -640,6 +645,7 @@ ActiveRecord::Schema.define(version: 2021_12_01_203417) do
     t.text "description"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "recitations_count", default: 0
   end
 
   create_table "recitation", primary_key: "recitation_id", id: :serial, force: :cascade do |t|
@@ -650,11 +656,13 @@ ActiveRecord::Schema.define(version: 2021_12_01_203417) do
   end
 
   create_table "recitation_styles", id: :serial, force: :cascade do |t|
-    t.string "style"
+    t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "arabic"
     t.string "slug"
+    t.text "description"
+    t.integer "recitations_count", default: 0
     t.index ["slug"], name: "index_recitation_styles_on_slug"
   end
 
@@ -678,6 +686,7 @@ ActiveRecord::Schema.define(version: 2021_12_01_203417) do
     t.text "slug"
     t.text "english", null: false
     t.text "arabic", null: false
+    t.text "description"
     t.index ["arabic"], name: "_reciter_arabic_key", unique: true
     t.index ["english"], name: "_reciter_english_key", unique: true
     t.index ["path"], name: "_reciter_path_key", unique: true
@@ -688,6 +697,7 @@ ActiveRecord::Schema.define(version: 2021_12_01_203417) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "recitations_count", default: 0
   end
 
   create_table "resource", primary_key: "resource_id", id: :serial, force: :cascade do |t|
@@ -913,6 +923,14 @@ ActiveRecord::Schema.define(version: 2021_12_01_203417) do
     t.datetime "updated_at", null: false
     t.string "text_imlaei"
     t.string "text_uthmani_tajweed"
+    t.text "text"
+    t.integer "resource_content_id"
+    t.integer "record_id"
+    t.string "record_type"
+    t.integer "uniq_token_count"
+    t.index ["record_type", "record_id"], name: "index_tokens_on_record_type_and_record_id"
+    t.index ["resource_content_id"], name: "index_tokens_on_resource_content_id"
+    t.index ["text"], name: "index_tokens_on_text"
   end
 
   create_table "topics", id: :serial, force: :cascade do |t|
@@ -1050,18 +1068,12 @@ ActiveRecord::Schema.define(version: 2021_12_01_203417) do
     t.string "code_v1"
     t.string "code_v2"
     t.integer "v2_page"
-    t.string "qpc_uthmani_hafs"
-    t.string "qpc_uthmani_qaloon"
-    t.string "qpc_uthmani_shouba"
-    t.string "qpc_uthmani_warsh"
-    t.string "qpc_uthmani_doori"
-    t.string "qpc_uthmani_qumbul"
-    t.string "qpc_uthmani_bazzi"
-    t.string "qpc_uthmani_soosi"
+    t.string "text_qpc_hafs"
     t.integer "words_count"
     t.string "text_nastaleeq_indopak"
     t.integer "pause_words_count", default: 0
     t.jsonb "mushaf_pages_mapping", default: {}
+    t.string "text_qpc_nastaleeq"
     t.index ["chapter_id"], name: "index_verses_on_chapter_id"
     t.index ["verse_index"], name: "index_verses_on_verse_index"
     t.index ["verse_key"], name: "index_verses_on_verse_key"
@@ -1225,15 +1237,9 @@ ActiveRecord::Schema.define(version: 2021_12_01_203417) do
     t.string "code_v2"
     t.integer "v2_page"
     t.integer "line_v2"
-    t.string "qpc_uthmani_hafs"
-    t.string "qpc_uthmani_qaloon"
-    t.string "qpc_uthmani_shouba"
-    t.string "qpc_uthmani_warsh"
-    t.string "qpc_uthmani_doori"
-    t.string "qpc_uthmani_qumbul"
-    t.string "qpc_uthmani_bazzi"
-    t.string "qpc_uthmani_soosi"
+    t.string "text_qpc_hafs"
     t.string "text_nastaleeq_indopak"
+    t.string "text_qpc_nastaleeq"
     t.index ["chapter_id"], name: "index_words_on_chapter_id"
     t.index ["char_type_id"], name: "index_words_on_char_type_id"
     t.index ["location"], name: "index_words_on_location"

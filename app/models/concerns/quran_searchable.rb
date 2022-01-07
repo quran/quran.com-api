@@ -11,7 +11,7 @@ module QuranSearchable
     text_imlaei
     text_imlaei_simple
     text_indopak
-    qpc_uthmani_hafs
+    text_qpc_hafs
   ].freeze
 
   included do
@@ -37,7 +37,7 @@ module QuranSearchable
         text_uthmani_simple
         text_imlaei
         text_imlaei_simple
-        qpc_uthmani_hafs
+        text_qpc_hafs
         text_indopak],
         methods: [:verse_id]
       )
@@ -50,7 +50,7 @@ module QuranSearchable
           text_imlaei: w.text_imlaei,
           text_imlaei_simple: w.text_imlaei_simple,
           text_indopak: w.text_indopak,
-          qpc_uthmani_hafs: w.qpc_uthmani_hafs
+          text_qpc_hafs: w.text_qpc_hafs
         }
       end
 
@@ -92,7 +92,7 @@ module QuranSearchable
                 analyzer: 'arabic_normalized',
                 similarity: 'my_bm25'
 
-        indexes :qpc_uthmani_hafs,
+        indexes :text_qpc_hafs,
                 type: 'text',
                 term_vector: 'with_positions_offsets',
                 analyzer: 'arabic_normalized',

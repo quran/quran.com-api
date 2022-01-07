@@ -155,7 +155,7 @@ module Qdc
               'text_imlaei.*',
               'text_imlaei_simple.*',
               'text_indopak.*',
-              'qpc_uthmani_hafs.*'
+              'text_qpc_hafs.*'
             ]
           )
         ]

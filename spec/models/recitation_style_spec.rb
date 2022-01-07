@@ -2,12 +2,14 @@
 #
 # Table name: recitation_styles
 #
-#  id         :integer          not null, primary key
-#  arabic     :string
-#  slug       :string
-#  style      :string
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id                :integer          not null, primary key
+#  arabic            :string
+#  description       :text
+#  name              :string
+#  recitations_count :integer          default(0)
+#  slug              :string
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
 #
 # Indexes
 #

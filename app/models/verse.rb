@@ -14,14 +14,6 @@
 #  mushaf_pages_mapping   :jsonb
 #  page_number            :integer
 #  pause_words_count      :integer          default(0)
-#  qpc_uthmani_bazzi      :string
-#  qpc_uthmani_doori      :string
-#  qpc_uthmani_hafs       :string
-#  qpc_uthmani_qaloon     :string
-#  qpc_uthmani_qumbul     :string
-#  qpc_uthmani_shouba     :string
-#  qpc_uthmani_soosi      :string
-#  qpc_uthmani_warsh      :string
 #  rub_number             :integer
 #  sajdah_number          :integer
 #  sajdah_type            :string
@@ -29,6 +21,8 @@
 #  text_imlaei_simple     :string
 #  text_indopak           :string
 #  text_nastaleeq_indopak :string
+#  text_qpc_hafs          :string
+#  text_qpc_nastaleeq     :string
 #  text_uthmani           :string
 #  text_uthmani_simple    :string
 #  text_uthmani_tajweed   :text
@@ -116,8 +110,8 @@ class Verse < ApplicationRecord
       text_uthmani_tajweed
     when :indopak, :text_indopak
       text_indopak
-    when :uthmani_hafs, :qpc_uthmani_hafs
-      qpc_uthmani_hafs
+    when :uthmani_hafs, :qpc_uthmani_hafs, :text_qpc_hafs
+      text_qpc_hafs
     end
   end
 end
