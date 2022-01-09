@@ -15,6 +15,7 @@
 #  name                :string
 #  priority            :integer
 #  relative_path       :string
+#  segment_locked      :boolean          default(FALSE)
 #  segments_count      :integer
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null

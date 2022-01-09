@@ -4,12 +4,28 @@ json.object! do
       json.object! do
         json.extract! recitation,
                       :id,
-                      :name,
-                      :arabic_name,
-                      :relative_path
+                      :name
 
-        json.format recitation.format
-        json.files_size recitation.files_size
+        json.style do
+          json.object! do
+            json.name recitation.recitation_style&.name
+            json.language_name 'english'
+          end
+        end
+
+        json.qirat do
+          json.object! do
+            json.name recitation.qirat_type&.name
+            json.language_name 'english'
+          end
+        end
+
+        json.translated_name do
+          translated_name = recitation.translated_name
+          json.object! do
+            json.extract! translated_name, :name, :language_name
+          end
+        end
       end
     end
   end

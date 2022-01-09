@@ -47,7 +47,7 @@ module Search
 
         if (highlight = hit['highlight'])
           translation = highlight['text']
-          ayah_text = highlight['text_imlaei.text'] || highlight['text_uthmani.text'] || highlight['qpc_uthmani_hafs.text']
+          ayah_text = highlight['text_imlaei.text'] || highlight['text_uthmani.text'] || highlight['text_qpc_hafs.text']
 
           document['text'] = translation[0] if translation
           document['ayah_text'] = ayah_text[0] if ayah_text

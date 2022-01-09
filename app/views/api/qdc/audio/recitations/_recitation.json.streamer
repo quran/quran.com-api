@@ -3,7 +3,6 @@ json.object! do
                 :id,
                 :name,
                 :arabic_name,
-                :relative_path,
                 :format,
                 :section_id,
                 :description

@@ -23,18 +23,12 @@
 #  page_number            :integer
 #  pause_name             :string
 #  position               :integer
-#  qpc_uthmani_bazzi      :string
-#  qpc_uthmani_doori      :string
-#  qpc_uthmani_hafs       :string
-#  qpc_uthmani_qaloon     :string
-#  qpc_uthmani_qumbul     :string
-#  qpc_uthmani_shouba     :string
-#  qpc_uthmani_soosi      :string
-#  qpc_uthmani_warsh      :string
 #  text_imlaei            :string
 #  text_imlaei_simple     :string
 #  text_indopak           :string
 #  text_nastaleeq_indopak :string
+#  text_qpc_hafs          :string
+#  text_qpc_nastaleeq     :string
 #  text_uthmani           :string
 #  text_uthmani_simple    :string
 #  text_uthmani_tajweed   :string
@@ -85,6 +79,8 @@ class Word < ApplicationRecord
   default_scope { order 'position asc' }
 
   alias_attribute :v1_page, :page_number
+  #TODO: deprecated and renamed to text_qpc_hafs
+  alias_attribute :qpc_uthmani_hafs, :text_qpc_hafs
 
   def get_page_number(version)
     if :v1 == version
@@ -110,8 +106,8 @@ class Word < ApplicationRecord
       code_v2
     when :indopak
       text_indopak
-    when :qpc_uthmani_hafs
-      qpc_uthmani_hafs
+    when :text_qpc_hafs, :qpc_uthmani_hafs
+      text_qpc_hafs
     when :uthmani, :uthmani_tajweed
       text_uthmani
     when :imlaei

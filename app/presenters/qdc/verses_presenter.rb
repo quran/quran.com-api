@@ -10,7 +10,8 @@ module Qdc
       'text_imlaei',
       'text_uthmani_simple',
       'text_uthmani_tajweed',
-      'qpc_uthmani_hafs',
+      'qpc_uthmani_hafs', #TODO: deprecated and renamed to text_qpc_hafs
+      'text_qpc_hafs',
       'verse_key',
       'location',
       'code_v1',

@@ -7,7 +7,7 @@ module QuranNavigationSearchable
     include Elasticsearch::Model
     has_many :navigation_search_records, as: :searchable_record
 
-    index_name "navigation"
+    index_name 'navigation'
     settings YAML.safe_load(
       File.read('config/elasticsearch/settings.yml')
     )
@@ -62,7 +62,7 @@ module QuranNavigationSearchable
 
         {
           index: {
-            _id: "#{document[:priority].to_s}-#{index}",
+            _id: "#{document[:priority]}-#{index}",
             data: document
           }
         }
@@ -83,7 +83,6 @@ module QuranNavigationSearchable
   end
 
   protected
-
   def index_variation(document)
     params = {
       index: self.class.index_name,
@@ -182,9 +181,9 @@ module QuranNavigationSearchable
       "#{chapter_id} #{verse_number}", # "1 2"
       "#{chapter_id.to_roman} #{verse_number}", # X 1
       "chapter #{chapter_id} verse #{verse_number}", # chapter 1 verse 2
-      "ch#{chapter_id} v#{verse_number}", #ch23 v2
-      "ch#{chapter_id}v#{verse_number}", #ch23v2
-      "c#{chapter_id}v#{verse_number}", #v2v3
+      "ch#{chapter_id} v#{verse_number}", # ch23 v2
+      "ch#{chapter_id}v#{verse_number}", # ch23v2
+      "c#{chapter_id}v#{verse_number}", # v2v3
       "#{chapter.name_arabic} #{verse_number}", # الفاتحة 1
       "surah #{chapter_id} ayah #{verse_number}", # surah 1 ayah 1
       "ayah #{verse_number} surah #{chapter_id}", # ayah 1 surah 1

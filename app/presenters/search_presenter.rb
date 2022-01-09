@@ -107,7 +107,7 @@ class SearchPresenter < BasePresenter
     verse.words.map do |w|
       word = {
         char_type: w.char_type_name,
-        text: w.qpc_uthmani_hafs,
+        text: w.text_qpc_hafs,
       }
 
       if highlighted_words&.include?(w.id)

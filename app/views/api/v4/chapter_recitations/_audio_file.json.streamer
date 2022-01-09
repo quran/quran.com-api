@@ -4,5 +4,5 @@ json.object! do
                 :file_size,
                 :format
 
-  json.audio_url audio_file.audio_url(relative_path: recitation.relative_path)
+  json.audio_url audio_file.audio_url
 end

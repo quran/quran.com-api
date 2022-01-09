@@ -45,7 +45,7 @@ module Search
               number_of_fragments: 0,
               type: 'plain'
             },
-            "qpc_uthmani_hafs.text": {
+            "text_qpc_hafs.text": {
               number_of_fragments: 0,
               type: 'plain'
             },
@@ -94,7 +94,7 @@ module Search
             }
           },
           inner_hits: {
-            _source: ["words.id", "words.qpc_uthmani_hafs"]
+            _source: ["words.id", "words.text_qpc_hafs"]
           }
         }
       }
@@ -166,7 +166,7 @@ module Search
             'text_imlaei.*',
             'text_imlaei_simple.*',
             'text_indopak.*',
-            'qpc_uthmani_hafs.*'
+            'text_qpc_hafs.*'
           ]
         )
       ]
