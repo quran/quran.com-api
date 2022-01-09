@@ -73,16 +73,8 @@ namespace :qdc do
   # i.e /v4/quran/translations/131 will send complete Clear Quran translation
   namespace :quran do
     get 'translations/:translation_id', action: 'translation'
-    get :'tafsirs/:tafsir_id', action: 'tafsir'
-    get :'verses/uthmani', action: 'verses_text', script: 'text_uthmani'
-    get :'verses/uthmani_simple', action: 'verses_text', script: 'text_uthmani_simple'
-    get :'verses/uthmani_tajweed', action: 'verses_text', script: 'text_uthmani_tajweed'
-    get :'verses/indopak', action: 'verses_text', script: 'text_indopak'
-    get :'verses/imlaei', action: 'verses_text', script: 'text_imlaei'
-    get :'verses/imlaei_simple', action: 'verses_text', script: 'text_imlaei_simple'
-    get :'verses/code_v1', action: 'verses_text', script: 'code_v1'
-    get :'verses/code_v2', action: 'verses_text', script: 'code_v2'
-    # TODO: Naveed. add Qaloon and other Qira'at
+    get 'tafsirs/:tafsir_id', action: 'tafsir'
+    get 'verses/:script', action: 'verses_text'
   end
 
   # translations routes, by juz, chapter, page

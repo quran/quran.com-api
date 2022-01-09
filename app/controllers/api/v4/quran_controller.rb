@@ -2,17 +2,6 @@
 
 module Api::V4
   class QuranController < ApiController
-    VERSE_AVAILABLE_SCRIPTS = [
-        'text_uthmani',
-        'text_uthmani_simple',
-        'text_uthmani_tajweed',
-        'text_indopak',
-        'text_imlaei',
-        'text_imlaei_simple',
-        'code_v1',
-        'code_v2'
-    ]
-
     def translation
       @presenter = TranslationsPresenter.new(params)
 
@@ -65,19 +54,39 @@ module Api::V4
       end
 
       @verses = Verse
-                    .unscope(:order)
-                    .order('verse_index ASC').where(resource_filters)
-                    .select(:id, :verse_key, @script_type, *@extra_fields)
+                  .unscope(:order)
+                  .order('verse_index ASC').where(resource_filters)
+                  .select(:id, :verse_key, @script_type, *@extra_fields)
 
       render
     end
 
     protected
-    def fetch_script_type
-      script = params[:script]
 
-      if VERSE_AVAILABLE_SCRIPTS.include?(script)
-        script
+    def fetch_script_type
+      script = params[:script].to_s
+
+      case script
+      when 'uthmani_simple', 'text_uthmani_simple'
+        'text_uthmani_simple'
+      when 'uthmani_tajweed', 'text_uthmani_tajweed'
+        'text_uthmani_tajweed'
+      when 'indopak', 'text_indopak'
+        'text_indopak'
+      when 'imlaei', 'text_imlaei'
+        'text_imlaei'
+      when 'imlaei_simple', 'text_imlaei_simple'
+        'text_imlaei_simple'
+      when 'qpc_hafs', 'text_qpc_hafs'
+        'text_qpc_hafs'
+      when 'qpc_nastaleeq', 'text_qpc_nastaleeq'
+        'text_qpc_nastaleeq'
+      when 'nastaleeq_indopak', 'text_nastaleeq_indopak'
+        'text_nastaleeq_indopak'
+      when 'code_v1', 'v1'
+        'code_v1'
+      when 'v2', 'code_v2'
+        'code_v2'
       else
         'text_uthmani'
       end
@@ -90,6 +99,7 @@ module Api::V4
           juz_number: params[:juz_number],
           hizb_number: params[:hizb_number],
           rub_number: params[:rub_number],
+          ruku_number: params[:],
           page_number: params[:page_number],
           verse_key: params[:verse_key]
       }.compact
