@@ -79,6 +79,8 @@ class Word < ApplicationRecord
   default_scope { order 'position asc' }
 
   alias_attribute :v1_page, :page_number
+  #TODO: deprecated and renamed to text_qpc_hafs
+  alias_attribute :qpc_uthmani_hafs, :text_qpc_hafs
 
   def get_page_number(version)
     if :v1 == version

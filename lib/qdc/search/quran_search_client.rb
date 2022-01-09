@@ -83,7 +83,7 @@ module Qdc
               }
             },
             inner_hits: {
-              _source: ["words.id", "words.qpc_uthmani_hafs"]
+              _source: ["words.id", "words.text_qpc_hafs"]
             }
           }
         }

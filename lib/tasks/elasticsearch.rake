@@ -1,25 +1,27 @@
 # frozen_string_literal: true
 
 namespace :elasticsearch do
-
   desc 'deletes all elasticsearch indices'
   task delete_indices: :environment do
     begin
       Qdc::Search::ContentIndex.remove_indexes
     rescue Elasticsearch::Transport::Transport::Errors::NotFound => e
+      puts e.messsage
     end
 
     begin
       Verse.__elasticsearch__.delete_index!
     rescue Elasticsearch::Transport::Transport::Errors::NotFound => e
+      puts e.messsage
     end
 
     begin
       Chapter.__elasticsearch__.delete_index!
     rescue Elasticsearch::Transport::Transport::Errors::NotFound => e
+      puts e.messsage
     end
 
-    puts "Done"
+    puts 'Done'
   end
 
   desc 'reindex elasticsearch'
@@ -28,9 +30,9 @@ namespace :elasticsearch do
     options = {}
 
     opts = OptionParser.new
-    opts.banner = "Usage: rake add [options]"
-    opts.on("-q", "--query ARG") { |debug| options[:debug_queries] = debug }
-    args = opts.order!(ARGV) {}
+    opts.banner = 'Usage: rake add [options]'
+    opts.on('-q', '--query ARG') { |debug| options[:debug_queries] = debug }
+    args = opts.order!(ARGV) { }
     opts.parse!(args)
 
     ar_logger = ActiveRecord::Base.logger
@@ -42,8 +44,9 @@ namespace :elasticsearch do
       ActiveRecord::Base.logger = nil
     end
 
-    index_start = Time.now
+    index_start = Time.current
 
+    puts 'Creating indexes'
     Verse.__elasticsearch__.create_index!
     Chapter.__elasticsearch__.create_index!
 
@@ -51,17 +54,17 @@ namespace :elasticsearch do
       Chapter.includes(:translated_names).order('chapter_number ASC'),
       MushafPage.order('page_number ASC'),
       Juz.order('juz_number ASC'),
-      VerseKey.unscope(:order).includes(:chapter).order("verses.verse_index ASC")
+      VerseKey.unscope(:order).includes(:chapter).order('verses.verse_index ASC')
     ]
 
     navigational_resources.each do |model|
       model.bulk_import_with_variation
     end
 
-    puts "Importing verses"
+    puts 'Importing verses'
     Verse.includes(:char_words).import
 
-    puts "Setting up translation indexes"
+    puts 'Setting up translation indexes'
     Qdc::Search::ContentIndex.setup_language_index_classes
     Qdc::Search::ContentIndex.setup_indexes
 
@@ -70,7 +73,7 @@ namespace :elasticsearch do
       Qdc::Search::ContentIndex.import_translation_for_language(language)
     end
 
-    index_end = Time.now
+    index_end = Time.current
     ActiveRecord::Base.logger = ar_logger
     Rails.logger.level = 0
 

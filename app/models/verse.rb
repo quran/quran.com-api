@@ -76,6 +76,8 @@ class Verse < ApplicationRecord
 
   alias_attribute :v1_page, :page_number
   alias_attribute :verse_id, :id
+  #TODO: deprecated and renamed to text_qpc_hafs
+  alias_attribute :qpc_uthmani_hafs, :text_qpc_hafs
 
   def self.find_by_id_or_key(id)
     if id.to_s.include? ':'

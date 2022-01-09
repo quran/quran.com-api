@@ -15,6 +15,7 @@ class VersesPresenter < BasePresenter
     'text_uthmani_simple',
     'text_uthmani_tajweed',
     'text_qpc_hafs',
+    'qpc_uthmani_hafs', # TODO: deprecated and renamed to text_qpc_hafs
     'image_url',
     'image_width',
     'code_v1',

@@ -6,10 +6,10 @@ module Slugable
   included do
     has_many :slugs
     # For eager loading
-    has_one :default_slug, -> { where is_default: true}, class_name: 'Slug'
+    has_one :default_slug, -> { where is_default: true }, class_name: 'Slug'
 
     def self.find_using_slug(slug, items = nil)
-      slugged = Slug.where(slug: CGI::unescape(slug)).first
+      slugged = Slug.where(slug: CGI.unescape(slug)).first
       (items || Chapter).where(id: [slugged&.chapter_id, slug]).first
     end
   end
