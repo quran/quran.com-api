@@ -98,8 +98,9 @@ module Api::V4
           chapter_id: params[:chapter_number],
           juz_number: params[:juz_number],
           hizb_number: params[:hizb_number],
-          rub_number: params[:rub_number],
-          ruku_number: params[:],
+          rub_el_hizb_number: params[:rub_el_hizb_number],
+          ruku_number: params[:ruku_number],
+          manzil_number: params[:manzil_number],
           page_number: params[:page_number],
           verse_key: params[:verse_key]
       }.compact

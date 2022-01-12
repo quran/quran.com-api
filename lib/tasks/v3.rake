@@ -174,7 +174,7 @@ namespace :v3 do
       verse.page_number = ayah.page_num
       verse.juz_number = ayah.juz_num
       verse.hizb_number = ayah.hizb_num
-      verse.rub_number = ayah.rub_num
+      verse.rub_el_hizb_number = ayah.rub_num
       verse.sajdah = ayah.sajdah
       if ayah.sajdah.present?
         verse.sajdah_number = sajdah_number

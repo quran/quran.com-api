@@ -19,7 +19,7 @@ module Types
 
     field :juz_number, Integer, null: true
     field :hizb_number, Integer, null: true
-    field :rub_number, Integer, null: true
+    field :rub_el_hizb_number, Integer, null: true
     field :sajdah_type, String, null: true
     field :sajdah_number, Integer, null: true
 

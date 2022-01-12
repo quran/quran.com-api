@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 class VersesPresenter < BasePresenter
-  attr_reader :lookahead,
-              :finder,
-              :mushaf_type,
+  attr_reader :mushaf_type,
               :verses_filter
 
   VERSE_FIELDS = [
@@ -52,7 +50,7 @@ class VersesPresenter < BasePresenter
     'verse_key',
     'juz_number',
     'hizb_number',
-    'rub_number',
+    'rub_el_hizb_number',
     'page_number',
     'resource_name',
     'language_name',
@@ -66,7 +64,7 @@ class VersesPresenter < BasePresenter
     'verse_key',
     'juz_number',
     'hizb_number',
-    'rub_number',
+    'rub_el_hizb_number',
     'page_number',
     'resource_name',
     'language_name',
@@ -78,7 +76,6 @@ class VersesPresenter < BasePresenter
     super(params)
 
     @verses_filter = filter
-    @lookahead = RestApi::ParamLookahead.new(params)
     @finder = V4::VerseFinder.new(params)
   end
 
@@ -92,7 +89,7 @@ class VersesPresenter < BasePresenter
       page_number: params[:page_number],
       juz_number: params[:juz_number],
       hizb_number: params[:hizb_number],
-      rub_number: params[:rub_number]
+      rub_el_hizb_number: params[:rub_el_hizb_number]
     }.compact
 
     @finder.random_verse(
@@ -119,8 +116,6 @@ class VersesPresenter < BasePresenter
       result
     end
   end
-
-  delegate :total_records, to: :finder
 
   def verse_fields
     strong_memoize :fields do

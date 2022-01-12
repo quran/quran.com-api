@@ -2,18 +2,21 @@
 #
 # Table name: chapters
 #
-#  id               :integer          not null, primary key
-#  bismillah_pre    :boolean
-#  chapter_number   :integer
-#  name_arabic      :string
-#  name_complex     :string
-#  name_simple      :string
-#  pages            :string
-#  revelation_order :integer
-#  revelation_place :string
-#  verses_count     :integer
-#  created_at       :datetime         not null
-#  updated_at       :datetime         not null
+#  id                 :integer          not null, primary key
+#  bismillah_pre      :boolean
+#  chapter_number     :integer
+#  hizbs_count        :integer
+#  name_arabic        :string
+#  name_complex       :string
+#  name_simple        :string
+#  pages              :string
+#  revelation_order   :integer
+#  revelation_place   :string
+#  rub_el_hizbs_count :integer
+#  rukus_count        :integer
+#  verses_count       :integer
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
 #
 # Indexes
 #

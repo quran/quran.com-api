@@ -1,0 +1,5 @@
+json.object! do
+  json.rub_el_hizb do
+    json.partial! 'rub_el_hizb', rub_el_hizb: @rub_el_hizb
+  end
+end

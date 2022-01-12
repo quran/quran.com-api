@@ -25,6 +25,14 @@ module Api::V4
       render partial: 'translations'
     end
 
+    def by_manzil
+      render partial: 'translations'
+    end
+
+    def by_ruku
+      render partial: 'translations'
+    end
+
     def by_ayah
       render partial: 'translations'
     end

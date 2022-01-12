@@ -35,8 +35,10 @@ namespace :qdc do
     get 'by_page/:page_number', action: 'by_page'
     get 'by_juz/:juz_number', action: 'by_juz'
     get 'by_chapter/:chapter_number', action: 'by_chapter'
-    get 'by_rub/:rub_number', action: 'by_rub'
+    get 'by_rub/:rub_el_hizb_number', action: 'by_rub'
     get 'by_hizb/:hizb_number', action: 'by_hizb'
+    get 'by_manzil/:manzil_number', action: 'by_manzil'
+    get 'by_ruku/:ruku_number', action: 'by_ruku'
     get 'by_key/:verse_key', action: 'by_key'
     get :filter
 
@@ -82,8 +84,10 @@ namespace :qdc do
     get 'by_chapter/:chapter_number', action: 'by_chapter'
     get 'by_page/:page_number', action: 'by_page'
     get 'by_juz/:juz_number', action: 'by_juz'
-    get 'by_rub/:rub_number', action: 'by_rub'
+    get 'by_rub/:rub_el_hizb_number', action: 'by_rub'
     get 'by_hizb/:hizb_number', action: 'by_hizb'
+    get 'by_manzil/:manzil_number', action: 'by_manzil'
+    get 'by_ruku/:ruku_number', action: 'by_ruku'
     get 'by_ayah/:ayah_key', action: 'by_ayah'
   end
 
@@ -92,8 +96,21 @@ namespace :qdc do
     get 'by_chapter/:chapter_number', action: 'by_chapter'
     get 'by_page/:page_number', action: 'by_page'
     get 'by_juz/:juz_number', action: 'by_juz'
-    get 'by_rub/:rub_number', action: 'by_rub'
+    get 'by_rub/:rub_el_hizb_number', action: 'by_rub'
     get 'by_hizb/:hizb_number', action: 'by_hizb'
+    get 'by_manzil/:manzil_number', action: 'by_manzil'
+    get 'by_ruku/:ruku_number', action: 'by_ruku'
+    get 'by_ayah/:ayah_key', action: 'by_ayah'
+  end
+
+  scope 'recitations/:recitation_id', controller: 'recitations' do
+    get 'by_chapter/:chapter_number', action: 'by_chapter'
+    get 'by_page/:page_number', action: 'by_page'
+    get 'by_juz/:juz_number', action: 'by_juz'
+    get 'by_rub/:rub_el_hizb_number', action: 'by_rub'
+    get 'by_hizb/:hizb_number', action: 'by_hizb'
+    get 'by_manzil/:manzil_number', action: 'by_manzil'
+    get 'by_ruku/:ruku_number', action: 'by_ruku'
     get 'by_ayah/:ayah_key', action: 'by_ayah'
   end
 

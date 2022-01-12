@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_05_034635) do
+ActiveRecord::Schema.define(version: 2022_01_09_075422) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -82,16 +82,21 @@ ActiveRecord::Schema.define(version: 2022_01_05_034635) do
     t.integer "verse_number"
     t.integer "juz_number"
     t.integer "hizb_number"
-    t.integer "rub_number"
+    t.integer "rub_el_hizb_number"
     t.integer "page_number"
+    t.integer "ruku_number"
+    t.integer "surah_ruku_number"
+    t.integer "manzil_number"
     t.index ["chapter_id", "verse_number"], name: "index_audio_files_on_chapter_id_and_verse_number"
     t.index ["chapter_id"], name: "index_audio_files_on_chapter_id"
     t.index ["hizb_number"], name: "index_audio_files_on_hizb_number"
     t.index ["is_enabled"], name: "index_audio_files_on_is_enabled"
     t.index ["juz_number"], name: "index_audio_files_on_juz_number"
+    t.index ["manzil_number"], name: "index_audio_files_on_manzil_number"
     t.index ["page_number"], name: "index_audio_files_on_page_number"
     t.index ["recitation_id"], name: "index_audio_files_on_recitation_id"
-    t.index ["rub_number"], name: "index_audio_files_on_rub_number"
+    t.index ["rub_el_hizb_number"], name: "index_audio_files_on_rub_el_hizb_number"
+    t.index ["ruku_number"], name: "index_audio_files_on_ruku_number"
     t.index ["verse_id"], name: "index_audio_files_on_verse_id"
     t.index ["verse_key"], name: "index_audio_files_on_verse_key"
   end
@@ -113,7 +118,7 @@ ActiveRecord::Schema.define(version: 2022_01_05_034635) do
     t.datetime "updated_at", precision: 6, null: false
     t.integer "priority"
     t.integer "segments_count"
-    t.integer "files_size"
+    t.float "files_size"
     t.integer "qirat_type_id"
     t.boolean "segment_locked", default: false
     t.index ["approved"], name: "index_audio_recitations_on_approved"
@@ -224,6 +229,9 @@ ActiveRecord::Schema.define(version: 2022_01_05_034635) do
     t.integer "chapter_number"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "rukus_count"
+    t.integer "hizbs_count"
+    t.integer "rub_el_hizbs_count"
     t.index ["chapter_number"], name: "index_chapters_on_chapter_number"
   end
 
@@ -351,6 +359,18 @@ ActiveRecord::Schema.define(version: 2022_01_05_034635) do
     t.index ["translation_id"], name: "index_foot_notes_on_translation_id"
   end
 
+  create_table "hizbs", force: :cascade do |t|
+    t.integer "hizb_number"
+    t.integer "verses_count"
+    t.jsonb "verse_mapping"
+    t.integer "first_verse_id"
+    t.integer "last_verse_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["first_verse_id", "last_verse_id"], name: "index_hizbs_on_first_verse_id_and_last_verse_id"
+    t.index ["hizb_number"], name: "index_hizbs_on_hizb_number"
+  end
+
   create_table "image", primary_key: ["resource_id", "ayah_key"], force: :cascade do |t|
     t.integer "resource_id", null: false
     t.text "ayah_key", null: false
@@ -420,6 +440,18 @@ ActiveRecord::Schema.define(version: 2022_01_05_034635) do
     t.datetime "updated_at", null: false
     t.integer "words_count"
     t.integer "uniq_words_count"
+  end
+
+  create_table "manzils", force: :cascade do |t|
+    t.integer "manzil_number"
+    t.integer "verses_count"
+    t.json "verse_mapping"
+    t.integer "first_verse_id"
+    t.integer "last_verse_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["first_verse_id", "last_verse_id"], name: "index_manzils_on_first_verse_id_and_last_verse_id"
+    t.index ["manzil_number"], name: "index_manzils_on_manzil_number"
   end
 
   create_table "media_contents", id: :serial, force: :cascade do |t|
@@ -615,7 +647,7 @@ ActiveRecord::Schema.define(version: 2022_01_05_034635) do
     t.index ["qirat_type_id"], name: "index_mushafs_on_qirat_type_id"
   end
 
-  create_table "mushaf_pages", force: :cascade do |t|
+  create_table "mushas_pages", force: :cascade do |t|
     t.integer "page_number"
     t.json "verse_mapping"
     t.integer "first_verse_id"
@@ -623,7 +655,7 @@ ActiveRecord::Schema.define(version: 2022_01_05_034635) do
     t.integer "verses_count"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["page_number"], name: "index_mushaf_pages_on_page_number"
+    t.index ["page_number"], name: "index_mushas_pages_on_page_number"
   end
 
   create_table "navigation_search_records", force: :cascade do |t|
@@ -787,6 +819,31 @@ ActiveRecord::Schema.define(version: 2022_01_05_034635) do
     t.integer "uniq_words_count"
   end
 
+  create_table "rub_el_hizbs", force: :cascade do |t|
+    t.integer "rub_el_hizb_number"
+    t.integer "verses_count"
+    t.json "verse_mapping"
+    t.integer "first_verse_id"
+    t.integer "last_verse_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["first_verse_id", "last_verse_id"], name: "index_rub_el_hizbs_on_first_verse_id_and_last_verse_id"
+    t.index ["rub_el_hizb_number"], name: "index_rub_el_hizbs_on_rub_el_hizb_number"
+  end
+
+  create_table "rukus", force: :cascade do |t|
+    t.integer "ruku_number"
+    t.integer "surah_ruku_number"
+    t.json "verse_mapping"
+    t.integer "verses_count"
+    t.integer "first_verse_id"
+    t.integer "last_verse_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["first_verse_id", "last_verse_id"], name: "index_rukus_on_first_verse_id_and_last_verse_id"
+    t.index ["ruku_number"], name: "index_rukus_on_ruku_number"
+  end
+
   create_table "slugs", force: :cascade do |t|
     t.bigint "chapter_id"
     t.string "slug"
@@ -881,7 +938,7 @@ ActiveRecord::Schema.define(version: 2022_01_05_034635) do
     t.integer "verse_number"
     t.integer "juz_number"
     t.integer "hizb_number"
-    t.integer "rub_number"
+    t.integer "rub_el_hizb_number"
     t.integer "page_number"
     t.string "group_verse_key_from"
     t.string "group_verse_key_to"
@@ -889,15 +946,20 @@ ActiveRecord::Schema.define(version: 2022_01_05_034635) do
     t.integer "group_tafsir_id"
     t.integer "start_verse_id"
     t.integer "end_verse_id"
+    t.integer "ruku_number"
+    t.integer "surah_ruku_number"
+    t.integer "manzil_number"
     t.index ["chapter_id", "verse_number"], name: "index_tafsirs_on_chapter_id_and_verse_number"
     t.index ["chapter_id"], name: "index_tafsirs_on_chapter_id"
     t.index ["end_verse_id"], name: "index_tafsirs_on_end_verse_id"
     t.index ["hizb_number"], name: "index_tafsirs_on_hizb_number"
     t.index ["juz_number"], name: "index_tafsirs_on_juz_number"
     t.index ["language_id"], name: "index_tafsirs_on_language_id"
+    t.index ["manzil_number"], name: "index_tafsirs_on_manzil_number"
     t.index ["page_number"], name: "index_tafsirs_on_page_number"
     t.index ["resource_content_id"], name: "index_tafsirs_on_resource_content_id"
-    t.index ["rub_number"], name: "index_tafsirs_on_rub_number"
+    t.index ["rub_el_hizb_number"], name: "index_tafsirs_on_rub_el_hizb_number"
+    t.index ["ruku_number"], name: "index_tafsirs_on_ruku_number"
     t.index ["start_verse_id"], name: "index_tafsirs_on_start_verse_id"
     t.index ["verse_id"], name: "index_tafsirs_on_verse_id"
     t.index ["verse_key"], name: "index_tafsirs_on_verse_key"
@@ -977,17 +1039,22 @@ ActiveRecord::Schema.define(version: 2022_01_05_034635) do
     t.integer "verse_number"
     t.integer "juz_number"
     t.integer "hizb_number"
-    t.integer "rub_number"
+    t.integer "rub_el_hizb_number"
     t.integer "page_number"
+    t.integer "ruku_number"
+    t.integer "surah_ruku_number"
+    t.integer "manzil_number"
     t.index ["chapter_id", "verse_number"], name: "index_translations_on_chapter_id_and_verse_number"
     t.index ["chapter_id"], name: "index_translations_on_chapter_id"
     t.index ["hizb_number"], name: "index_translations_on_hizb_number"
     t.index ["juz_number"], name: "index_translations_on_juz_number"
     t.index ["language_id"], name: "index_translations_on_language_id"
+    t.index ["manzil_number"], name: "index_translations_on_manzil_number"
     t.index ["page_number"], name: "index_translations_on_page_number"
     t.index ["priority"], name: "index_translations_on_priority"
     t.index ["resource_content_id"], name: "index_translations_on_resource_content_id"
-    t.index ["rub_number"], name: "index_translations_on_rub_number"
+    t.index ["rub_el_hizb_number"], name: "index_translations_on_rub_el_hizb_number"
+    t.index ["ruku_number"], name: "index_translations_on_ruku_number"
     t.index ["verse_id"], name: "index_translations_on_verse_id"
     t.index ["verse_key"], name: "index_translations_on_verse_key"
   end
@@ -1051,7 +1118,7 @@ ActiveRecord::Schema.define(version: 2022_01_05_034635) do
     t.string "text_imlaei_simple"
     t.integer "juz_number"
     t.integer "hizb_number"
-    t.integer "rub_number"
+    t.integer "rub_el_hizb_number"
     t.string "sajdah_type"
     t.integer "sajdah_number"
     t.integer "page_number"
@@ -1074,7 +1141,15 @@ ActiveRecord::Schema.define(version: 2022_01_05_034635) do
     t.integer "pause_words_count", default: 0
     t.jsonb "mushaf_pages_mapping", default: {}
     t.string "text_qpc_nastaleeq"
+    t.integer "ruku_number"
+    t.integer "surah_ruku_number"
+    t.integer "manzil_number"
     t.index ["chapter_id"], name: "index_verses_on_chapter_id"
+    t.index ["hizb_number"], name: "index_verses_on_hizb_number"
+    t.index ["juz_number"], name: "index_verses_on_juz_number"
+    t.index ["manzil_number"], name: "index_verses_on_manzil_number"
+    t.index ["rub_el_hizb_number"], name: "index_verses_on_rub_el_hizb_number"
+    t.index ["ruku_number"], name: "index_verses_on_ruku_number"
     t.index ["verse_index"], name: "index_verses_on_verse_index"
     t.index ["verse_key"], name: "index_verses_on_verse_key"
     t.index ["verse_lemma_id"], name: "index_verses_on_verse_lemma_id"

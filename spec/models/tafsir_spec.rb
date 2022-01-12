@@ -9,9 +9,12 @@
 #  hizb_number          :integer
 #  juz_number           :integer
 #  language_name        :string
+#  manzil_number        :integer
 #  page_number          :integer
 #  resource_name        :string
-#  rub_number           :integer
+#  rub_el_hizb_number   :integer
+#  ruku_number          :integer
+#  surah_ruku_number    :integer
 #  text                 :text
 #  verse_key            :string
 #  verse_number         :integer
@@ -33,9 +36,11 @@
 #  index_tafsirs_on_hizb_number                  (hizb_number)
 #  index_tafsirs_on_juz_number                   (juz_number)
 #  index_tafsirs_on_language_id                  (language_id)
+#  index_tafsirs_on_manzil_number                (manzil_number)
 #  index_tafsirs_on_page_number                  (page_number)
 #  index_tafsirs_on_resource_content_id          (resource_content_id)
-#  index_tafsirs_on_rub_number                   (rub_number)
+#  index_tafsirs_on_rub_el_hizb_number           (rub_el_hizb_number)
+#  index_tafsirs_on_ruku_number                  (ruku_number)
 #  index_tafsirs_on_start_verse_id               (start_verse_id)
 #  index_tafsirs_on_verse_id                     (verse_id)
 #  index_tafsirs_on_verse_key                    (verse_key)

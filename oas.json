@@ -427,7 +427,7 @@
                                         "verse_key": "1:1",
                                         "juz_number": 1,
                                         "hizb_number": 1,
-                                        "rub_number": 1,
+                                        "rub_el_hizb_number": 1,
                                         "sajdah_type": null,
                                         "sajdah_number": null,
                                         "words": [
@@ -598,7 +598,7 @@
                                         "verse_key": "1:1",
                                         "juz_number": 1,
                                         "hizb_number": 1,
-                                        "rub_number": 1,
+                                        "rub_el_hizb_number": 1,
                                         "sajdah_type": null,
                                         "sajdah_number": null,
                                         "words": [
@@ -766,7 +766,7 @@
                                         "verse_key": "1:1",
                                         "juz_number": 1,
                                         "hizb_number": 1,
-                                        "rub_number": 1,
+                                        "rub_el_hizb_number": 1,
                                         "sajdah_type": null,
                                         "sajdah_number": null,
                                         "words": [
@@ -935,7 +935,7 @@
                                         "verse_key": "1:1",
                                         "juz_number": 1,
                                         "hizb_number": 1,
-                                        "rub_number": 1,
+                                        "rub_el_hizb_number": 1,
                                         "sajdah_type": null,
                                         "sajdah_number": null,
                                         "words": [
@@ -986,12 +986,12 @@
                 }
             }
         },
-        "/verses/by_rub/{rub_number}": {
+        "/verses/by_rub/{rub_el_hizb_number}": {
             "parameters": [
                 {
-                    "name": "rub_number",
+                    "name": "rub_el_hizb_number",
                     "in": "path",
-                    "description": "Rub number(1-240)",
+                    "description": "Rub el Hizb number(1-240)",
                     "required": true,
                     "type": "integer",
                     "minimum": 1,
@@ -999,12 +999,12 @@
                 }
             ],
             "get": {
-                "operationId": "GET_verses-by_rub-rub_number",
-                "summary": "By Rub number",
+                "operationId": "GET_verses-by_rub-rub_el_hizb_number",
+                "summary": "By Rub el Hizb number",
                 "tags": [
                     "Verses"
                 ],
-                "description": "Get all verses of a specific Rub number(1-240).",
+                "description": "Get all verses of a specific Rub el Hizb number(1-240).",
                 "parameters": [
                     {
                         "name": "language",
@@ -1088,7 +1088,7 @@
                                         "verse_key": "1:1",
                                         "juz_number": 1,
                                         "hizb_number": 1,
-                                        "rub_number": 1,
+                                        "rub_el_hizb_number": 1,
                                         "sajdah_type": null,
                                         "sajdah_number": null,
                                         "words": [
@@ -1235,7 +1235,7 @@
                                     "verse_key": "1:1",
                                     "juz_number": 1,
                                     "hizb_number": 1,
-                                    "rub_number": 1,
+                                    "rub_el_hizb_number": 1,
                                     "sajdah_type": null,
                                     "sajdah_number": null,
                                     "words": [
@@ -1285,7 +1285,7 @@
                 "tags": [
                     "Verses"
                 ],
-                "description": "Get a random verse. You can get random verse by `chapter`,`page`, `juz`, `hizb`, `rub`, or from whole Quran.",
+                "description": "Get a random verse. You can get random verse from a specific `chapter`,`page`, `juz`, `hizb`, `rub-el-hizb`, `ruku`, `manzil`, or from whole Quran.",
                 "parameters": [
                     {
                         "name": "language",
@@ -1365,7 +1365,7 @@
                                     "verse_key": "1:1",
                                     "juz_number": 1,
                                     "hizb_number": 1,
-                                    "rub_number": 1,
+                                    "rub_el_hizb_number": 1,
                                     "sajdah_type": null,
                                     "sajdah_number": null,
                                     "words": [
@@ -1466,9 +1466,9 @@
                         "maximum": 60
                     },
                     {
-                        "name": "rub_number",
+                        "name": "rub_el_hizb_number",
                         "in": "query",
-                        "description": "If you want to get indopak script of a specific rub.",
+                        "description": "If you want to get indopak script of a specific Rub el Hizb.",
                         "type": "integer",
                         "minimum": 1,
                         "maximum": 240
@@ -1562,9 +1562,9 @@
                         "maximum": 60
                     },
                     {
-                        "name": "rub_number",
+                        "name": "rub_el_hizb_number",
                         "in": "query",
-                        "description": "If you want to get text of a specific rub.",
+                        "description": "If you want to get text of a specific Rub el Hizb.",
                         "type": "integer",
                         "minimum": 1,
                         "maximum": 240
@@ -1658,9 +1658,9 @@
                         "maximum": 60
                     },
                     {
-                        "name": "rub_number",
+                        "name": "rub_el_hizb_number",
                         "in": "query",
-                        "description": "If you want to get Uthmani script of a specific rub.",
+                        "description": "If you want to get Uthmani script of a specific Rub el Hizb.",
                         "type": "integer",
                         "minimum": 1,
                         "maximum": 240
@@ -1754,9 +1754,9 @@
                         "maximum": 60
                     },
                     {
-                        "name": "rub_number",
+                        "name": "rub_el_hizb_number",
                         "in": "query",
-                        "description": "If you want to get Uthmani script of a specific rub.",
+                        "description": "If you want to get Uthmani script of a specific Rub el Hizb.",
                         "type": "integer",
                         "minimum": 1,
                         "maximum": 240
@@ -1850,9 +1850,9 @@
                         "maximum": 60
                     },
                     {
-                        "name": "rub_number",
+                        "name": "rub_el_hizb_number",
                         "in": "query",
-                        "description": "If you want to get text of a specific rub.",
+                        "description": "If you want to get text of a specific Rub el Hizb.",
                         "type": "integer",
                         "minimum": 1,
                         "maximum": 240
@@ -2006,9 +2006,9 @@
                         "maximum": 60
                     },
                     {
-                        "name": "rub_number",
+                        "name": "rub_el_hizb_number",
                         "in": "query",
-                        "description": "If you want to get audio file of a specific rub.",
+                        "description": "If you want to get audio file of a specific Rub el Hizb.",
                         "type": "integer",
                         "minimum": 1,
                         "maximum": 240
@@ -2150,9 +2150,9 @@
                         "maximum": 60
                     },
                     {
-                        "name": "rub_number",
+                        "name": "rub_el_hizb_number",
                         "in": "query",
-                        "description": "If you want to get translation of a specific rub.",
+                        "description": "If you want to get translation of a specific Rub el Hizb.",
                         "type": "integer",
                         "minimum": 1,
                         "maximum": 240
@@ -2335,9 +2335,9 @@
                         "maximum": 60
                     },
                     {
-                        "name": "rub_number",
+                        "name": "rub_el_hizb_number",
                         "in": "query",
-                        "description": "If you want to get tafsir of a specific rub.",
+                        "description": "If you want to get tafsir of a specific Rub el Hizb.",
                         "type": "integer",
                         "minimum": 1,
                         "maximum": 240
@@ -2440,9 +2440,9 @@
                         "maximum": 60
                     },
                     {
-                        "name": "rub_number",
+                        "name": "rub_el_hizb_number",
                         "in": "query",
-                        "description": "If you want to get text of a specific rub.",
+                        "description": "If you want to get text of a specific Rub el Hizb.",
                         "type": "integer",
                         "minimum": 1,
                         "maximum": 240
@@ -2544,9 +2544,9 @@
                         "maximum": 60
                     },
                     {
-                        "name": "rub_number",
+                        "name": "rub_el_hizb_number",
                         "in": "query",
-                        "description": "If you want to get text of a specific rub.",
+                        "description": "If you want to get text of a specific Rub el Hizb.",
                         "type": "integer",
                         "minimum": 1,
                         "maximum": 240
@@ -2831,7 +2831,7 @@
                 }
             }
         },
-        "/recitations/{recitation_id}/by_rub/{rub_number}": {
+        "/recitations/{recitation_id}/by_rub/{rub_el_hizb_number}": {
             "parameters": [
                 {
                     "name": "recitation_id",
@@ -2841,7 +2841,7 @@
                     "type": "number"
                 },
                 {
-                    "name": "rub_number",
+                    "name": "rub_el_hizb_number",
                     "in": "path",
                     "required": true,
                     "type": "number",
@@ -2850,12 +2850,12 @@
                 }
             ],
             "get": {
-                "operationId": "LIST-rub-recitaiton",
-                "summary": "Get Ayah recitations for specific Rub",
+                "operationId": "LIST-rub-el-hizb-recitaiton",
+                "summary": "Get Ayah recitations for specific Rub el Hizb",
                 "tags": [
                     "Audio Recitations"
                 ],
-                "description": "Get list of ayah #model:knzdXGgyjYnAqbhGX for a Rub.",
+                "description": "Get list of ayah #model:knzdXGgyjYnAqbhGX for a Rub el Hizb.",
                 "responses": {
                     "200": {
                         "description": "",
@@ -3801,7 +3801,7 @@
                 "hizb_number": {
                     "type": "integer"
                 },
-                "rub_number": {
+                "rub_el_hizb_number": {
                     "type": "integer"
                 },
                 "page_number": {

@@ -1,5 +1,5 @@
 fields = @presenter.tafsir_fields
-tafsir = @presenter.find_tafsir(action_name)
+tafsir = @presenter.find_tafsirs(action_name)
 include_words = @presenter.render_words?
 verse_fields = @presenter.verse_fields
 word_fields = @presenter.word_fields
@@ -38,6 +38,7 @@ json.object! do
                     *fields,
                     :resource_name,
                     :language_id
+
       json.slug @presenter.resource_slug
       json.translated_name do
         json.object! do

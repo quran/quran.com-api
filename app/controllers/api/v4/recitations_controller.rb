@@ -25,6 +25,14 @@ module Api::V4
       render partial: 'audio_files'
     end
 
+    def by_manzil
+      render partial: 'audio_files'
+    end
+
+    def by_ruku
+      render partial: 'audio_files'
+    end
+
     def by_ayah
       render partial: 'audio_files'
     end

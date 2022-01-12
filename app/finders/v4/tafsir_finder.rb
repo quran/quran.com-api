@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class V4::TafsirFinder < V4::VerseFinder
+class V4::TafsirFinder < Finder
   attr_reader :resource_content_id
 
   def load_tafsirs(filter, resource_id)
@@ -28,21 +28,16 @@ class V4::TafsirFinder < V4::VerseFinder
   end
 
   def fetch_by_chapter(resource_id)
-    if chapter = Chapter.find_by(id: params[:chapter_number].to_i.abs)
-      @total_records = chapter.verses_count
-      results = filter_tafsirs(resource_id)
-                  .where(chapter_id: params[:chapter_number].to_i.abs)
-    else
-      results = Tafsir.where('1=0')
-    end
-
+    chapter = validate_chapter
+    @total_records = chapter.verses_count
+    results = filter_tafsirs(resource_id)
+                .where(chapter_id: chapter.id)
     results
   end
 
   def fetch_by_page(resource_id)
     results = filter_tafsirs(resource_id)
-                .where(page_number: params[:page_number].to_i.abs)
-
+                .where(page_number: validate_mushaf_page_number)
     @total_records = results.size
 
     results
@@ -50,8 +45,7 @@ class V4::TafsirFinder < V4::VerseFinder
 
   def fetch_by_rub(resource_id)
     results = filter_tafsirs(resource_id)
-                .where(rub_number: params[:rub_number].to_i.abs)
-
+                .where(rub_el_hizb_number: find_rub_el_hizb_number)
     @total_records = results.size
 
     results
@@ -59,31 +53,45 @@ class V4::TafsirFinder < V4::VerseFinder
 
   def fetch_by_hizb(resource_id)
     results = filter_tafsirs(resource_id)
-                .where(hizb_number: params[:hizb_number].to_i.abs)
-
+                .where(hizb_number: find_hizb_number)
     @total_records = results.size
+
     results
   end
 
   def fetch_by_juz(resource_id)
-    if juz = Juz.find_by(juz_number: params[:juz_number].to_i.abs)
-      @total_records = juz.verses_count
+    juz = find_juz
+    @total_records = juz.verses_count
 
-      results = filter_tafsirs(resource_id)
-                  .where(juz_number: juz.juz_number)
+    results = filter_tafsirs(resource_id)
+                .where(juz_number: juz.juz_number)
 
-      results
-    else
-      Tafsir.where('1=0')
-    end
+    results
+  end
+
+  def fetch_by_manzil(resource_id)
+    manzil = find_manzil
+    @total_records = manzil.verses_count
+    results = filter_tafsirs(resource_id)
+                .where(manzil_number: manzil.manzil_number)
+
+    results
+  end
+
+  def fetch_by_ruku(resource_id)
+    ruku = find_ruku
+    @total_records = ruku.verses_count
+    results = filter_tafsirs(resource_id)
+                .where(ruku_number: ruku.ruku_number)
+
+    results
   end
 
   def fetch_by_ayah(resource_id)
     @total_records = 1
-    verse = Verse.find_by_id_or_key(params[:ayah_key].to_s) || raise_not_found("Ayah not found")
 
     filter_tafsirs(resource_id)
-      .where(":ayah >= start_verse_id AND :ayah <= end_verse_id ", ayah: verse.id)
+      .where(":ayah >= start_verse_id AND :ayah <= end_verse_id ", ayah: find_ayah.id)
   end
 
   def filter_tafsirs(resource_id)

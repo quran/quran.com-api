@@ -1,12 +1,6 @@
 # frozen_string_literal: true
 
 class Qdc::VerseFinder < ::VerseFinder
-  MAX_RECORDS_PER_PAGE = 50
-  RECORDS_PER_PAGE = 10
-
-  attr_reader :next_page,
-              :total_records
-
   def random_verse(filters, language_code, mushaf_type:, words: true, tafsirs: false, translations: false, reciter: false)
     @results = Verse.unscope(:order).where(filters).order('RANDOM()').limit(3)
 
@@ -195,7 +189,7 @@ class Qdc::VerseFinder < ::VerseFinder
 
   def fetch_by_rub
     results = rescope_verses('verse_index')
-                .where(rub_number: params[:rub_number].to_i.abs)
+                .where(rub_el_hizb_number: params[:rub_el_hizb_number].to_i.abs)
 
     @total_records = results.size
     @results = results.limit(per_page).offset((current_page - 1) * per_page)

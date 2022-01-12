@@ -5,6 +5,10 @@ module Api::V4
     before_action :init_presenter
     before_action :load_verses, except: [:random, :by_key]
 
+    def filter
+      render partial: 'verses'
+    end
+
     def by_chapter
       render partial: 'verses'
     end
@@ -22,6 +26,14 @@ module Api::V4
     end
 
     def by_hizb
+      render partial: 'verses'
+    end
+
+    def by_manzil
+      render partial: 'verses'
+    end
+
+    def by_ruku
       render partial: 'verses'
     end
 

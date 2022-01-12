@@ -5,7 +5,7 @@ module Qdc
     end
 
     def page
-      MushafPage.where(mushaf_id: get_mushaf_id).find_by_page_number(params[:id])
+      MushafPage.where(mushaf_id: get_mushaf_id).find_by_page_number(params[:id]) || raise_404("Invalid page number")
     end
   end
 end

@@ -1,0 +1,7 @@
+json.object! do
+  json.hizbs do
+    json.array! @hizbs do |hizb|
+      json.partial! 'hizb', hizb: hizb
+    end
+  end
+end

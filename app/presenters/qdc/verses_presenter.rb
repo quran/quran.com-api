@@ -21,6 +21,7 @@ module Qdc
       'line_number',
       'line_v2',
       'line_v1',
+      'position',
       'page_position',
       'line_position',
     ]
@@ -51,7 +52,7 @@ module Qdc
         page_number: params[:page_number],
         juz_number: params[:juz_number],
         hizb_number: params[:hizb_number],
-        rub_number: params[:rub_number]
+        rub_el_hizb_number: params[:rub_el_hizb_number]
       }.compact_blank
 
       @finder.random_verse(

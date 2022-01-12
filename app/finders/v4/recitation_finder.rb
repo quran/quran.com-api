@@ -12,10 +12,8 @@ class V4::RecitationFinder < V4::VerseFinder
 
   def load_recitation_range(filter)
     results = send("fetch_#{filter}", recitation)
-
     results = results.limit(per_page)
                      .offset((current_page - 1) * per_page)
-
     if current_page < total_pages
       @next_page = current_page + 1
     end
@@ -24,21 +22,16 @@ class V4::RecitationFinder < V4::VerseFinder
   end
 
   def fetch_by_chapter(recitation)
-    if chapter = Chapter.find_using_slug(params[:chapter_number])
-      @total_records = chapter.verses_count
-      results = filter_audio_files(recitation)
-                  .where(chapter_id: params[:chapter_number].to_i.abs)
-    else
-      raise RestApi::RecordNotFound.new("Surah not found")
-    end
+    chapter = validate_chapter
+    @total_records = chapter.verses_count
 
-    results
+    filter_audio_files(recitation)
+      .where(chapter_id: chapter.id)
   end
 
   def fetch_by_page(recitation)
     results = filter_audio_files(recitation)
-                .where(page_number: params[:page_number].to_i.abs)
-
+                .where(page_number: validate_mushaf_page_number)
     @total_records = results.size
 
     results
@@ -46,8 +39,7 @@ class V4::RecitationFinder < V4::VerseFinder
 
   def fetch_by_rub(recitation)
     results = filter_audio_files(recitation)
-                .where(rub_number: params[:rub_number].to_i.abs)
-
+                .where(rub_el_hizb_number: find_rub_el_hizb_number)
     @total_records = results.size
 
     results
@@ -55,28 +47,39 @@ class V4::RecitationFinder < V4::VerseFinder
 
   def fetch_by_hizb(recitation)
     results = filter_audio_files(recitation)
-                .where(hizb_number: params[:hizb_number].to_i.abs)
-
+                .where(hizb_number: find_hizb_number)
     @total_records = results.size
+
     results
   end
 
   def fetch_by_juz(recitation)
-    if juz = Juz.find_by(juz_number: params[:juz_number].to_i.abs)
-      @total_records = juz.verses_count
+    juz = find_juz
+    @total_records = juz.verses_count
 
-      results = filter_audio_files(recitation)
-                  .where(juz_number: juz.juz_number)
+    filter_audio_files(recitation)
+      .where(juz_number: juz.juz_number)
+  end
 
-      results
-    else
-      raise RestApi::RecordNotFound.new("Juz not found")
-    end
+  def fetch_by_ruku(recitation)
+    ruku = find_ruku
+    @total_records = ruku.verses_count
+
+    filter_audio_files(recitation)
+      .where(ruku_number: ruku.juz_number)
+  end
+
+  def fetch_by_manzil(recitation)
+    manzil = find_manzil
+    @total_records = manzil.verses_count
+
+    filter_audio_files(recitation)
+      .where(manzil_number: manzil.manzil_number)
   end
 
   def fetch_by_ayah(recitation)
     @total_records = 1
-    filter_audio_files(recitation).where(verse_key: params[:ayah_key])
+    filter_audio_files(recitation).where(verse_id: find_ayah.id)
   end
 
   def filter_audio_files(recitation)

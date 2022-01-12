@@ -1,5 +1,19 @@
 namespace :v4 do
-  # QuanicAudio api routes
+  # verses routes, by juz, chapter, page
+  namespace :verses do
+    get 'by_page/:page_number', action: 'by_page'
+    get 'by_juz/:juz_number', action: 'by_juz'
+    get 'by_chapter/:chapter_number', action: 'by_chapter'
+    get 'by_rub/:rub_el_hizb_number', action: 'by_rub'
+    get 'by_hizb/:hizb_number', action: 'by_hizb'
+    get 'by_manzil/:manzil_number', action: 'by_manzil'
+    get 'by_ruku/:ruku_number', action: 'by_ruku'
+    get 'by_key/:verse_key', action: 'by_key'
+
+    get 'random', action: 'random'
+  end
+
+  # TODO: move this to qa(Quranic audio) namespace
   namespace :audio do
     # https://quranicaudio.com/api/surahs
     # https://quranicaudio.com/api/surahs/1
@@ -25,6 +39,22 @@ namespace :v4 do
   # Juz
   get 'juzs', to: 'juzs#index'
   get 'juzs/:id', to: 'juzs#show'
+
+  # Hizb
+  get 'hizbs', to: 'hizbs#index'
+  get 'hizbs/:id', to: 'hizbs#show'
+
+  # Rul el hizbs
+  get 'rub_el_hizbs', to: 'rub_el_hizbs#index'
+  get 'rub_el_hizbs/:id', to: 'rub_el_hizbs#show'
+
+  # Manzils
+  get 'manzils', to: 'manzils#index'
+  get 'manzils/:id', to: 'manzils#show'
+
+  # Ruku
+  get 'rukus', to: 'rukus#index'
+  get 'rukus/:id', to: 'rukus#show'
 
   # Footnote
   get 'foot_notes/:id', to: 'foot_notes#show'
@@ -53,25 +83,15 @@ namespace :v4 do
     get 'verses/:script', action: 'verses_text'
   end
 
-  # verses routes, by juz, chapter, page
-  namespace :verses do
-    get 'by_page/:page_number', action: 'by_page'
-    get 'by_juz/:juz_number', action: 'by_juz'
-    get 'by_chapter/:chapter_number', action: 'by_chapter'
-    get 'by_rub/:rub_number', action: 'by_rub'
-    get 'by_hizb/:hizb_number', action: 'by_hizb'
-    get 'by_key/:verse_key', action: 'by_key'
-
-    get 'random', action: 'random'
-  end
-
   # translations routes, by juz, chapter, page
   scope 'translations/:resource_id', controller: 'translations' do
     get 'by_chapter/:chapter_number', action: 'by_chapter'
     get 'by_page/:page_number', action: 'by_page'
     get 'by_juz/:juz_number', action: 'by_juz'
-    get 'by_rub/:rub_number', action: 'by_rub'
+    get 'by_rub/:rub_el_hizb_number', action: 'by_rub'
     get 'by_hizb/:hizb_number', action: 'by_hizb'
+    get 'by_manzil/:manzil_number', action: 'by_manzil'
+    get 'by_ruku/:ruku_number', action: 'by_ruku'
     get 'by_ayah/:ayah_key', action: 'by_ayah'
   end
 
@@ -80,8 +100,10 @@ namespace :v4 do
     get 'by_chapter/:chapter_number', action: 'by_chapter'
     get 'by_page/:page_number', action: 'by_page'
     get 'by_juz/:juz_number', action: 'by_juz'
-    get 'by_rub/:rub_number', action: 'by_rub'
+    get 'by_rub/:rub_el_hizb_number', action: 'by_rub'
     get 'by_hizb/:hizb_number', action: 'by_hizb'
+    get 'by_manzil/:manzil_number', action: 'by_manzil'
+    get 'by_ruku/:ruku_number', action: 'by_ruku'
     get 'by_ayah/:ayah_key', action: 'by_ayah'
   end
 
@@ -90,8 +112,10 @@ namespace :v4 do
     get 'by_chapter/:chapter_number', action: 'by_chapter'
     get 'by_page/:page_number', action: 'by_page'
     get 'by_juz/:juz_number', action: 'by_juz'
-    get 'by_rub/:rub_number', action: 'by_rub'
+    get 'by_rub/:rub_el_hizb_number', action: 'by_rub'
     get 'by_hizb/:hizb_number', action: 'by_hizb'
+    get 'by_manzil/:manzil_number', action: 'by_manzil'
+    get 'by_ruku/:ruku_number', action: 'by_ruku'
     get 'by_ayah/:ayah_key', action: 'by_ayah'
   end
 

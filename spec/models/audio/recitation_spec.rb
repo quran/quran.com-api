@@ -7,7 +7,7 @@
 #  arabic_name         :string
 #  description         :text
 #  files_count         :integer
-#  files_size          :integer
+#  files_size          :float
 #  format              :string
 #  home                :integer
 #  name                :string

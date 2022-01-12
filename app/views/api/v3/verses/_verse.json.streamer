@@ -6,7 +6,7 @@ json.object! do
                 :text_indopak,
                 :juz_number,
                 :hizb_number,
-                :rub_number,
+                :rub_el_hizb_number,
                 :sajdah_number,
                 :page_number
 
