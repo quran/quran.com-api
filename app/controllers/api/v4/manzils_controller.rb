@@ -3,15 +3,15 @@
 module Api::V4
   class ManzilsController < ApiController
     def index
-      @juzs = Juz.order('juz_number ASC').all
+      @manzils = Manzil.order('manzil_number ASC')
       render
     end
 
     def show
-      @juz = Juz.find_by(id: params[:id])
+      @manzil = Manzil.find_by(id: params[:id])
 
-      if @juz.nil?
-        render_404("Juz not found. Please select valid juz number from 1-30")
+      if @manzil.nil?
+        render_404("Manzil not found. Please select valid manzil number from 1-7")
       else
         render
       end

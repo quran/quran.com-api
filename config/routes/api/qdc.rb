@@ -26,6 +26,22 @@ namespace :qdc do
   get 'juzs', to: 'juzs#index'
   get 'juzs/:id', to: 'juzs#show'
 
+  # Hizb
+  get 'hizbs', to: 'hizbs#index'
+  get 'hizbs/:id', to: 'hizbs#show'
+
+  # Rul el hizbs
+  get 'rub_el_hizbs', to: 'rub_el_hizbs#index'
+  get 'rub_el_hizbs/:id', to: 'rub_el_hizbs#show'
+
+  # Manzils
+  get 'manzils', to: 'manzils#index'
+  get 'manzils/:id', to: 'manzils#show'
+
+  # Ruku
+  get 'rukus', to: 'rukus#index'
+  get 'rukus/:id', to: 'rukus#show'
+
   # Page
   get 'pages', to: 'pages#index'
   get 'pages/:id', to: 'pages#show'

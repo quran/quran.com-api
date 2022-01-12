@@ -1,0 +1,7 @@
+json.object! do
+  json.rukus do
+    json.array! @rukus do |ruku|
+      json.partial! 'ruku', ruku: ruku
+    end
+  end
+end

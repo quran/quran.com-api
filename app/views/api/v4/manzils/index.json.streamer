@@ -1,0 +1,7 @@
+json.object! do
+  json.manzils do
+    json.array! @manzils do |manzil|
+      json.partial! 'manzil', manzil: manzil
+    end
+  end
+end

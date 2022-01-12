@@ -3,15 +3,15 @@
 module Api::V4
   class RukusController < ApiController
     def index
-      @juzs = Juz.order('juz_number ASC').all
+      @rukus = Ruku.order('ruku_number ASC')
       render
     end
 
     def show
-      @juz = Juz.find_by(id: params[:id])
+      @ruku = Ruku.find_by(id: params[:id])
 
-      if @juz.nil?
-        render_404("Juz not found. Please select valid juz number from 1-30")
+      if @ruku.nil?
+        render_404("Ruku not found. Please select valid ruku number from 1-558")
       else
         render
       end
