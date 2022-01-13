@@ -4,39 +4,45 @@ module Api::V4
   class QuranController < ApiController
     def translation
       @presenter = TranslationsPresenter.new(params)
+      @resource = fetch_translation_resource
+      filters = resource_filters(@resource)
+      @filter_names = humanize_filter_names(filters)
 
-      @translations = if (@resource = fetch_translation_resource)
-        Translation.order('verse_id ASC').where(resource_filters(@resource))
-      else
-        []
-      end
+      @translations = if @resource
+                        Translation.order('verse_id ASC').where(filters)
+                      else
+                        []
+                      end
 
       render
     end
 
     def tafsir
       @presenter = TafsirsPresenter.new(params)
+      filters = resource_filters(@resource)
+      @filter_names = humanize_filter_names(filters)
 
       @tafsirs = if (@resource = fetch_tafsir_resource)
-        Tafsir.order('verse_id ASC').where(resource_filters(@resource))
-      else
-        []
-      end
+                   Tafsir.order('verse_id ASC').where(filters)
+                 else
+                   []
+                 end
 
       render
     end
 
     def recitation
       @presenter = RecitationsPresenter.new(params)
+      filters = resource_filters
+      @filter_names = humanize_filter_names(filters)
 
       @audio_files = if (@recitation = fetch_approved_recitation)
-        filters = resource_filters
-        filters[:recitation_id] = @recitation.id
+                       @filters[:recitation_id] = @recitation.id
 
-        @audio_files = AudioFile.order('verse_id ASC').where(filters)
-      else
-        []
-      end
+                       @audio_files = AudioFile.order('verse_id ASC').where(filters)
+                     else
+                       []
+                     end
 
       render
     end
@@ -44,6 +50,8 @@ module Api::V4
     def verses_text
       @script_type = fetch_script_type
       @extra_fields = []
+      filters = resource_filters
+      @filter_names = humanize_filter_names(filters)
 
       if 'code_v1' == @script_type
         @extra_fields << :v1_page
@@ -55,7 +63,7 @@ module Api::V4
 
       @verses = Verse
                   .unscope(:order)
-                  .order('verse_index ASC').where(resource_filters)
+                  .order('verse_index ASC').where(filters)
                   .select(:id, :verse_key, @script_type, *@extra_fields)
 
       render
@@ -94,21 +102,29 @@ module Api::V4
 
     def resource_filters(resource = nil)
       {
-          resource_content_id: resource&.id,
-          chapter_id: params[:chapter_number],
-          juz_number: params[:juz_number],
-          hizb_number: params[:hizb_number],
-          rub_el_hizb_number: params[:rub_el_hizb_number],
-          ruku_number: params[:ruku_number],
-          manzil_number: params[:manzil_number],
-          page_number: params[:page_number],
-          verse_key: params[:verse_key]
-      }.compact
+        resource_content_id: resource&.id,
+        chapter_id: params[:chapter_number],
+        juz_number: params[:juz_number],
+        hizb_number: params[:hizb_number],
+        rub_el_hizb_number: params[:rub_el_hizb_number],
+        ruku_number: params[:ruku_number],
+        manzil_number: params[:manzil_number],
+        page_number: params[:page_number],
+        verse_key: params[:verse_key]
+      }.compact_blank
+    end
+
+    def humanize_filter_names(filters)
+      filters = filters.clone
+      filters[:resource_id] = filters.delete(:resource_content_id)
+      filters[:chapter_number] = filters.delete(:chapter_id)
+
+      filters.compact_blank
     end
 
     def fetch_approved_recitation
       list = Recitation
-                 .approved
+               .approved
 
       list.where(id: params[:recitation_id]).first
     end

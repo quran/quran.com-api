@@ -16,7 +16,7 @@ module Api::V4
       render partial: 'tafsirs'
     end
 
-    def by_rub
+    def by_rub_el_hizb
       render partial: 'tafsirs'
     end
 

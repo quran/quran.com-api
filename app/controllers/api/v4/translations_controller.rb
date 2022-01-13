@@ -17,7 +17,7 @@ module Api::V4
       render partial: 'translations'
     end
 
-    def by_rub
+    def by_rub_el_hizb
       render partial: 'translations'
     end
 

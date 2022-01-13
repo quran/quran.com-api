@@ -23,7 +23,7 @@ class V4::TranslationFinder < Finder
   end
 
   def fetch_by_chapter(resource_id)
-    chapter = validate_chapter
+    chapter = find_chapter
     @total_records = chapter.verses_count
 
     filter_translations(resource_id)
@@ -31,27 +31,27 @@ class V4::TranslationFinder < Finder
   end
 
   def fetch_by_page(resource_id)
-    results = filter_translations(resource_id)
-                .where(page_number: validate_mushaf_page_number)
-    @total_records = results.size
+    mushaf_page = find_mushaf_page
+    @total_records = mushaf_page.verses_count
 
-    results
+    filter_translations(resource_id)
+      .where(page_number: mushaf_page.page_number)
   end
 
-  def fetch_by_rub(resource_id)
-    results = filter_translations(resource_id)
-                .where(rub_el_hizb_number: find_rub_el_hizb_number)
-    @total_records = results.size
+  def fetch_by_rub_el_hizb(resource_id)
+    rub_el_hizb = find_rub_el_hizb
+    @total_records = rub_el_hizb.verses_count
 
-    results
+    filter_translations(resource_id)
+      .where(rub_el_hizb_number: rub_el_hizb.rub_el_hizb_number)
   end
 
   def fetch_by_hizb(resource_id)
-    results = filter_translations(resource_id)
-                .where(hizb_number: find_hizb_number)
-    @total_records = results.size
+    hizb = find_hizb
+    @total_records = hizb.verses_count
 
-    results
+    filter_translations(resource_id)
+                .where(hizb_number: hizb.hizb_number)
   end
 
   def fetch_by_juz(resource_id)
@@ -80,9 +80,8 @@ class V4::TranslationFinder < Finder
 
   def fetch_by_ayah(resource_id)
     @total_records = 1
-    verse = Verse.find_by_id_or_key(params[:ayah_key].to_s) || raise_invalid_ayah_number
 
-    filter_translations(resource_id).where(verse_id: verse.id)
+    filter_translations(resource_id).where(verse_id: find_ayah.id)
   end
 
   def filter_translations(resource_id)

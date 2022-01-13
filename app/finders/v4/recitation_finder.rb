@@ -22,7 +22,7 @@ class V4::RecitationFinder < V4::VerseFinder
   end
 
   def fetch_by_chapter(recitation)
-    chapter = validate_chapter
+    chapter = find_chapter
     @total_records = chapter.verses_count
 
     filter_audio_files(recitation)
@@ -30,27 +30,27 @@ class V4::RecitationFinder < V4::VerseFinder
   end
 
   def fetch_by_page(recitation)
-    results = filter_audio_files(recitation)
-                .where(page_number: validate_mushaf_page_number)
-    @total_records = results.size
+    mushaf_page = find_mushaf_page
+    @total_records = mushaf_page.verses_count
 
-    results
+    filter_audio_files(recitation)
+      .where(page_number: mushaf_page.page_number)
   end
 
-  def fetch_by_rub(recitation)
-    results = filter_audio_files(recitation)
-                .where(rub_el_hizb_number: find_rub_el_hizb_number)
-    @total_records = results.size
+  def fetch_by_rub_el_hizb(recitation)
+    rub_el_hizb = find_rub_el_hizb
+    @total_records = rub_el_hizb.verses_count
 
-    results
+    filter_audio_files(recitation)
+      .where(rub_el_hizb_number: rub_el_hizb.rub_el_hizb_number)
   end
 
   def fetch_by_hizb(recitation)
-    results = filter_audio_files(recitation)
-                .where(hizb_number: find_hizb_number)
-    @total_records = results.size
+    hizb = find_hizb
+    @total_records = hizb.verses_count
 
-    results
+    filter_audio_files(recitation)
+      .where(hizb_number: hizb.hizb_number)
   end
 
   def fetch_by_juz(recitation)
@@ -66,7 +66,7 @@ class V4::RecitationFinder < V4::VerseFinder
     @total_records = ruku.verses_count
 
     filter_audio_files(recitation)
-      .where(ruku_number: ruku.juz_number)
+      .where(ruku_number: ruku.ruku_number)
   end
 
   def fetch_by_manzil(recitation)

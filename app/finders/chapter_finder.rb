@@ -2,7 +2,7 @@
 
 class ChapterFinder < Finder
   def find(id_or_slug)
-    validate_chapter(id_or_slug)
+    find_chapter(id_or_slug)
   end
 
   def find_and_eager_load(id_or_slug, locale: 'en', include_slugs: false)

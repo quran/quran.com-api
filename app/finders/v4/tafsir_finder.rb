@@ -28,63 +28,59 @@ class V4::TafsirFinder < Finder
   end
 
   def fetch_by_chapter(resource_id)
-    chapter = validate_chapter
+    chapter = find_chapter
     @total_records = chapter.verses_count
-    results = filter_tafsirs(resource_id)
-                .where(chapter_id: chapter.id)
-    results
+
+    filter_tafsirs(resource_id)
+      .where(chapter_id: chapter.id)
   end
 
   def fetch_by_page(resource_id)
-    results = filter_tafsirs(resource_id)
-                .where(page_number: validate_mushaf_page_number)
-    @total_records = results.size
+    mushaf_page = find_mushaf_page
+    @total_records = mushaf_page.verses_count
 
-    results
+    filter_tafsirs(resource_id)
+      .where(page_number: mushaf_page.page_number)
   end
 
   def fetch_by_rub(resource_id)
-    results = filter_tafsirs(resource_id)
-                .where(rub_el_hizb_number: find_rub_el_hizb_number)
-    @total_records = results.size
+    rub_el_hizb = find_rub_el_hizb
+    @total_records = rub_el_hizb.verses_count
 
-    results
+    filter_tafsirs(resource_id)
+      .where(rub_el_hizb_number: rub_el_hizb.rub_el_hizb_number)
   end
 
   def fetch_by_hizb(resource_id)
-    results = filter_tafsirs(resource_id)
-                .where(hizb_number: find_hizb_number)
-    @total_records = results.size
+    hizb = find_hizb
+    @total_records = hizb.verses_count
 
-    results
+    filter_tafsirs(resource_id)
+      .where(hizb_number: hizb.hizb_number)
   end
 
   def fetch_by_juz(resource_id)
     juz = find_juz
     @total_records = juz.verses_count
 
-    results = filter_tafsirs(resource_id)
-                .where(juz_number: juz.juz_number)
-
-    results
+    filter_tafsirs(resource_id)
+      .where(juz_number: juz.juz_number)
   end
 
   def fetch_by_manzil(resource_id)
     manzil = find_manzil
     @total_records = manzil.verses_count
-    results = filter_tafsirs(resource_id)
-                .where(manzil_number: manzil.manzil_number)
 
-    results
+    filter_tafsirs(resource_id)
+      .where(manzil_number: manzil.manzil_number)
   end
 
   def fetch_by_ruku(resource_id)
     ruku = find_ruku
     @total_records = ruku.verses_count
-    results = filter_tafsirs(resource_id)
-                .where(ruku_number: ruku.ruku_number)
 
-    results
+    filter_tafsirs(resource_id)
+      .where(ruku_number: ruku.ruku_number)
   end
 
   def fetch_by_ayah(resource_id)

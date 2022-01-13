@@ -13,10 +13,15 @@ class Finder
   end
 
   def per_page
-    limit = (params[:limit] || 10).to_i.abs
-    limit = 10 if limit.zero?
-
-    limit <= 50 ? limit : 50
+    strong_memoize :per_page do
+      if params[:per_page].to_s.strip == 'all'
+        [total_records, 286].min
+      else
+        limit = (params[:per_page] || RECORDS_PER_PAGE).to_i.abs
+        limit = RECORDS_PER_PAGE if limit.zero?
+        MAX_RECORDS_PER_PAGE ? limit : RECORDS_PER_PAGE
+      end
+    end
   end
 
   def next_page
@@ -46,7 +51,9 @@ class Finder
   end
 
   def total_pages
-    (total_records / per_page.to_f).ceil
+    strong_memoize :total_pages do
+      (total_records / per_page.to_f).ceil
+    end
   end
 
   def total_verses
@@ -55,67 +62,49 @@ class Finder
 
   protected
 
-  def validate_mushaf_page_number
-    page = params[:page_number].to_i.abs
+  def find_mushaf_page(mushaf: nil)
+    mushaf ||= Mushaf.default
+    page_number = params[:page_number].to_i.abs
+    mushaf_page = MushafPage.where(mushaf_id: mushaf.id, page_number: page_number).first
 
-    if page >= 1 && page <= 604
-      page
-    else
-      raise_invalid_mushaf_page_number
-    end
+    mushaf_page || raise_invalid_mushaf_page_number
   end
 
-  def find_rub_number
-    rub_el_hizb_number = params[:rub_el_hizb_number].to_i.abs
+  def find_rub_el_hizb
+    number = params[:rub_el_hizb_number].to_i.abs
 
-    if rub_el_hizb_number >= 1 && rub_el_hizb_number <= 240
-      rub_el_hizb_number
-    else
-      raise_invalid_rub_number
-    end
+    RubElHizb.find_by(rub_el_hizb_number: number) || raise_invalid_rub_el_hizb_number
   end
 
-  def find_hizb_number
-    hizb_nunber = params[:hizb_number].to_i.abs
+  def find_hizb
+    hizb_number = params[:hizb_number].to_i.abs
 
-    if hizb_nunber >= 1 && hizb_number <= 60
-      hizb_nunber
-    else
-      raise_invalid_hizb_number
-    end
+    Hizb.find_by(hizb_number: hizb_number) || raise_invalid_hizb_number
   end
 
   def find_manzil
     manzil_number = params[:manzil_number].to_i.abs
 
-    if manzil_number >= 1 && manzil_number <= 7
-      Manzil.find_by(manzil_number: manzil_number)
-    else
-      raise_invalid_manzil_number
-    end
+    Manzil.find_by(manzil_number: manzil_number) || raise_invalid_manzil_number
   end
 
   def find_ruku
-    params[:ruku_number]
-    raise_invalid_ruku_number
+    ruku_number = params[:ruku_number].to_i.abs
+    Ruku.find_by(ruku_number: ruku_number) || raise_invalid_ruku_number
   end
 
   def find_juz
-    juz_nunber = params[:juz_number].to_i.abs
+    juz_number = params[:juz_number].to_i.abs
 
-    if juz_nunber >= 1 && juz_nunber <= 30
-      Juz.find_by(juz_nunber: juz_nunber)
-    else
-      raise_invalid_juz_number
-    end
+    Juz.find_by(juz_number: juz_number) || raise_invalid_juz_number
   end
 
   def find_ayah
     Verse.find_by_id_or_key(params[:ayah_key].to_s) || raise_invalid_ayah_number
   end
 
-  def validate_chapter(id_or_slug=nil)
-    id_or_slug ||= params[:chapter_number].to_s.strip
+  def find_chapter(id_or_slug = nil)
+    id_or_slug = (id_or_slug.presence || params[:chapter_number] || params[:chapter_id]).to_s.strip
 
     Chapter.find_using_slug(id_or_slug) || raise_invalid_surah_number
   end
@@ -129,34 +118,34 @@ class Finder
   end
 
   def raise_invalid_ayah_number
-
+    raise(RestApi::RecordNotFound.new("Ayah key or ID is invalid. Please select valid ayah key(1:1 to 114:6) or ID(1 to 6236)."))
   end
 
   def raise_invalid_surah_number
-    raise(RestApi::RecordNotFound.new("Surah not found. Please select valid slug or surah number from 1-114"))
+    raise(RestApi::RecordNotFound.new("Surah number or slug is invalid. Please select valid slug or surah number from 1-114."))
   end
 
   def raise_invalid_juz_number
-    raise(RestApi::RecordNotFound.new("Juz not found. Please select valid juz number from 1-30."))
+    raise(RestApi::RecordNotFound.new("Juz number is invalid. Please select valid juz number from 1-30."))
   end
 
   def raise_invalid_manzil_number
-
+    raise(RestApi::RecordNotFound.new("Manzil number is invalid. Please select valid manzil number from 1-7."))
   end
 
   def raise_invalid_hizb_number
-    raise RestApi::RecordNotFound.new("Hizb not found. Please select valid hizb number from 1-60.")
+    raise RestApi::RecordNotFound.new("Hizb number is invalid. Please select valid hizb number from 1-60.")
   end
 
-  def raise_invalid_rub_number
-    raise RestApi::RecordNotFound.new("R not found. Please select valid hizb number from 1-60.")
+  def raise_invalid_rub_el_hizb_number
+    raise RestApi::RecordNotFound.new("Rub el hizb number is invalid. Please select valid rub el hizb number from 1-240.")
   end
 
   def raise_invalid_mushaf_page_number
-
+    raise RestApi::RecordNotFound.new("Mushaf page number is invalid. Please select valid page from 1-604.")
   end
 
   def raise_invalid_ruku_number
-
+    raise RestApi::RecordNotFound.new("R not found. Please select valid hizb number from 1-60.")
   end
 end

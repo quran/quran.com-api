@@ -23,7 +23,8 @@ json.object! do
                     :juz_number,
                     :hizb_number,
                     :rub_el_hizb_number,
-                    :sajdah_type,
+                    :ruku_number,
+                    :manzil_number,
                     :sajdah_number, *fields
 
       json.page_number verse.get_page_number_for(mushaf: mushaf_id)

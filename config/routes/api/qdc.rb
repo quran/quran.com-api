@@ -51,7 +51,7 @@ namespace :qdc do
     get 'by_page/:page_number', action: 'by_page'
     get 'by_juz/:juz_number', action: 'by_juz'
     get 'by_chapter/:chapter_number', action: 'by_chapter'
-    get 'by_rub/:rub_el_hizb_number', action: 'by_rub'
+    get 'by_rub_el_hizb/:rub_el_hizb_number', action: 'by_rub_el_hizb'
     get 'by_hizb/:hizb_number', action: 'by_hizb'
     get 'by_manzil/:manzil_number', action: 'by_manzil'
     get 'by_ruku/:ruku_number', action: 'by_ruku'
@@ -92,6 +92,7 @@ namespace :qdc do
   namespace :quran do
     get 'translations/:translation_id', action: 'translation'
     get 'tafsirs/:tafsir_id', action: 'tafsir'
+    get 'recitations/:recitation_id', action: 'recitation'
     get 'verses/:script', action: 'verses_text'
   end
 
@@ -100,7 +101,7 @@ namespace :qdc do
     get 'by_chapter/:chapter_number', action: 'by_chapter'
     get 'by_page/:page_number', action: 'by_page'
     get 'by_juz/:juz_number', action: 'by_juz'
-    get 'by_rub/:rub_el_hizb_number', action: 'by_rub'
+    get 'by_rub_el_hizb/:rub_el_hizb_number', action: 'by_rub_el_hizb'
     get 'by_hizb/:hizb_number', action: 'by_hizb'
     get 'by_manzil/:manzil_number', action: 'by_manzil'
     get 'by_ruku/:ruku_number', action: 'by_ruku'
@@ -112,7 +113,7 @@ namespace :qdc do
     get 'by_chapter/:chapter_number', action: 'by_chapter'
     get 'by_page/:page_number', action: 'by_page'
     get 'by_juz/:juz_number', action: 'by_juz'
-    get 'by_rub/:rub_el_hizb_number', action: 'by_rub'
+    get 'by_rub_el_hizb/:rub_el_hizb_number', action: 'by_rub_el_hizb'
     get 'by_hizb/:hizb_number', action: 'by_hizb'
     get 'by_manzil/:manzil_number', action: 'by_manzil'
     get 'by_ruku/:ruku_number', action: 'by_ruku'
@@ -123,7 +124,7 @@ namespace :qdc do
     get 'by_chapter/:chapter_number', action: 'by_chapter'
     get 'by_page/:page_number', action: 'by_page'
     get 'by_juz/:juz_number', action: 'by_juz'
-    get 'by_rub/:rub_el_hizb_number', action: 'by_rub'
+    get 'by_rub_el_hizb/:rub_el_hizb_number', action: 'by_rub_el_hizb'
     get 'by_hizb/:hizb_number', action: 'by_hizb'
     get 'by_manzil/:manzil_number', action: 'by_manzil'
     get 'by_ruku/:ruku_number', action: 'by_ruku'

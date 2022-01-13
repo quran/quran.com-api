@@ -5,6 +5,19 @@ class VerseFinder < Finder
     load_verses(language_code).find_by_id_or_key(verse_number) || raise_invalid_ayah_number
   end
 
+  def random_verse(filters, language_code, words: true, tafsirs: false, translations: false, reciter: false)
+    @results = Verse.unscope(:order).where(filters).order('RANDOM()').limit(3)
+
+    load_translations
+    load_words(language_code)
+    load_audio
+    translations_order = valid_translations.present? ? ',translations.priority ASC' : ''
+
+    @results.order("verses.verse_index ASC, words.position ASC, word_translations.priority ASC #{translations_order}".strip)
+            .sample
+  end
+
+
   def load_verses(language_code)
     fetch_verses_range
     load_translations
@@ -67,6 +80,7 @@ class VerseFinder < Finder
   end
 
   def valid_translations
+    #TODO: move to presenter
     strong_memoize :translations do
       # user can get translation using ids or Slug
       translation = params[:translations].to_s.split(',')
@@ -113,13 +127,7 @@ class VerseFinder < Finder
 
   def chapter
     strong_memoize :chapter do
-      if chapter = Chapter.find_using_slug(params[:chapter_id])
-        params[:chapter_id] = chapter.id
-      else
-        raise_invalid_surah_number
-      end
-
-      chapter
+      find_chapter
     end
   end
 end

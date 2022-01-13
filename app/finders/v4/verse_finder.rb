@@ -46,19 +46,7 @@ class V4::VerseFinder < ::VerseFinder
     @results = send("fetch_#{filter}")
   end
 
-  def per_page
-    return @per_page if @per_page
-
-    limit = (params[:per_page] || 10).to_i.abs
-    limit <= 50 ? limit : 50
-  end
-
-  def total_pages
-    (total_records / per_page.to_f).ceil
-  end
-
   protected
-
   def fetch_advance_copy
     if params[:from] && params[:to]
       verse_from = QuranUtils::Quran.get_ayah_id_from_key(params[:from])
@@ -91,7 +79,7 @@ class V4::VerseFinder < ::VerseFinder
   end
 
   def fetch_by_chapter
-    chapter = validate_chapter
+    chapter = find_chapter
     @total_records = chapter.verses_count
     verse_start = verse_pagination_start(@total_records)
     verse_end = verse_pagination_end(verse_start, @total_records)
@@ -103,27 +91,21 @@ class V4::VerseFinder < ::VerseFinder
   end
 
   def fetch_by_page
-    @results = rescope_verses('verse_index').where(page_number: validate_mushaf_page_number)
+    mushaf_page = find_mushaf_page.page_number
     # Disable pagination for by_page route
+    @per_page = @total_records = mushaf_page.verses_count
     @next_page = nil
-    @total_records = @results.size
-    @per_page = @total_records
 
-    @results
+    @results = rescope_verses('verse_index').where(page_number: mushaf_page.page_number)
   end
 
-  def fetch_by_rub
-    results = rescope_verses('verse_index')
-                .where(rub_el_hizb_number: find_rub_el_hizb_number)
+  def fetch_by_rub_el_hizb
+    rub_el_hizb = find_rub_el_hizb
+    # Disable pagination for by_page route
+    @per_page = @total_records = rub_el_hizb.verses_count
+    @next_page = nil
 
-    @total_records = results.size
-    @results = results.limit(per_page).offset((current_page - 1) * per_page)
-
-    if current_page < total_pages
-      @next_page = current_page + 1
-    end
-
-    @results
+    @results = rescope_verses('verse_index').where(rub_el_hizb_number: rub_el_hizb.rub_el_hizb_number)
   end
 
   def fetch_by_hizb
@@ -156,16 +138,11 @@ class V4::VerseFinder < ::VerseFinder
 
   def fetch_by_ruku
     ruku = find_ruku
-    verse_start = ruku.first_verse_id + (current_page - 1) * per_page
-    verse_end = min(verse_start + per_page, ruku.last_verse_id)
-    if verse_end < ruku.last_verse_id
-      @next_page = current_page + 1
-    end
-    @total_records = ruku.verses_count
+    # Disable pagination for ruku route
+    @per_page = @total_records = ruku.verses_count
+    @next_page = nil
 
-    @results = rescope_verses('verse_index')
-                 .where(ruku_number: ruku.ruku_number)
-                 .where('verses.verse_index >= ? AND verses.verse_index < ?', verse_start.to_i, verse_end.to_i)
+    @results = rescope_verses('verse_index').where(ruku_number: ruku.ruku_number)
   end
 
   def fetch_by_manzil
