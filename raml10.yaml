@@ -302,7 +302,7 @@ documentation:
                         "verse_key": "1:1",
                         "juz_number": 1,
                         "hizb_number": 1,
-                        "rub_number": 1,
+                        "rub_el_hizb_number": 1,
                         "sajdah_type": null,
                         "sajdah_number": null,
                         "words": [
@@ -449,7 +449,7 @@ documentation:
                         "verse_key": "1:1",
                         "juz_number": 1,
                         "hizb_number": 1,
-                        "rub_number": 1,
+                        "rub_el_hizb_number": 1,
                         "sajdah_type": null,
                         "sajdah_number": null,
                         "words": [
@@ -594,7 +594,7 @@ documentation:
                         "verse_key": "1:1",
                         "juz_number": 1,
                         "hizb_number": 1,
-                        "rub_number": 1,
+                        "rub_el_hizb_number": 1,
                         "sajdah_type": null,
                         "sajdah_number": null,
                         "words": [
@@ -741,7 +741,7 @@ documentation:
                         "verse_key": "1:1",
                         "juz_number": 1,
                         "hizb_number": 1,
-                        "rub_number": 1,
+                        "rub_el_hizb_number": 1,
                         "sajdah_type": null,
                         "sajdah_number": null,
                         "words": [
@@ -850,18 +850,18 @@ documentation:
             displayName: 'records per api call, you can get maximum 50 records. '
   /by_rub:
     displayName: by_rub
-    '/{rub_number}':
-      displayName: rub_number
+    '/{rub_el_hizb_number}':
+      displayName: rub_el_hizb_number
       uriParameters:
-        rub_number:
+        rub_el_hizb_number:
           type: integer
-          description: Rub number(1-240)
+          description: Rub el Hizb number(1-240)
           minimum: 1
           maximum: 240
-          displayName: Rub number(1-240)
+          displayName: Rub el Hizb number(1-240)
       get:
-        displayName: By Rub number
-        description: Get all verses of a specific Rub number(1-240).
+        displayName: By Rub el Hizb number
+        description: Get all verses of a specific Rub el Hizb number(1-240).
         responses:
           '200':
             body:
@@ -888,7 +888,7 @@ documentation:
                         "verse_key": "1:1",
                         "juz_number": 1,
                         "hizb_number": 1,
-                        "rub_number": 1,
+                        "rub_el_hizb_number": 1,
                         "sajdah_type": null,
                         "sajdah_number": null,
                         "words": [
@@ -1020,7 +1020,7 @@ documentation:
                       "verse_key": "1:1",
                       "juz_number": 1,
                       "hizb_number": 1,
-                      "rub_number": 1,
+                      "rub_el_hizb_number": 1,
                       "sajdah_type": null,
                       "sajdah_number": null,
                       "words": [
@@ -1111,7 +1111,7 @@ documentation:
     displayName: random
     get:
       displayName: Get random ayah
-      description: 'Get a random verse. You can get random verse by `chapter`,`page`, `juz`, `hizb`, `rub`, or from whole Quran.'
+      description: 'Get a random verse. You can get random verse by `chapter`,`page`, `juz`, `hizb`, `rub-el-hizb`, `manzil`, `ruku`, or from whole Quran.'
       responses:
         '200':
           body:
@@ -1134,7 +1134,7 @@ documentation:
                     "verse_key": "1:1",
                     "juz_number": 1,
                     "hizb_number": 1,
-                    "rub_number": 1,
+                    "rub_el_hizb_number": 1,
                     "sajdah_type": null,
                     "sajdah_number": null,
                     "words": [
@@ -1296,12 +1296,12 @@ documentation:
             minimum: 1
             maximum: 60
             displayName: If you want to get indopak script of a specific hizb.
-          rub_number:
+          rub_el_hizb_number:
             type: integer
-            description: If you want to get indopak script of a specific rub.
+            description: If you want to get indopak script of a specific Rub el Hizb.
             minimum: 1
             maximum: 240
-            displayName: If you want to get indopak script of a specific rub.
+            displayName: If you want to get indopak script of a specific Rub el Hizb.
           verse_key:
             type: string
             description: If you want to get indopak script of a specific ayah.
@@ -1371,12 +1371,12 @@ documentation:
             minimum: 1
             maximum: 60
             displayName: If you want to get text of a specific hizb.
-          rub_number:
+          rub_el_hizb_number:
             type: integer
-            description: If you want to get text of a specific rub.
+            description: If you want to get text of a specific Rub el Hizb.
             minimum: 1
             maximum: 240
-            displayName: If you want to get text of a specific rub.
+            displayName: If you want to get text of a specific Rub el Hizb.
           verse_key:
             type: string
             description: If you want to get text of a specific ayah.
@@ -1446,12 +1446,12 @@ documentation:
             minimum: 1
             maximum: 60
             displayName: If you want to get Uthmani script of a specific hizb.
-          rub_number:
+          rub_el_hizb_number:
             type: integer
-            description: If you want to get Uthmani script of a specific rub.
+            description: If you want to get Uthmani script of a specific Rub el Hizb.
             minimum: 1
             maximum: 240
-            displayName: If you want to get Uthmani script of a specific rub.
+            displayName: If you want to get Uthmani script of a specific Rub el Hizb.
           verse_key:
             type: string
             description: If you want to get Uthmani script of a specific ayah.
@@ -1521,12 +1521,12 @@ documentation:
             minimum: 1
             maximum: 60
             displayName: If you want to get Uthmani script of a specific hizb.
-          rub_number:
+          rub_el_hizb_number:
             type: integer
-            description: If you want to get Uthmani script of a specific rub.
+            description: If you want to get Uthmani script of a specific Rub el Hizb.
             minimum: 1
             maximum: 240
-            displayName: If you want to get Uthmani script of a specific rub.
+            displayName: If you want to get Uthmani script of a specific Rub el Hizb.
           verse_key:
             type: string
             description: If you want to get Uthmani script of a specific ayah.
@@ -1596,12 +1596,12 @@ documentation:
             minimum: 1
             maximum: 60
             displayName: If you want to get text of a specific hizb.
-          rub_number:
+          rub_el_hizb_number:
             type: integer
-            description: If you want to get text of a specific rub.
+            description: If you want to get text of a specific Rub el Hizb.
             minimum: 1
             maximum: 240
-            displayName: If you want to get text of a specific rub.
+            displayName: If you want to get text of a specific Rub el Hizb.
           verse_key:
             type: string
             description: If you want to get text of a specific ayah.
@@ -1679,12 +1679,12 @@ documentation:
             minimum: 1
             maximum: 60
             displayName: If you want to get text of a specific hizb.
-          rub_number:
+          rub_el_hizb_number:
             type: integer
-            description: If you want to get text of a specific rub.
+            description: If you want to get text of a specific Rub el Hizb.
             minimum: 1
             maximum: 240
-            displayName: If you want to get text of a specific rub.
+            displayName: If you want to get text of a specific Rub el Hizb.
           verse_key:
             type: string
             description: If you want to get text of a specific ayah.
@@ -1766,12 +1766,12 @@ documentation:
             minimum: 1
             maximum: 60
             displayName: If you want to get text of a specific hizb.
-          rub_number:
+          rub_el_hizb_number:
             type: integer
-            description: If you want to get text of a specific rub.
+            description: If you want to get text of a specific Rub el Hizb.
             minimum: 1
             maximum: 240
-            displayName: If you want to get text of a specific rub.
+            displayName: If you want to get text of a specific Rub el Hizb.
           verse_key:
             type: string
             description: If you want to get text of a specific ayah.
@@ -1888,12 +1888,12 @@ documentation:
             minimum: 1
             maximum: 60
             displayName: If you want to get audio file of a specific hizb.
-          rub_number:
+          rub_el_hizb_number:
             type: integer
-            description: If you want to get audio file of a specific rub.
+            description: If you want to get audio file of a specific Rub el Hizb.
             minimum: 1
             maximum: 240
-            displayName: If you want to get audio file of a specific rub.
+            displayName: If you want to get audio file of a specific Rub el Hizb.
           verse_key:
             type: string
             description: If you want to get audio file of a specific ayah.
@@ -1988,12 +1988,12 @@ documentation:
             minimum: 1
             maximum: 60
             displayName: If you want to get translation of a specific hizb.
-          rub_number:
+          rub_el_hizb_number:
             type: integer
-            description: If you want to get translation of a specific rub.
+            description: If you want to get translation of a specific Rub el Hizb.
             minimum: 1
             maximum: 240
-            displayName: If you want to get translation of a specific rub.
+            displayName: If you want to get translation of a specific Rub el Hizb.
           verse_key:
             type: string
             description: If you want to get translation of a specific ayah.
@@ -2089,12 +2089,12 @@ documentation:
             minimum: 1
             maximum: 60
             displayName: If you want to get tafsir of a specific hizb.
-          rub_number:
+          rub_el_hizb_number:
             type: integer
-            description: If you want to get tafsir of a specific rub.
+            description: If you want to get tafsir of a specific Rub el Hizb.
             minimum: 1
             maximum: 240
-            displayName: If you want to get tafsir of a specific rub.
+            displayName: If you want to get tafsir of a specific Rub el Hizb.
           verse_key:
             type: string
             description: If you want to get tafsir of a specific ayah.
@@ -2720,16 +2720,16 @@ documentation:
                   }
     /by_rub:
       displayName: by_rub
-      '/{rub_number}':
-        displayName: rub_number
+      '/{rub_el_hizb_number}':
+        displayName: rub_el_hizb_number
         uriParameters:
-          rub_number:
+          rub_el_hizb_number:
             type: number
             minimum: 1
             maximum: 240
         get:
-          displayName: LIST-rub-recitaiton
-          description: 'Get list of ayah #model:knzdXGgyjYnAqbhGX for a Rub.'
+          displayName: LIST-rub-el-hizb-recitaiton
+          description: 'Get list of ayah #model:knzdXGgyjYnAqbhGX for a Rub el Hizb.'
           responses:
             '200':
               body:
@@ -3112,7 +3112,7 @@ types:
       hizb_number:
         type: integer
         required: false
-      rub_number:
+      rub_el_hizb_number:
         type: integer
         required: false
       page_number:
@@ -3129,7 +3129,7 @@ types:
       verse_number: 1
       juz_number: 1
       hizb_number: 1
-      rub_number: 1
+      rub_el_hizb_number: 1
       page_number: 1
     displayName: Tafsir
   translated-name:
@@ -3181,7 +3181,7 @@ types:
       hizb_number:
         type: integer
         required: false
-      rub_number:
+      rub_el_hizb_number:
         type: integer
         required: false
       page_number:
@@ -3200,7 +3200,7 @@ types:
       verse_number: 1
       juz_number: 1
       hizb_number: 1
-      rub_number: 1
+      rub_el_hizb_number: 1
       page_number: 1
     displayName: Translation
   transliteration:
@@ -3260,7 +3260,7 @@ types:
         type: integer
       hizb_number:
         type: integer
-      rub_number:
+      rub_el_hizb_number:
         type: integer
       sajdah_type:
         type: 'null'
@@ -3324,7 +3324,7 @@ types:
       text_uthmani_tajweed: بِسْمِ <tajweed class=ham_wasl>ٱ</tajweed>للَّهِ <tajweed class=ham_wasl>ٱ</tajweed><tajweed class=laam_shamsiyah>ل</tajweed>رَّحْمَ<tajweed class=madda_normal>ـٰ</tajweed>نِ <tajweed class=ham_wasl>ٱ</tajweed><tajweed class=laam_shamsiyah>ل</tajweed>رَّح<tajweed class=madda_permissible>ِي</tajweed>مِ <span class=end>١</span>
       juz_number: 1
       hizb_number: 1
-      rub_number: 1
+      rub_el_hizb_number: 1
       sajdah_type: null
       sajdah_number: null
       page_number: 1

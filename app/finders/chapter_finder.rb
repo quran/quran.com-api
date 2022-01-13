@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
-class ChapterFinder
+class ChapterFinder < Finder
   def find(id_or_slug)
-    Chapter.find_using_slug(id_or_slug) || raise(RestApi::RecordNotFound.new("Surah not found"))
+    find_chapter(id_or_slug)
   end
 
   def find_and_eager_load(id_or_slug, locale: 'en', include_slugs: false)
     chapters = all_with_eager_load(locale: locale, include_slugs: include_slugs)
 
-    chapters.find_using_slug(id_or_slug, chapters) || raise(RestApi::RecordNotFound.new("Surah not found"))
+    chapters.find_using_slug(id_or_slug, chapters) || raise_invalid_surah_number
   end
 
   def all_with_eager_load(locale: 'en', include_slugs: false)

@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
 class V4::VerseFinder < ::VerseFinder
-  attr_reader :next_page,
-              :total_records
-
   def random_verse(filters, language_code, words: true, tafsirs: false, translations: false, audio: false)
     @results = Verse.unscope(:order).where(filters).order('RANDOM()').limit(3)
 
@@ -49,19 +46,7 @@ class V4::VerseFinder < ::VerseFinder
     @results = send("fetch_#{filter}")
   end
 
-  def per_page
-    return @per_page if @per_page
-
-    limit = (params[:per_page] || 10).to_i.abs
-    limit <= 50 ? limit : 50
-  end
-
-  def total_pages
-    (total_records / per_page.to_f).ceil
-  end
-
   protected
-
   def fetch_advance_copy
     if params[:from] && params[:to]
       verse_from = QuranUtils::Quran.get_ayah_id_from_key(params[:from])
@@ -94,100 +79,84 @@ class V4::VerseFinder < ::VerseFinder
   end
 
   def fetch_by_chapter
-    if chapter = find_chapter(params[:chapter_number])
-      @total_records = chapter.verses_count
-      verse_start = verse_pagination_start(@total_records)
-      verse_end = verse_pagination_end(verse_start, @total_records)
+    chapter = find_chapter
+    @total_records = chapter.verses_count
+    verse_start = verse_pagination_start(@total_records)
+    verse_end = verse_pagination_end(verse_start, @total_records)
+    @next_page = current_page + 1 if verse_end < params[:to]
 
-      @next_page = current_page + 1 if verse_end < params[:to]
-
-      @results = Verse
-                   .where(chapter_id: chapter.id)
-                   .where('verses.verse_number >= ? AND verses.verse_number <= ?', verse_start.to_i, verse_end.to_i)
-    else
-      @total_records = 0
-      @next_page = nil
-      @results = Verse.none
-    end
-
-    @results
+    @results = Verse
+                 .where(chapter_id: chapter.id)
+                 .where('verses.verse_number >= ? AND verses.verse_number <= ?', verse_start.to_i, verse_end.to_i)
   end
 
   def fetch_by_page
-    if page = find_page(params[:page_number])
-      @results = rescope_verses('verse_index').where(page_number: page)
+    mushaf_page = find_mushaf_page.page_number
+    # Disable pagination for by_page route
+    @per_page = @total_records = mushaf_page.verses_count
+    @next_page = nil
 
-      # Disable pagination for by_page route
-      @next_page = nil
-      @total_records = @results.size
-      @per_page = @total_records
-    else
-      @total_records = 0
-      @next_page = nil
-      @results = Verse.none
-    end
-    @results
+    @results = rescope_verses('verse_index').where(page_number: mushaf_page.page_number)
   end
 
-  def fetch_by_rub
-    if (rub_number = find_rub(params[:rub_number]))
-      results = rescope_verses('verse_index')
-                  .where(rub_number: rub_number)
+  def fetch_by_rub_el_hizb
+    rub_el_hizb = find_rub_el_hizb
+    # Disable pagination for by_page route
+    @per_page = @total_records = rub_el_hizb.verses_count
+    @next_page = nil
 
-      @total_records = results.size
-      @results = results.limit(per_page).offset((current_page - 1) * per_page)
-
-      if current_page < total_pages
-        @next_page = current_page + 1
-      end
-    else
-      @total_records = 0
-      @next_page = nil
-      @results = Verse.none
-    end
-
-    @results
+    @results = rescope_verses('verse_index').where(rub_el_hizb_number: rub_el_hizb.rub_el_hizb_number)
   end
 
   def fetch_by_hizb
-    if (hizb_number = find_hizb(params[:hizb_number]))
-      results = rescope_verses('verse_index')
-                  .where(hizb_number: hizb_number)
+    results = rescope_verses('verse_index')
+                .where(hizb_number: find_hizb_number)
 
-      @total_records = results.size
-      @results = results.limit(per_page).offset((current_page - 1) * per_page)
+    @total_records = results.size
+    @results = results.limit(per_page).offset((current_page - 1) * per_page)
 
-      if current_page < total_pages
-        @next_page = current_page + 1
-      end
-    else
-      @total_records = 0
-      @next_page = nil
-      @results = Verse.none
+    if current_page < total_pages
+      @next_page = current_page + 1
     end
 
     @results
   end
 
   def fetch_by_juz
-    if juz = find_juz(params[:juz_number])
-      @total_records = juz.verses_count
-
-      verse_start = juz.first_verse_id + (current_page - 1) * per_page
-      verse_end = min(verse_start + per_page, juz.last_verse_id)
-
-      if verse_end < juz.last_verse_id
-        @next_page = current_page + 1
-      end
-
-      @results = rescope_verses('verse_index')
-                   .where(juz_number: juz.juz_number)
-                   .where('verses.verse_index >= ? AND verses.verse_index < ?', verse_start.to_i, verse_end.to_i)
-    else
-      @total_records = 0
-      @next_page = nil
-      @results = Verse.none
+    juz = find_juz
+    verse_start = juz.first_verse_id + (current_page - 1) * per_page
+    verse_end = min(verse_start + per_page, juz.last_verse_id)
+    if verse_end < juz.last_verse_id
+      @next_page = current_page + 1
     end
+    @total_records = juz.verses_count
+
+    @results = rescope_verses('verse_index')
+                 .where(juz_number: juz.juz_number)
+                 .where('verses.verse_index >= ? AND verses.verse_index < ?', verse_start.to_i, verse_end.to_i)
+  end
+
+  def fetch_by_ruku
+    ruku = find_ruku
+    # Disable pagination for ruku route
+    @per_page = @total_records = ruku.verses_count
+    @next_page = nil
+
+    @results = rescope_verses('verse_index').where(ruku_number: ruku.ruku_number)
+  end
+
+  def fetch_by_manzil
+    manzil = find_manzil
+    verse_start = manzil.first_verse_id + (current_page - 1) * per_page
+    verse_end = min(verse_start + per_page, manzil.last_verse_id)
+    if verse_end < manzil.last_verse_id
+      @next_page = current_page + 1
+    end
+    @total_records = manzil.verses_count
+
+    @results = rescope_verses('verse_index')
+                 .where(manzil_number: manzil.manzil_number)
+                 .where('verses.verse_index >= ? AND verses.verse_index < ?', verse_start.to_i, verse_end.to_i)
   end
 
   def verse_pagination_start(total_verses)
@@ -241,39 +210,5 @@ class V4::VerseFinder < ::VerseFinder
 
   def rescope_verses(by)
     Verse.unscope(:order).order("#{by} ASC")
-  end
-
-  def find_chapter(id_or_slug)
-    strong_memoize :_chapter do
-      Chapter.find_using_slug(id_or_slug)
-    end
-  end
-
-  def find_page(page_number)
-    MushafPage.where(page_number: page_number, mushaf_id: 1).first&.page_number
-  end
-
-  def find_hizb(hizb_number)
-    hizb_number = hizb_number.to_i.abs
-
-    if hizb_number >= 1 && hizb_number <= 60
-      hizb_number
-    end
-  end
-
-  def find_rub(rub_number)
-    rub_number = rub_number.to_i.abs
-
-    if rub_number >= 1 && rub_number <= 240
-      rub_number
-    end
-  end
-
-  def find_juz(juz_number)
-    juz_number = juz_number.to_i.abs
-
-    if juz_number >= 1 && juz_number <= 30
-      Juz.find_by(juz_number: juz_number)
-    end
   end
 end

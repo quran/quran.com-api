@@ -3,7 +3,6 @@
 module Api::V4
   class TafsirsController < ApiController
     before_action :init_presenter
-    before_action :load_tafsirs
 
     def by_chapter
       render partial: 'tafsirs'
@@ -17,7 +16,7 @@ module Api::V4
       render partial: 'tafsirs'
     end
 
-    def by_rub
+    def by_rub_el_hizb
       render partial: 'tafsirs'
     end
 
@@ -25,17 +24,21 @@ module Api::V4
       render partial: 'tafsirs'
     end
 
-    def by_ayah
+    def by_manzil
       render partial: 'tafsirs'
+    end
+
+    def by_ruku
+      render partial: 'tafsirs'
+    end
+
+    def by_ayah
+      render
     end
 
     protected
     def init_presenter
       @presenter = TafsirsPresenter.new(params)
-    end
-
-    def load_tafsirs
-      @tafsirs = @presenter.tafsirs(action_name)
     end
   end
 end

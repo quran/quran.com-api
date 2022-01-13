@@ -1,0 +1,8 @@
+json.object! do
+  json.extract! rub_el_hizb, :id,
+                :rub_el_hizb_number,
+                :verse_mapping,
+                :first_verse_id,
+                :last_verse_id,
+                :verses_count
+end

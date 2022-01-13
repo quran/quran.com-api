@@ -2,16 +2,18 @@
 
 class BasePresenter
   include QuranUtils::StrongMemoize
-
-  attr_reader :params
-
-  def initialize(params)
-    @params = params
-  end
+  attr_reader :params, :finder, :lookahead
 
   delegate :next_page,
            :current_page,
-           :per_page, :total_records, :total_pages, to: :finder
+           :per_page, :total_records,
+           :total_pages,
+           to: :finder
+
+  def initialize(params)
+    @params = params
+    @lookahead = RestApi::ParamLookahead.new(params)
+  end
 
   def sanitize_query_fields(fields)
     fields.compact_blank.map do |field|
@@ -23,6 +25,11 @@ class BasePresenter
     get_mushaf.id
   end
 
+  def render_words?
+    strong_memoize :words do
+      @lookahead.selects?('words')
+    end
+  end
   protected
 
   def raise_404(message)

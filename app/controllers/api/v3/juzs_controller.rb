@@ -11,7 +11,7 @@ module Api::V3
       @juz = Juz.find_by(id: params[:id])
 
       if @juz.nil?
-        render_404("Juz not found")
+        render_404("Juz not found. Please select valid juz number from 1-30")
       else
         render
       end

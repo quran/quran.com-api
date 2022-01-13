@@ -17,11 +17,19 @@ module Api::V4
       render partial: 'translations'
     end
 
-    def by_rub
+    def by_rub_el_hizb
       render partial: 'translations'
     end
 
     def by_hizb
+      render partial: 'translations'
+    end
+
+    def by_manzil
+      render partial: 'translations'
+    end
+
+    def by_ruku
       render partial: 'translations'
     end
 

@@ -1,66 +1,31 @@
 # frozen_string_literal: true
 
-class VerseFinder
-  attr_reader :params, :results
-  include QuranUtils::StrongMemoize
-
-  def initialize(params)
-    @params = params
-  end
-
+class VerseFinder < Finder
   def find(verse_number, language_code = 'en')
-    load_verses(language_code).find_by(verse_number: verse_number) || raise_not_found("Ayah not found")
+    load_verses(language_code).find_by_id_or_key(verse_number) || raise_invalid_ayah_number
   end
+
+  def random_verse(filters, language_code, words: true, tafsirs: false, translations: false, reciter: false)
+    @results = Verse.unscope(:order).where(filters).order('RANDOM()').limit(3)
+
+    load_translations
+    load_words(language_code)
+    load_audio
+    translations_order = params[:translations].present? ? ',translations.priority ASC' : ''
+
+    @results.order("verses.verse_index ASC, words.position ASC, word_translations.priority ASC #{translations_order}".strip)
+            .sample
+  end
+
 
   def load_verses(language_code)
     fetch_verses_range
     load_translations
     load_words(language_code)
     load_audio
-    translations_order = valid_translations.present? ? ',translations.priority ASC' : ''
+    translations_order = params[:translations].present? ? ',translations.priority ASC' : ''
 
     @results.order("verses.verse_index ASC, words.position ASC, word_translations.priority ASC #{translations_order}".strip)
-  end
-
-  def per_page
-    limit = (params[:limit] || 10).to_i.abs
-    limit = 10 if limit.zero?
-
-    limit <= 50 ? limit : 50
-  end
-
-  def next_page
-    if last_page?
-      return nil
-    end
-
-    current_page + 1
-  end
-
-  def prev_page
-    current_page - 1 unless first_page?
-  end
-
-  def first_page?
-    current_page == 1
-  end
-
-  def last_page?
-    current_page == total_pages
-  end
-
-  def current_page
-    strong_memoize :current_page do
-      (params[:page].to_i <= 1 ? 1 : params[:page].to_i)
-    end
-  end
-
-  def total_pages
-    (total_verses / per_page.to_f).ceil
-  end
-
-  def total_verses
-    chapter.verses_count
   end
 
   protected
@@ -91,7 +56,7 @@ class VerseFinder
   end
 
   def load_translations
-    translations = valid_translations
+    translations = params[:translations]
 
     if translations.present?
       @results = @results
@@ -111,25 +76,6 @@ class VerseFinder
   def set_offset
     if offset.present?
       @results = @results.offset(offset)
-    end
-  end
-
-  def valid_translations
-    strong_memoize :translations do
-      # user can get translation using ids or Slug
-      translation = params[:translations].to_s.split(',')
-
-      return [] if translation.blank?
-
-      approved_translations = ResourceContent
-                                .approved
-                                .translations
-                                .one_verse
-
-      params[:translations] = approved_translations
-                                .where(id: translation)
-                                .or(approved_translations.where(slug: translation))
-                                .pluck(:id)
     end
   end
 
@@ -161,25 +107,7 @@ class VerseFinder
 
   def chapter
     strong_memoize :chapter do
-      if chapter = Chapter.find_using_slug(params[:chapter_id])
-        params[:chapter_id] = chapter.id
-      else
-        raise_not_found("Surah not found")
-      end
-
-      chapter
+      find_chapter
     end
-  end
-
-  def min(a, b)
-    a < b ? a : b
-  end
-
-  def max(a, b)
-    a > b ? a : b
-  end
-
-  def raise_not_found(message)
-    raise RestApi::RecordNotFound.new(message)
   end
 end

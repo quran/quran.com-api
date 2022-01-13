@@ -3,7 +3,6 @@
 module Api::V4
   class RecitationsController < ApiController
     before_action :init_presenter
-    before_action :load_recitation
 
     def by_chapter
       render partial: 'audio_files'
@@ -17,11 +16,19 @@ module Api::V4
       render partial: 'audio_files'
     end
 
-    def by_rub
+    def by_rub_el_hizb
       render partial: 'audio_files'
     end
 
     def by_hizb
+      render partial: 'audio_files'
+    end
+
+    def by_manzil
+      render partial: 'audio_files'
+    end
+
+    def by_ruku
       render partial: 'audio_files'
     end
 
@@ -32,10 +39,6 @@ module Api::V4
     protected
     def init_presenter
       @presenter = RecitationsPresenter.new(params)
-    end
-
-    def load_recitation
-      @audio_files = @presenter.audio_files(action_name)
     end
   end
 end

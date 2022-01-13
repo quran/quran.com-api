@@ -1,33 +1,9 @@
 # frozen_string_literal: true
 
 module Api::Qdc
-  class TranslationsController < ApiController
+  class TranslationsController < Api::V4::TranslationsController
     before_action :init_presenter
     before_action :load_translations
-
-    def by_chapter
-      render partial: 'translations'
-    end
-
-    def by_juz
-      render partial: 'translations'
-    end
-
-    def by_page
-      render partial: 'translations'
-    end
-
-    def by_rub
-      render partial: 'translations'
-    end
-
-    def by_hizb
-      render partial: 'translations'
-    end
-
-    def by_ayah
-      render partial: 'translations'
-    end
 
     protected
     def init_presenter

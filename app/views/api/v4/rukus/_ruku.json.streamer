@@ -1,0 +1,9 @@
+json.object! do
+  json.extract! ruku, :id,
+                :ruku_number,
+                :surah_ruku_number,
+                :verse_mapping,
+                :first_verse_id,
+                :last_verse_id,
+                :verses_count
+end

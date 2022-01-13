@@ -354,7 +354,7 @@ paths:
                   verse_key: '1:1'
                   juz_number: 1
                   hizb_number: 1
-                  rub_number: 1
+                  rub_el_hizb_number: 1
                   sajdah_type: null
                   sajdah_number: null
                   words:
@@ -487,7 +487,7 @@ paths:
                   verse_key: '1:1'
                   juz_number: 1
                   hizb_number: 1
-                  rub_number: 1
+                  rub_el_hizb_number: 1
                   sajdah_type: null
                   sajdah_number: null
                   words:
@@ -617,7 +617,7 @@ paths:
                   verse_key: '1:1'
                   juz_number: 1
                   hizb_number: 1
-                  rub_number: 1
+                  rub_el_hizb_number: 1
                   sajdah_type: null
                   sajdah_number: null
                   words:
@@ -748,7 +748,7 @@ paths:
                   verse_key: '1:1'
                   juz_number: 1
                   hizb_number: 1
-                  rub_number: 1
+                  rub_el_hizb_number: 1
                   sajdah_type: null
                   sajdah_number: null
                   words:
@@ -788,21 +788,21 @@ paths:
           enabled: false
           dynamic: false
           statusCode: 200
-  '/verses/by_rub/{rub_number}':
+  '/verses/by_rub/{rub_el_hizb_number}':
     parameters:
-      - name: rub_number
+      - name: rub_el_hizb_number
         in: path
-        description: Rub number(1-240)
+        description: Rub el Hizb number(1-240)
         required: true
         type: integer
         minimum: 1
         maximum: 240
     get:
-      operationId: GET_verses-by_rub-rub_number
-      summary: By Rub number
+      operationId: GET_verses-rub_el_hizb_number
+      summary: By Rub el Hizb number
       tags:
         - Verses
-      description: Get all verses of a specific Rub number(1-240).
+      description: Get all verses of a specific Rub el Hizb number(1-240).
       parameters:
         - name: language
           in: query
@@ -867,7 +867,7 @@ paths:
                   verse_key: '1:1'
                   juz_number: 1
                   hizb_number: 1
-                  rub_number: 1
+                  rub_el_hizb_number: 1
                   sajdah_type: null
                   sajdah_number: null
                   words:
@@ -985,7 +985,7 @@ paths:
                 verse_key: '1:1'
                 juz_number: 1
                 hizb_number: 1
-                rub_number: 1
+                rub_el_hizb_number: 1
                 sajdah_type: null
                 sajdah_number: null
                 words:
@@ -1025,7 +1025,7 @@ paths:
       summary: Get random ayah
       tags:
         - Verses
-      description: 'Get a random verse. You can get random verse by `chapter`,`page`, `juz`, `hizb`, `rub`, or from whole Quran.'
+      description: 'Get a random verse. You can get random verse by `chapter`,`page`, `juz`, `hizb`, `rub el hizb`, `ruku`, `manzil` number, or from whole Quran.'
       parameters:
         - name: language
           in: query
@@ -1088,7 +1088,7 @@ paths:
                 verse_key: '1:1'
                 juz_number: 1
                 hizb_number: 1
-                rub_number: 1
+                rub_el_hizb_number: 1
                 sajdah_type: null
                 sajdah_number: null
                 words:
@@ -1174,9 +1174,9 @@ paths:
           type: integer
           minimum: 1
           maximum: 60
-        - name: rub_number
+        - name: rub_el_hizb_number
           in: query
-          description: If you want to get indopak script of a specific rub.
+          description: If you want to get indopak script of a specific Rub el Hizb.
           type: integer
           minimum: 1
           maximum: 240
@@ -1248,9 +1248,9 @@ paths:
           type: integer
           minimum: 1
           maximum: 60
-        - name: rub_number
+        - name: rub_el_hizb_number
           in: query
-          description: If you want to get text of a specific rub.
+          description: If you want to get text of a specific Rub el Hizb.
           type: integer
           minimum: 1
           maximum: 240
@@ -1322,9 +1322,9 @@ paths:
           type: integer
           minimum: 1
           maximum: 60
-        - name: rub_number
+        - name: rub_el_hizb_number
           in: query
-          description: If you want to get Uthmani script of a specific rub.
+          description: If you want to get Uthmani script of a specific Rub el Hizb.
           type: integer
           minimum: 1
           maximum: 240
@@ -1396,9 +1396,9 @@ paths:
           type: integer
           minimum: 1
           maximum: 60
-        - name: rub_number
+        - name: rub_el_hizb_number
           in: query
-          description: If you want to get Uthmani script of a specific rub.
+          description: If you want to get Uthmani script of a specific Rub el Hizb.
           type: integer
           minimum: 1
           maximum: 240
@@ -1470,9 +1470,9 @@ paths:
           type: integer
           minimum: 1
           maximum: 60
-        - name: rub_number
+        - name: rub_el_hizb_number
           in: query
-          description: If you want to get text of a specific rub.
+          description: If you want to get text of a specific Rub el Hizb.
           type: integer
           minimum: 1
           maximum: 240
@@ -1598,9 +1598,9 @@ paths:
           type: integer
           minimum: 1
           maximum: 60
-        - name: rub_number
+        - name: rub_el_hizb_number
           in: query
-          description: If you want to get audio file of a specific rub.
+          description: If you want to get audio file of a specific Rub el Hizb.
           type: integer
           minimum: 1
           maximum: 240
@@ -1705,9 +1705,9 @@ paths:
           type: integer
           minimum: 1
           maximum: 60
-        - name: rub_number
+        - name: rub_el_hizb_number
           in: query
-          description: If you want to get translation of a specific rub.
+          description: If you want to get translation of a specific Rub el Hizb.
           type: integer
           minimum: 1
           maximum: 240
@@ -1857,9 +1857,9 @@ paths:
           type: integer
           minimum: 1
           maximum: 60
-        - name: rub_number
+        - name: rub_el_hizb_number
           in: query
-          description: If you want to get tafsir of a specific rub.
+          description: If you want to get tafsir of a specific Rub el Hizb.
           type: integer
           minimum: 1
           maximum: 240
@@ -1937,9 +1937,9 @@ paths:
           type: integer
           minimum: 1
           maximum: 60
-        - name: rub_number
+        - name: rub_el_hizb_number
           in: query
-          description: If you want to get text of a specific rub.
+          description: If you want to get text of a specific Rub el Hizb.
           type: integer
           minimum: 1
           maximum: 240
@@ -2018,9 +2018,9 @@ paths:
           type: integer
           minimum: 1
           maximum: 60
-        - name: rub_number
+        - name: rub_el_hizb_number
           in: query
-          description: If you want to get text of a specific rub.
+          description: If you want to get text of a specific Rub el Hizb.
           type: integer
           minimum: 1
           maximum: 240
@@ -2241,25 +2241,25 @@ paths:
           enabled: false
           dynamic: false
           statusCode: 200
-  '/recitations/{recitation_id}/by_rub/{rub_number}':
+  '/recitations/{recitation_id}/by_rub/{rub_el_hizb_number}':
     parameters:
       - name: recitation_id
         in: path
         description: 'Recitation Id, you can get list of all ayah by ayah recitations using this endpoint #endpoint:HLbauN2sdGitPQPPL'
         required: true
         type: number
-      - name: rub_number
+      - name: rub_el_hizb_number
         in: path
         required: true
         type: number
         minimum: 1
         maximum: 240
     get:
-      operationId: LIST-rub-recitaiton
-      summary: Get Ayah recitations for specific Rub
+      operationId: LIST-rub-el-hizb-recitaiton
+      summary: Get Ayah recitations for specific Rub el Hizb
       tags:
         - Audio Recitations
-      description: 'Get list of ayah #model:knzdXGgyjYnAqbhGX for a Rub.'
+      description: 'Get list of ayah #model:knzdXGgyjYnAqbhGX for a Rub el Hizb.'
       responses:
         '200':
           description: ''
@@ -2291,7 +2291,7 @@ paths:
                 total_pages: 15
                 total_records: 148
       x-stoplight:
-        id: LIST-rub-recitaiton
+        id: LIST-rub-el-hizb-recitaiton
         beforeScript: null
         afterScript: null
         public: true
@@ -3037,7 +3037,7 @@ definitions:
         type: integer
       hizb_number:
         type: integer
-      rub_number:
+      rub_el_hizb_number:
         type: integer
       page_number:
         type: integer
@@ -3052,7 +3052,7 @@ definitions:
       verse_number: 1
       juz_number: 1
       hizb_number: 1
-      rub_number: 1
+      rub_el_hizb_number: 1
       page_number: 1
     x-stoplight:
       id: tafsir
@@ -3107,7 +3107,7 @@ definitions:
         type: integer
       hizb_number:
         type: integer
-      rub_number:
+      rub_el_hizb_number:
         type: integer
       page_number:
         type: integer
@@ -3127,7 +3127,7 @@ definitions:
       verse_number: 1
       juz_number: 1
       hizb_number: 1
-      rub_number: 1
+      rub_el_hizb_number: 1
       page_number: 1
     x-stoplight:
       id: translation
@@ -3186,7 +3186,7 @@ definitions:
         type: integer
       hizb_number:
         type: integer
-      rub_number:
+      rub_el_hizb_number:
         type: integer
       sajdah_type:
         type: 'null'
@@ -3233,7 +3233,7 @@ definitions:
       - verse_key
       - juz_number
       - hizb_number
-      - rub_number
+      - rub_el_hizb_number
       - sajdah_type
       - sajdah_number
       - page_number
@@ -3251,7 +3251,7 @@ definitions:
       text_uthmani_tajweed: بِسْمِ <tajweed class=ham_wasl>ٱ</tajweed>للَّهِ <tajweed class=ham_wasl>ٱ</tajweed><tajweed class=laam_shamsiyah>ل</tajweed>رَّحْمَ<tajweed class=madda_normal>ـٰ</tajweed>نِ <tajweed class=ham_wasl>ٱ</tajweed><tajweed class=laam_shamsiyah>ل</tajweed>رَّح<tajweed class=madda_permissible>ِي</tajweed>مِ <span class=end>١</span>
       juz_number: 1
       hizb_number: 1
-      rub_number: 1
+      rub_el_hizb_number: 1
       sajdah_type: null
       sajdah_number: null
       page_number: 1
@@ -3615,7 +3615,7 @@ x-stoplight:
           description: |-
             Get list of #model:J83wDRc48FrARPHBY
 
-            You can filter verses by `chapter`, `page`, `juz`, `rub`, and `hizb`.
+            You can filter verses by `chapter`, `page`, `juz`, `rub-el-hizb`, `hizb`, `ruku` or `manzil`.
 
             ### Customizing the results
 
@@ -3696,8 +3696,7 @@ x-stoplight:
 
             You can download whole Clear Quran translation or Tasir ibe e Kathir in json format. We'll add more format later on, like down a sqlite dump instead of json.
 
-
-            If you don't need to fetch content of whole Quran, you can use query string to filter specific surah, pages, juz, hiz or rub as well.
+            If you don't need to fetch content of whole Quran, you can use query string to filter specific surah, pages, juz, hizb, rub el hizb, ruku or manzil as well.
         - divider: false
           items:
             - _id: BFFudhky6dWQsF9we
@@ -3728,7 +3727,7 @@ x-stoplight:
               type: endpoints
             - _id: LIST-page-recitaiton
               type: endpoints
-            - _id: LIST-rub-recitaiton
+            - _id: LIST-rub-el-hizb-recitaiton
               type: endpoints
             - _id: LIST-hizb-recitaiton
               type: endpoints

@@ -1,3 +1,5 @@
+verses = @presenter.verses
+
 include_words = @presenter.render_words?
 include_translations = @presenter.render_translations?
 include_audio = @presenter.render_audio?
@@ -10,15 +12,16 @@ mushaf_type = @presenter.get_mushaf_type
 
 json.object! do
   json.verses do
-    json.array! @verses do |verse|
+    json.array! verses do |verse|
       json.object! do
         json.extract! verse, :id,
                       :verse_number,
                       :verse_key,
                       :juz_number,
                       :hizb_number,
-                      :rub_number,
-                      :sajdah_type,
+                      :rub_el_hizb_number,
+                      :ruku_number,
+                      :manzil_number,
                       :sajdah_number, *fields
 
         json.page_number verse.get_page_number(mushaf_type)

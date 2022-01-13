@@ -1,0 +1,5 @@
+json.object! do
+  json.hizb do
+    json.partial! 'hizb', hizb: @hizb
+  end
+end

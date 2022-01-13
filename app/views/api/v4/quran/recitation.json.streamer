@@ -12,12 +12,11 @@ json.object! do
     end
   end
 
-  if @recitation
-    json.meta do
-      json.object! do
-        json.reciter_name @recitation.reciter_name
-        json.recitation_style @recitation.recitation_style&.name
-      end
+  json.meta do
+    json.object! do
+      json.reciter_name @recitation&.reciter_name
+      json.recitation_style @recitation&.recitation_style&.name
+      json.filters @filter_names
     end
   end
 end

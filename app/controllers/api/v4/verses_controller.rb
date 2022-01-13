@@ -3,7 +3,10 @@
 module Api::V4
   class VersesController < ApiController
     before_action :init_presenter
-    before_action :load_verses, except: [:random, :by_key]
+
+    def filter
+      render partial: 'verses'
+    end
 
     def by_chapter
       render partial: 'verses'
@@ -17,11 +20,19 @@ module Api::V4
       render partial: 'verses'
     end
 
-    def by_rub
+    def by_rub_el_hizb
       render partial: 'verses'
     end
 
     def by_hizb
+      render partial: 'verses'
+    end
+
+    def by_manzil
+      render partial: 'verses'
+    end
+
+    def by_ruku
       render partial: 'verses'
     end
 
@@ -36,10 +47,6 @@ module Api::V4
     protected
     def init_presenter
       @presenter = VersesPresenter.new(params, action_name)
-    end
-
-    def load_verses
-      @verses = @presenter.verses
     end
   end
 end

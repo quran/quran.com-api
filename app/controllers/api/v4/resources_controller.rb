@@ -103,32 +103,5 @@ module Api::V4
 
       render
     end
-
-    def verses_text
-      @script_type = fetch_script_type
-      @verses = Verse.select(:id, :verse_key, @script_type)
-
-      render
-    end
-
-    def fetch_script_type
-      script = params[:script]
-
-      if VERSE_AVAILABLE_SCRIPTS.include?(script)
-        script
-      else
-        'text_uthmani'
-      end
-    end
-
-    def chapters
-      finder = ChapterFinder.new
-      finder.all_with_eager_load(locale: fetch_locale)
-    end
-
-    def chapter
-      finder = ChapterFinder.new
-      finder.find_and_eager_load(params[:id], locale: fetch_locale)
-    end
   end
 end
