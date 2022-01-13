@@ -91,6 +91,8 @@ module Api::V4
         'text_qpc_nastaleeq'
       when 'nastaleeq_indopak', 'text_nastaleeq_indopak'
         'text_nastaleeq_indopak'
+      when 'v1_image'
+        'image_url'
       when 'code_v1', 'v1'
         'code_v1'
       when 'v2', 'code_v2'
