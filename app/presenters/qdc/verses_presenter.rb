@@ -52,7 +52,9 @@ module Qdc
         page_number: params[:page_number],
         juz_number: params[:juz_number],
         hizb_number: params[:hizb_number],
-        rub_el_hizb_number: params[:rub_el_hizb_number]
+        rub_el_hizb_number: params[:rub_el_hizb_number],
+        ruku_number: params[:ruku_number],
+        manzil_number: params[:manzil_number]
       }.compact_blank
 
       @finder.random_verse(

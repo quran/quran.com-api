@@ -11,7 +11,7 @@ class VerseFinder < Finder
     load_translations
     load_words(language_code)
     load_audio
-    translations_order = valid_translations.present? ? ',translations.priority ASC' : ''
+    translations_order = params[:translations].present? ? ',translations.priority ASC' : ''
 
     @results.order("verses.verse_index ASC, words.position ASC, word_translations.priority ASC #{translations_order}".strip)
             .sample
@@ -23,7 +23,7 @@ class VerseFinder < Finder
     load_translations
     load_words(language_code)
     load_audio
-    translations_order = valid_translations.present? ? ',translations.priority ASC' : ''
+    translations_order = params[:translations].present? ? ',translations.priority ASC' : ''
 
     @results.order("verses.verse_index ASC, words.position ASC, word_translations.priority ASC #{translations_order}".strip)
   end
@@ -56,7 +56,7 @@ class VerseFinder < Finder
   end
 
   def load_translations
-    translations = valid_translations
+    translations = params[:translations]
 
     if translations.present?
       @results = @results
@@ -76,26 +76,6 @@ class VerseFinder < Finder
   def set_offset
     if offset.present?
       @results = @results.offset(offset)
-    end
-  end
-
-  def valid_translations
-    #TODO: move to presenter
-    strong_memoize :translations do
-      # user can get translation using ids or Slug
-      translation = params[:translations].to_s.split(',')
-
-      return [] if translation.blank?
-
-      approved_translations = ResourceContent
-                                .approved
-                                .translations
-                                .one_verse
-
-      params[:translations] = approved_translations
-                                .where(id: translation)
-                                .or(approved_translations.where(slug: translation))
-                                .pluck(:id)
     end
   end
 
