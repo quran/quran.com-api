@@ -8,7 +8,7 @@ class Finder
   MAX_RECORDS_PER_PAGE = 50
   RECORDS_PER_PAGE = 10
 
-  def initialize(params)
+  def initialize(params={})
     @params = params
   end
 
