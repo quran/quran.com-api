@@ -81,7 +81,7 @@ class V4::VerseFinder < ::VerseFinder
   def fetch_by_chapter
     chapter = find_chapter
     @total_records = chapter.verses_count
-    verse_start = verse_pagination_start(@total_records)
+    verse_start = verse_pagination_start
     verse_end = verse_pagination_end(verse_start, @total_records)
     @next_page = current_page + 1 if verse_end < params[:to]
 
@@ -159,7 +159,7 @@ class V4::VerseFinder < ::VerseFinder
                  .where('verses.verse_index >= ? AND verses.verse_index < ?', verse_start.to_i, verse_end.to_i)
   end
 
-  def verse_pagination_start(total_verses)
+  def verse_pagination_start
     if (from = (params[:from] || 1).to_i.abs).zero?
       from = 1
     end
