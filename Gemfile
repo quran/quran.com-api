@@ -54,8 +54,7 @@ gem 'tzinfo-data'
 # Detect the language
 gem 'whatlanguage'
 
-gem 'rubocop', '>= 1.7.0', require: false
-
+# Exception tracking
 gem 'sentry-raven', group: [:production]
 
 group :development, :test do
@@ -71,16 +70,18 @@ group :development do
   gem 'benchmark-ips', require: false
   gem 'bullet'
   gem 'derailed_benchmarks'
-  gem 'pre-commit'
-  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-  gem 'spring'
-  gem 'spring-commands-rspec'
-  gem 'spring-watcher-listen', '~> 2.0.0'
+
+  # run some pre commit hooks
+  gem 'pre-commit', require: false
+  gem 'rubocop', '>= 1.7.0', require: false
+
   gem 'stackprof'
+
+  # Annotate modes with columns
+  gem 'annotate', '>= 3.1.1'
 end
 
 group :test, :development do
-  gem 'annotate', '>= 3.1.1'
   gem 'guard-rspec', '= 4.7.3'
   gem 'guard-spork'
   gem 'rspec-rails', '= 4.0.2'
@@ -91,4 +92,5 @@ group :test, :development do
   gem 'rubocop-rspec', '>= 2.1.0'
   gem 'spork'
   gem 'watchr'
+  gem 'json-schema-rspec'
 end
