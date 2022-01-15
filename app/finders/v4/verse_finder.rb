@@ -91,7 +91,7 @@ class V4::VerseFinder < ::VerseFinder
   end
 
   def fetch_by_page
-    mushaf_page = find_mushaf_page.page_number
+    mushaf_page = find_mushaf_page
     # Disable pagination for by_page route
     @per_page = @total_records = mushaf_page.verses_count
     @next_page = nil
