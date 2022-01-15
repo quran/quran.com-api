@@ -46,8 +46,6 @@ class Qdc::VerseFinder < ::VerseFinder
       filter: filter
     )
 
-    binding.pry
-
     results
   end
 
