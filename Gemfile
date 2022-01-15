@@ -75,7 +75,6 @@ group :development do
 
   # Annotate modes with columns
   gem 'annotate'
-  gem 'listen'
 end
 
 group :test, :development do
