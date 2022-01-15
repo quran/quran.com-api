@@ -90,7 +90,6 @@ class VerseFinder < Finder
   def verse_pagination_start
     start = 1 + (current_page - 1) * per_page
     start = min(start, total_verses)
-
     if offset
       min(start + offset, total_verses)
     else
