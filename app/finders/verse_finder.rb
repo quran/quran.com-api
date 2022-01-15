@@ -17,7 +17,6 @@ class VerseFinder < Finder
             .sample
   end
 
-
   def load_verses(language_code)
     fetch_verses_range
     load_translations
@@ -37,6 +36,7 @@ class VerseFinder < Finder
     @results = Verse
                  .where(chapter_id: chapter.id)
                  .where('verses.verse_number >= ? AND verses.verse_number <= ?', verse_start.to_i, verse_end.to_i)
+    @results
   end
 
   def load_words(word_translation_lang)
@@ -88,11 +88,13 @@ class VerseFinder < Finder
   end
 
   def verse_pagination_start
+    start = 1 + (current_page - 1) * per_page
+    start = min(start, total_verses)
+
     if offset
-      min(offset + 1, total_verses)
+      min(start + offset, total_verses)
     else
-      start = 1 + (current_page - 1) * per_page
-      min(start, total_verses)
+      start
     end
   end
 

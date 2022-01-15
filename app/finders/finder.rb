@@ -14,10 +14,11 @@ class Finder
 
   def per_page
     strong_memoize :per_page do
-      if params[:per_page].to_s.strip == 'all'
-        [total_records, 286].min
+      items_per_page = (params[:limit].presence || params[:per_page]).to_s.strip
+      if items_per_page.to_s.strip == 'all'
+        [total_records || total_verses, 286].min
       else
-        limit = (params[:per_page] || RECORDS_PER_PAGE).to_i.abs
+        limit = (items_per_page.presence || RECORDS_PER_PAGE).to_i.abs
         limit = RECORDS_PER_PAGE if limit.zero?
         MAX_RECORDS_PER_PAGE ? limit : RECORDS_PER_PAGE
       end
@@ -52,7 +53,7 @@ class Finder
 
   def total_pages
     strong_memoize :total_pages do
-      (total_records / per_page.to_f).ceil
+      (total_records || total_verses / per_page.to_f).ceil
     end
   end
 

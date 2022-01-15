@@ -22,7 +22,6 @@ gem 'graphql-schema_comparator'
 gem 'cld3', '= 3.4.3'
 
 # Elasticsearch
-gem 'faraday' # required for typhoeus
 gem 'elasticsearch-model', '~> 7.2.0'
 gem 'typhoeus'
 
@@ -68,6 +67,7 @@ group :development do
   # run some pre commit hooks
   gem 'pre-commit', require: false
   gem 'rubocop', '>= 1.7.0', require: false
+  gem 'rubocop-rails_config', '>= 1.6.0'
 
   # https://github.com/tmm1/stackprof
   # sampling call-stack profiler for ruby
@@ -81,7 +81,6 @@ group :test, :development do
   gem 'rspec-rails', '= 5.0.2'
   gem 'shoulda-matchers', '~> 5.1.0'
   gem 'simplecov', require: false
-  gem 'rubocop-rails_config', '>= 1.6.0'
   gem 'rubocop-rspec', '>= 2.1.0'
   gem 'json-schema-rspec'
 end

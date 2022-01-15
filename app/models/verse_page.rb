@@ -1,12 +1,13 @@
 # == Schema Information
+# Schema version: 20220109075422
 #
 # Table name: verse_pages
 #
-#  id          :bigint           not null, primary key
+#  id          :integer          not null, primary key
+#  verse_id    :integer
+#  page_id     :integer
 #  page_number :integer
 #  mushaf_id   :integer
-#  page_id     :integer
-#  verse_id    :integer
 #
 # Indexes
 #
