@@ -14,6 +14,9 @@ class VersesPresenter < BasePresenter
     'text_uthmani_tajweed',
     'text_qpc_hafs',
     'qpc_uthmani_hafs', # TODO: deprecated and renamed to text_qpc_hafs
+    'text_qpc_nastaleeq_hafs',
+    'text_qpc_nastaleeq',
+    'text_indopak_nastaleeq',
     'image_url',
     'image_width',
     'code_v1',

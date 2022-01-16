@@ -100,16 +100,22 @@ class Word < ApplicationRecord
 
   def get_text(version)
     case version
-    when :v1
+    when :v1, :code_v1
       code_v1
-    when :v2
+    when :v2, :code_v2
       code_v2
-    when :indopak
+    when :indopak, :text_indopak
       text_indopak
-    when :text_qpc_hafs, :qpc_uthmani_hafs
+    when :text_qpc_hafs, :qpc_uthmani_hafs # TODO: qpc_uthmani_hafs is deprecated
       text_qpc_hafs
-    when :uthmani, :uthmani_tajweed
+    when :uthmani, :uthmani_tajweed # NOTE: we don't have wbw uthmani tajweed yet
       text_uthmani
+    when :text_qpc_nastaleeq_hafs, :qpc_nastaleeq_hafs # QPC nastalleq text compatiable with their own font
+      text_qpc_nastaleeq_hafs
+    when :text_qpc_nastaleeq, :qpc_nastaleeq # QPC nastalleq text compatible with indopak font
+      text_qpc_nastaleeq
+    when :text_indopak_nastaleeq, :indopak_nastaleeq # Normal Indopak script
+      text_indopak_nastaleeq
     when :imlaei
       text_imlaei
     when :imlaei_simple
