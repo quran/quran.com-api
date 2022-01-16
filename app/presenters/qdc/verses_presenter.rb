@@ -12,6 +12,9 @@ module Qdc
       'text_uthmani_tajweed',
       'qpc_uthmani_hafs', #TODO: deprecated and renamed to text_qpc_hafs
       'text_qpc_hafs',
+      'text_qpc_nastaleeq_hafs',
+      'text_qpc_nastaleeq',
+      'text_nastaleeq_indopak',
       'verse_key',
       'location',
       'code_v1',
