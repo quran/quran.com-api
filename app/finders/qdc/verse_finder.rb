@@ -49,6 +49,25 @@ class Qdc::VerseFinder < ::VerseFinder
     results
   end
 
+  def find_verses_range(filter:, mushaf:, from: nil, to: nil)
+    # Clear the pagination and range(from, to) filter
+    params[:from] = nil
+    params[:to] = nil
+    params[:page] = 1
+    params[:per_page] = 'all'
+    verses = fetch_verses_range(filter, mushaf: mushaf, words: false)
+
+    if from.present?
+      verses = verses.where('verses.id >= ?', from)
+    end
+
+    if to.present?
+      verses = verses.where('verses.id <= ?', to)
+    end
+
+    verses
+  end
+
   protected
 
   def fetch_verses_range(filter, mushaf: nil, words: false)
@@ -66,11 +85,7 @@ class Qdc::VerseFinder < ::VerseFinder
     load_tafsirs(tafsirs) if tafsirs.present?
 
     words_ordering = if words
-                       #if filter.to_s == 'by_page'
-                       # 'mushaf_words.position_in_page ASC, word_translations.priority ASC, '
-                         #else
-                         ', mushaf_words.position_in_verse ASC, word_translations.priority ASC'
-                       # end
+                       ', mushaf_words.position_in_verse ASC, word_translations.priority ASC'
                      else
                        ''
                      end
@@ -155,7 +170,7 @@ class Qdc::VerseFinder < ::VerseFinder
     if words && mushaf.lines_per_page == 16 && only_page_words
       # NOTE: in 16 lines mushaf ayahs could span into multiple pages
       # and we need to restrict words that are on requested page.
-      @results = @results.where(mushaf_words: {page_number: mushaf_page.page_number})
+      @results = @results.where(mushaf_words: { page_number: mushaf_page.page_number })
     else
       @results
     end
