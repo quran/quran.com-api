@@ -10,8 +10,13 @@ module Qdc
 
     # Find pages based on given filters and Mushaf
     def lookup
-      pages
-        .where('(first_verse_id >= :verse_from OR last_verse_id >= :verse_from) AND (first_verse_id <= :verse_to OR last_verse_id <= :verse_to)', lookup_verse_range)
+      filters = lookup_verse_range
+
+      if filters.present?
+        pages.where('(first_verse_id >= :verse_from OR last_verse_id >= :verse_from) AND (first_verse_id <= :verse_to OR last_verse_id <= :verse_to)', filters)
+      else
+        []
+      end
     end
 
     protected
@@ -20,23 +25,15 @@ module Qdc
       finder = ::Qdc::VerseFinder.new(params)
       verses = finder.find_verses_range(
         filter: look_up_filter,
-        mushaf: get_mushaf,
-        from: look_up_verse_from,
-        to: look_up_verse_to
+        mushaf: get_mushaf
       )
 
-      {
-        verse_from: verses.first.id,
-        verse_to: verses.last.id
-      }
-    end
-
-    def look_up_verse_from
-      get_ayah_id params[:from]
-    end
-
-    def look_up_verse_to
-      get_ayah_id params[:to]
+      if verses.first
+        {
+          verse_from: verses.first&.id,
+          verse_to: verses.last&.id
+        }
+      end
     end
 
     def get_ayah_id(ayah_id_or_key)
