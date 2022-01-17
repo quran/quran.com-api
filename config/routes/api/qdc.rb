@@ -44,6 +44,7 @@ namespace :qdc do
 
   # Page
   get 'pages', to: 'pages#index'
+  get 'pages/lookup', to: 'pages#lookup'
   get 'pages/:id', to: 'pages#show'
 
   # verses routes, by juz, chapter, page
