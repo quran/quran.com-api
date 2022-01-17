@@ -33,10 +33,9 @@ class Qdc::VerseFinder < ::VerseFinder
 
   def load_verses(filter, language_code, mushaf_type:, words: true, tafsirs: false, translations: false, reciter: false)
     mushaf = Mushaf.find(mushaf_type)
-
     fetch_verses_range(filter, mushaf: mushaf, words: words)
 
-    results = load_related_resources(
+    load_related_resources(
       language: language_code,
       mushaf: mushaf,
       words: words,
@@ -45,32 +44,22 @@ class Qdc::VerseFinder < ::VerseFinder
       reciter: reciter,
       filter: filter
     )
-
-    results
   end
 
-  def find_verses_range(filter:, mushaf:, from: nil, to: nil)
-    # Clear the pagination and range(from, to) filter
-    params[:from] = nil
-    params[:to] = nil
+  def find_verses_range(filter:, mushaf:)
+    # Clear the pagination and limit
     params[:page] = 1
     params[:per_page] = 'all'
-    verses = fetch_verses_range(filter, mushaf: mushaf, words: false)
-
-    if from.present?
-      verses = verses.where('verses.id >= ?', from)
-    end
-
-    if to.present?
-      verses = verses.where('verses.id <= ?', to)
-    end
-
-    verses
+    fetch_verses_range(filter, mushaf: mushaf, words: false)
   end
 
   protected
 
   def fetch_verses_range(filter, mushaf: nil, words: false)
+    # both from and to could be ayah key or ayah ID(not ayah number)
+    params[:from] = get_ayah_id(params[:from])
+    params[:to] = get_ayah_id(params[:to])
+
     if 'by_page' == filter
       @results = fetch_by_page(mushaf: mushaf, words: words)
     else
@@ -96,13 +85,10 @@ class Qdc::VerseFinder < ::VerseFinder
 
   def fetch_advance_copy
     if params[:from] && params[:to]
-      verse_from = QuranUtils::Quran.get_ayah_id_from_key(params[:from])
-      verse_to = QuranUtils::Quran.get_ayah_id_from_key(params[:to])
-
       @results = Verse
                    .unscoped
                    .order('verses.verse_index asc')
-                   .where('verses.verse_index >= :from AND verses.verse_index <= :to', from: verse_from, to: verse_to)
+                   .where('verses.verse_index >= :from AND verses.verse_index <= :to', from: params[:from], to: params[:to])
     else
       @results = Verse.none
     end
@@ -132,39 +118,18 @@ class Qdc::VerseFinder < ::VerseFinder
 
   def fetch_by_chapter
     chapter = find_chapter
+    range = QuranUtils::Quran.get_fist_and_last_ayah_of_surah(chapter.id)
+    from, to = get_ayah_range_to_load(range[0], range[1])
 
-    if params[:from].present?
-      verse_from = params[:from].to_i
-    else
-      verse_from = 1
-    end
-
-    if params[:to].present?
-      verse_to = params[:to].to_i
-    else
-      verse_to = chapter.verses_count
-    end
-
-    @total_records = max(0, (verse_to == verse_from) ? 1 : (verse_to + 1) - verse_from)
-    verse_start = verse_pagination_start
-    verse_end = verse_pagination_end(verse_start, chapter.verses_count)
-
-    @next_page = current_page + 1 if verse_end < params[:to]
-
-    @results = Verse
+    @results = rescope_verses('verse_index')
                  .where(chapter_id: chapter.id)
-                 .where('verses.verse_number >= ? AND verses.verse_number <= ?', verse_start.to_i, verse_end.to_i)
+                 .where('verses.verse_index >= ? AND verses.verse_index <= ?', from, to)
   end
 
   def fetch_by_page(mushaf:, words:)
     mushaf_page = find_mushaf_page(mushaf: mushaf)
-    # Disable pagination for by_page route
-    @next_page = nil
-    @per_page = @total_records = mushaf_page.verses_count
-
-    verse_start = mushaf_page.first_verse_id
-    verse_end = mushaf_page.last_verse_id
-    @results = rescope_verses('verse_index').where('verses.verse_index >= ? AND verses.verse_index <= ?', verse_start, verse_end)
+    from, to = get_ayah_range_to_load(mushaf_page.first_verse_id, mushaf_page.last_verse_id)
+    @results = rescope_verses('verse_index').where('verses.verse_index >= ? AND verses.verse_index <= ?', from, to)
 
     only_page_words = params[:filter_page_words] == 'true'
     if words && mushaf.lines_per_page == 16 && only_page_words
@@ -178,88 +143,54 @@ class Qdc::VerseFinder < ::VerseFinder
 
   def fetch_by_rub_el_hizb
     rub_el_hizb = find_rub_el_hizb
-    # Disable pagination for rub_el_hizb route
-    @next_page = nil
-    @per_page = @total_records = rub_el_hizb.verses_count
+    from, to = get_ayah_range_to_load(rub_el_hizb.first_verse_id, rub_el_hizb.last_verse_id)
 
     @results = rescope_verses('verse_index')
                  .where(rub_el_hizb_number: rub_el_hizb.rub_el_hizb_number)
+                 .where('verses.verse_index >= ? AND verses.verse_index <= ?', from, to)
   end
 
   def fetch_by_hizb
     hizb = find_hizb
-    results = rescope_verses('verse_index')
-                .where(hizb_number: hizb.hizb_number)
+    from, to = get_ayah_range_to_load(hizb.first_verse_id, hizb.last_verse_id)
 
-    @total_records = results.size
-
-    if @total_records == per_page
-      @next_page = nil # disable pagination
-      @results = results
-    else
-      if current_page < total_pages
-        @next_page = current_page + 1
-      end
-
-      @results = results.limit(per_page).offset((current_page - 1) * per_page)
-    end
+    @results = rescope_verses('verse_index')
+                 .where(hizb_number: hizb.hizb_number)
+                 .where('verses.verse_index >= ? AND verses.verse_index <= ?', from, to)
   end
 
   def fetch_by_juz
     juz = find_juz
-    @total_records = juz.verses_count
-
-    verse_start = juz.first_verse_id + (current_page - 1) * per_page
-    verse_end = min(verse_start + per_page, juz.last_verse_id)
-
-    if verse_end < juz.last_verse_id
-      @next_page = current_page + 1
-    end
+    from, to = get_ayah_range_to_load(juz.first_verse_id, juz.last_verse_id)
 
     @results = rescope_verses('verse_index')
                  .where(juz_number: juz.juz_number)
-                 .where('verses.verse_index >= ? AND verses.verse_index < ?', verse_start.to_i, verse_end.to_i)
+                 .where('verses.verse_index >= ? AND verses.verse_index <= ?', from, to)
   end
 
   def fetch_by_manzil
     manzil = find_manzil
-    @total_records = manzil.verses_count
-
-    verse_start = manzil.first_verse_id + (current_page - 1) * per_page
-    verse_end = min(verse_start + per_page, manzil.last_verse_id)
-
-    if verse_end < manzil.last_verse_id
-      @next_page = current_page + 1
-    end
+    from, to = get_ayah_range_to_load(manzil.first_verse_id, manzil.last_verse_id)
 
     @results = rescope_verses('verse_index')
                  .where(manzil_number: manzil.manzil_number)
-                 .where('verses.verse_index >= ? AND verses.verse_index < ?', verse_start.to_i, verse_end.to_i)
+                 .where('verses.verse_index >= ? AND verses.verse_index <= ?', from, to)
   end
 
   def fetch_by_ruku
     ruku = find_ruku
-    # Disable pagination for ruku route
-    @next_page = nil
-    @per_page = @total_records = ruku.verses_count
+    from, to = get_ayah_range_to_load(ruku.first_verse_id, ruku.last_verse_id)
 
-    @results = rescope_verses('verse_index').where(ruku_number: ruku.ruku_number)
+    @results = rescope_verses('verse_index')
+                 .where(ruku_number: ruku.ruku_number)
+                 .where('verses.verse_index >= ? AND verses.verse_index <= ?', from, to)
   end
 
-  def verse_pagination_start
-    if (from = (params[:from] || 1).to_i.abs).zero?
-      from = 1
-    end
+  def fetch_by_range
+    from, to = get_ayah_range_to_load(params[:from], params[:to])
 
-    from + (current_page - 1) * per_page
-  end
-
-  def verse_pagination_end(start, total_verses)
-    to = params[:to].presence ? params[:to].to_i.abs : nil
-    verse_to = min(to || total_verses, total_verses)
-    params[:to] = verse_to
-
-    min((start + per_page - 1), verse_to)
+    @results = rescope_verses('verse_index')
+                 .where('verses.verse_index >= ? AND verses.verse_index <= ?', from, to)
   end
 
   def load_words(word_translation_lang, mushaf)
@@ -308,5 +239,32 @@ class Qdc::VerseFinder < ::VerseFinder
 
   def eager_load_words
     [:word_translation, :word]
+  end
+
+  def get_ayah_range_to_load(first_verse_id, last_verse_id)
+    verse_start = load_verse_from(first_verse_id)
+    verse_end = max(verse_start, load_verse_to(last_verse_id))
+    @total_records = (verse_end - verse_start) + 1
+
+    verse_start = verse_start + (current_page - 1) * per_page
+    verse_start = min(verse_start, last_verse_id)
+
+    [verse_start, min(verse_start + per_page , verse_end)]
+  end
+
+  def load_verse_from(default_from)
+    if params[:from]
+      max(params[:from], default_from)
+    else
+      default_from
+    end
+  end
+
+  def load_verse_to(default_to)
+    if params[:to]
+      min(params[:to], default_to)
+    else
+      default_to
+    end
   end
 end

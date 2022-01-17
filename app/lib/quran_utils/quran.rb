@@ -62,7 +62,20 @@ module QuranUtils
       page
     end
 
+    def self.get_fist_and_last_ayah_of_surah(surah)
+      return if surah > 114 || !surah.positive?
+
+      if 1 == surah
+        [1, 7]
+      elsif 114 == surah
+        [6230, 6236]
+      else
+        [abs_ayahs[surah - 1], abs_ayahs[surah]]
+      end
+    end
+
     protected
+
     def self.valid_ayah?(surah, ayah)
       ayah > 0 && SURAH_AYAH[surah - 1] && ayah <= SURAH_AYAH[surah - 1]
     end

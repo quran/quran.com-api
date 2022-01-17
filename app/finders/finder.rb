@@ -30,7 +30,7 @@ class Finder
       return nil
     end
 
-    current_page + 1
+    @next_page || current_page + 1
   end
 
   def prev_page
@@ -42,18 +42,24 @@ class Finder
   end
 
   def last_page?
-    current_page == total_pages
+    total_pages <= 1 || current_page == total_pages
   end
 
   def current_page
     strong_memoize :current_page do
-      (params[:page].to_i <= 1 ? 1 : params[:page].to_i)
+      page = params[:page].to_i
+
+      page.positive? ? page : 1
     end
   end
 
   def total_pages
     strong_memoize :total_pages do
-      (total_records / per_page.to_f).ceil
+      if total_records.zero? || per_page.zero?
+        0
+      else
+        (total_records / per_page.to_f).ceil
+     end
     end
   end
 
@@ -120,6 +126,19 @@ class Finder
 
   def raise_invalid_ayah_number
     raise(RestApi::RecordNotFound.new("Ayah key or ID is invalid. Please select valid ayah key(1:1 to 114:6) or ID(1 to 6236)."))
+  end
+
+  # Convert the input into ayah id. Input could be ayah or or simple integer value
+  def get_ayah_id(ayah_id_or_key)
+    return if ayah_id_or_key.blank?
+
+    id = if ayah_id_or_key.present? && ayah_id_or_key.include?(':')
+           QuranUtils::Quran.get_ayah_id_from_key(ayah_id_or_key)
+         else
+           ayah_id_or_key.to_i
+         end
+
+    id.positive? ? id : nil
   end
 
   def raise_invalid_surah_number
