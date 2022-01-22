@@ -2,20 +2,29 @@
 
 class Audio::RecitationPresenter < BasePresenter
   def recitations
-    Audio::Recitation.order('name ASC')
+    relation = Audio::Recitation
+                 .includes(:recitation_style, :qirat_type, reciter: :translated_name)
+                 .eager_load(reciter: :translated_name)
+                 .order('priority ASC, language_priority DESC')
+
+    eager_load_translated_name filter_recitations(relation)
+  end
+
+  def render_bio?
+    strong_memoize :render_bio do
+      @lookahead.selects?('bio')
+    end
   end
 
   def approved_recitations
-    audio_recitations = Audio::Recitation
-                          .approved
-                          .includes(:recitation_style, :qirat_type)
-                          .eager_load(:translated_name)
-                          .order('priority ASC')
-
-    eager_load_translated_name audio_recitations
+    recitations.approved
   end
 
   def recitation
+    recitations.find_by(id: recitation_id) || raise_404("Recitation not found")
+  end
+
+  def recitation_without_eager_load
     Audio::Recitation.find_by(id: recitation_id) || raise_404("Recitation not found")
   end
 
@@ -23,8 +32,8 @@ class Audio::RecitationPresenter < BasePresenter
     approved_recitations.find_by(id: recitation_id) || raise_404("Recitation not found")
   end
 
-  def related
-    recitation.related_recitations
+  def related_recitations
+    approved_recitations.where(id: recitation_without_eager_load.related_recitations)
   end
 
   def chapter_audio_file
@@ -32,11 +41,11 @@ class Audio::RecitationPresenter < BasePresenter
   end
 
   def audio_files
-    recitation.chapter_audio_files
+    recitation_without_eager_load.chapter_audio_files
   end
 
   def approved_audio_files
-    files = approved_recitation.chapter_audio_files.order('audio_chapter_audio_files.chapter_id ASC')
+    files = recitation_without_eager_load.chapter_audio_files.order('audio_chapter_audio_files.chapter_id ASC')
 
     files = if chapter_id
               files.where(chapter_id: chapter_id)
@@ -82,6 +91,14 @@ class Audio::RecitationPresenter < BasePresenter
       if (key = params[:verse_key])
         QuranUtils::Quran.get_ayah_id_from_key(key)
       end
+    end
+  end
+
+  def filter_recitations(recitations)
+    if params[:filter_reciter]
+      recitations.where(reciter_id: params[:filter_reciter].to_i)
+    else
+      recitations
     end
   end
 end

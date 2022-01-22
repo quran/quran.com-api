@@ -1,9 +1,33 @@
+reciter = recitation.reciter
+
 json.object! do
-  json.extract! recitation,
-                :id,
-                :name,
-                :arabic_name,
-                :format,
-                :section_id,
-                :description
+  json.id recitation.id
+  json.reciter_id reciter.id
+  json.name reciter.name
+
+  if render_bio
+    json.bio reciter.bio
+    json.image_path reciter.image_path
+  end
+
+  json.translated_name do
+    translated_name = reciter.translated_name
+    json.object! do
+      json.extract! translated_name, :name, :language_name
+    end
+  end
+
+  json.style do
+    json.object! do
+      json.name recitation.recitation_style&.name
+      json.language_name 'english'
+    end
+  end
+
+  json.qirat do
+    json.object! do
+      json.name recitation.qirat_type&.name
+      json.language_name 'english'
+    end
+  end
 end

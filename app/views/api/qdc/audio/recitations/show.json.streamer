@@ -1,1 +1,5 @@
-json.partial! 'recitation', recitation: @presenter.recitation
+json.object! do
+  json.reciter do
+    json.partial! 'recitation', recitation: @presenter.recitation, render_bio: @presenter.render_bio?
+  end
+end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_09_075422) do
+ActiveRecord::Schema.define(version: 2022_01_22_210902) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -730,6 +730,8 @@ ActiveRecord::Schema.define(version: 2022_01_09_075422) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "recitations_count", default: 0
+    t.string "image_path"
+    t.text "bio"
   end
 
   create_table "resource", primary_key: "resource_id", id: :serial, force: :cascade do |t|
@@ -1137,13 +1139,14 @@ ActiveRecord::Schema.define(version: 2022_01_09_075422) do
     t.integer "v2_page"
     t.string "text_qpc_hafs"
     t.integer "words_count"
-    t.string "text_nastaleeq_indopak"
+    t.string "text_indopak_nastaleeq"
     t.integer "pause_words_count", default: 0
     t.jsonb "mushaf_pages_mapping", default: {}
     t.string "text_qpc_nastaleeq"
     t.integer "ruku_number"
     t.integer "surah_ruku_number"
     t.integer "manzil_number"
+    t.string "text_qpc_nastaleeq_hafs"
     t.index ["chapter_id"], name: "index_verses_on_chapter_id"
     t.index ["hizb_number"], name: "index_verses_on_hizb_number"
     t.index ["juz_number"], name: "index_verses_on_juz_number"
@@ -1313,8 +1316,9 @@ ActiveRecord::Schema.define(version: 2022_01_09_075422) do
     t.integer "v2_page"
     t.integer "line_v2"
     t.string "text_qpc_hafs"
-    t.string "text_nastaleeq_indopak"
+    t.string "text_indopak_nastaleeq"
     t.string "text_qpc_nastaleeq"
+    t.string "text_qpc_nastaleeq_hafs"
     t.index ["chapter_id"], name: "index_words_on_chapter_id"
     t.index ["char_type_id"], name: "index_words_on_char_type_id"
     t.index ["location"], name: "index_words_on_location"

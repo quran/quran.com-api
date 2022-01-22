@@ -1,3 +1,10 @@
-json.array! @presenter.recitations do |recitation|
-  json.partial! 'recitation', recitation: recitation
+recitations = @presenter.approved_recitations
+render_bio = @presenter.render_bio?
+
+json.object! do
+  json.reciters do
+    json.array! recitations do |recitation|
+      json.partial! 'recitation', recitation: recitation, render_bio: render_bio
+    end
+  end
 end
