@@ -5,6 +5,12 @@ class Audio::RecitationPresenter < BasePresenter
     Audio::Recitation.order('name ASC')
   end
 
+  def render_info?
+    strong_memoize :render_recitation_idno do
+      @lookahead.selects?('info')
+    end
+  end
+
   def approved_recitations
     audio_recitations = Audio::Recitation
                           .approved
@@ -23,8 +29,14 @@ class Audio::RecitationPresenter < BasePresenter
     approved_recitations.find_by(id: recitation_id) || raise_404("Recitation not found")
   end
 
-  def related
-    recitation.related_recitations
+  def related_recitations
+    audio_recitations = recitation
+                          .related_recitations
+                          .includes(:recitation_style, :qirat_type)
+                          .eager_load(:translated_name)
+                          .order('priority ASC')
+
+    eager_load_translated_name audio_recitations
   end
 
   def chapter_audio_file

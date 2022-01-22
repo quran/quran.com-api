@@ -1,9 +1,0 @@
-json.object! do
-  json.extract! recitation,
-                :id,
-                :name,
-                :arabic_name,
-                :format,
-                :section_id,
-                :description
-end

@@ -1,3 +1,0 @@
-json.array! @presenter.chapters do |chapter|
-  json.partial! 'chapter', chapter: chapter
-end

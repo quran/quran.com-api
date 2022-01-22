@@ -1,5 +1,0 @@
-json.object! do
-  json.extract! section,
-                :id,
-                :name
-end

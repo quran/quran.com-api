@@ -1,0 +1,3 @@
+json.object! do
+  json.percentiles @presenter.ayah_cumulative_percentile
+end
