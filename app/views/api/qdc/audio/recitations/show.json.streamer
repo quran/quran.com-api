@@ -1,5 +1,5 @@
 json.object! do
   json.reciter do
-    json.partial! 'reciter', reciter: @presenter.recitation, render_info: @presenter.render_info?
+    json.partial! 'recitation', recitation: @presenter.recitation, render_bio: @presenter.render_bio?
   end
 end
