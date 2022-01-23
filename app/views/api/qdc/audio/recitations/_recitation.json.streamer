@@ -3,13 +3,11 @@ reciter = recitation.reciter
 json.object! do
   json.id recitation.id
   json.reciter_id reciter.id
-  json.name reciter.name
 
-  if render_bio
-    json.bio reciter.bio
-    json.image_path reciter.image_path
-  end
-
+  json.extract! reciter,
+                :name,
+                *fields
+ 
   json.translated_name do
     translated_name = reciter.translated_name
     json.object! do

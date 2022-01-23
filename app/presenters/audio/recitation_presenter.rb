@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
 class Audio::RecitationPresenter < BasePresenter
+  RECITER_FIELDS = [
+    'bio',
+    'image_path'
+  ]
+
   def recitations
     relation = Audio::Recitation
                  .includes(:recitation_style, :qirat_type, reciter: :translated_name)
@@ -10,9 +15,15 @@ class Audio::RecitationPresenter < BasePresenter
     eager_load_translated_name filter_recitations(relation)
   end
 
-  def render_bio?
-    strong_memoize :render_bio do
-      @lookahead.selects?('bio')
+  def reciter_fields
+    strong_memoize :fields do
+      if (fields = params[:fields]).presence
+        fields.split(',').select do |field|
+          RECITER_FIELDS.include?(field)
+        end
+      else
+        []
+      end
     end
   end
 
