@@ -3,7 +3,8 @@
 class Audio::RecitationPresenter < BasePresenter
   RECITER_FIELDS = [
     'bio',
-    'image_path'
+    'profile_picture',
+    'cover_image'
   ]
 
   def recitations
