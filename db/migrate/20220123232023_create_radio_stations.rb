@@ -6,6 +6,7 @@ class CreateRadioStations < ActiveRecord::Migration[6.1]
       t.string :profile_picture
       t.text :description
       t.integer :audio_recitation_id, index: true
+      t.integer :parent_id, index: true
       t.integer :priority, index: true
 
       t.timestamps

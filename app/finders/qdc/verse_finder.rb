@@ -249,14 +249,22 @@ class Qdc::VerseFinder < ::VerseFinder
     verse_start = verse_start + (current_page - 1) * per_page
     verse_start = min(verse_start, last_verse_id)
 
-    [verse_start, min(verse_start + per_page , verse_end)]
+    [verse_start, min(verse_start + per_page, verse_end)]
   end
 
   def load_verse_from(default_from)
-    if params[:from]
-      max(params[:from], default_from)
+    from = if params[:from]
+             max(params[:from], default_from)
+           else
+             default_from
+           end
+
+    # Ayah from and to range is inclusive in the query
+    # offset start by 1 for all pages after the first page
+    if current_page > 1
+      from + 1
     else
-      default_from
+      from
     end
   end
 
