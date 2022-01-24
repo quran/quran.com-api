@@ -19,7 +19,5 @@
 class Radio::Station < ApplicationRecord
   include NameTranslateable
 
-  belongs_to :audio_recitation, class_name: 'Audio::Recitation'
-  has_many :chapter_audio_files, class_name: 'Audio::ChapterAudioFile', foreign_key: :audio_recitation_id
   has_many :radio_audio_files, class_name: 'Radio::AudioFile'
 end

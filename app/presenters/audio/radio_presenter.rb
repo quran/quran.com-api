@@ -32,7 +32,8 @@ class Audio::RadioPresenter < Audio::RecitationPresenter
   end
 
   def station_audio_files
-    files = radio_station.chapter_audio_files.order('audio_chapter_audio_files.chapter_id ASC')
+    #
+    files = radio_station.radio_audio_files.order('audio_chapter_audio_files.chapter_id ASC')
 
     files = if chapter_id
               files.where(chapter_id: chapter_id)
