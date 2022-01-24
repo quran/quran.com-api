@@ -1,0 +1,6 @@
+json.object! do
+  json.extract! station,
+                :id,
+                :name,
+                *fields
+end
