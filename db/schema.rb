@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_22_210902) do
+ActiveRecord::Schema.define(version: 2022_01_23_232023) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -171,6 +171,17 @@ ActiveRecord::Schema.define(version: 2022_01_22_210902) do
     t.index ["chapter_id"], name: "index_audio_segments_on_chapter_id"
     t.index ["verse_id"], name: "index_audio_segments_on_verse_id"
     t.index ["verse_number"], name: "index_audio_segments_on_verse_number"
+  end
+
+  create_table "audio_stations", force: :cascade do |t|
+    t.string "name"
+    t.string "cover_image"
+    t.string "profile_picture"
+    t.text "description"
+    t.integer "audio_recitation_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["audio_recitation_id"], name: "index_audio_stations_on_audio_recitation_id"
   end
 
   create_table "author", primary_key: "author_id", id: :integer, default: -> { "nextval('_author_author_id_seq'::regclass)" }, force: :cascade do |t|
@@ -730,8 +741,9 @@ ActiveRecord::Schema.define(version: 2022_01_22_210902) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "recitations_count", default: 0
-    t.string "image_path"
+    t.string "profile_picture"
     t.text "bio"
+    t.string "cover_image"
   end
 
   create_table "resource", primary_key: "resource_id", id: :serial, force: :cascade do |t|

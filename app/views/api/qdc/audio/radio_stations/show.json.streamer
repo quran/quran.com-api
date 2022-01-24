@@ -1,0 +1,11 @@
+station = @presenter.station
+fields = @presenter.station_fields
+
+json.object! do
+  json.station do
+    json.extract! station,
+                 :id,
+                 :name,
+                 *fields
+  end
+end

@@ -1,0 +1,12 @@
+stations = @presenter.radio_stations
+fields = @presenter.station_fields
+
+json.object! do
+  json.stations do
+    json.array! stations do |station|
+      json.partial! 'station',
+                    station: station,
+                    fields: fields
+    end
+  end
+end

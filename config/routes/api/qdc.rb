@@ -85,6 +85,10 @@ namespace :qdc do
     # percentiles
     get 'reciters/:reciter_id/percentiles', to: 'recitations#cumulative_percentile'
     get 'reciters/:reciter_id/ayah_percentiles', to: 'recitations#ayah_duration_percentile'
+
+    # Radio stations
+    get 'stations', to: 'radio_stations#index'
+    get 'stations/:station_id', to: 'radio_stations#show'
   end
 
   # routes for fetching all records of one resource.
