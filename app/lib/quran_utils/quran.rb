@@ -70,7 +70,7 @@ module QuranUtils
       elsif 114 == surah
         [6230, 6236]
       else
-        [abs_ayahs[surah - 1], abs_ayahs[surah]]
+        [abs_ayahs[surah - 1] + 1, abs_ayahs[surah]]
       end
     end
 

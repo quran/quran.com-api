@@ -242,35 +242,46 @@ class Qdc::VerseFinder < ::VerseFinder
   end
 
   def get_ayah_range_to_load(first_verse_id, last_verse_id)
-    verse_start = load_verse_from(first_verse_id)
-    verse_end = max(verse_start, load_verse_to(last_verse_id))
-    @total_records = (verse_end - verse_start) + 1
+    range_start = load_verse_from(first_verse_id)
+    range_end = load_verse_to(last_verse_id)
 
-    verse_start = verse_start + (current_page - 1) * per_page
-    verse_start = min(verse_start, last_verse_id)
+    @total_records = records_count(range_start, range_end)
 
-    [verse_start, min(verse_start + per_page, verse_end)]
+    unless @total_records.positive?
+      return overflow_range
+    end
+
+    pagy = Pagy.new(count: @total_records, page: current_page, items: per_page, overflow: :empty_page)
+    @next_page = pagy.next
+
+    if pagy.overflow?
+      overflow_range
+    else
+      offset = range_start - 1
+      [offset + pagy.from, offset + pagy.to]
+    end
+  end
+
+  def overflow_range
+    [0, 0]
+  end
+
+  def records_count(range_start, range_end)
+    # `from` and `to` are inclusive in range
+    (range_end - range_start) + 1
   end
 
   def load_verse_from(default_from)
-    from = if params[:from]
-             max(params[:from], default_from)
-           else
-             default_from
-           end
-
-    # Ayah from and to range is inclusive in the query
-    # offset start by 1 for all pages after the first page
-    if current_page > 1
-      from + 1
+    if params[:from].present?
+      max(params[:from].to_i, default_from)
     else
-      from
+      default_from
     end
   end
 
   def load_verse_to(default_to)
-    if params[:to]
-      min(params[:to], default_to)
+    if params[:to].present?
+      min(params[:to].to_i, default_to)
     else
       default_to
     end
