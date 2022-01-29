@@ -19,20 +19,41 @@ module Qdc
       end
     end
 
+    def lookup_range_keys
+      range = lookup_verse_range
+
+      {
+        from: QuranUtils::Quran.get_ayah_key_from_id(range[:verse_from]),
+        to: QuranUtils::Quran.get_ayah_key_from_id(range[:verse_to])
+      }
+    end
+
+    def filtered_lookup_range_for_page(page)
+      range = lookup_verse_range
+      from = QuranUtils::Quran.get_ayah_key_from_id([page.first_verse_id, range[:verse_from]].max)
+      to = QuranUtils::Quran.get_ayah_key_from_id([page.last_verse_id, range[:verse_to]].min)
+
+      {
+        from: from,
+        to: to
+      }
+    end
     protected
 
     def lookup_verse_range
-      finder = ::Qdc::VerseFinder.new(params)
-      verses = finder.find_verses_range(
-        filter: look_up_filter,
-        mushaf: get_mushaf
-      )
+      strong_memoize :lookup_range do
+        finder = ::Qdc::VerseFinder.new(params)
+        verses = finder.find_verses_range(
+          filter: look_up_filter,
+          mushaf: get_mushaf
+        )
 
-      if verses.first
-        {
-          verse_from: verses.first&.id,
-          verse_to: verses.last&.id
-        }
+        if verses.first
+          {
+            verse_from: verses.first&.id,
+            verse_to: verses.last&.id
+          }
+        end
       end
     end
 

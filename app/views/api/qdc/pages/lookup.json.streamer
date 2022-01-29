@@ -1,14 +1,21 @@
 pages = @presenter.lookup
+lookup_range_keys = @presenter.lookup_range_keys
 
 json.object! do
   json.total_page pages.size
+  json.lookup_range lookup_range_keys
+
   json.pages do
     json.object! do
       pages.each do |page|
+        filtered_range = @presenter.filtered_lookup_range_for_page(page)
+
         json.set! page.page_number do
           json.object! do
-            json.from page.first_verse_key
-            json.to page.last_verse_key
+            json.first_verse_key page.first_verse_key
+            json.last_verse_key page.last_verse_key
+            json.from filtered_range[:from]
+            json.to filtered_range[:to]
           end
         end
       end
