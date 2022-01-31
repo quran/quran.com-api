@@ -28,6 +28,10 @@ class VerseFinder < Finder
     @results.order("verses.verse_index ASC, words.position ASC, word_translations.priority ASC #{translations_order}".strip)
   end
 
+  def total_records
+    @total_records || total_verses
+  end
+
   protected
 
   def fetch_verses_range
