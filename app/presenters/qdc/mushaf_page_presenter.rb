@@ -47,7 +47,7 @@ module Qdc
           filter: look_up_filter,
           mushaf: get_mushaf
         )
-
+        
         if verses.first
           {
             verse_from: verses.first&.id,

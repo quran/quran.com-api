@@ -50,6 +50,8 @@ class Qdc::VerseFinder < ::VerseFinder
     # Clear the pagination and limit
     params[:page] = 1
     params[:per_page] = 'all'
+    @max_records = 564 # max ayah count in juz 30
+
     fetch_verses_range(filter, mushaf: mushaf, words: false)
   end
 
