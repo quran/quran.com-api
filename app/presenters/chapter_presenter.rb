@@ -14,6 +14,10 @@ class ChapterPresenter < BasePresenter
     end
   end
 
+  def chapters
+   finder.all_with_eager_load(locale: locale)
+  end
+
   def include_slugs?
     include_in_response? params[:slugs]
   end
