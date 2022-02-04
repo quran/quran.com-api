@@ -10,10 +10,15 @@ module Qdc
 
     # Find pages based on given filters and Mushaf
     def lookup
-      filters = lookup_verse_range
+      filter = look_up_filter
+      filters = lookup_verse_range(filter)
 
       if filters.present?
-        pages.where('(first_verse_id >= :verse_from OR last_verse_id >= :verse_from) AND (first_verse_id <= :verse_to OR last_verse_id <= :verse_to)', filters)
+        if 'by_page' == filter
+          pages.where('(first_verse_id >= :verse_from) AND (last_verse_id <= :verse_to)', filters)
+        else
+          pages.where('(first_verse_id >= :verse_from OR last_verse_id >= :verse_from) AND (first_verse_id <= :verse_to OR last_verse_id <= :verse_to)', filters)
+        end
       else
         []
       end
@@ -38,16 +43,19 @@ module Qdc
         to: to
       }
     end
+
     protected
 
-    def lookup_verse_range
+    def lookup_verse_range(filter=nil)
+      filter ||= look_up_filter
+
       strong_memoize :lookup_range do
         finder = ::Qdc::VerseFinder.new(params)
         verses = finder.find_verses_range(
-          filter: look_up_filter,
+          filter: filter,
           mushaf: get_mushaf
         )
-        
+
         if verses.first
           {
             verse_from: verses.first&.id,
@@ -66,22 +74,24 @@ module Qdc
     end
 
     def look_up_filter
-      if params[:chapter_number].present?
-        'by_chapter'
-      elsif params[:juz_number].present?
-        'by_juz'
-      elsif params[:page_number].present?
-        'by_page'
-      elsif params[:manzil_number].present?
-        'by_manzil'
-      elsif params[:rub_el_hizb_number].present?
-        'by_rub_el_hizb'
-      elsif params[:hizb_number].present?
-        'by_hizb'
-      elsif params[:ruku_number].present?
-        'ruku_number'
-      else
-        raise_404 "Look up filter is invalid, please provide a valid filter(chapter_number, juz_number, page_number, manzil_number, rub_el_hizb_number, hizb_number, ruku_number)"
+      strong_memoize :filter_name do
+        if params[:chapter_number].present?
+          'by_chapter'
+        elsif params[:juz_number].present?
+          'by_juz'
+        elsif params[:page_number].present?
+          'by_page'
+        elsif params[:manzil_number].present?
+          'by_manzil'
+        elsif params[:rub_el_hizb_number].present?
+          'by_rub_el_hizb'
+        elsif params[:hizb_number].present?
+          'by_hizb'
+        elsif params[:ruku_number].present?
+          'ruku_number'
+        else
+          raise_404 "Look up filter is invalid, please provide a valid filter(chapter_number, juz_number, page_number, manzil_number, rub_el_hizb_number, hizb_number, ruku_number)"
+        end
       end
     end
   end
