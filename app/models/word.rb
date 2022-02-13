@@ -80,6 +80,7 @@ class Word < ApplicationRecord
   default_scope { order 'position asc' }
 
   alias_attribute :v1_page, :page_number
+  alias_attribute :line_v1, :line_number
   #TODO: deprecated and renamed to text_qpc_hafs
   alias_attribute :qpc_uthmani_hafs, :text_qpc_hafs
 
@@ -92,10 +93,10 @@ class Word < ApplicationRecord
   end
 
   def get_line_number(version)
-    if :v1 == version
-      line_number
-    else
+    if :v2 == version
       line_v2
+    else
+      line_number
     end
   end
 

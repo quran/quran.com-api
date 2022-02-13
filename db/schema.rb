@@ -173,17 +173,6 @@ ActiveRecord::Schema.define(version: 2022_01_23_232023) do
     t.index ["verse_number"], name: "index_audio_segments_on_verse_number"
   end
 
-  create_table "audio_stations", force: :cascade do |t|
-    t.string "name"
-    t.string "cover_image"
-    t.string "profile_picture"
-    t.text "description"
-    t.integer "audio_recitation_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["audio_recitation_id"], name: "index_audio_stations_on_audio_recitation_id"
-  end
-
   create_table "author", primary_key: "author_id", id: :integer, default: -> { "nextval('_author_author_id_seq'::regclass)" }, force: :cascade do |t|
     t.text "url", array: true
     t.text "name", null: false
@@ -691,6 +680,30 @@ ActiveRecord::Schema.define(version: 2022_01_23_232023) do
     t.integer "recitations_count", default: 0
   end
 
+  create_table "radio_station_audio_files", force: :cascade do |t|
+    t.integer "radio_station_id"
+    t.integer "chapter_audio_file_id"
+    t.integer "chapter_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["radio_station_id", "chapter_audio_file_id", "chapter_id"], name: "index_on_radio_audio_files"
+  end
+
+  create_table "radio_stations", force: :cascade do |t|
+    t.string "name"
+    t.string "cover_image"
+    t.string "profile_picture"
+    t.text "description"
+    t.integer "audio_recitation_id"
+    t.integer "parent_id"
+    t.integer "priority"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["audio_recitation_id"], name: "index_radio_stations_on_audio_recitation_id"
+    t.index ["parent_id"], name: "index_radio_stations_on_parent_id"
+    t.index ["priority"], name: "index_radio_stations_on_priority"
+  end
+
   create_table "recitation", primary_key: "recitation_id", id: :serial, force: :cascade do |t|
     t.integer "reciter_id", null: false
     t.integer "style_id"
@@ -742,8 +755,8 @@ ActiveRecord::Schema.define(version: 2022_01_23_232023) do
     t.datetime "updated_at", null: false
     t.integer "recitations_count", default: 0
     t.string "profile_picture"
-    t.text "bio"
     t.string "cover_image"
+    t.text "bio"
   end
 
   create_table "resource", primary_key: "resource_id", id: :serial, force: :cascade do |t|
