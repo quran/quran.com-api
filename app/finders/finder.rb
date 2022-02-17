@@ -15,8 +15,9 @@ class Finder
   def per_page
     strong_memoize :per_page do
       items_per_page = (params[:limit].presence || params[:per_page]).to_s.strip
+
       if items_per_page.to_s.strip == 'all'
-        [total_records || total_verses, 286].min
+        [total_records || total_verses, max_records].min
       else
         limit = (items_per_page.presence || RECORDS_PER_PAGE).to_i.abs
         limit = RECORDS_PER_PAGE if limit.zero?
@@ -25,12 +26,16 @@ class Finder
     end
   end
 
+  def max_records
+    @max_records || 286
+  end
+
   def next_page
     if last_page?
       return nil
     end
 
-    current_page + 1
+    @next_page || current_page + 1
   end
 
   def prev_page
@@ -42,18 +47,24 @@ class Finder
   end
 
   def last_page?
-    current_page == total_pages
+    total_pages <= 1 || current_page == total_pages
   end
 
   def current_page
     strong_memoize :current_page do
-      (params[:page].to_i <= 1 ? 1 : params[:page].to_i)
+      page = params[:page].to_i
+
+      page.positive? ? page : 1
     end
   end
 
   def total_pages
     strong_memoize :total_pages do
-      (total_records || total_verses / per_page.to_f).ceil
+      if total_records.zero? || per_page.zero?
+        0
+      else
+        (total_records / per_page.to_f).ceil
+     end
     end
   end
 
@@ -120,6 +131,19 @@ class Finder
 
   def raise_invalid_ayah_number
     raise(RestApi::RecordNotFound.new("Ayah key or ID is invalid. Please select valid ayah key(1:1 to 114:6) or ID(1 to 6236)."))
+  end
+
+  # Convert the input into ayah id. Input could be ayah or or simple integer value
+  def get_ayah_id(ayah_id_or_key)
+    return if ayah_id_or_key.blank?
+
+    id = if ayah_id_or_key.present? && ayah_id_or_key.include?(':')
+           QuranUtils::Quran.get_ayah_id_from_key(ayah_id_or_key)
+         else
+           ayah_id_or_key.to_i
+         end
+
+    id.positive? ? id : nil
   end
 
   def raise_invalid_surah_number

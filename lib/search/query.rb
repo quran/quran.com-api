@@ -1,12 +1,15 @@
 # frozen_string_literal: true
 
 require 'cld3'
+
 module Search
   class Query
     attr_reader :query # rubocop:disable
     include QuranUtils::StrongMemoize
 
     LANG_DETECTOR_CLD3 = CLD3::NNetLanguageIdentifier.new(0, 2000)
+    REGEXP_AYAH_RANGE = /^(?<surah>\d+)[\s\/:-]+(?<from>\d+)[\s\/:-]+(?<to>\d+)$/
+    REGEXP_AYAH_KEY = /^(?<surah>\d+)[\/:\\](?<ayah>\d+)$/
 
     def initialize(query)
       @query = query.to_s.strip
@@ -20,8 +23,12 @@ module Search
       detect_languages == ['ar']
     end
 
-    def has_ayah_key?
-      query.match? /[\/:\\]/
+    def is_ayah_key_query?
+      REGEXP_AYAH_KEY.match query
+    end
+
+    def is_range_query?
+      REGEXP_AYAH_RANGE.match query
     end
 
     def detect_languages

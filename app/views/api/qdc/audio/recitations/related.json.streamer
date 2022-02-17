@@ -1,7 +1,10 @@
-json.array! @presenter.related do |related|
-  json.object! do
-    json.extract! related,
-                  :id,
-                  :name
+recitations = @presenter.related_recitations
+fields = @presenter.reciter_fields
+
+json.object! do
+  json.reciters do
+    json.array! recitations do |recitation|
+      json.partial! 'recitation', recitation: recitation, fields: fields
+    end
   end
 end

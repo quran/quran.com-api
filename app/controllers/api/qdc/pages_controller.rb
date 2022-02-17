@@ -12,6 +12,10 @@ module Api::Qdc
       render
     end
 
+    def lookup
+      render
+    end
+
     protected
     def init_presenter
       @presenter = Qdc::MushafPagePresenter.new(params)

@@ -40,7 +40,7 @@
 #  ruku_number            :integer
 #  surah_ruku_number      :integer
 #  manzil_number          :integer
-#
+
 # Indexes
 #
 #  index_verses_on_chapter_id          (chapter_id)
@@ -120,6 +120,12 @@ class Verse < ApplicationRecord
       text_uthmani_tajweed
     when :indopak, :text_indopak
       text_indopak
+    when :text_qpc_nastaleeq_hafs, :qpc_nastaleeq_hafs # QPC nastalleq text compatiable with their own font
+      text_qpc_nastaleeq_hafs
+    when :text_qpc_nastaleeq, :qpc_nastaleeq # QPC nastalleq text compatible with indopak font
+      text_qpc_nastaleeq
+    when :text_indopak_nastaleeq, :indopak_nastaleeq # Normal Indopak script
+      text_indopak_nastaleeq
     when :uthmani_hafs, :qpc_uthmani_hafs, :text_qpc_hafs
       text_qpc_hafs
     end

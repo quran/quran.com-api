@@ -9,6 +9,7 @@ namespace :v4 do
     get 'by_manzil/:manzil_number', action: 'by_manzil'
     get 'by_ruku/:ruku_number', action: 'by_ruku'
     get 'by_key/:verse_key', action: 'by_key'
+    get :filter
 
     get 'random', action: 'random'
   end

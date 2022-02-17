@@ -15,6 +15,13 @@ class Audio::PercentilePresenter < Audio::SegmentPresenter
   end
 
   def ayah_duration_percentile
-    audio_file_segments.pluck :percentile, :verse_key
+    audio_file_segments.map do |segment|
+      {
+        verse_key: segment.verse_key,
+        from: segment.timestamp_from,
+        to: segment.timestamp_to,
+        percentile: segment.percentile
+      }
+    end
   end
 end

@@ -27,4 +27,13 @@ class MushafPage < ApplicationRecord
   belongs_to :mushaf
   has_many :verses, foreign_key: :page_number
   has_many :chapters, through: :verses
+
+  # TODO: Can save this calculation, save first and last ayah key in db.
+  def first_verse_key
+    QuranUtils::Quran.get_ayah_key_from_id(first_verse_id)
+  end
+
+  def last_verse_key
+    QuranUtils::Quran.get_ayah_key_from_id(last_verse_id)
+  end
 end

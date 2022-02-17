@@ -28,16 +28,9 @@ class CreateMorphologyWordSegments < ActiveRecord::Migration[6.1]
       t.string :lemma_name
       t.string :verb_form
 
-<<<<<<< HEAD
       t.boolean :hidden, default: false
 
       t.timestamps
     end
   end
 end
-=======
-      t.timestamps
-    end
-  end
-end
->>>>>>> 101258768416f9f51cf1429094d89e2842ddc0bc

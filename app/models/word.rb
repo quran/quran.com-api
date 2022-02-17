@@ -4,43 +4,44 @@
 #
 # Table name: words
 #
-#  id                     :integer          not null, primary key
-#  audio_url              :string
-#  char_type_name         :string
-#  class_name             :string
-#  code_dec               :integer
-#  code_dec_v3            :integer
-#  code_hex               :string
-#  code_hex_v3            :string
-#  code_v1                :string
-#  code_v2                :string
-#  en_transliteration     :string
-#  image_blob             :text
-#  image_url              :string
-#  line_number            :integer
-#  line_v2                :integer
-#  location               :string
-#  page_number            :integer
-#  pause_name             :string
-#  position               :integer
-#  text_imlaei            :string
-#  text_imlaei_simple     :string
-#  text_indopak           :string
-#  text_nastaleeq_indopak :string
-#  text_qpc_hafs          :string
-#  text_qpc_nastaleeq     :string
-#  text_uthmani           :string
-#  text_uthmani_simple    :string
-#  text_uthmani_tajweed   :string
-#  v2_page                :integer
-#  verse_key              :string
-#  created_at             :datetime         not null
-#  updated_at             :datetime         not null
-#  chapter_id             :integer
-#  char_type_id           :integer
-#  token_id               :integer
-#  topic_id               :integer
-#  verse_id               :integer
+#  id                      :integer          not null, primary key
+#  audio_url               :string
+#  char_type_name          :string
+#  class_name              :string
+#  code_dec                :integer
+#  code_dec_v3             :integer
+#  code_hex                :string
+#  code_hex_v3             :string
+#  code_v1                 :string
+#  code_v2                 :string
+#  en_transliteration      :string
+#  image_blob              :text
+#  image_url               :string
+#  line_number             :integer
+#  line_v2                 :integer
+#  location                :string
+#  page_number             :integer
+#  pause_name              :string
+#  position                :integer
+#  text_imlaei             :string
+#  text_imlaei_simple      :string
+#  text_indopak            :string
+#  text_indopak_nastaleeq  :string
+#  text_qpc_hafs           :string
+#  text_qpc_nastaleeq      :string
+#  text_qpc_nastaleeq_hafs :string
+#  text_uthmani            :string
+#  text_uthmani_simple     :string
+#  text_uthmani_tajweed    :string
+#  v2_page                 :integer
+#  verse_key               :string
+#  created_at              :datetime         not null
+#  updated_at              :datetime         not null
+#  chapter_id              :integer
+#  char_type_id            :integer
+#  token_id                :integer
+#  topic_id                :integer
+#  verse_id                :integer
 #
 # Indexes
 #
@@ -79,6 +80,7 @@ class Word < ApplicationRecord
   default_scope { order 'position asc' }
 
   alias_attribute :v1_page, :page_number
+  alias_attribute :line_v1, :line_number
   #TODO: deprecated and renamed to text_qpc_hafs
   alias_attribute :qpc_uthmani_hafs, :text_qpc_hafs
 
@@ -91,25 +93,31 @@ class Word < ApplicationRecord
   end
 
   def get_line_number(version)
-    if :v1 == version
-      line_number
-    else
+    if :v2 == version
       line_v2
+    else
+      line_number
     end
   end
 
   def get_text(version)
     case version
-    when :v1
+    when :v1, :code_v1
       code_v1
-    when :v2
+    when :v2, :code_v2
       code_v2
-    when :indopak
+    when :indopak, :text_indopak
       text_indopak
-    when :text_qpc_hafs, :qpc_uthmani_hafs
+    when :text_qpc_hafs, :qpc_uthmani_hafs # TODO: qpc_uthmani_hafs is deprecated
       text_qpc_hafs
-    when :uthmani, :uthmani_tajweed
+    when :uthmani, :uthmani_tajweed # NOTE: we don't have wbw uthmani tajweed yet
       text_uthmani
+    when :text_qpc_nastaleeq_hafs, :qpc_nastaleeq_hafs # QPC nastalleq text compatiable with their own font
+      text_qpc_nastaleeq_hafs
+    when :text_qpc_nastaleeq, :qpc_nastaleeq # QPC nastalleq text compatible with indopak font
+      text_qpc_nastaleeq
+    when :text_indopak_nastaleeq, :indopak_nastaleeq # Normal Indopak script
+      text_indopak_nastaleeq
     when :imlaei
       text_imlaei
     when :imlaei_simple

@@ -48,6 +48,7 @@ staging:
 
 development:
   <<: *default
+  host: localhost
   database: quran_dev
 
 

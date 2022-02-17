@@ -6,10 +6,6 @@ namespace :qdc do
     get 'translations/filter', action: 'filter'
     get :tafsirs
     get 'tafsirs/:tafsir_id/info', action: 'tafsir_info'
-    # TODO: move to audio
-    get :recitations
-    get 'recitations/:recitation_id/info', action: 'recitation_info'
-    # TODO: move to audio
     get :recitation_styles
     get :languages
     get :chapter_infos
@@ -44,6 +40,7 @@ namespace :qdc do
 
   # Page
   get 'pages', to: 'pages#index'
+  get 'pages/lookup', to: 'pages#lookup'
   get 'pages/:id', to: 'pages#show'
 
   # verses routes, by juz, chapter, page
@@ -74,21 +71,28 @@ namespace :qdc do
   get :mushafs, to: 'mushafs#index'
 
   namespace :audio do
-    # Surah audio
-    get 'reciters', to: 'chapter_recitations#reciters'
-    get 'reciters/:reciter_id', to: 'chapter_recitations#reciter_audio_files'
+    # Surah audio recitations, FE team wants to access them using /audio/reciters path instead of /audio/recitations...well sure!
+    get 'reciters', to: 'recitations#index'
+    get 'reciters/:reciter_id', to: 'recitations#show'
+    get 'reciters/:reciter_id/audio_files', to: 'recitations#audio_files'
+    get 'reciters/:reciter_id/related', to: 'recitations#related'
 
     # Get timestamp for ayah
-    get 'reciters/:reciter_id/timestamp', to: 'segments#timestamp'
-
+    get 'reciters/:reciter_id/timestamp', to: 'recitations#timestamp'
     # Segments and percentiles
-    get 'reciters/:reciter_id/lookup', to: 'segments#lookup_ayah'
-    get 'reciters/:reciter_id/percentiles', to: 'percentiles#cumulative_percentile'
-    get 'reciters/:reciter_id/ayah_percentiles', to: 'percentiles#ayah_duration_percentile'
+    get 'reciters/:reciter_id/lookup', to: 'recitations#lookup_ayah'
+
+    # percentiles
+    get 'reciters/:reciter_id/percentiles', to: 'recitations#cumulative_percentile'
+    get 'reciters/:reciter_id/ayah_percentiles', to: 'recitations#ayah_duration_percentile'
+
+    # Radio stations
+    get 'stations', to: 'radio_stations#index'
+    get 'stations/:station_id', to: 'radio_stations#show'
   end
 
   # routes for fetching all records of one resource.
-  # i.e /v4/quran/translations/131 will send complete Clear Quran translation
+  # i.e /qdc/quran/translations/131 will send complete Clear Quran translation
   namespace :quran do
     get 'translations/:translation_id', action: 'translation'
     get 'tafsirs/:tafsir_id', action: 'tafsir'
