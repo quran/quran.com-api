@@ -171,6 +171,6 @@ class Finder
   end
 
   def raise_invalid_ruku_number
-    raise RestApi::RecordNotFound.new("R not found. Please select valid hizb number from 1-60.")
+    raise RestApi::RecordNotFound.new("Ruku not found. Please select valid ruku number from 1-558.")
   end
 end
