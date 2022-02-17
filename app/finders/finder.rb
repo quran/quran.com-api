@@ -112,7 +112,7 @@ class Finder
   end
 
   def find_ayah
-    Verse.find_by_id_or_key(params[:ayah_key].to_s) || raise_invalid_ayah_number
+    Verse.find_with_id_or_key(params[:ayah_key].to_s) || raise_invalid_ayah_number
   end
 
   def find_chapter(id_or_slug = nil)

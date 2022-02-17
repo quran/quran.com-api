@@ -87,7 +87,7 @@ class Verse < ApplicationRecord
   #TODO: deprecated and renamed to text_qpc_hafs
   alias_attribute :qpc_uthmani_hafs, :text_qpc_hafs
 
-  def self.find_by_id_or_key(id)
+  def self.find_with_id_or_key(id)
     if id.to_s.include? ':'
       where(verse_key: id).first
     else
