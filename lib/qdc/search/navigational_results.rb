@@ -19,6 +19,10 @@ module Qdc
         @search.empty?
       end
 
+      def range?
+        false
+      end
+
       def total_count
         @search.response['hits']['total']['value']
       end
