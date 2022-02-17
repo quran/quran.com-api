@@ -49,7 +49,7 @@ module Qdc
     def lookup_verse_range(filter=nil)
       filter ||= look_up_filter
 
-      strong_memoize :lookup_range do
+      strong_memoize "look_up_#{filter}" do
         finder = ::Qdc::VerseFinder.new(params)
         verses = finder.find_verses_range(
           filter: filter,
