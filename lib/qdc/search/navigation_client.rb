@@ -11,16 +11,23 @@ module Qdc
       end
 
       def search
-        response = Elasticsearch::Model.search(search_definition, [Chapter], index: Chapter.index_name)
+        range_match = query.is_range_query?
+        range_surah = range_match && range_match['surah'].to_i
 
-        # For debugging, copy the query and paste in kibana for debugging
-        if DEBUG_ES_QUERIES
-          File.open("es_queries/last_navigational_query.json", "wb") do |f|
-            f << search_definition.to_json
+        if range_surah && range_surah > 0 && range_surah < 114
+          Search::NavigationalAyahRangeResult.new(range_match)
+        else
+          response = Elasticsearch::Model.search(search_definition, [Chapter], index: Chapter.index_name)
+
+          # For debugging, copy the query and paste in kibana for debugging
+          if DEBUG_ES_QUERIES
+            File.open("es_queries/last_navigational_query.json", "wb") do |f|
+              f << search_definition.to_json
+            end
           end
-        end
 
-        Search::NavigationalResults.new(response)
+          Search::NavigationalResults.new(response)
+        end
       end
 
       protected
@@ -31,7 +38,7 @@ module Qdc
           query: navigate_query,
           size: navigate_result_size,
           collapse: { # get uniq results for each navigation record type.
-            field: 'result_type'
+                      field: 'result_type'
           },
           sort: sort_query
         }

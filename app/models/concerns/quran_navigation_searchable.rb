@@ -185,6 +185,7 @@ module QuranNavigationSearchable
       "ch#{chapter_id}v#{verse_number}", # ch23v2
       "c#{chapter_id}v#{verse_number}", # v2v3
       "#{chapter.name_arabic} #{verse_number}", # الفاتحة 1
+      "#{chapter.name_simple} #{verse_number}", # Al-Baqarah 1
       "surah #{chapter_id} ayah #{verse_number}", # surah 1 ayah 1
       "ayah #{verse_number} surah #{chapter_id}", # ayah 1 surah 1
     ]
