@@ -5,7 +5,7 @@ ruby '3.1.0'
 
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-gem 'rails', '~> 7.0.1'
+gem 'rails', '~> 7.0.2', '>= 7.0.2.2'
 
 # Use postgresql as the database for Active Record
 gem 'pg', '>= 0.18', '< 2.0'
@@ -68,7 +68,7 @@ group :development do
   # run some pre commit hooks
   gem 'pre-commit', require: false
   gem 'rubocop', '>= 1.7.0', require: false
-  gem 'rubocop-rails_config', '>= 1.6.0'
+  gem 'rubocop-rails_config', '>= 1.8.0'
 
   # https://github.com/tmm1/stackprof
   # sampling call-stack profiler for ruby
