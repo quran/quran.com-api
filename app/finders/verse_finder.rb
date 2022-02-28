@@ -2,7 +2,7 @@
 
 class VerseFinder < Finder
   def find(verse_number, language_code = 'en')
-    load_verses(language_code).find_by_id_or_key(verse_number) || raise_invalid_ayah_number
+    load_verses(language_code).find_with_id_or_key(verse_number) || raise_invalid_ayah_number
   end
 
   def random_verse(filters, language_code, words: true, tafsirs: false, translations: false, reciter: false)
@@ -16,7 +16,6 @@ class VerseFinder < Finder
     @results.order("verses.verse_index ASC, words.position ASC, word_translations.priority ASC #{translations_order}".strip)
             .sample
   end
-
 
   def load_verses(language_code)
     fetch_verses_range
@@ -33,7 +32,6 @@ class VerseFinder < Finder
   end
 
   protected
-
   def fetch_verses_range
     verse_start = verse_pagination_start
     verse_end = verse_pagination_end(verse_start)

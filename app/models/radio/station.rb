@@ -1,17 +1,18 @@
 # == Schema Information
+# Schema version: 20220123232023
 #
 # Table name: radio_stations
 #
-#  id                  :bigint           not null, primary key
-#  cover_image         :string
-#  description         :text
+#  id                  :integer          not null, primary key
 #  name                :string
-#  priority            :integer
+#  cover_image         :string
 #  profile_picture     :string
-#  created_at          :datetime         not null
-#  updated_at          :datetime         not null
+#  description         :text
 #  audio_recitation_id :integer
 #  parent_id           :integer
+#  priority            :integer
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
 #
 # Indexes
 #
@@ -19,6 +20,7 @@
 #  index_radio_stations_on_parent_id            (parent_id)
 #  index_radio_stations_on_priority             (priority)
 #
+
 class Radio::Station < ApplicationRecord
   include NameTranslateable
 

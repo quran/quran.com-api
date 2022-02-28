@@ -4,7 +4,7 @@ module Qdc
     class QuranSearchClient < Search::Client
       TRANSLATION_LANGUAGES = Language.with_translations
       TRANSLATION_LANGUAGE_CODES = TRANSLATION_LANGUAGES.pluck(:iso_code)
-      DEFAULT_TRANSLATIONS = [131, 20]
+      DEFAULT_TRANSLATIONS = [131, 20, 57] # Clear Quran, Sahih International and Transliteration
 
       QURAN_SOURCE_ATTRS = [
         'language_id',

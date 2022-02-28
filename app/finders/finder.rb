@@ -15,6 +15,7 @@ class Finder
   def per_page
     strong_memoize :per_page do
       items_per_page = (params[:limit].presence || params[:per_page]).to_s.strip
+
       if items_per_page.to_s.strip == 'all'
         [total_records || total_verses, max_records].min
       else
@@ -111,7 +112,7 @@ class Finder
   end
 
   def find_ayah
-    Verse.find_by_id_or_key(params[:ayah_key].to_s) || raise_invalid_ayah_number
+    Verse.find_with_id_or_key(params[:ayah_key].to_s) || raise_invalid_ayah_number
   end
 
   def find_chapter(id_or_slug = nil)
@@ -170,6 +171,6 @@ class Finder
   end
 
   def raise_invalid_ruku_number
-    raise RestApi::RecordNotFound.new("R not found. Please select valid hizb number from 1-60.")
+    raise RestApi::RecordNotFound.new("Ruku not found. Please select valid ruku number from 1-558.")
   end
 end

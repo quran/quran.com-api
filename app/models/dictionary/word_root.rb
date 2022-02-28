@@ -1,19 +1,19 @@
 # frozen_string_literal: true
-
 # == Schema Information
+# Schema version: 20220109075422
 #
 # Table name: dictionary_word_roots
 #
-#  id                 :bigint           not null, primary key
+#  id                 :integer          not null, primary key
+#  frequency          :integer
+#  root_number        :integer
+#  english_trilateral :string
 #  arabic_trilateral  :string
 #  cover_url          :string
 #  description        :text
-#  english_trilateral :string
-#  frequency          :integer
-#  root_number        :integer
+#  root_id            :integer
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
-#  root_id            :integer
 #
 # Indexes
 #
@@ -22,6 +22,7 @@
 #  index_dictionary_word_roots_on_root_id             (root_id)
 #  index_dictionary_word_roots_on_root_number         (root_number)
 #
+
 class Dictionary::WordRoot < ApplicationRecord
   belongs_to :root, optional: true
   has_many :root_examples, class_name: 'Dictionary::RootExample'
