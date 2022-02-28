@@ -22,7 +22,8 @@ gem 'graphql-schema_comparator'
 gem 'cld3', '= 3.4.3'
 
 # Elasticsearch
-gem 'elasticsearch-model', '~> 7.2.0'
+gem 'elastic-transport'
+gem 'elasticsearch-model'#, '~> 7.2.0'
 gem 'typhoeus'
 
 # Paging the results

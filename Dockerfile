@@ -1,4 +1,4 @@
-FROM ruby:3.0.0-alpine
+FROM ruby:3.1.0-alpine
 
 RUN apk add --no-cache curl postgresql-dev tzdata git make gcc g++ python3 linux-headers binutils-gold gnupg libstdc++ yarn bash autoconf automake libtool build-base
 
