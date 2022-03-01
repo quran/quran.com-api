@@ -1,31 +1,30 @@
 # frozen_string_literal: true
 
 source 'https://rubygems.org'
-ruby '3.0.0'
+ruby '3.1.0'
 
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-gem 'rails', '~> 6.1.4.6'
+gem 'rails', '~> 7.0.2', '>= 7.0.2.2'
 
 # Use postgresql as the database for Active Record
 gem 'pg', '>= 0.18', '< 2.0'
 
-gem 'turbostreamer', '>= 1.9'
+# For rendering json,
+# TODO: turbostreamer replace this with https://github.com/thoughtbot/props_template
+# pros_template has simple syntax and slightly faster than turbostreamer
+gem 'turbostreamer', '= 1.9'
 
-# Http request
-gem 'httparty', require: false
-
-gem 'graphql', '1.11.4'
+gem 'graphql', '= 1.11.4'
 gem 'graphql-schema_comparator'
-gem 'graphql-playground', github: 'naveed-ahmad/graphql-playground-rails'
+#gem 'graphql-playground', github: 'naveed-ahmad/graphql-playground-rails'
 
-gem 'cld3', '>= 3.4.2'
+gem 'cld3', '= 3.4.3'
 
 # Elasticsearch
-# using excon as faraday adapter (net::http breaks)
-gem 'elasticsearch-model', '>= 7.1.1'
-gem 'excon'
-gem 'typhoeus', github: 'naveed-ahmad/typhoeus'
+gem 'elastic-transport'
+gem 'elasticsearch-model'#, '~> 7.2.0'
+gem 'typhoeus'
 
 # Paging the results
 gem 'pagy'
@@ -36,30 +35,24 @@ gem 'oj_mimic_json'
 gem 'rails-html-sanitizer', '>= 1.4.2'
 
 # This is to run the rake task for importing in parallel
-gem 'parallel'
 # Will provide a progress bar as the import happens
+gem 'parallel', require: false
 
-gem 'prose'
-
+# use puma server
 gem 'puma', '~> 4.3', '>= 4.3.11'
 
+# enable cors
 gem 'rack-cors'
+
 # compresses Rack responses using Google's Brotli compression algorithm
 gem 'rack-brotli'
-gem 'virtus'
 
-gem 'bootsnap', '>= 1.4.2', require: false
 gem 'tzinfo-data'
 
-# Detect the language
-gem 'whatlanguage'
-
-gem 'rubocop', '>= 1.7.0', require: false
-
+# Exception tracking
 gem 'sentry-raven', group: [:production]
 
 group :development, :test do
-  gem 'pry-byebug'
   gem 'pry-rails'
   gem 'apollo-tracing'
   gem 'solargraph'
@@ -71,24 +64,26 @@ group :development do
   gem 'benchmark-ips', require: false
   gem 'bullet'
   gem 'derailed_benchmarks'
-  gem 'pre-commit'
-  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-  gem 'spring'
-  gem 'spring-commands-rspec'
-  gem 'spring-watcher-listen', '~> 2.0.0'
+
+  # run some pre commit hooks
+  gem 'pre-commit', require: false
+  gem 'rubocop', '>= 1.7.0', require: false
+  gem 'rubocop-rails_config', '>= 1.8.0'
+
+  # https://github.com/tmm1/stackprof
+  # sampling call-stack profiler for ruby
   gem 'stackprof'
+
+  # Annotate modes with columns
+  gem 'annotate'
 end
 
 group :test, :development do
-  gem 'annotate', '>= 3.1.1'
-  gem 'guard-rspec', '= 4.7.3'
-  gem 'guard-spork'
-  gem 'rspec-rails', '= 4.0.2'
-  gem 'shoulda-matchers', '~> 4.0'
+  gem 'rspec-rails', '= 5.0.2'
+  gem 'shoulda-matchers', '~> 5.1.0'
   gem 'simplecov', require: false
   gem 'factory_bot_rails', '>= 6.2.0'
   gem 'rubocop-rails_config', '>= 1.8.2'
   gem 'rubocop-rspec', '>= 2.1.0'
-  gem 'spork'
-  gem 'watchr'
+  gem 'json-schema-rspec'
 end

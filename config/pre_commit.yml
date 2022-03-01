@@ -2,3 +2,6 @@
 :warnings_remove: []
 :warnings_add:
 - :tabs
+:checks_add: []
+:checks_remove:
+- :jshint

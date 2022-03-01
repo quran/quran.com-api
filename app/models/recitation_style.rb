@@ -1,17 +1,17 @@
 # frozen_string_literal: true
-
 # == Schema Information
+# Schema version: 20220109075422
 #
 # Table name: recitation_styles
 #
 #  id                :integer          not null, primary key
-#  arabic            :string
-#  description       :text
 #  name              :string
-#  recitations_count :integer          default(0)
-#  slug              :string
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
+#  arabic            :string
+#  slug              :string
+#  description       :text
+#  recitations_count :integer          default("0")
 #
 # Indexes
 #
