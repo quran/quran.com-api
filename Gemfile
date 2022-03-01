@@ -68,7 +68,6 @@ group :development do
   # run some pre commit hooks
   gem 'pre-commit', require: false
   gem 'rubocop', '>= 1.7.0', require: false
-  gem 'rubocop-rails_config', '>= 1.8.0'
 
   # https://github.com/tmm1/stackprof
   # sampling call-stack profiler for ruby
@@ -82,6 +81,8 @@ group :test, :development do
   gem 'rspec-rails', '= 5.0.2'
   gem 'shoulda-matchers', '~> 5.1.0'
   gem 'simplecov', require: false
+  gem 'factory_bot_rails', '>= 6.2.0'
+  gem 'rubocop-rails_config', '>= 1.8.2'
   gem 'rubocop-rspec', '>= 2.1.0'
   gem 'json-schema-rspec'
 end
