@@ -68,7 +68,6 @@ group :development do
   # run some pre commit hooks
   gem 'pre-commit', require: false
   gem 'rubocop', '>= 1.7.0', require: false
-  gem 'rubocop-rails_config', '>= 1.8.0'
 
   # https://github.com/tmm1/stackprof
   # sampling call-stack profiler for ruby
