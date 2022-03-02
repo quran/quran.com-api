@@ -37,7 +37,7 @@ module Api::V4
       @filter_names = humanize_filter_names(filters)
 
       @audio_files = if (@recitation = fetch_approved_recitation)
-                       @filters[:recitation_id] = @recitation.id
+                       filters[:recitation_id] = @recitation.id
 
                        @audio_files = AudioFile.order('verse_id ASC').where(filters)
                      else

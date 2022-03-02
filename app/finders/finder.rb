@@ -143,7 +143,7 @@ class Finder
            ayah_id_or_key.to_i
          end
 
-    id.positive? ? id : nil
+    id&.positive? ? id : nil
   end
 
   def raise_invalid_surah_number
