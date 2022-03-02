@@ -1,6 +1,6 @@
 if @presenter.render_raw_response?
   json.object! do
-    json.result render(partial: 'raw_response', formats: ['html'])
+    json.result render(partial: 'raw_response', formats: [:html])
   end
 else
   json.object! do
