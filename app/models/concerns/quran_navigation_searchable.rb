@@ -123,7 +123,9 @@ module QuranNavigationSearchable
     ].uniq
 
     document_name = "Surah #{name_simple}"
-    (names + translated_names.pluck(:name)).flatten.map do |name|
+    hard_coded_variants = navigation_search_records.pluck(:text)
+
+    (names + translated_names.pluck(:name) + hard_coded_variants).flatten.uniq.map do |name|
       {
         id: id,
         text: name,
@@ -141,8 +143,9 @@ module QuranNavigationSearchable
       "Juz #{juz_number}",
       "Para #{juz_number}",
     ]
+    hard_coded_variants = navigation_search_records.pluck(:text)
 
-    variants.map do |variant|
+    (hard_coded_variants + variants).flatten.uniq.map do |variant|
       {
         id: juz_number,
         text: variant,
@@ -162,8 +165,9 @@ module QuranNavigationSearchable
       "P #{page_number}",
       "p#{page_number}"
     ]
+    hard_coded_variants = navigation_search_records.pluck(:text)
 
-    variants.map do |variant|
+    (hard_coded_variants + variants).flatten.uniq.map do |variant|
       {
         id: page_number,
         text: variant,
@@ -189,8 +193,9 @@ module QuranNavigationSearchable
       "surah #{chapter_id} ayah #{verse_number}", # surah 1 ayah 1
       "ayah #{verse_number} surah #{chapter_id}", # ayah 1 surah 1
     ]
+    hard_coded_variants = navigation_search_records.pluck(:text)
 
-    variants.map do |variant|
+    (hard_coded_variants + variants).flatten.uniq.map do |variant|
       {
         id: id,
         text: variant,
