@@ -109,8 +109,9 @@ class V4::VerseFinder < ::VerseFinder
   end
 
   def fetch_by_hizb
+    hizb = find_hizb
     results = rescope_verses('verse_index')
-                .where(hizb_number: find_hizb_number)
+                .where(hizb_number: hizb.hizb_number)
 
     @total_records = results.size
     @results = results.limit(per_page).offset((current_page - 1) * per_page)

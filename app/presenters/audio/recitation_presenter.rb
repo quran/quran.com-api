@@ -49,7 +49,7 @@ class Audio::RecitationPresenter < BasePresenter
   end
 
   def chapter_audio_file
-    approved_audio_files.where(chapter_id: chapter_id).first
+    approved_audio_files.where(chapter_id: chapter.id).first
   end
 
   def audio_files
@@ -59,8 +59,8 @@ class Audio::RecitationPresenter < BasePresenter
   def approved_audio_files
     files = recitation_without_eager_load.chapter_audio_files.order('audio_chapter_audio_files.chapter_id ASC')
 
-    files = if chapter_id
-              files.where(chapter_id: chapter_id)
+    files = if chapter
+              files.where(chapter_id: chapter.id)
             else
               files
             end
@@ -74,6 +74,12 @@ class Audio::RecitationPresenter < BasePresenter
 
   def include_segments?
     include_in_response? params[:segments].presence
+  end
+
+  def chapter
+    strong_memoize :chapter do
+      Chapter.find_using_slug(chapter_id) || raise_404("Surah number or slug is invalid. Please select valid slug or surah number from 1-114.")
+    end
   end
 
   protected

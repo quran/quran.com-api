@@ -43,5 +43,8 @@ module QuranAPI
     config.generators do |g|
       g.test_framework :rspec, fixture: true
     end
+
+    # Disable IP spoofing attack check
+    config.action_dispatch.ip_spoofing_check = false
   end
 end
