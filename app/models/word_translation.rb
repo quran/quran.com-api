@@ -1,18 +1,18 @@
 # frozen_string_literal: true
 # == Schema Information
-# Schema version: 20220109075422
+# Schema version: 20220123232023
 #
 # Table name: word_translations
 #
-#  id                  :integer          not null, primary key
-#  word_id             :integer
-#  text                :string
+#  id                  :bigint           not null, primary key
 #  language_name       :string
-#  language_id         :integer
-#  resource_content_id :integer
 #  priority            :integer
+#  text                :string
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
+#  language_id         :integer
+#  resource_content_id :integer
+#  word_id             :integer
 #
 # Indexes
 #

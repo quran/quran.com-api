@@ -1,16 +1,16 @@
 # == Schema Information
-# Schema version: 20220109075422
+# Schema version: 20220123232023
 #
 # Table name: manzils
 #
-#  id             :integer          not null, primary key
+#  id             :bigint           not null, primary key
 #  manzil_number  :integer
-#  verses_count   :integer
 #  verse_mapping  :json
-#  first_verse_id :integer
-#  last_verse_id  :integer
+#  verses_count   :integer
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
+#  first_verse_id :integer
+#  last_verse_id  :integer
 #
 # Indexes
 #

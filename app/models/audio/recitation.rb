@@ -1,29 +1,29 @@
 # frozen_string_literal: true
 # == Schema Information
-# Schema version: 20220109075422
+# Schema version: 20220123232023
 #
 # Table name: audio_recitations
 #
-#  id                  :integer          not null, primary key
-#  name                :string
+#  id                  :bigint           not null, primary key
+#  approved            :boolean
 #  arabic_name         :string
-#  relative_path       :string
-#  format              :string
-#  section_id          :integer
 #  description         :text
 #  files_count         :integer
-#  resource_content_id :integer
-#  recitation_style_id :integer
-#  reciter_id          :integer
-#  approved            :boolean
+#  files_size          :float
+#  format              :string
 #  home                :integer
+#  name                :string
+#  priority            :integer
+#  relative_path       :string
+#  segment_locked      :boolean          default(FALSE)
+#  segments_count      :integer
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
-#  priority            :integer
-#  segments_count      :integer
-#  files_size          :float
 #  qirat_type_id       :integer
-#  segment_locked      :boolean          default("false")
+#  recitation_style_id :integer
+#  reciter_id          :integer
+#  resource_content_id :integer
+#  section_id          :integer
 #
 # Indexes
 #

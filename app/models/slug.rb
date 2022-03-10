@@ -1,18 +1,18 @@
 # frozen_string_literal: true
 # == Schema Information
-# Schema version: 20220109075422
+# Schema version: 20220123232023
 #
 # Table name: slugs
 #
-#  id                :integer          not null, primary key
-#  chapter_id        :integer
-#  slug              :string
+#  id                :bigint           not null, primary key
+#  is_default        :boolean          default(FALSE)
+#  language_priority :integer
 #  locale            :string
+#  name              :string
+#  slug              :string
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
-#  is_default        :boolean          default("false")
-#  name              :string
-#  language_priority :integer
+#  chapter_id        :bigint
 #  language_id       :integer
 #
 # Indexes

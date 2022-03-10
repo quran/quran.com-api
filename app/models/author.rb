@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 # == Schema Information
-# Schema version: 20220109075422
+# Schema version: 20220123232023
 #
 # Table name: authors
 #
 #  id                      :integer          not null, primary key
 #  name                    :string
+#  resource_contents_count :integer          default(0)
 #  url                     :string
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
-#  resource_contents_count :integer          default("0")
 #
 
 class Author < ApplicationRecord

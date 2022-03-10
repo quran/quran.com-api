@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 # == Schema Information
-# Schema version: 20220109075422
+# Schema version: 20220123232023
 #
 # Table name: dictionary_root_definitions
 #
-#  id              :integer          not null, primary key
+#  id              :bigint           not null, primary key
 #  definition_type :integer
 #  description     :text
-#  word_root_id    :integer
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
+#  word_root_id    :bigint
 #
 # Indexes
 #

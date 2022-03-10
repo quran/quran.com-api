@@ -1,28 +1,28 @@
 # frozen_string_literal: true
 # == Schema Information
-# Schema version: 20220109075422
+# Schema version: 20220123232023
 #
 # Table name: audio_chapter_audio_files
 #
-#  id                  :integer          not null, primary key
-#  chapter_id          :integer
-#  audio_recitation_id :integer
-#  total_files         :integer
-#  stream_count        :integer
-#  download_count      :integer
-#  file_size           :float
+#  id                  :bigint           not null, primary key
+#  audio_url           :string
 #  bit_rate            :integer
+#  download_count      :integer
 #  duration            :integer
+#  duration_ms         :integer
 #  file_name           :string
+#  file_size           :float
 #  format              :string
+#  metadata            :jsonb
 #  mime_type           :string
-#  metadata            :jsonb            default("{}")
+#  stream_count        :integer
+#  timing_percentiles  :string           is an Array
+#  total_files         :integer
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
+#  audio_recitation_id :integer
+#  chapter_id          :integer
 #  resource_content_id :integer
-#  duration_ms         :integer
-#  audio_url           :string
-#  timing_percentiles  :string           is an Array
 #
 # Indexes
 #

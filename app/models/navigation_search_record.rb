@@ -1,17 +1,17 @@
 # == Schema Information
-# Schema version: 20220109075422
+# Schema version: 20220123232023
 #
 # Table name: navigation_search_records
 #
-#  id                     :integer          not null, primary key
+#  id                     :bigint           not null, primary key
+#  key                    :string
+#  name                   :string
 #  result_type            :string
 #  searchable_record_type :string
-#  searchable_record_id   :integer
-#  name                   :string
-#  key                    :string
 #  text                   :string
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
+#  searchable_record_id   :bigint
 #
 # Indexes
 #

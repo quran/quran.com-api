@@ -1,16 +1,16 @@
 # frozen_string_literal: true
 # == Schema Information
-# Schema version: 20220109075422
+# Schema version: 20220123232023
 #
 # Table name: audio_change_logs
 #
-#  id                  :integer          not null, primary key
-#  audio_recitation_id :integer
+#  id                  :bigint           not null, primary key
 #  date                :datetime
 #  mini_desc           :text
 #  rss_desc            :text
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
+#  audio_recitation_id :integer
 #
 
 class Audio::ChangeLog < ApplicationRecord

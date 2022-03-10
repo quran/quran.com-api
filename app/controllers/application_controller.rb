@@ -5,7 +5,7 @@ class ApplicationController < ActionController::API
   include QuranUtils::StrongMemoize
   include ActionView::Rendering
 
-  before_action :set_cache_headers, except: :random
+  before_action :set_cache_headers
   before_action :set_default_response_format
 
   rescue_from RestApi::RecordNotFound, with: :render_404
@@ -28,10 +28,13 @@ class ApplicationController < ActionController::API
   end
 
   def set_cache_headers
-    expires_in 7.day, public: true
-    headers['Connection'] = 'Keep-Alive'
-    # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security
-    headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains; preload'
+    if action_name != 'random'
+      expires_in 7.day, public: true
+      # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security
+      headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains; preload'
+    end
+
+    headers['Access-Control-Allow-Origin'] = '*'
   end
 
   def eager_load_translated_name(records)

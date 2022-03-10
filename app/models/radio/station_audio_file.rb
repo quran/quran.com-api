@@ -3,12 +3,12 @@
 #
 # Table name: radio_station_audio_files
 #
-#  id                    :integer          not null, primary key
-#  radio_station_id      :integer
-#  chapter_audio_file_id :integer
-#  chapter_id            :integer
+#  id                    :bigint           not null, primary key
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null
+#  chapter_audio_file_id :integer
+#  chapter_id            :integer
+#  radio_station_id      :integer
 #
 # Indexes
 #

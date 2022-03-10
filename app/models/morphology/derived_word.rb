@@ -1,18 +1,18 @@
 # == Schema Information
-# Schema version: 20220109075422
+# Schema version: 20220123232023
 #
 # Table name: morphology_derived_words
 #
-#  id                 :integer          not null, primary key
-#  verse_id           :integer
-#  word_id            :integer
-#  derived_word_id    :integer
-#  word_verb_from_id  :integer
-#  form_name          :string
-#  en_transliteration :string
+#  id                 :bigint           not null, primary key
 #  en_translation     :string
+#  en_transliteration :string
+#  form_name          :string
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
+#  derived_word_id    :bigint
+#  verse_id           :bigint
+#  word_id            :bigint
+#  word_verb_from_id  :bigint
 #
 # Indexes
 #
@@ -20,6 +20,11 @@
 #  index_morphology_derived_words_on_verse_id           (verse_id)
 #  index_morphology_derived_words_on_word_id            (word_id)
 #  index_morphology_derived_words_on_word_verb_from_id  (word_verb_from_id)
+#
+# Foreign Keys
+#
+#  fk_rails_5e24f5074a  (verse_id => verses.id)
+#  fk_rails_caed5b1f66  (word_id => words.id)
 #
 
 class Morphology::DerivedWord < ApplicationRecord

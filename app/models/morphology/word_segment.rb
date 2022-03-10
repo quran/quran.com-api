@@ -1,32 +1,32 @@
 # == Schema Information
-# Schema version: 20220109075422
+# Schema version: 20220123232023
 #
 # Table name: morphology_word_segments
 #
-#  id                        :integer          not null, primary key
-#  word_id                   :integer
-#  root_id                   :integer
-#  topic_id                  :integer
-#  lemma_id                  :integer
-#  grammar_concept_id        :integer
-#  grammar_role_id           :integer
-#  grammar_sub_role_id       :integer
-#  grammar_term_id           :integer
+#  id                        :bigint           not null, primary key
+#  grammar_term_desc_arabic  :string
+#  grammar_term_desc_english :string
 #  grammar_term_key          :string
 #  grammar_term_name         :string
+#  hidden                    :boolean
+#  lemma_name                :string
 #  part_of_speech_key        :string
 #  part_of_speech_name       :string
-#  position                  :integer
-#  text_uthmani              :string
-#  grammar_term_desc_english :string
-#  grammar_term_desc_arabic  :string
 #  pos_tags                  :string
+#  position                  :integer
 #  root_name                 :string
-#  lemma_name                :string
+#  text_uthmani              :string
 #  verb_form                 :string
 #  created_at                :datetime         not null
 #  updated_at                :datetime         not null
-#  hidden                    :boolean
+#  grammar_concept_id        :bigint
+#  grammar_role_id           :bigint
+#  grammar_sub_role_id       :bigint
+#  grammar_term_id           :bigint
+#  lemma_id                  :bigint
+#  root_id                   :bigint
+#  topic_id                  :bigint
+#  word_id                   :bigint
 #
 # Indexes
 #
@@ -41,6 +41,13 @@
 #  index_morphology_word_segments_on_root_id              (root_id)
 #  index_morphology_word_segments_on_topic_id             (topic_id)
 #  index_morphology_word_segments_on_word_id              (word_id)
+#
+# Foreign Keys
+#
+#  fk_rails_18c40a6302  (word_id => words.id)
+#  fk_rails_378c14d9b9  (root_id => roots.id)
+#  fk_rails_3887db9336  (topic_id => topics.id)
+#  fk_rails_a3cf985389  (lemma_id => lemmas.id)
 #
 
 class Morphology::WordSegment < ApplicationRecord

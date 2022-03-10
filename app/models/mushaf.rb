@@ -1,18 +1,18 @@
 # frozen_string_literal: true
 # == Schema Information
-# Schema version: 20220109075422
+# Schema version: 20220123232023
 #
 # Table name: mushafs
 #
-#  id                  :integer          not null, primary key
-#  name                :string           not null
-#  description         :text
-#  lines_per_page      :integer
-#  is_default          :boolean          default("false")
+#  id                  :bigint           not null, primary key
 #  default_font_name   :string
+#  description         :text
+#  enabled             :boolean
+#  is_default          :boolean          default(FALSE)
+#  lines_per_page      :integer
+#  name                :string           not null
 #  pages_count         :integer
 #  qirat_type_id       :integer
-#  enabled             :boolean
 #  resource_content_id :integer
 #
 # Indexes

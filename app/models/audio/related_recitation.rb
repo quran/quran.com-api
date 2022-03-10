@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 # == Schema Information
-# Schema version: 20220109075422
+# Schema version: 20220123232023
 #
 # Table name: audio_related_recitations
 #
-#  id                          :integer          not null, primary key
-#  audio_recitation_id         :integer
-#  related_audio_recitation_id :integer
+#  id                          :bigint           not null, primary key
 #  created_at                  :datetime         not null
 #  updated_at                  :datetime         not null
+#  audio_recitation_id         :integer
+#  related_audio_recitation_id :integer
 #
 # Indexes
 #

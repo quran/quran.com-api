@@ -1,11 +1,11 @@
 # == Schema Information
-# Schema version: 20220109075422
+# Schema version: 20220123232023
 #
 # Table name: morphology_grammar_concepts
 #
-#  id         :integer          not null, primary key
-#  english    :string
+#  id         :bigint           not null, primary key
 #  arabic     :string
+#  english    :string
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #

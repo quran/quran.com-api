@@ -1,32 +1,32 @@
 # frozen_string_literal: true
 # == Schema Information
-# Schema version: 20220109075422
+# Schema version: 20220123232023
 #
 # Table name: resource_contents
 #
 #  id                     :integer          not null, primary key
 #  approved               :boolean
-#  author_id              :integer
-#  data_source_id         :integer
 #  author_name            :string
-#  resource_type_name     :string
-#  sub_type               :string
-#  name                   :string
-#  description            :text
 #  cardinality_type       :string
-#  language_id            :integer
+#  description            :text
 #  language_name          :string
-#  created_at             :datetime         not null
-#  updated_at             :datetime         not null
-#  slug                   :string
-#  mobile_translation_id  :integer
+#  meta_data              :jsonb
+#  name                   :string
 #  priority               :integer
 #  resource_info          :text
-#  resource_id            :string
-#  meta_data              :jsonb            default("{}")
 #  resource_type          :string
+#  resource_type_name     :string
+#  slug                   :string
 #  sqlite_db              :string
 #  sqlite_db_generated_at :datetime
+#  sub_type               :string
+#  created_at             :datetime         not null
+#  updated_at             :datetime         not null
+#  author_id              :integer
+#  data_source_id         :integer
+#  language_id            :integer
+#  mobile_translation_id  :integer
+#  resource_id            :string
 #
 # Indexes
 #
@@ -35,7 +35,7 @@
 #  index_resource_contents_on_cardinality_type       (cardinality_type)
 #  index_resource_contents_on_data_source_id         (data_source_id)
 #  index_resource_contents_on_language_id            (language_id)
-#  index_resource_contents_on_meta_data              (meta_data)
+#  index_resource_contents_on_meta_data              (meta_data) USING gin
 #  index_resource_contents_on_mobile_translation_id  (mobile_translation_id)
 #  index_resource_contents_on_priority               (priority)
 #  index_resource_contents_on_resource_id            (resource_id)

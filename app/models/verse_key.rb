@@ -4,42 +4,42 @@
 # Table name: verses
 #
 #  id                      :integer          not null, primary key
-#  chapter_id              :integer
-#  verse_number            :integer
-#  verse_index             :integer
-#  verse_key               :string
-#  text_uthmani            :string
-#  text_indopak            :string
-#  text_imlaei_simple      :string
-#  juz_number              :integer
-#  hizb_number             :integer
-#  rub_el_hizb_number      :integer
-#  sajdah_type             :string
-#  sajdah_number           :integer
-#  page_number             :integer
-#  created_at              :datetime         not null
-#  updated_at              :datetime         not null
-#  image_url               :text
-#  image_width             :integer
-#  verse_root_id           :integer
-#  verse_lemma_id          :integer
-#  verse_stem_id           :integer
-#  text_imlaei             :string
-#  text_uthmani_simple     :string
-#  text_uthmani_tajweed    :text
 #  code_v1                 :string
 #  code_v2                 :string
-#  v2_page                 :integer
-#  text_qpc_hafs           :string
-#  words_count             :integer
-#  text_indopak_nastaleeq  :string
-#  pause_words_count       :integer          default("0")
-#  mushaf_pages_mapping    :jsonb            default("{}")
-#  text_qpc_nastaleeq      :string
-#  ruku_number             :integer
-#  surah_ruku_number       :integer
+#  hizb_number             :integer
+#  image_url               :text
+#  image_width             :integer
+#  juz_number              :integer
 #  manzil_number           :integer
+#  mushaf_pages_mapping    :jsonb
+#  page_number             :integer
+#  pause_words_count       :integer          default(0)
+#  rub_el_hizb_number      :integer
+#  ruku_number             :integer
+#  sajdah_number           :integer
+#  sajdah_type             :string
+#  surah_ruku_number       :integer
+#  text_imlaei             :string
+#  text_imlaei_simple      :string
+#  text_indopak            :string
+#  text_indopak_nastaleeq  :string
+#  text_qpc_hafs           :string
+#  text_qpc_nastaleeq      :string
 #  text_qpc_nastaleeq_hafs :string
+#  text_uthmani            :string
+#  text_uthmani_simple     :string
+#  text_uthmani_tajweed    :text
+#  v2_page                 :integer
+#  verse_index             :integer
+#  verse_key               :string
+#  verse_number            :integer
+#  words_count             :integer
+#  created_at              :datetime         not null
+#  updated_at              :datetime         not null
+#  chapter_id              :integer
+#  verse_lemma_id          :integer
+#  verse_root_id           :integer
+#  verse_stem_id           :integer
 #
 # Indexes
 #

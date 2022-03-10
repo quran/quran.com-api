@@ -1,19 +1,19 @@
 # == Schema Information
-# Schema version: 20220109075422
+# Schema version: 20220123232023
 #
 # Table name: mushaf_pages
 #
-#  id             :integer          not null, primary key
+#  id             :bigint           not null, primary key
 #  page_number    :integer
 #  verse_mapping  :json
-#  first_verse_id :integer
-#  last_verse_id  :integer
 #  verses_count   :integer
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
-#  mushaf_id      :integer
+#  first_verse_id :integer
 #  first_word_id  :integer
+#  last_verse_id  :integer
 #  last_word_id   :integer
+#  mushaf_id      :integer
 #
 # Indexes
 #

@@ -1,23 +1,23 @@
 # frozen_string_literal: true
 # == Schema Information
-# Schema version: 20220109075422
+# Schema version: 20220123232023
 #
 # Table name: mushaf_words
 #
-#  id                :integer          not null, primary key
-#  mushaf_id         :integer
-#  word_id           :integer
-#  verse_id          :integer
-#  text              :text
-#  char_type_id      :integer
+#  id                :bigint           not null, primary key
 #  char_type_name    :string
+#  css_class         :string
+#  css_style         :string
 #  line_number       :integer
 #  page_number       :integer
-#  position_in_verse :integer
 #  position_in_line  :integer
 #  position_in_page  :integer
-#  css_style         :string
-#  css_class         :string
+#  position_in_verse :integer
+#  text              :text
+#  char_type_id      :integer
+#  mushaf_id         :integer
+#  verse_id          :integer
+#  word_id           :integer
 #
 # Indexes
 #

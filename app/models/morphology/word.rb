@@ -1,22 +1,22 @@
 # == Schema Information
-# Schema version: 20220109075422
+# Schema version: 20220123232023
 #
 # Table name: morphology_words
 #
-#  id                      :integer          not null, primary key
-#  word_id                 :integer
-#  verse_id                :integer
-#  grammar_pattern_id      :integer
-#  grammar_base_pattern_id :integer
-#  words_count_for_root    :integer
-#  words_count_for_lemma   :integer
-#  words_count_for_stem    :integer
-#  location                :string
-#  description             :text
+#  id                      :bigint           not null, primary key
 #  case                    :string
 #  case_reason             :string
+#  description             :text
+#  location                :string
+#  words_count_for_lemma   :integer
+#  words_count_for_root    :integer
+#  words_count_for_stem    :integer
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
+#  grammar_base_pattern_id :bigint
+#  grammar_pattern_id      :bigint
+#  verse_id                :bigint
+#  word_id                 :bigint
 #
 # Indexes
 #
@@ -25,6 +25,11 @@
 #  index_morphology_words_on_location                 (location)
 #  index_morphology_words_on_verse_id                 (verse_id)
 #  index_morphology_words_on_word_id                  (word_id)
+#
+# Foreign Keys
+#
+#  fk_rails_3b86d16307  (word_id => words.id)
+#  fk_rails_f421a8bac5  (verse_id => verses.id)
 #
 
 class Morphology::Word < ApplicationRecord

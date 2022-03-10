@@ -1,17 +1,17 @@
 # == Schema Information
-# Schema version: 20220109075422
+# Schema version: 20220123232023
 #
 # Table name: morphology_grammar_terms
 #
-#  id                   :integer          not null, primary key
-#  category             :string
-#  term                 :string
-#  arabic_grammar_name  :string
-#  english_grammar_name :string
-#  urdu_grammar_name    :string
+#  id                   :bigint           not null, primary key
 #  arabic_description   :text
+#  arabic_grammar_name  :string
+#  category             :string
 #  english_description  :text
+#  english_grammar_name :string
+#  term                 :string
 #  urdu_description     :text
+#  urdu_grammar_name    :string
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
 #

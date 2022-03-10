@@ -3,16 +3,16 @@
 #
 # Table name: radio_stations
 #
-#  id                  :integer          not null, primary key
-#  name                :string
+#  id                  :bigint           not null, primary key
 #  cover_image         :string
-#  profile_picture     :string
 #  description         :text
-#  audio_recitation_id :integer
-#  parent_id           :integer
+#  name                :string
 #  priority            :integer
+#  profile_picture     :string
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
+#  audio_recitation_id :integer
+#  parent_id           :integer
 #
 # Indexes
 #

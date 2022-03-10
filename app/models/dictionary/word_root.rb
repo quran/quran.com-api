@@ -1,19 +1,19 @@
 # frozen_string_literal: true
 # == Schema Information
-# Schema version: 20220109075422
+# Schema version: 20220123232023
 #
 # Table name: dictionary_word_roots
 #
-#  id                 :integer          not null, primary key
-#  frequency          :integer
-#  root_number        :integer
-#  english_trilateral :string
+#  id                 :bigint           not null, primary key
 #  arabic_trilateral  :string
 #  cover_url          :string
 #  description        :text
-#  root_id            :integer
+#  english_trilateral :string
+#  frequency          :integer
+#  root_number        :integer
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
+#  root_id            :integer
 #
 # Indexes
 #

@@ -1,15 +1,29 @@
 # frozen_string_literal: true
 
 # == Schema Information
+# Schema version: 20220123232023
 #
 # Table name: roots
 #
-#  id               :integer          not null, primary key
-#  uniq_words_count :integer
-#  value            :string
-#  words_count      :integer
-#  created_at       :datetime         not null
-#  updated_at       :datetime         not null
+#  id                 :integer          not null, primary key
+#  arabic_trilateral  :string
+#  en_translations    :string
+#  english_trilateral :string
+#  text_clean         :string
+#  text_uthmani       :string
+#  uniq_words_count   :integer
+#  ur_translations    :string
+#  value              :string
+#  words_count        :integer
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
+#
+# Indexes
+#
+#  index_roots_on_arabic_trilateral   (arabic_trilateral)
+#  index_roots_on_english_trilateral  (english_trilateral)
+#  index_roots_on_text_clean          (text_clean)
+#  index_roots_on_text_uthmani        (text_uthmani)
 #
 
 class Root < ApplicationRecord
