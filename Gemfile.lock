@@ -391,7 +391,6 @@ DEPENDENCIES
   graphql (= 1.11.4)
   graphql-schema_comparator
   json-schema-rspec
-  loofah
   oj
   oj_mimic_json
   pagy
