@@ -1,22 +1,23 @@
 # frozen_string_literal: true
 
 # == Schema Information
-# Schema version: 20220123232023
+# Schema version: 20220310190828
 #
 # Table name: roots
 #
-#  id                 :integer          not null, primary key
-#  arabic_trilateral  :string
-#  en_translations    :string
-#  english_trilateral :string
-#  text_clean         :string
-#  text_uthmani       :string
-#  uniq_words_count   :integer
-#  ur_translations    :string
-#  value              :string
-#  words_count        :integer
-#  created_at         :datetime         not null
-#  updated_at         :datetime         not null
+#  id                    :integer          not null, primary key
+#  arabic_trilateral     :string
+#  dictionary_image_path :string
+#  en_translations       :json
+#  english_trilateral    :string
+#  text_clean            :string
+#  text_uthmani          :string
+#  uniq_words_count      :integer
+#  ur_translations       :json
+#  value                 :string
+#  words_count           :integer
+#  created_at            :datetime         not null
+#  updated_at            :datetime         not null
 #
 # Indexes
 #
