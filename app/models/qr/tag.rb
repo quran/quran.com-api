@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20220310192026
+# Schema version: 20220311202850
 #
 # Table name: qr_tags
 #

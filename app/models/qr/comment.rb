@@ -3,14 +3,15 @@
 #
 # Table name: qr_comments
 #
-#  id         :bigint           not null, primary key
-#  body       :text
-#  html_body  :text
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  author_id  :integer
-#  parent_id  :integer
-#  post_id    :integer
+#  id            :bigint           not null, primary key
+#  body          :text
+#  html_body     :text
+#  replies_count :integer          default(0)
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  author_id     :integer
+#  parent_id     :integer
+#  post_id       :integer
 #
 # Indexes
 #
@@ -18,6 +19,7 @@
 #  index_qr_comments_on_parent_id  (parent_id)
 #  index_qr_comments_on_post_id    (post_id)
 #
+
 class Qr::Comment < QrRecord
   belongs_to :author, class_name: 'Qr::Author', counter_cache: true
   belongs_to :post, class_name: 'Qr::Post', optional: true, counter_cache: true

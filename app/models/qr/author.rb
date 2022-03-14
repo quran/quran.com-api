@@ -23,6 +23,16 @@
 #  index_qr_authors_on_username   (username)
 #  index_qr_authors_on_verified   (verified)
 #
+
+#  id         :bigint           not null, primary key
+#  avatar_url :string
+#  bio        :string
+#  name       :string
+#  user_type  :string
+#  verified   :boolean
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+
 class Qr::Author < QrRecord
   has_many :comments, class_name: 'Qr::Comment'
   has_many :posts, class_name: 'Qr::Post'

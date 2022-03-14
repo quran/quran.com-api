@@ -25,13 +25,12 @@
 #  index_qr_posts_on_verified     (verified)
 #
 class Qr::Post < QrRecord
-  belongs_to :author, class_name: 'Qr::Author', counter_cache: true
+  belongs_to :author, class_name: 'Qr::Author'
 
-  has_many :comments, class_name: 'Qr::Comment'
   has_many :post_filters, class_name: 'Qr::PostFilter'
   has_many :filters, through: :post_filters, class_name: 'Qr::Filter'
   has_many :post_tags, class_name: 'Qr::PostTag'
   has_many :tags, through: :post_tags, class_name: 'Qr::Tag'
-
+  has_many :comments, class_name: 'Qr::Comment'
   has_many :recent_comments, -> {order('created_at DESC').limit(10)}, class_name: 'Qr::Comment'
 end
