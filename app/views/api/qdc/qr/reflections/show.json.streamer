@@ -1,0 +1,17 @@
+post = @presenter.find
+fields = @presenter.reflection_fields
+render_author = @presenter.render_author?
+author_fields = @presenter.author_fields
+render_comments = @presenter.render_comments?
+comment_fields = @presenter.comment_fields
+
+json.object! do
+  json.post do
+    json.partial! 'post', post: post,
+                  fields: fields,
+                  render_author: render_author,
+                  author_fields: author_fields,
+                  render_comments: render_comments,
+                  comment_fields: comment_fields
+  end
+end

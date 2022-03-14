@@ -1,0 +1,17 @@
+replies = @presenter.replies
+fields = @presenter.comment_fields
+render_author = @presenter.render_author?
+author_fields = @presenter.author_fields
+
+json.object! do
+  json.replies do
+    json.array! replies do |reply|
+      json.partial! 'comment',
+                    comment: reply,
+                    fields: fields,
+                    render_author: render_author,
+                    author_fields: author_fields,
+                    render_replies: false
+    end
+  end
+end

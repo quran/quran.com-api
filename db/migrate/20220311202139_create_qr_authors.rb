@@ -7,10 +7,15 @@ class CreateQrAuthors < ActiveRecord::Migration[7.0]
       t.string :avatar_url
       t.text :bio
       t.integer :user_type, index: true
-      t.integer :followers_count
-      t.integer :followings_count
+      t.integer :followers_count, default: 0
+      t.integer :followings_count, default: 0
+      t.integer :posts_count, default: 0
+      t.integer :comments_count, default: 0
+
 
       t.timestamps
     end
   end
 end
+
+

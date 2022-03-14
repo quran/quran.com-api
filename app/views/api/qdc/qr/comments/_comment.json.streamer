@@ -1,0 +1,24 @@
+json.object! do
+  json.extract! comment,
+                :id,
+                *fields
+
+  if render_author
+    json.author do
+      json.partial! 'api/qdc/qr/authors/author', locals: { author: comment.author, fields: author_fields }
+    end
+  end
+
+  if render_replies
+    json.replies do
+      json.array! comment.recent_replies do |reply|
+        json.partial! 'comment',
+                      comment: reply,
+                      fields: fields,
+                      render_author: render_author,
+                      author_fields: author_fields,
+                      render_replies: false
+      end
+    end
+  end
+end

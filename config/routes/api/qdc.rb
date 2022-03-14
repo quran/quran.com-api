@@ -1,4 +1,19 @@
 namespace :qdc do
+  namespace :qr do
+    get :reflections, to: 'reflections#index'
+    get 'reflections/:id', to: 'reflections#show'
+    get 'reflections/:post_id/comments', to: 'comments#index'
+    get 'reflections/:id/likes', to: 'recitations#likes'
+    get 'comments/:id', to: 'comments#show'
+    get 'comments/:comment_id/replies', to: 'comments#replies'
+    get :tags, to: 'tags#index'
+    get :authors, to: 'authors#index'
+    get 'authors/:id', to: 'authors#show'
+    get 'authors/:id/followers', to: 'authors#followers'
+    get 'authors/:id/followings', to: 'authors#followings'
+    get :search, to: 'search#search'
+  end
+
   # available resources
   namespace :resources do
     get :translations
