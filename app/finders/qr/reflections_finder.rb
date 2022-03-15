@@ -3,7 +3,7 @@ module Qr
     VALID_FILTERS = ['latest', 'popular', 'random', 'lessons']
 
     #TODO: add language filter
-    def filter(filter:, verified:, authors:, tags:, ranges:, include_author: false, include_comments: false, op: 'and')
+    def filter(verified:, authors:, tags:, ranges:, filter: nil, include_author: false, include_comments: false, op: 'and')
       filter = VALID_FILTERS.include?(filter) ? filter : 'latest'
 
       posts = send("load_#{filter}")
@@ -17,13 +17,13 @@ module Qr
       end
 
       if tags.present?
-        with_tags = posts.join(:post_tags).where(post_tags: { tag_id: tags })
-        posts = add_filter(posts, with_tags, op)
+        posts = posts.joins(:post_tags).where(post_tags: { tag_id: tags })
       end
 
       if ranges.present?
-        with_ranges = posts.join(:post_filters).where(post_filters: { filter_id: ranges })
-        posts = add_filter(posts, with_ranges, op)
+        filter_ids = find_post_filters(ranges)
+
+        posts = posts.joins(:post_filters).where(post_filters: { filter_id: filter_ids})
       end
 
       if include_author
@@ -106,6 +106,20 @@ module Qr
 
     def sort_by
       @arel_order
+    end
+
+    def find_post_filters(ranges)
+      filter_ids = []
+
+      ranges.split(',').compact_blank.each do |range|
+        verse_ids = QuranUtils::VerseRange.new(range).get_ids
+
+        if verse_ids.present? && (filters = Qr::Filter.find_with_verses(verse_ids).pluck(:id))
+          filter_ids += filters
+        end
+      end
+
+      filter_ids
     end
   end
 end

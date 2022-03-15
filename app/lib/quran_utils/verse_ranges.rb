@@ -3,7 +3,7 @@
 module QuranUtils
   class VerseRanges
     def get_ids_from_ranges(ranges)
-      ranges = ranges.to_s.split(',').map(&:presence)
+      ranges = ranges.to_s.split(',').compact_blank
       ids = []
 
       if ranges.present?

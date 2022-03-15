@@ -37,6 +37,9 @@ class Qr::Author < QrRecord
   has_many :comments, class_name: 'Qr::Comment'
   has_many :posts, class_name: 'Qr::Post'
 
+  scope :verified, -> { where verified: true }
+  enum user_type: { scholar: 1, student: 2 }
+
   def self.with_username_or_id(values)
     username_or_ids = values.tr('@', '').split(',')
     ids = username_or_ids.select { |part| part =~ /\d+/ }

@@ -27,4 +27,12 @@
 class Qr::Filter < QrRecord
   has_many :post_filters, class_name: 'Qr::PostFilter'
   has_many :posts, through: :post_filters, class_name: 'Qr::Post'
+
+  def self.find_with_verses(verse_ids)
+    if verse_ids.size == 1
+      where(verse_id_from: verse_ids.first).or(where(verse_id_to: verse_ids.first))
+    else
+      where('(verse_id_from >= :from OR verse_id_to >= :from) AND (verse_id_from <= :to OR verse_id_to <= :to)', from: verse_ids.first, to: verse_ids.last)
+    end
+  end
 end

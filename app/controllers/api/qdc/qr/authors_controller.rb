@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Api::Qdc
-  class Qr::ReflectionsController < ApiController
+  class Qr::AuthorsController < ApiController
     before_action :init_presenter
 
     def index
@@ -12,11 +12,17 @@ module Api::Qdc
       render
     end
 
+    def followers
+      render
+    end
+
+    def followings
+      render
+    end
+
     protected
     def init_presenter
-      params[:verified] = true if params[:verified].nil?
-
-      @presenter = ::Qr::ReflectionsPresenter.new(params)
+      @presenter = ::Qr::AuthorsPresenter.new(params)
     end
   end
 end

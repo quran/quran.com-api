@@ -18,14 +18,12 @@ module Qr
     ].freeze
 
     def initialize(params)
-      super
+      super(params)
 
       @finder = ::Qr::ReflectionsFinder.new(params)
     end
 
     def reflections
-      params[:verified] = true if params[:verified].nil?
-
       finder.filter(
         verified: lookahead.selects?(:verified),
         filter: filter_name,
@@ -77,6 +75,7 @@ module Qr
     end
 
     def filter_ranges
+      params[:ranges].presence
     end
   end
 end

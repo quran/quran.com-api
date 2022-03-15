@@ -20,6 +20,10 @@ class Qr::Tag < QrRecord
 
   scope :approved, -> {where approved: true}
 
+  def hash_tag
+    "##{name}"
+  end
+
   def self.with_tagname_or_id(values)
     tags_or_ids = values.tr('#', '').split(',')
     ids = tags_or_ids.select { |part| part =~ /\d+/ }

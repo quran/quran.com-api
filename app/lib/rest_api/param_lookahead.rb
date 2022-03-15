@@ -27,7 +27,7 @@ class RestApi::ParamLookahead
       case query
       when Hash
         RestApi::ParamLookahead.new(params[attribute])
-      when String
+      when String, Symbol, TrueClass, FalseClass
         if ActiveRecord::Type::Boolean::FALSE_VALUES.include?(query)
           null_lookahead
         else
