@@ -14,7 +14,7 @@ json.object! do
 
   if render_comments
     json.comments do
-      json.array! post.recent_comments, partial: 'api/qdc/qr/comments/comment', as: :comment, locals: { fields: comment_fields, render_author: render_author, author_fields: author_fields }
+      json.array! post.recent_comments, partial: 'api/qdc/qr/comments/comment', as: :comment, locals: { fields: comment_fields, render_author: render_author, author_fields: author_fields, render_replies: false }
     end
   end
 end
