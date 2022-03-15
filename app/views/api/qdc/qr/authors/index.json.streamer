@@ -1,0 +1,22 @@
+authors = @presenter.authors
+fields = @presenter.author_fields
+
+json.object! do
+  json.authors do
+    json.array! authors do |author|
+      json.partial! 'author',
+                    author: author,
+                    fields: fields
+    end
+  end
+
+  json.pagination do
+    json.object! do
+      json.per_page @presenter.per_page
+      json.current_page @presenter.current_page
+      json.next_page @presenter.next_page
+      json.total_pages @presenter.total_pages
+      json.total_records @presenter.total_records
+    end
+  end
+end

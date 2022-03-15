@@ -53,8 +53,6 @@ class BasePresenter
   end
 
   def eager_load_translated_name(records)
-    language = Language.find_by(iso_code: fetch_locale)
-
     defaults = records.where(
       translated_names: { language_id: Language.default.id }
     )
@@ -66,6 +64,12 @@ class BasePresenter
         ).or(defaults).order('translated_names.language_priority DESC')
     else
       defaults
+    end
+  end
+
+  def language
+    strong_memoize :lang do
+      Language.find_by(iso_code: fetch_locale)
     end
   end
 

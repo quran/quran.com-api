@@ -29,7 +29,6 @@ class TafsirsPresenter < VersesPresenter
   end
 
   def resource_translated_name
-    language = Language.find_by(iso_code: fetch_locale)
     names = TranslatedName.where(resource_id: resource_id, resource_type: 'ResourceContent')
     en_name = names.where(language_id: Language.default.id)
 

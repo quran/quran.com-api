@@ -184,7 +184,6 @@ class VersesPresenter < BasePresenter
 
   def fetch_chapters
     chapters = Chapter.where(id: chapter_ids).includes(:translated_name)
-    language = Language.find_with_id_or_iso_code(fetch_locale)
 
     # Eager load translated names to avoid n+1 queries
     # Fallback to english translated names

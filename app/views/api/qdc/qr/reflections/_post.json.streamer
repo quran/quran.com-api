@@ -1,0 +1,20 @@
+json.object! do
+  json.extract! post,
+                :id,
+                :author_id,
+                :language_id,
+                :language_name,
+                *fields
+
+  if render_author
+    json.author do
+      json.partial! 'api/qdc/qr/authors/author', locals: { author: post.author, fields: author_fields }
+    end
+  end
+
+  if render_comments
+    json.comments do
+      json.array! post.recent_comments, partial: 'api/qdc/qr/comments/comment', as: :comment, locals: { fields: comment_fields, render_author: render_author, author_fields: author_fields }
+    end
+  end
+end

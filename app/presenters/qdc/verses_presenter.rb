@@ -101,7 +101,6 @@ module Qdc
 
     def fetch_chapters
       chapters = Chapter.where(id: chapter_ids).includes(:translated_name)
-      language = Language.find_with_id_or_iso_code(fetch_locale)
 
       with_default_names = chapters
                              .where(

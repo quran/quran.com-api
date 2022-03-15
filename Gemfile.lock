@@ -83,7 +83,7 @@ GEM
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.11)
     byebug (11.1.3)
-    cld3 (3.4.3)
+    cld3 (3.4.4)
       ffi (>= 1.1.0, < 1.16.0)
     coderay (1.1.3)
     concurrent-ruby (1.1.9)
@@ -383,7 +383,7 @@ DEPENDENCIES
   benchmark-ips
   bullet
   byebug
-  cld3 (= 3.4.3)
+  cld3 (= 3.4.4)
   derailed_benchmarks
   elastic-transport
   elasticsearch-model

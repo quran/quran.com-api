@@ -1,0 +1,30 @@
+posts = @presenter.reflections
+fields = @presenter.reflection_fields
+render_author = @presenter.render_author?
+author_fields = @presenter.author_fields
+render_comments = @presenter.render_comments?
+comment_fields = @presenter.comment_fields
+
+json.object! do
+  json.posts do
+    json.array! posts do |post|
+      json.partial! 'post',
+                    post: post,
+                    fields: fields,
+                    render_author: render_author,
+                    author_fields: author_fields,
+                    render_comments: render_comments,
+                    comment_fields: comment_fields
+    end
+  end
+
+  json.pagination do
+    json.object! do
+      json.per_page @presenter.per_page
+      json.current_page @presenter.current_page
+      json.next_page @presenter.next_page
+      json.total_pages @presenter.total_pages
+      json.total_records @presenter.total_records
+    end
+  end
+end
