@@ -6,6 +6,7 @@ module Search
     DEBUG_ES_QUERIES = Rails.env.development?
     DEFAULT_RESULT_SIZE = 10
     NAVIGATE_RESULT_SIZE = 30
+    MAX_RESULT_SIZE = 50
 
     include QuranUtils::StrongMemoize
 
@@ -27,7 +28,7 @@ module Search
     end
 
     def result_size
-      @per_page || DEFAULT_RESULT_SIZE
+      [@per_page || DEFAULT_RESULT_SIZE, MAX_RESULT_SIZE].min
     end
   end
 end

@@ -4,6 +4,7 @@ json.object! do
                 :author_id,
                 :language_id,
                 :language_name,
+                :referenced_ayahs,
                 *fields
 
   if render_author

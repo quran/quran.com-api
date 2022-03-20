@@ -3,11 +3,13 @@
 #
 # Table name: qr_tags
 #
-#  id         :bigint           not null, primary key
-#  approved   :boolean          default(TRUE)
-#  name       :string
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id             :bigint           not null, primary key
+#  approved       :boolean          default(TRUE)
+#  comments_count :integer
+#  name           :string
+#  posts_count    :integer
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
 #
 # Indexes
 #

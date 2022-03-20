@@ -3,19 +3,20 @@
 #
 # Table name: qr_posts
 #
-#  id             :bigint           not null, primary key
-#  body           :text
-#  comments_count :integer          default(0)
-#  html_body      :text
-#  language_name  :string
-#  likes_count    :integer          default(0)
-#  post_type      :integer
-#  verified       :boolean
-#  views_count    :integer          default(0)
-#  created_at     :datetime         not null
-#  updated_at     :datetime         not null
-#  author_id      :integer
-#  language_id    :integer
+#  id               :bigint           not null, primary key
+#  body             :text
+#  comments_count   :integer          default(0)
+#  html_body        :text
+#  language_name    :string
+#  likes_count      :integer          default(0)
+#  post_type        :integer
+#  referenced_ayahs :string           is an Array
+#  verified         :boolean
+#  views_count      :integer          default(0)
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#  author_id        :integer
+#  language_id      :integer
 #
 # Indexes
 #

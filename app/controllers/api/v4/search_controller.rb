@@ -43,7 +43,7 @@ module Api::V4
       params[:q] = QUERY_SANITIZER.sanitize(query)
     end
 
-    def size(default = 10)
+    def per_page(default = 10)
       (params[:size] || params[:s] || params[:per_page] || default).to_i.abs
     end
 
@@ -63,7 +63,7 @@ module Api::V4
       content_client = Search::QuranSearchClient.new(
         query,
         page: page,
-        per_page: size,
+        per_page: per_page,
         language: language,
         translations: translations
       )
