@@ -59,11 +59,7 @@ module Qr
 
     def load_verified
       posts = posts_table
-      verified = posts.where(verified: true)
-
-      verified.or(
-        posts.joins(:author).where(qr_authors: { verified: true })
-      )
+      posts.joins(:author).where("qr_authors.verified = :verified OR qr_posts.verified = :verified", verified: true)
     end
 
     # Latest posts first
