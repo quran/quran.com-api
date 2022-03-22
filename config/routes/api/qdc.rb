@@ -3,6 +3,7 @@ namespace :qdc do
     get :reflections, to: 'reflections#index'
     get 'reflections/:id', to: 'reflections#show'
     get 'reflections/:post_id/comments', to: 'comments#index'
+    get 'reflections/:post_id/verses', to: 'reflections#verses'
     get 'comments/:id', to: 'comments#show'
     get 'comments/:comment_id/replies', to: 'comments#replies'
     get :tags, to: 'tags#index'

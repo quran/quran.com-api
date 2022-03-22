@@ -3,7 +3,7 @@
 module Qr
   class AuthorsPresenter < QrPresenter
     def initialize(params)
-      super
+      super(params, '')
 
       @finder = ::Qr::AuthorsFinder.new(params)
     end

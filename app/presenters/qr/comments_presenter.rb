@@ -18,7 +18,7 @@ module Qr
     ].freeze
 
     def initialize(params)
-      super
+      super(params, '')
 
       @finder = ::Qr::CommentsFinder.new(params)
     end

@@ -9,6 +9,7 @@ class CreateQrPosts < ActiveRecord::Migration[7.0]
       t.integer :comments_count, default: 0
       t.integer :views_count, default: 0
       t.integer :language_id, index: true
+      t.integer :ranking_weight, index: true
       t.string :language_name
       t.json :referenced_ayahs
 

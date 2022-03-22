@@ -12,6 +12,10 @@ module Api::Qdc
       render
     end
 
+    def verses
+      render
+    end
+
     protected
     def init_presenter
       params[:verified] = true if params[:verified].nil?

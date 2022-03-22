@@ -1,0 +1,55 @@
+verses = @presenter.verses
+include_words = @presenter.render_words?
+include_translations = @presenter.render_translations?
+translation_fields = @presenter.translation_fields
+
+fields = @presenter.verse_fields
+word_fields = @presenter.word_fields
+mushaf_id = @presenter.get_mushaf_id
+
+json.object! do
+  json.verses do
+    json.array! verses do |verse|
+      json.object! do
+        json.extract! verse, :id,
+                      :verse_number,
+                      :verse_key,
+                      *fields
+
+        json.page_number verse.get_page_number_for(mushaf: mushaf_id)
+
+        if include_words
+          json.words do
+            json.array! verse.mushaf_words,
+                        partial: 'api/qdc/verses/word',
+                        as: :word,
+                        locals: {
+                          fields: word_fields
+                        }
+          end
+        end
+
+        if include_translations
+          json.translations do
+            json.array! verse.translations,
+                        partial: 'api/qdc/verses/translation',
+                        as: :translation,
+                        locals: {
+                          fields: translation_fields
+                        }
+          end
+        end
+      end
+    end
+  end
+
+  json.pagination do
+    json.object! do
+      json.per_page @presenter.per_page
+      json.current_page @presenter.current_page
+      json.next_page @presenter.next_page
+      json.total_pages @presenter.total_pages
+      json.total_records @presenter.total_records
+    end
+  end
+end

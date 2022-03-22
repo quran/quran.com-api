@@ -18,9 +18,24 @@ module Qr
     ].freeze
 
     def initialize(params)
-      super(params)
+      super(params, 'filter')
 
       @finder = ::Qr::ReflectionsFinder.new(params)
+    end
+
+    def verses
+      post = finder.find(params[:post_id], include_author: false, include_comments: false)
+      params[:filters] = post.filters.map(&:key).join(',')
+
+      @finder = ::Qdc::VerseFinder.new(params)
+
+      finder.load_verses('filter',
+                         fetch_word_translation_language,
+                         mushaf_type: get_mushaf_id,
+                         words: render_words?,
+                         tafsirs: false,
+                         translations: fetch_translations,
+                         reciter: false)
     end
 
     def reflections

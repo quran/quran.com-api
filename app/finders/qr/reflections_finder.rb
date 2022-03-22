@@ -58,7 +58,12 @@ module Qr
     protected
 
     def load_verified
-      posts_table.joins(:author).where(qr_authors: { verified: true })
+      posts = posts_table
+      verified = posts.where(verified: true)
+
+      verified.or(
+        posts.joins(:author).where(qr_authors: { verified: true })
+      )
     end
 
     # Latest posts first
@@ -69,7 +74,7 @@ module Qr
 
     # Most popular posts first
     def load_popular
-      add_order 'qr_posts.comments_count DESC, qr_posts.likes_count DESC'
+      add_order 'qr_posts.ranking_weight DESC'
       posts_table
     end
 

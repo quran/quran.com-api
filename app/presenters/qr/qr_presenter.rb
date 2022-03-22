@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Qr
-  class QrPresenter < BasePresenter
+  class QrPresenter < Qdc::VersesPresenter
     AUTHOR_FIELDS = [
       'verified',
       'avatar_url',

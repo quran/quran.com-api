@@ -35,4 +35,14 @@ class Qr::Filter < QrRecord
       where('(verse_id_from >= :from OR verse_id_to >= :from) AND (verse_id_from <= :to OR verse_id_to <= :to)', from: verse_ids.first, to: verse_ids.last)
     end
   end
+
+  def key
+    if verse_number_to.presence && verse_number_to != verse_number_from
+      "#{chapter_id}:#{verse_number_from}-#{verse_number_to}"
+    elsif verse_number_from
+      verse_key_from
+    else
+      "#{chapter_id}:1-#{chapter.verses_count}"
+    end
+  end
 end
