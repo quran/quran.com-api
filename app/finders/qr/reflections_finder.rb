@@ -9,7 +9,7 @@ module Qr
       posts = send("load_#{filter}")
 
       if verified
-        posts = add_filter(posts, load_verified)
+        posts = load_verified(posts)
       end
 
       if authors.present?
@@ -24,7 +24,7 @@ module Qr
         # TODO: add filter OP
         filter_ids = find_post_filters(ranges, 'or')
 
-        posts = Qr::Post.joins(:post_filters).where(post_filters: { filter_id: filter_ids })
+        posts = posts.joins(:post_filters).where(post_filters: { filter_id: filter_ids })
       end
 
       if include_author
@@ -58,8 +58,7 @@ module Qr
 
     protected
 
-    def load_verified
-      posts = posts_table
+    def load_verified(posts)
       posts.joins(:author).where("qr_authors.verified = :verified OR qr_posts.verified = :verified", verified: true)
     end
 
