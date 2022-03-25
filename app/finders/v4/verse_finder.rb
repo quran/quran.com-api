@@ -126,7 +126,8 @@ class V4::VerseFinder < ::VerseFinder
   def fetch_by_juz
     juz = find_juz
     verse_start = juz.first_verse_id + (current_page - 1) * per_page
-    verse_end = min(verse_start + per_page, juz.last_verse_id)
+    verse_end = min(verse_start + per_page, juz.last_verse_id + 1)
+
     if verse_end < juz.last_verse_id
       @next_page = current_page + 1
     end
@@ -149,7 +150,7 @@ class V4::VerseFinder < ::VerseFinder
   def fetch_by_manzil
     manzil = find_manzil
     verse_start = manzil.first_verse_id + (current_page - 1) * per_page
-    verse_end = min(verse_start + per_page, manzil.last_verse_id)
+    verse_end = min(verse_start + per_page, manzil.last_verse_id + 1)
     if verse_end < manzil.last_verse_id
       @next_page = current_page + 1
     end
