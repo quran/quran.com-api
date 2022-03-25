@@ -2,6 +2,7 @@
 
 module QuranUtils
   class VerseRange
+    include QuranUtils::StrongMemoize
     RANGE_REG = /(?<chapter>\d+):?(?<from>\d+)?-?(?<to>\d+)?/
 
     def initialize(range)
@@ -25,17 +26,18 @@ module QuranUtils
       ids
     end
 
-    protected
     def process_range
-      match = @range.match(RANGE_REG)
+      strong_memoize :process_range do
+        match = @range.match(RANGE_REG)
 
-      return [] if match.nil?
+        return [] if match.nil?
 
-      chapter = match[:chapter]
-      from = match[:from]
-      to = match[:to] || from
+        chapter = match[:chapter]
+        from = match[:from]
+        to = match[:to] || from
 
-      [chapter, from, to]
+        [chapter, from, to]
+      end
     end
   end
 end

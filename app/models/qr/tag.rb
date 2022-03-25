@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20220311202850
+# Schema version: 20220325102524
 #
 # Table name: qr_tags
 #
@@ -13,8 +13,9 @@
 #
 # Indexes
 #
-#  index_qr_tags_on_approved  (approved)
-#  index_qr_tags_on_name      (name)
+#  index_qr_tags_on_approved     (approved)
+#  index_qr_tags_on_name         (name)
+#  index_qr_tags_on_posts_count  (posts_count)
 #
 class Qr::Tag < QrRecord
   has_many :post_tags, class_name: 'Qr::PostTag'

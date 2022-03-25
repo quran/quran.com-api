@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 # == Schema Information
-# Schema version: 20220123232023
+# Schema version: 20220325102524
 #
 # Table name: resource_contents
 #
@@ -13,6 +13,7 @@
 #  meta_data              :jsonb
 #  name                   :string
 #  priority               :integer
+#  records_count          :integer          default(0)
 #  resource_info          :text
 #  resource_type          :string
 #  resource_type_name     :string
