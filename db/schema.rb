@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_03_11_202850) do
+ActiveRecord::Schema[7.0].define(version: 2022_03_25_102524) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -690,6 +690,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_11_202850) do
     t.integer "followings_count"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "posts_count", default: 0
+    t.integer "comments_count", default: 0
     t.index ["user_type"], name: "index_qr_authors_on_user_type"
     t.index ["username"], name: "index_qr_authors_on_username"
     t.index ["verified"], name: "index_qr_authors_on_verified"
@@ -703,6 +705,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_11_202850) do
     t.integer "author_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "replies_count", default: 0
     t.index ["author_id"], name: "index_qr_comments_on_author_id"
     t.index ["parent_id"], name: "index_qr_comments_on_parent_id"
     t.index ["post_id"], name: "index_qr_comments_on_post_id"
@@ -755,9 +758,22 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_11_202850) do
     t.text "html_body"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "verified"
+    t.json "referenced_ayahs"
+    t.integer "ranking_weight"
+    t.integer "room_id"
     t.index ["author_id"], name: "index_qr_posts_on_author_id"
     t.index ["language_id"], name: "index_qr_posts_on_language_id"
     t.index ["post_type"], name: "index_qr_posts_on_post_type"
+    t.index ["ranking_weight"], name: "index_qr_posts_on_ranking_weight"
+    t.index ["verified"], name: "index_qr_posts_on_verified"
+  end
+
+  create_table "qr_rooms", force: :cascade do |t|
+    t.string "name"
+    t.string "subdomain"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "qr_tags", force: :cascade do |t|
@@ -765,8 +781,11 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_11_202850) do
     t.boolean "approved", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "comments_count"
+    t.integer "posts_count"
     t.index ["approved"], name: "index_qr_tags_on_approved"
     t.index ["name"], name: "index_qr_tags_on_name"
+    t.index ["posts_count"], name: "index_qr_tags_on_posts_count"
   end
 
   create_table "radio_station_audio_files", force: :cascade do |t|
@@ -908,6 +927,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_11_202850) do
     t.string "resource_type"
     t.string "sqlite_db"
     t.datetime "sqlite_db_generated_at", precision: nil
+    t.integer "records_count", default: 0
     t.index ["approved"], name: "index_resource_contents_on_approved"
     t.index ["author_id"], name: "index_resource_contents_on_author_id"
     t.index ["cardinality_type"], name: "index_resource_contents_on_cardinality_type"
@@ -937,9 +957,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_11_202850) do
     t.string "text_uthmani"
     t.string "english_trilateral"
     t.string "arabic_trilateral"
+    t.jsonb "en_translations"
+    t.jsonb "ur_translations"
     t.string "dictionary_image_path"
-    t.json "en_translations"
-    t.json "ur_translations"
     t.index ["arabic_trilateral"], name: "index_roots_on_arabic_trilateral"
     t.index ["english_trilateral"], name: "index_roots_on_english_trilateral"
     t.index ["text_clean"], name: "index_roots_on_text_clean"

@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20220311202850
+# Schema version: 20220325102524
 #
 # Table name: qr_posts
 #
@@ -10,23 +10,27 @@
 #  language_name    :string
 #  likes_count      :integer          default(0)
 #  post_type        :integer
-#  referenced_ayahs :string           is an Array
+#  ranking_weight   :integer
+#  referenced_ayahs :json
 #  verified         :boolean
 #  views_count      :integer          default(0)
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #  author_id        :integer
 #  language_id      :integer
+#  room_id          :integer
 #
 # Indexes
 #
-#  index_qr_posts_on_author_id    (author_id)
-#  index_qr_posts_on_language_id  (language_id)
-#  index_qr_posts_on_post_type    (post_type)
-#  index_qr_posts_on_verified     (verified)
+#  index_qr_posts_on_author_id       (author_id)
+#  index_qr_posts_on_language_id     (language_id)
+#  index_qr_posts_on_post_type       (post_type)
+#  index_qr_posts_on_ranking_weight  (ranking_weight)
+#  index_qr_posts_on_verified        (verified)
 #
 class Qr::Post < QrRecord
   belongs_to :author, class_name: 'Qr::Author'
+  belongs_to :room, class_name: 'Qr::Room', optional: true
 
   has_many :post_filters, class_name: 'Qr::PostFilter'
   has_many :filters, through: :post_filters, class_name: 'Qr::Filter'

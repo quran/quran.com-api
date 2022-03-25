@@ -21,9 +21,10 @@ module Qr
       end
 
       if ranges.present?
-        filter_ids = find_post_filters(ranges)
+        # TODO: add filter OP
+        filter_ids = find_post_filters(ranges, 'or')
 
-        posts = posts.joins(:post_filters).where(post_filters: { filter_id: filter_ids})
+        posts = Qr::Post.joins(:post_filters).where(post_filters: { filter_id: filter_ids })
       end
 
       if include_author
@@ -94,7 +95,7 @@ module Qr
     end
 
     def posts_table
-      Qr::Post
+      Qr::Post.includes(:room)
     end
 
     def add_order(order)
@@ -109,18 +110,33 @@ module Qr
       @arel_order
     end
 
-    def find_post_filters(ranges)
+    def find_post_filters(ranges, op)
       filter_ids = []
 
       ranges.split(',').compact_blank.each do |range|
-        verse_ids = QuranUtils::VerseRange.new(range).get_ids
+        verse_range = QuranUtils::VerseRange.new(range)
+        verse_ids = verse_range.get_ids
 
         if verse_ids.present? && (filters = Qr::Filter.find_with_verses(verse_ids).pluck(:id))
           filter_ids += filters
         end
+
+        if op == 'or'
+          filter_ids += filter_ids_for_full_surah(verse_range)
+        end
       end
 
       filter_ids
+    end
+
+    def filter_ids_for_full_surah(verse_range)
+      surah, _from, _to = verse_range.process_range
+
+      if surah
+        Qr::Filter.where(chapter_id: surah, verse_number_from: nil, verse_number_to: nil).pluck(:id)
+      else
+        []
+      end
     end
   end
 end

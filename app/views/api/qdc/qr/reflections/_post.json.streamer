@@ -1,3 +1,5 @@
+room = post.room
+
 json.object! do
   json.extract! post,
                 :id,
@@ -6,6 +8,14 @@ json.object! do
                 :language_name,
                 :referenced_ayahs,
                 *fields
+
+  if room
+    json.room do
+      json.object! do
+        json.extract! room, :id, :name, :subdomain
+      end
+    end
+  end
 
   if render_author
     json.author do

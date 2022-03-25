@@ -15,6 +15,7 @@ class CreateResourceContents < ActiveRecord::Migration[5.0]
       t.string :cardinality_type, index: true
       t.references :language
       t.string :language_name # cache
+      t.integer :records_count, default: 0
 
       t.timestamps
     end
