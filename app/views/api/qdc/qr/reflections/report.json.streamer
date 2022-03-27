@@ -1,0 +1,10 @@
+json.object! do
+  if @issue.persisted?
+    json.success true
+    json.message "Reported successfully."
+    json.id @issue.id
+  else
+    json.success false
+    json.message @issue.errors
+  end
+end

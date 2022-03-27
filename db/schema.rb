@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_03_25_102524) do
+ActiveRecord::Schema[7.0].define(version: 2022_03_26_180952) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -767,6 +767,17 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_25_102524) do
     t.index ["post_type"], name: "index_qr_posts_on_post_type"
     t.index ["ranking_weight"], name: "index_qr_posts_on_ranking_weight"
     t.index ["verified"], name: "index_qr_posts_on_verified"
+  end
+
+  create_table "qr_reported_issues", force: :cascade do |t|
+    t.integer "post_id"
+    t.integer "comment_id"
+    t.string "name"
+    t.string "email"
+    t.text "body"
+    t.boolean "synced_with_qr", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "qr_rooms", force: :cascade do |t|
