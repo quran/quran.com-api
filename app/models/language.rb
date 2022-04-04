@@ -22,6 +22,13 @@
 #
 
 class Language < ApplicationRecord
+  ANALYZER_MAPPING = {
+    fa: 'persian',
+    ar: 'arabic',
+    ur: 'persian', # ES don't have Urdu analyzer
+    pt: 'portuguese'
+  }
+
   include NameTranslateable
   serialize :es_indexes
 
@@ -39,5 +46,10 @@ class Language < ApplicationRecord
     def find_with_id_or_iso_code(id)
       Language.where(id: id).or(Language.where(iso_code: id)).first
     end
+  end
+
+  def get_es_analyzer
+    analyzer = es_analyzer_default.presence || 'english'
+    ANALYZER_MAPPING[analyzer.to_sym] || analyzer
   end
 end

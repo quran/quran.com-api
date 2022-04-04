@@ -58,6 +58,7 @@ module Qdc
         TRANSLATION_LANGUAGES.each do |language|
           lang_index_name = self.get_index_name(language)
 
+          puts "Setting up index #{lang_index_name} for #{language.name}"
           LANG_INDEX_CLASSES[language.id] = Class.new(content_type) do
             include Elasticsearch::Model
 
@@ -67,7 +68,7 @@ module Qdc
 
             settings index_settings
 
-            es_analyzer = language.es_analyzer_default.presence || 'english'
+            es_analyzer = language.get_es_analyzer
             index_name lang_index_name
 
             mappings dynamic: false do
