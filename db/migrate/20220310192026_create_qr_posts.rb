@@ -11,6 +11,7 @@ class CreateQrPosts < ActiveRecord::Migration[7.0]
       t.integer :language_id, index: true
       t.integer :ranking_weight, index: true
       t.string :language_name
+      t.string :url
       t.json :referenced_ayahs
 
       t.text :body

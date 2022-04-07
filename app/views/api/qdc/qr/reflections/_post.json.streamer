@@ -7,6 +7,7 @@ json.object! do
                 :language_id,
                 :language_name,
                 :referenced_ayahs,
+                :url,
                 *fields
 
   if room
