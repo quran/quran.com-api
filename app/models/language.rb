@@ -29,6 +29,8 @@ class Language < ApplicationRecord
     pt: 'portuguese'
   }
 
+  ES_BUILTIN_ANALYZER = %w(arabic armenian basque bengali brazilian bulgarian  catalan  cjk czech  danish  dutch  english estonian finnish french galician german greek hindi hungarian indonesian irish italian latvian lithuanian norwegian persian portuguese romanian russian sorani spanish swedish turkish thai)
+
   include NameTranslateable
   serialize :es_indexes
 
