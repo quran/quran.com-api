@@ -78,7 +78,11 @@ class Audio::RecitationPresenter < BasePresenter
 
   def chapter
     strong_memoize :chapter do
-      Chapter.find_using_slug(chapter_id) || raise_404("Surah number or slug is invalid. Please select valid slug or surah number from 1-114.")
+      if chapter_id
+        Chapter.find_using_slug(chapter_id) || raise_404("Surah number or slug is invalid. Please select valid slug or surah number from 1-114.")
+      else
+        raise_404("Surah number or slug is invalid. Please select valid slug or surah number from 1-114.")
+      end
     end
   end
 

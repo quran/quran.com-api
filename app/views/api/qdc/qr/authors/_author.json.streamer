@@ -3,5 +3,6 @@ json.object! do
                 :id,
                 :name,
                 :username,
+                :verified,
                 *fields
 end
