@@ -5,7 +5,7 @@ ruby '3.1.0'
 
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-gem 'rails', '~> 7.0.2', '>= 7.0.2.2'
+gem 'rails', '~> 7.0.2', '>= 7.0.2.3'
 
 # Use postgresql as the database for Active Record
 gem 'pg', '>= 0.18', '< 2.0'
@@ -39,7 +39,7 @@ gem 'rails-html-sanitizer', '>= 1.4.2'
 gem 'parallel', require: false
 
 # use puma server
-gem 'puma', '~> 4.3', '>= 4.3.11'
+gem 'puma', '~> 4.3', '>= 4.3.12'
 
 # enable cors
 gem 'rack-cors'
