@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20220325102524
+# Schema version: 20220411000741
 #
 # Table name: qr_posts
 #
@@ -12,6 +12,7 @@
 #  post_type        :integer
 #  ranking_weight   :integer
 #  referenced_ayahs :json
+#  url              :string
 #  verified         :boolean
 #  views_count      :integer          default(0)
 #  created_at       :datetime         not null

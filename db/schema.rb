@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_03_26_180952) do
+ActiveRecord::Schema[7.0].define(version: 2022_04_11_000741) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -199,6 +199,25 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_26_180952) do
     t.index ["ayah_key"], name: "index_quran.ayah_on_ayah_key"
     t.index ["surah_id", "ayah_num"], name: "surah_ayah_key", unique: true
     t.index ["surah_id"], name: "ayah_surah_id_idx"
+  end
+
+  create_table "ayah_themes", force: :cascade do |t|
+    t.integer "chapter_id"
+    t.integer "verse_number_from"
+    t.integer "verse_number_to"
+    t.string "verse_key_from"
+    t.string "verse_key_to"
+    t.integer "verse_id_from"
+    t.integer "verse_id_to"
+    t.integer "verses_count"
+    t.string "theme"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["chapter_id"], name: "index_ayah_themes_on_chapter_id"
+    t.index ["verse_id_from"], name: "index_ayah_themes_on_verse_id_from"
+    t.index ["verse_id_to"], name: "index_ayah_themes_on_verse_id_to"
+    t.index ["verse_number_from"], name: "index_ayah_themes_on_verse_number_from"
+    t.index ["verse_number_to"], name: "index_ayah_themes_on_verse_number_to"
   end
 
   create_table "chapter_infos", id: :serial, force: :cascade do |t|
@@ -762,6 +781,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_26_180952) do
     t.json "referenced_ayahs"
     t.integer "ranking_weight"
     t.integer "room_id"
+    t.string "url"
     t.index ["author_id"], name: "index_qr_posts_on_author_id"
     t.index ["language_id"], name: "index_qr_posts_on_language_id"
     t.index ["post_type"], name: "index_qr_posts_on_post_type"
