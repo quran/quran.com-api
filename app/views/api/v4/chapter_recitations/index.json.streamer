@@ -1,11 +1,11 @@
-recitation = @presenter.approved_recitation
+render_segments = @presenter.include_segments?
 
 json.object! do
   json.audio_files do
     json.array! @presenter.approved_audio_files do |audio_file|
       json.partial! 'audio_file',
                     audio_file: audio_file,
-                    recitation: recitation
+                    render_segments: render_segments
     end
   end
 end
