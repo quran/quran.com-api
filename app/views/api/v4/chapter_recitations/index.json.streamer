@@ -3,7 +3,9 @@ recitation = @presenter.approved_recitation
 json.object! do
   json.audio_files do
     json.array! @presenter.approved_audio_files do |audio_file|
-      json.partial! 'audio_file', audio_file: audio_file, recitation: recitation
+      json.partial! 'audio_file',
+                    audio_file: audio_file,
+                    recitation: recitation
     end
   end
 end

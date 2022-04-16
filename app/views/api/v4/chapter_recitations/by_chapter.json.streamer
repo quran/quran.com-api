@@ -1,7 +1,9 @@
-recitation = @presenter.approved_recitation
+render_segments = @presenter.include_segments?
 
 json.object! do
   json.audio_file do
-    json.partial! 'audio_file', audio_file: @presenter.chapter_audio_file, recitation: recitation
+    json.partial! 'audio_file',
+                  audio_file: @presenter.chapter_audio_file,
+                  render_segments: render_segments
   end
 end

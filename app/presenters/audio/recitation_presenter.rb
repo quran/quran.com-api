@@ -59,7 +59,7 @@ class Audio::RecitationPresenter < BasePresenter
   def approved_audio_files
     files = recitation_without_eager_load.chapter_audio_files.order('audio_chapter_audio_files.chapter_id ASC')
 
-    files = if chapter
+    files = if chapter_id
               files.where(chapter_id: chapter.id)
             else
               files
@@ -73,7 +73,7 @@ class Audio::RecitationPresenter < BasePresenter
   end
 
   def include_segments?
-    include_in_response? params[:segments].presence
+    chapter_id && include_in_response?(params[:segments].presence)
   end
 
   def chapter

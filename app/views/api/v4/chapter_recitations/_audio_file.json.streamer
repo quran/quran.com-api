@@ -5,4 +5,16 @@ json.object! do
                 :format
 
   json.audio_url audio_file.audio_url
+
+  if render_segments
+    json.timestamps audio_file.audio_segments do |segment|
+      json.object! do
+        json.verse_key segment.verse_key
+        json.timestamp_from segment.timestamp_from
+        json.timestamp_to segment.timestamp_to
+        json.duration segment.duration_ms
+        json.segments segment.segments
+      end
+    end
+  end
 end
