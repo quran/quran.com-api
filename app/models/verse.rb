@@ -136,13 +136,13 @@ class Verse < ApplicationRecord
       text_uthmani
     when :uthmani_tajweed, :text_uthmani_tajweed
       text_uthmani_tajweed
-    when :indopak, :text_indopak
+    when :indopak, :text_indopak # me_quran font
       text_indopak
-    when :text_qpc_nastaleeq_hafs, :qpc_nastaleeq_hafs # QPC nastalleq text compatiable with their own font
+    when :text_qpc_nastaleeq_hafs, :qpc_nastaleeq_hafs # QPC nastalleq text compatible with their own font
       text_qpc_nastaleeq_hafs
-    when :text_qpc_nastaleeq, :qpc_nastaleeq # QPC nastalleq text compatible with indopak font
+    when :text_qpc_nastaleeq, :qpc_nastaleeq # QPC nastalleq text compatible with alqalam Quran wbw font
       text_qpc_nastaleeq
-    when :text_indopak_nastaleeq, :indopak_nastaleeq # Normal Indopak script
+    when :text_indopak_nastaleeq, :indopak_nastaleeq # Normal Indopak script( Alqalam Quran wbw font)
       text_indopak_nastaleeq
     when :uthmani_hafs, :qpc_uthmani_hafs, :text_qpc_hafs
       text_qpc_hafs

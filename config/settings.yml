@@ -25,8 +25,6 @@ index:
                 type: "edgeNGram"
                 min_gram: 1
                 max_gram: 30
-
-
             unique_tokens:
                 type: unique
                 only_on_same_position: true

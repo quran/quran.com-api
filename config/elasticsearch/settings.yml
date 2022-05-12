@@ -87,11 +87,12 @@ index:
         tokenizer: icu_tokenizer
         filter:
           - arabic_keywords
-          #- quran_arabic_word_synonym
+          - quran_arabic_word_synonym
           - arabic_normalization
-          # - arabic_stemmer
+          - arabic_stemmer
           - arabic_stop
           - icu_folding
+          - noun_synonym
 
       arabic_normalized:
         tokenizer: whitespace
@@ -121,7 +122,7 @@ index:
           - english_keywords
           - english_stemmer
           - noun_synonym
-
+          - asciifolding
       arabic:
         tokenizer: whitespace
         filter:
