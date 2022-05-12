@@ -59,7 +59,7 @@ module Qr
     protected
 
     def load_verified(posts)
-      posts.joins(:author).where("qr_authors.verified = :verified OR qr_posts.verified = :verified", verified: true)
+      posts.joins(:author).where("qr_authors.user_type IN(:user_type) OR qr_authors.verified = :verified OR qr_posts.verified = :verified", verified: true, user_type: [1, 2])
     end
 
     # Latest posts first
@@ -120,9 +120,10 @@ module Qr
           filter_ids += filters
         end
 
-        if op == 'or'
-          filter_ids += filter_ids_for_full_surah(verse_range)
-        end
+        # Disable full surah reflection
+        #if op == 'or'
+        #  filter_ids += filter_ids_for_full_surah(verse_range)
+        #end
       end
 
       filter_ids
