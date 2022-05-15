@@ -1,4 +1,5 @@
 reciter = recitation.reciter
+style = recitation.recitation_style
 
 json.object! do
   json.id recitation.id
@@ -17,8 +18,11 @@ json.object! do
 
   json.style do
     json.object! do
-      json.name recitation.recitation_style&.name
-      json.language_name 'english'
+      if style
+        json.name style.name
+        json.language_name 'english'
+        json.description style.description
+      end
     end
   end
 
