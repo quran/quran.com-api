@@ -3,13 +3,19 @@
 module Api::V4
   class QuranController < ApiController
     def translation
+      # TODO: move filters to presenter
       @presenter = TranslationsPresenter.new(params)
       @resource = fetch_translation_resource
       filters = resource_filters(@resource)
       @filter_names = humanize_filter_names(filters)
 
       @translations = if @resource
-                        Translation.order('verse_id ASC').where(filters)
+                        translations = Translation.order('verse_id ASC').where(filters)
+                        if @presenter.render_footnotes?
+                          translations = translations.includes(:foot_notes)
+                        end
+
+                        translations
                       else
                         []
                       end
@@ -43,7 +49,6 @@ module Api::V4
                      else
                        []
                      end
-
       render
     end
 
@@ -105,8 +110,8 @@ module Api::V4
     def resource_filters(resource = nil)
       {
         resource_content_id: resource&.id,
-        chapter_id: params[:chapter_number],
-        juz_number: params[:juz_number],
+        chapter_id: params[:chapter_number] || params[:chapter_id],
+        juz_number: params[:juz_number] || params[:juz_id],
         hizb_number: params[:hizb_number],
         rub_el_hizb_number: params[:rub_el_hizb_number],
         ruku_number: params[:ruku_number],

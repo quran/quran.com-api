@@ -39,6 +39,10 @@ class TranslationsPresenter < BasePresenter
     finder.load_translations(filter, resource_id)
   end
 
+  def render_footnotes?
+    @lookahead.selects?('foot_notes')
+  end
+
   protected
   def resource_id
     strong_memoize :approved_translation do

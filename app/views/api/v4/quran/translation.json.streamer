@@ -1,4 +1,5 @@
 fields = @presenter.translation_fields
+render_footnotes = @presenter.render_footnotes?
 
 json.object! do
   json.translations do
@@ -8,6 +9,16 @@ json.object! do
                       :resource_id,
                       *fields,
                       :text
+
+        if render_footnotes
+          json.foot_notes do
+            json.object! do
+               translation.foot_notes.each do |foot_note|
+                 json.set! foot_note.id, foot_note.text
+              end
+            end
+          end
+        end
       end
     end
   end
