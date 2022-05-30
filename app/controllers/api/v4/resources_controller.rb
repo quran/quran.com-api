@@ -2,6 +2,7 @@
 
 module Api::V4
   class ResourcesController < ApiController
+    #TODO: move the logic to presenters
     def chapter_reciters
       @presenter = ::Audio::RecitationPresenter.new(params)
       render
@@ -15,6 +16,7 @@ module Api::V4
                .approved
                .order('priority ASC')
 
+      @presenter = ResourcePresenter.new(params)
       @translations = eager_load_translated_name(list)
 
       render
@@ -35,6 +37,7 @@ module Api::V4
                .approved
                .order('priority ASC')
 
+      @presenter = ResourcePresenter.new(params)
       @tafsirs = eager_load_translated_name(list)
 
       render

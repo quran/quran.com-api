@@ -1,3 +1,5 @@
+fields = @presenter.fields
+
 json.object! do
   json.translations do
     json.array! @translations do |translation|
@@ -7,7 +9,8 @@ json.object! do
                       :name,
                       :author_name,
                       :slug,
-                      :language_name
+                      :language_name,
+                      *fields
 
         json.translated_name do
           translated_name = translation.translated_name
