@@ -32,7 +32,7 @@ gem 'pagy'
 gem 'oj'
 gem 'oj_mimic_json'
 
-gem 'rails-html-sanitizer', '>= 1.4.2'
+gem 'rails-html-sanitizer', '>= 1.4.3'
 
 # This is to run the rake task for importing in parallel
 # Will provide a progress bar as the import happens
