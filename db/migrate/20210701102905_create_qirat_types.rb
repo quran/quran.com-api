@@ -9,7 +9,6 @@ class CreateQiratTypes < ActiveRecord::Migration[6.1]
     end
 
     add_column :recitations, :qirat_type_id, :integer
-    add_column :audio_recitations, :qirat_type_id, :integer
 
     add_index :recitations, :qirat_type_id
     add_index :audio_recitations, :qirat_type_id

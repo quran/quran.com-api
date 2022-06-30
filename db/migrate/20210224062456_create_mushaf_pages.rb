@@ -1,4 +1,4 @@
-class CreateMuhsafPages < ActiveRecord::Migration[6.1]
+class CreateMushafPages < ActiveRecord::Migration[6.1]
   def change
     create_table :mushaf_pages do |t|
       t.integer :page_number, index: true
