@@ -118,7 +118,13 @@ class Verse < ApplicationRecord
     mushaf_pages_mapping[mushaf.to_s]
   end
 
-  def get_page_number(version)
+  # QDC api, send page number based on Mushaf type(madani, or indopak)
+  # default to madani
+  def get_juz_number_for(mushaf_type:)
+    mushaf_juzs_mapping[mushaf_type.to_s] || mushaf_pages_mapping['madani']
+  end
+
+  def get_qpc_page_number(version)
     if :v1 == version
       v1_page
     else

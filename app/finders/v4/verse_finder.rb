@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+#TODO: replace with QdcFinder
 class V4::VerseFinder < ::VerseFinder
   def random_verse(filters, language_code, words: true, tafsirs: false, translations: false, audio: false)
     @results = Verse.unscope(:order).where(filters).order('RANDOM()').limit(3)
@@ -29,8 +30,8 @@ class V4::VerseFinder < ::VerseFinder
     @results.order("verses.verse_index ASC #{words_ordering} #{translations_order}".strip).first
   end
 
-  def load_verses(filter, language_code, words: true, tafsirs: false, translations: false, audio: false)
-    fetch_verses_range(filter)
+  def load_verses(filter, language_code, mushaf: nil, words: true, tafsirs: false, translations: false, audio: false)
+    fetch_verses_range(filter, mushaf: mushaf)
     load_translations(translations) if translations.present?
     load_words(language_code) if words
     load_audio(audio) if audio
@@ -42,8 +43,14 @@ class V4::VerseFinder < ::VerseFinder
     @results.order("verses.verse_index ASC #{words_ordering} #{translations_order}".strip)
   end
 
-  def fetch_verses_range(filter)
-    @results = send("fetch_#{filter}")
+  # TODO: it's time to merge v4 and qdc
+  # We are writing lot of duplicate code now
+  def fetch_verses_range(filter, mushaf: nil)
+    if 'by_juz' == filter
+      @results = fetch_by_juz(mushaf: mushaf)
+    else
+      @results = send("fetch_#{filter}")
+    end
   end
 
   protected
@@ -123,8 +130,8 @@ class V4::VerseFinder < ::VerseFinder
     @results
   end
 
-  def fetch_by_juz
-    juz = find_juz
+  def fetch_by_juz(mushaf:nil)
+    juz = find_juz(mushaf: mushaf)
     verse_start = juz.first_verse_id + (current_page - 1) * per_page
     verse_end = min(verse_start + per_page, juz.last_verse_id + 1)
 
@@ -134,7 +141,6 @@ class V4::VerseFinder < ::VerseFinder
     @total_records = juz.verses_count
 
     @results = rescope_verses('verse_index')
-                 .where(juz_number: juz.juz_number)
                  .where('verses.verse_index >= ? AND verses.verse_index < ?', verse_start.to_i, verse_end.to_i)
   end
 
@@ -157,7 +163,6 @@ class V4::VerseFinder < ::VerseFinder
     @total_records = manzil.verses_count
 
     @results = rescope_verses('verse_index')
-                 .where(manzil_number: manzil.manzil_number)
                  .where('verses.verse_index >= ? AND verses.verse_index < ?', verse_start.to_i, verse_end.to_i)
   end
 

@@ -56,7 +56,7 @@ class TafsirsPresenter < VersesPresenter
 
     verse_finder.load_verses('by_range',
                              fetch_locale,
-                             mushaf_type: get_mushaf_id,
+                             mushaf_id: get_mushaf_id,
                              words: render_words?)
   end
 

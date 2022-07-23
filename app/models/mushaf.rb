@@ -23,11 +23,34 @@
 #
 
 class Mushaf < ApplicationRecord
+  #TODO: add field in db instead of hard coding
+  INDOPAK_MUSHAFS = [
+    3, # pdms, disable now
+    6, # 15 lines
+    7, # 16 lines
+    8, # 14 lines
+    13, # QPC nastaleeq 15 lines
+    14, # QPc Hafs nastaleeq 15 lines
+    15 # QPc Hafs nastaleeq 16 lines
+  ]
+
   scope :approved, -> { where enabled: true }
   has_many :mushaf_pages
   belongs_to :qirat_type
 
   def self.default
     where(is_default: true).first
+  end
+
+  def indopak?
+    INDOPAK_MUSHAFS.include? id
+  end
+
+  def mushaf_type
+    if indopak?
+      'indopak'
+    else
+      'madani'
+    end
   end
 end

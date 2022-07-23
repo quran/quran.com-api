@@ -1,9 +1,10 @@
 # == Schema Information
-# Schema version: 20220411000741
+# Schema version: 20220723001532
 #
 # Table name: ayah_themes
 #
 #  id                :bigint           not null, primary key
+#  keywords          :jsonb
 #  theme             :string
 #  verse_id_from     :integer
 #  verse_id_to       :integer

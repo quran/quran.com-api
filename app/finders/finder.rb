@@ -105,10 +105,16 @@ class Finder
     Ruku.find_by(ruku_number: ruku_number) || raise_invalid_ruku_number
   end
 
-  def find_juz
+  def find_juz(mushaf: nil)
     juz_number = params[:juz_number].to_i.abs
 
-    Juz.find_by(juz_number: juz_number) || raise_invalid_juz_number
+    juzs = if mushaf && mushaf.indopak?
+             MushafJuz.indopak
+           else
+             MushafJuz.madani
+           end
+
+    juzs.find_by(juz_number: juz_number) || raise_invalid_juz_number
   end
 
   def find_ayah

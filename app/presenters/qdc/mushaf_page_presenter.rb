@@ -1,11 +1,11 @@
 module Qdc
   class MushafPagePresenter < BasePresenter
     def pages
-      MushafPage.where(mushaf_id: get_mushaf_id).order('page_number ASC')
+      mushaf_pages
     end
 
     def page
-      MushafPage.where(mushaf_id: get_mushaf_id).find_by_page_number(params[:id]) || raise_404("Invalid page number")
+      mushaf_pages.find_by(page_number: page_number) || raise_404("Invalid page number")
     end
 
     # Find pages based on given filters and Mushaf
@@ -45,6 +45,13 @@ module Qdc
     end
 
     protected
+    def mushaf_pages
+      MushafPage.where(mushaf_id: get_mushaf_id).order('page_number ASC')
+    end
+
+    def page_number
+      (params[:page_number] || params[:id]).presence
+    end
 
     def lookup_verse_range(filter=nil)
       filter ||= look_up_filter

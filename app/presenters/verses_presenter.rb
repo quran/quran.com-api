@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class VersesPresenter < BasePresenter
-  attr_reader :mushaf_type,
+  attr_reader :mushaf_code,
               :verses_filter
 
   VERSE_FIELDS = [
@@ -82,8 +82,8 @@ class VersesPresenter < BasePresenter
     @finder = V4::VerseFinder.new(params)
   end
 
-  def get_mushaf_type
-    @mushaf_type || :v1
+  def get_mushaf_code
+    @mushaf_code || :v1
   end
 
   def random_verse
@@ -136,7 +136,7 @@ class VersesPresenter < BasePresenter
     strong_memoize :word_fields do
       if (fields = params[:word_fields]).presence
         fields = sanitize_query_fields(fields.split(','))
-        detect_mushaf_type(fields)
+        detect_mushaf_code(fields)
 
         fields.select do |field|
           WORDS_FIELDS.include?(field)
@@ -175,6 +175,7 @@ class VersesPresenter < BasePresenter
     strong_memoize :verses do
       finder.load_verses(verses_filter,
                          fetch_locale,
+                         mushaf: get_mushaf,
                          words: render_words?,
                          tafsirs: fetch_tafsirs,
                          translations: fetch_translations,
@@ -233,23 +234,23 @@ class VersesPresenter < BasePresenter
     verses.pluck(:chapter_id).uniq
   end
 
-  def detect_mushaf_type(fields)
+  def detect_mushaf_code(fields)
     if fields.include?('code_v2')
-      @mushaf_type = :v2
+      @mushaf_code = :v2
     elsif fields.include?('text_uthmani')
-      @mushaf_type = :uthmani
+      @mushaf_code = :uthmani
     elsif fields.include?('text_indopak')
-      @mushaf_type = :indopak
+      @mushaf_code = :indopak
     elsif fields.include?('text_imlaei_simple')
-      @mushaf_type = :imlaei_simple
+      @mushaf_code = :imlaei_simple
     elsif fields.include?('text_imlaei')
-      @mushaf_type = :imlaei
+      @mushaf_code = :imlaei
     elsif fields.include?('text_uthmani_tajweed')
-      @mushaf_type = :uthmani_tajweed
+      @mushaf_code = :uthmani_tajweed
     elsif fields.include?('qpc_uthmani_hafs') || fields.include?('text_qpc_hafs')
-      @mushaf_type = :text_qpc_hafs
+      @mushaf_code = :text_qpc_hafs
     else
-      @mushaf_type = :v1
+      @mushaf_code = :v1
     end
   end
 
