@@ -84,8 +84,8 @@ class Word < ApplicationRecord
   #TODO: deprecated and renamed to text_qpc_hafs
   alias_attribute :qpc_uthmani_hafs, :text_qpc_hafs
 
-  def get_qpc_page_number(code)
-    if :v1 == code
+  def get_qpc_page_number(mushaf_code)
+    if :v1 == mushaf_code
       page_number
     else
       v2_page
