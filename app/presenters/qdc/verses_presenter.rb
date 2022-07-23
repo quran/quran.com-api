@@ -63,7 +63,7 @@ module Qdc
       @finder.random_verse(
         filters,
         fetch_word_translation_language,
-        mushaf_type: get_mushaf_id,
+        mushaf_id: get_mushaf_id,
         tafsirs: fetch_tafsirs,
         translations: fetch_translations,
         reciter: fetch_reciter
@@ -76,7 +76,7 @@ module Qdc
         result = @finder.find_with_key(
           params[:verse_key],
           fetch_word_translation_language,
-          mushaf_type: get_mushaf_id,
+          mushaf_id: get_mushaf_id,
           tafsirs: fetch_tafsirs,
           translations: fetch_translations,
           reciter: fetch_reciter
@@ -91,7 +91,7 @@ module Qdc
       strong_memoize :verses do
         finder.load_verses(verses_filter,
                            fetch_word_translation_language,
-                           mushaf_type: get_mushaf_id,
+                           mushaf_id: get_mushaf_id,
                            words: render_words?,
                            tafsirs: fetch_tafsirs,
                            translations: fetch_translations,

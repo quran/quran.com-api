@@ -1,5 +1,5 @@
 json.object! do
   json.juz do
-    json.partial! 'juz', juz: @juz
+    json.partial! 'juz', juz: @presenter.find
   end
 end

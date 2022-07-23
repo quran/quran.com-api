@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class Qdc::VerseFinder < ::VerseFinder
-  def random_verse(filters, language_code, mushaf_type:, words: true, tafsirs: false, translations: false, reciter: false)
-    mushaf = Mushaf.find(mushaf_type)
+  def random_verse(filters, language_code, mushaf_id:, words: true, tafsirs: false, translations: false, reciter: false)
+    mushaf = Mushaf.find(mushaf_id)
     @results = Verse.unscope(:order).where(filters).order('RANDOM()').limit(3)
 
     load_related_resources(
@@ -16,8 +16,8 @@ class Qdc::VerseFinder < ::VerseFinder
     ).sample
   end
 
-  def find_with_key(key, language_code, mushaf_type:, words: true, tafsirs: false, translations: false, reciter: false)
-    mushaf = Mushaf.find(mushaf_type)
+  def find_with_key(key, language_code, mushaf_id:, words: true, tafsirs: false, translations: false, reciter: false)
+    mushaf = Mushaf.find(mushaf_id)
     @results = Verse.where(verse_key: key).limit(1)
 
     load_related_resources(
@@ -31,8 +31,8 @@ class Qdc::VerseFinder < ::VerseFinder
     ).first
   end
 
-  def load_verses(filter, language_code, mushaf_type:, words: true, tafsirs: false, translations: false, reciter: false)
-    mushaf = Mushaf.find(mushaf_type)
+  def load_verses(filter, language_code, mushaf_id:, words: true, tafsirs: false, translations: false, reciter: false)
+    mushaf = Mushaf.find(mushaf_id)
     fetch_verses_range(filter, mushaf: mushaf, words: words)
 
     load_related_resources(
@@ -64,6 +64,8 @@ class Qdc::VerseFinder < ::VerseFinder
 
     if 'by_page' == filter
       @results = fetch_by_page(mushaf: mushaf, words: words)
+    elsif 'by_juz' == filter
+      @results = fetch_by_juz(mushaf: mushaf)
     else
       @results = send("fetch_#{filter}")
     end
@@ -124,7 +126,6 @@ class Qdc::VerseFinder < ::VerseFinder
     from, to = get_ayah_range_to_load(range[0], range[1])
 
     @results = rescope_verses('verse_index')
-                 .where(chapter_id: chapter.id)
                  .where('verses.verse_index >= ? AND verses.verse_index <= ?', from, to)
   end
 
@@ -148,7 +149,6 @@ class Qdc::VerseFinder < ::VerseFinder
     from, to = get_ayah_range_to_load(rub_el_hizb.first_verse_id, rub_el_hizb.last_verse_id)
 
     @results = rescope_verses('verse_index')
-                 .where(rub_el_hizb_number: rub_el_hizb.rub_el_hizb_number)
                  .where('verses.verse_index >= ? AND verses.verse_index <= ?', from, to)
   end
 
@@ -157,16 +157,14 @@ class Qdc::VerseFinder < ::VerseFinder
     from, to = get_ayah_range_to_load(hizb.first_verse_id, hizb.last_verse_id)
 
     @results = rescope_verses('verse_index')
-                 .where(hizb_number: hizb.hizb_number)
                  .where('verses.verse_index >= ? AND verses.verse_index <= ?', from, to)
   end
 
-  def fetch_by_juz
-    juz = find_juz
+  def fetch_by_juz(mushaf:)
+    juz = find_juz(mushaf: mushaf)
     from, to = get_ayah_range_to_load(juz.first_verse_id, juz.last_verse_id)
 
     @results = rescope_verses('verse_index')
-                 .where(juz_number: juz.juz_number)
                  .where('verses.verse_index >= ? AND verses.verse_index <= ?', from, to)
   end
 
@@ -175,7 +173,6 @@ class Qdc::VerseFinder < ::VerseFinder
     from, to = get_ayah_range_to_load(manzil.first_verse_id, manzil.last_verse_id)
 
     @results = rescope_verses('verse_index')
-                 .where(manzil_number: manzil.manzil_number)
                  .where('verses.verse_index >= ? AND verses.verse_index <= ?', from, to)
   end
 
@@ -184,7 +181,6 @@ class Qdc::VerseFinder < ::VerseFinder
     from, to = get_ayah_range_to_load(ruku.first_verse_id, ruku.last_verse_id)
 
     @results = rescope_verses('verse_index')
-                 .where(ruku_number: ruku.ruku_number)
                  .where('verses.verse_index >= ? AND verses.verse_index <= ?', from, to)
   end
 

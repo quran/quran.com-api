@@ -1,6 +1,6 @@
 json.object! do
   json.juzs do
-    json.array! @juzs do |juz|
+    json.array! @presenter.all do |juz|
       json.partial! 'juz', juz: juz
     end
   end

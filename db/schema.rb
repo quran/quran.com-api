@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_04_11_000741) do
+ActiveRecord::Schema[7.0].define(version: 2022_07_23_001532) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -211,6 +211,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_11_000741) do
     t.integer "verse_id_to"
     t.integer "verses_count"
     t.string "theme"
+    t.jsonb "keywords"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["chapter_id"], name: "index_ayah_themes_on_chapter_id"
@@ -614,6 +615,25 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_11_000741) do
     t.index ["location"], name: "index_morphology_words_on_location"
     t.index ["verse_id"], name: "index_morphology_words_on_verse_id"
     t.index ["word_id"], name: "index_morphology_words_on_word_id"
+  end
+
+  create_table "mushaf_juzs", force: :cascade do |t|
+    t.integer "mushaf_type"
+    t.integer "mushaf_id"
+    t.integer "juz_id"
+    t.jsonb "verse_mapping"
+    t.integer "juz_number"
+    t.integer "verses_count"
+    t.integer "first_verse_id"
+    t.integer "last_verse_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["first_verse_id"], name: "index_mushaf_juzs_on_first_verse_id"
+    t.index ["juz_id"], name: "index_mushaf_juzs_on_juz_id"
+    t.index ["juz_number"], name: "index_mushaf_juzs_on_juz_number"
+    t.index ["last_verse_id"], name: "index_mushaf_juzs_on_last_verse_id"
+    t.index ["mushaf_id"], name: "index_mushaf_juzs_on_mushaf_id"
+    t.index ["mushaf_type"], name: "index_mushaf_juzs_on_mushaf_type"
   end
 
   create_table "mushaf_pages", force: :cascade do |t|
@@ -1323,6 +1343,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_11_000741) do
     t.integer "surah_ruku_number"
     t.integer "manzil_number"
     t.string "text_qpc_nastaleeq_hafs"
+    t.jsonb "mushaf_juzs_mapping", default: {}
     t.index ["chapter_id"], name: "index_verses_on_chapter_id"
     t.index ["hizb_number"], name: "index_verses_on_hizb_number"
     t.index ["juz_number"], name: "index_verses_on_juz_number"

@@ -7,7 +7,7 @@ fields = @presenter.verse_fields
 word_fields = @presenter.word_fields
 tafsir_fields = @presenter.tafsir_fields
 translation_fields = @presenter.translation_fields
-mushaf_type = @presenter.get_mushaf_type
+mushaf_code = @presenter.get_mushaf_code
 
 json.array! @verses do |verse|
   json.object! do
@@ -18,7 +18,7 @@ json.array! @verses do |verse|
 
     if include_words
       json.words do
-        json.array! verse.words, partial: 'word', as: :word, locals: { fields: word_fields, mushaf_type: mushaf_type }
+        json.array! verse.words, partial: 'word', as: :word, locals: { fields: word_fields, mushaf_code: mushaf_code }
       end
     end
 

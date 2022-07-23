@@ -25,6 +25,10 @@ class BasePresenter
     get_mushaf.id
   end
 
+  def get_mushaf_type
+    get_mushaf.mushaf_type
+  end
+
   def render_words?
     strong_memoize :words do
       @lookahead.selects?('words')
@@ -38,12 +42,16 @@ class BasePresenter
 
   def get_mushaf
     strong_memoize :mushaf do
-      mushaf = if params[:mushaf].presence
-                 Mushaf.approved.find_by(id: params[:mushaf].to_s.strip)
+      mushaf = if mushaf_id
+                 Mushaf.approved.find_by(id: mushaf_id)
                end
 
       mushaf || Mushaf.default
     end
+  end
+
+  def mushaf_id
+    (params[:mushaf] || params[:mushaf_id]).presence
   end
 
   def include_in_response?(value)

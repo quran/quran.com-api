@@ -31,7 +31,7 @@ module Qr
 
       finder.load_verses('filter',
                          fetch_word_translation_language,
-                         mushaf_type: get_mushaf_id,
+                         mushaf_id: get_mushaf_id,
                          words: render_words?,
                          tafsirs: false,
                          translations: fetch_translations,

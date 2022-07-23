@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20220123232023
+# Schema version: 20220723001532
 #
 # Table name: verses
 #
@@ -11,6 +11,7 @@
 #  image_width             :integer
 #  juz_number              :integer
 #  manzil_number           :integer
+#  mushaf_juzs_mapping     :jsonb
 #  mushaf_pages_mapping    :jsonb
 #  page_number             :integer
 #  pause_words_count       :integer          default(0)

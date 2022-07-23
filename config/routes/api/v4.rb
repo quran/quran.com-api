@@ -37,6 +37,9 @@ namespace :v4 do
   # Chapter info
   get 'chapters/:id/info', to: 'chapter_infos#show'
 
+  # Get approved Mushafs
+  get :mushafs, to: 'mushafs#index'
+
   # Juz
   get 'juzs', to: 'juzs#index'
   get 'juzs/:id', to: 'juzs#show'
