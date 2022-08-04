@@ -1265,7 +1265,7 @@
                 "tags": [
                     "Verses"
                 ],
-                "description": "Get a specific ayah with key. Key is combination of surah number and ayah number. 1:1 is first ayah offirst surah for exampke.\n\n10:5 is 5th ayah of 101th surah.",
+                "description": "Get a specific ayah with key. Key is combination of surah number and ayah number. 1:1 is first ayah offirst surah for exampke.\n\n10:5 is 5th ayah of 10th surah.",
                 "parameters": [
                     {
                         "name": "language",

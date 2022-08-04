@@ -997,7 +997,7 @@ documentation:
         description: |-
           Get a specific ayah with key. Key is combination of surah number and ayah number. 1:1 is first ayah offirst surah for exampke.
 
-          10:5 is 5th ayah of 101th surah.
+          10:5 is 5th ayah of 10th surah.
         responses:
           '200':
             body:
