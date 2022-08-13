@@ -84,8 +84,14 @@ class Qdc::VerseFinder < ::VerseFinder
                        ''
                      end
 
-    translations_order = translations.present? ? ', translations.priority ASC' : ''
-    @results.order("#{verse_order} #{words_ordering} #{translations_order}".strip)
+    translations_order = translations.present? ? "#{words_ordering.present? ? ',' : ''} translations.priority ASC" : ''
+    order_query = "#{verse_order} #{words_ordering} #{translations_order}".strip
+
+    if order_query.present?
+      @results.order(order_query)
+    else
+      @results
+    end
   end
 
   def fetch_advance_copy
