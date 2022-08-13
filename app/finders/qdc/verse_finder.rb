@@ -42,7 +42,8 @@ class Qdc::VerseFinder < ::VerseFinder
       tafsirs: tafsirs,
       translations: translations,
       reciter: reciter,
-      filter: filter
+      filter: filter,
+      verse_order: 'filter' == filter ? '' : 'verses.verse_index ASC'
     )
   end
 
@@ -71,20 +72,20 @@ class Qdc::VerseFinder < ::VerseFinder
     end
   end
 
-  def load_related_resources(language:, mushaf:, words:, tafsirs:, translations:, reciter:, filter:)
+  def load_related_resources(language:, mushaf:, words:, tafsirs:, translations:, reciter:, filter:, verse_order: 'verses.verse_index ASC')
     load_translations(translations) if translations.present?
     load_words(language, mushaf) if words
     load_segments(reciter) if reciter
     load_tafsirs(tafsirs) if tafsirs.present?
 
     words_ordering = if words
-                       ', mushaf_words.position_in_verse ASC, word_translations.priority ASC'
+                       "#{verse_order.present? ? ',' : ''} mushaf_words.position_in_verse ASC, word_translations.priority ASC"
                      else
                        ''
                      end
 
     translations_order = translations.present? ? ', translations.priority ASC' : ''
-    @results.order("verses.verse_index ASC #{words_ordering} #{translations_order}".strip)
+    @results.order("#{verse_order} #{words_ordering} #{translations_order}".strip)
   end
 
   def fetch_advance_copy
@@ -104,20 +105,20 @@ class Qdc::VerseFinder < ::VerseFinder
     utils = QuranUtils::VerseRanges.new
     ids = utils.get_ids_from_ranges(params[:filters])
     @total_records = ids.size
-    results = Verse.unscoped.where(id: ids)
 
-    if per_page == @total_records
-      @results = results
-      @next_page = nil # disable pagination
-    else
-      @results = results.limit(per_page).offset((current_page - 1) * per_page)
+    pagy = Pagy.new(
+      count: @total_records,
+      page: current_page,
+      items: per_page,
+      overflow: :empty_page
+    )
+    @next_page = pagy.next
 
-      if current_page < total_pages
-        @next_page = current_page + 1
-      end
-    end
-
-    @results
+    @results = if pagy.overflow?
+                 Verse.none
+               else
+                 Verse.unscoped.where(id: ids[pagy.offset, pagy.items])
+               end
   end
 
   def fetch_by_chapter
