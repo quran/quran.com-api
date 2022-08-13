@@ -78,14 +78,21 @@ class Qdc::VerseFinder < ::VerseFinder
     load_segments(reciter) if reciter
     load_tafsirs(tafsirs) if tafsirs.present?
 
+    # TODO: move ordering to separate method
     words_ordering = if words
                        "#{verse_order.present? ? ',' : ''} mushaf_words.position_in_verse ASC, word_translations.priority ASC"
                      else
                        ''
                      end
 
-    translations_order = translations.present? ? ', translations.priority ASC' : ''
-    @results.order("#{verse_order} #{words_ordering} #{translations_order}".strip)
+    translations_order = translations.present? ? "#{words_ordering.present? ? ',' : ''} translations.priority ASC" : ''
+    order_query = "#{verse_order} #{words_ordering} #{translations_order}".strip
+
+    if order_query.present?
+      @results.order(order_query)
+    else
+      @results
+    end
   end
 
   def fetch_advance_copy
