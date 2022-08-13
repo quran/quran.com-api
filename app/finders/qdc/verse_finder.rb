@@ -104,20 +104,20 @@ class Qdc::VerseFinder < ::VerseFinder
     utils = QuranUtils::VerseRanges.new
     ids = utils.get_ids_from_ranges(params[:filters])
     @total_records = ids.size
-    results = Verse.unscoped.where(id: ids)
 
-    if per_page == @total_records
-      @results = results
-      @next_page = nil # disable pagination
-    else
-      @results = results.limit(per_page).offset((current_page - 1) * per_page)
+    pagy = Pagy.new(
+      count: @total_records,
+      page: current_page,
+      items: per_page,
+      overflow: :empty_page
+    )
+    @next_page = pagy.next
 
-      if current_page < total_pages
-        @next_page = current_page + 1
-      end
-    end
-
-    @results
+    @results = if pagy.overflow?
+                 Verse.none
+               else
+                 Verse.unscoped.where(id: ids[pagy.offset, pagy.items])
+               end
   end
 
   def fetch_by_chapter
