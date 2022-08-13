@@ -42,7 +42,8 @@ class Qdc::VerseFinder < ::VerseFinder
       tafsirs: tafsirs,
       translations: translations,
       reciter: reciter,
-      filter: filter
+      filter: filter,
+      verse_order: 'filter' == filter ? '' : 'verses.verse_index ASC'
     )
   end
 
@@ -71,20 +72,20 @@ class Qdc::VerseFinder < ::VerseFinder
     end
   end
 
-  def load_related_resources(language:, mushaf:, words:, tafsirs:, translations:, reciter:, filter:)
+  def load_related_resources(language:, mushaf:, words:, tafsirs:, translations:, reciter:, filter:, verse_order: 'verses.verse_index ASC')
     load_translations(translations) if translations.present?
     load_words(language, mushaf) if words
     load_segments(reciter) if reciter
     load_tafsirs(tafsirs) if tafsirs.present?
 
     words_ordering = if words
-                       ', mushaf_words.position_in_verse ASC, word_translations.priority ASC'
+                       "#{verse_order.present? ? ',' : ''} mushaf_words.position_in_verse ASC, word_translations.priority ASC"
                      else
                        ''
                      end
 
     translations_order = translations.present? ? ', translations.priority ASC' : ''
-    @results.order("verses.verse_index ASC #{words_ordering} #{translations_order}".strip)
+    @results.order("#{verse_order} #{words_ordering} #{translations_order}".strip)
   end
 
   def fetch_advance_copy
