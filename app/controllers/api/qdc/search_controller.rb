@@ -55,7 +55,9 @@ module Api::Qdc
     end
 
     def per_page(default = 10)
-      (params[:size] || params[:s] || params[:per_page] || default).to_i.abs
+      val = (params[:size] || params[:s] || params[:per_page] || default).to_i.abs
+
+      [val, 1].max
     end
 
     def page

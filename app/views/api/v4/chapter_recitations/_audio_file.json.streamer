@@ -1,5 +1,6 @@
 json.object! do
-  json.extract! audio_file, :id,
+  json.extract! audio_file,
+                :id,
                 :chapter_id,
                 :file_size,
                 :format

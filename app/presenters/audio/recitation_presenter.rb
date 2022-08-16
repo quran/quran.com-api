@@ -49,7 +49,9 @@ class Audio::RecitationPresenter < BasePresenter
   end
 
   def chapter_audio_file
-    approved_audio_files.where(chapter_id: chapter.id).first
+    file = approved_audio_files.where(chapter_id: chapter.id).first
+
+    file || raise_404("Sorry. Audio file for this surah is missing.")
   end
 
   def audio_files
@@ -57,13 +59,9 @@ class Audio::RecitationPresenter < BasePresenter
   end
 
   def approved_audio_files
-    files = recitation_without_eager_load.chapter_audio_files.order('audio_chapter_audio_files.chapter_id ASC')
-
-    files = if chapter_id
-              files.where(chapter_id: chapter.id)
-            else
-              files
-            end
+    files = recitation_without_eager_load
+              .chapter_audio_files
+              .order('audio_chapter_audio_files.chapter_id ASC')
 
     if include_segments?
       files.includes(:audio_segments).order('audio_segments.verse_id ASC')

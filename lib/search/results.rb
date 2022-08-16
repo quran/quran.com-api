@@ -23,7 +23,7 @@ module Search
     end
 
     def empty?
-      @search.empty?
+      @search.empty? || @page_size.zero?
     end
 
     def timed_out?
