@@ -63,6 +63,12 @@ class Audio::RecitationPresenter < BasePresenter
               .chapter_audio_files
               .order('audio_chapter_audio_files.chapter_id ASC')
 
+    files = if chapter_id
+              files.where(chapter_id: chapter.id)
+            else
+              files
+            end
+
     if include_segments?
       files.includes(:audio_segments).order('audio_segments.verse_id ASC')
     else
