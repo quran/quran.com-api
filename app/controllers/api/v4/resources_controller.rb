@@ -106,5 +106,11 @@ module Api::V4
 
       render
     end
+
+    def changes
+      @resources = ResourceContent.changes(params[:updated_after])
+
+      render
+    end
   end
 end

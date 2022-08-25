@@ -57,6 +57,7 @@ class ResourceContent < ApplicationRecord
   scope :one_chapter, -> { where cardinality_type: CardinalityType::OneChapter }
   scope :approved, -> { where approved: true }
   scope :recitations, -> { where sub_type: SubType::Audio }
+  scope :changes, ->(updated_after = nil) { where("updated_at > ?" , updated_after) }
 
   module CardinalityType
     OneVerse = '1_ayah'

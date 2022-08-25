@@ -1,0 +1,22 @@
+json.object! do
+  json.changes do
+    json.array! @resources do |resource|
+      json.object! do
+        json.extract! resource,
+                      :id,
+                      :name,
+                      :updated_at,
+                      :resource_type,
+                      :resource_type_name,
+                      :cardinality_type,
+                      :description,
+                      :language_name,
+                      :resource_info,
+                      :slug,
+                      :sub_type
+
+
+      end
+    end
+  end
+end
