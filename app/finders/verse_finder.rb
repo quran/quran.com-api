@@ -1,8 +1,14 @@
 # frozen_string_literal: true
 
 class VerseFinder < Finder
-  def find(verse_number, language_code = 'en')
-    load_verses(language_code).find_with_id_or_key(verse_number) || raise_invalid_ayah_number
+  def find(verse_key, language_code = 'en')
+    unless verse_key.include?(':')
+      verse_key = "#{chapter.id}:#{verse_key}"
+    end
+
+    @results = Verse.where(chapter_id: chapter.id)
+
+    load_verses(language_code).find_with_id_or_key(verse_key) || raise_invalid_ayah_number
   end
 
   def random_verse(filters, language_code, words: true, tafsirs: false, translations: false, reciter: false)
@@ -33,6 +39,8 @@ class VerseFinder < Finder
 
   protected
   def fetch_verses_range
+    return @results if @results
+
     verse_start = verse_pagination_start
     verse_end = verse_pagination_end(verse_start)
 
