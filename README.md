@@ -44,7 +44,7 @@ http://localhost:3000/api/v4/chapters/1
 ### Documentation
 https://quran.api-docs.io/v4/
 
-Note that v3 is no longer being extended or fixed. For migration guide for v3 -> v4
+Note that v3 is no longer being extended or fixed. For v3 -> v4 migration guide
 see: https://quran.api-docs.io/v4/getting-started/api-v3-v4-migration-guide
 
 ## Community

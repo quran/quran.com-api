@@ -76,7 +76,7 @@ namespace :v4 do
     get :chapter_infos
     get :verse_media
     get :chapter_reciters
-    get 'changes/', action: 'changes'
+    get :changes
   end
 
   # routes for fetching all records of one resource.
