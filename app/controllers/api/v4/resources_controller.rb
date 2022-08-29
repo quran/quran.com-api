@@ -108,9 +108,15 @@ module Api::V4
     end
 
     def changes
-      @resources = ResourceContent.changes(params[:updated_after])
+      updated_after = params[:updated_after]
+      @resources = ResourceContent.changes(updated_after)
 
-      render
+      if valid_time?(updated_after) || updated_after.blank?
+        render
+      else
+        render_422("Invalid datetime format")
+      end
+
     end
   end
 end
