@@ -7,11 +7,8 @@ json.object! do
                       :name,
                       :updated_at,
                       :resource_type,
-                      :resource_type_name,
                       :cardinality_type,
-                      :description,
                       :language_name,
-                      :resource_info,
                       :slug,
                       :sub_type
 

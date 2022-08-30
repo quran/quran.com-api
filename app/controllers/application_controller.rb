@@ -59,10 +59,9 @@ class ApplicationController < ActionController::API
     end
   end
 
-  def valid_time?(datetime)
-    Time.strptime(datetime, "%Y-%m-%dT%H:%M:%S")
-    true
-  rescue
-    false
+  def after_timestamp
+    if time = params[:updated_after].presence
+      time !~ /\D/ ? DateTime.strptime(time, '%s') : Time.parse(time)
+    end
   end
 end
