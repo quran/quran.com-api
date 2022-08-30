@@ -11,6 +11,7 @@ class CreateAyahThemes < ActiveRecord::Migration[7.0]
       t.integer :verses_count
       t.string :theme
       t.jsonb :keywords
+      t.integer :book_id, index: true
 
       t.timestamps
     end
