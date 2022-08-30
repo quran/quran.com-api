@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20220723001532
+# Schema version: 20220829193210
 #
 # Table name: ayah_themes
 #
@@ -15,10 +15,12 @@
 #  verses_count      :integer
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
+#  book_id           :integer
 #  chapter_id        :integer
 #
 # Indexes
 #
+#  index_ayah_themes_on_book_id            (book_id)
 #  index_ayah_themes_on_chapter_id         (chapter_id)
 #  index_ayah_themes_on_verse_id_from      (verse_id_from)
 #  index_ayah_themes_on_verse_id_to        (verse_id_to)

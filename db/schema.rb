@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_07_23_001532) do
+ActiveRecord::Schema[7.0].define(version: 2022_08_30_203349) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -212,13 +212,22 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_23_001532) do
     t.integer "verses_count"
     t.string "theme"
     t.jsonb "keywords"
+    t.integer "book_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["book_id"], name: "index_ayah_themes_on_book_id"
     t.index ["chapter_id"], name: "index_ayah_themes_on_chapter_id"
     t.index ["verse_id_from"], name: "index_ayah_themes_on_verse_id_from"
     t.index ["verse_id_to"], name: "index_ayah_themes_on_verse_id_to"
     t.index ["verse_number_from"], name: "index_ayah_themes_on_verse_number_from"
     t.index ["verse_number_to"], name: "index_ayah_themes_on_verse_number_to"
+  end
+
+  create_table "books", force: :cascade do |t|
+    t.string "name"
+    t.string "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "chapter_infos", id: :serial, force: :cascade do |t|
@@ -918,6 +927,14 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_23_001532) do
     t.string "cover_image"
   end
 
+  create_table "related_topics", force: :cascade do |t|
+    t.integer "topic_id"
+    t.integer "related_topic_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["topic_id"], name: "index_related_topics_on_topic_id"
+  end
+
   create_table "resource", primary_key: "resource_id", id: :serial, force: :cascade do |t|
     t.text "type", null: false
     t.text "sub_type", null: false
@@ -1198,7 +1215,26 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_23_001532) do
     t.integer "parent_id"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
+    t.boolean "is_ontological"
+    t.text "descrition"
+    t.string "wikipedia_link"
+    t.string "arabic_name"
+    t.boolean "ontology"
+    t.boolean "thematic"
+    t.integer "depth", default: 0
+    t.string "ayah_range"
+    t.integer "relatd_topics_count", default: 0
+    t.integer "childen_count", default: 0
+    t.text "description"
+    t.integer "ontology_parent_id"
+    t.integer "thematic_parent_id"
+    t.index ["depth"], name: "index_topics_on_depth"
+    t.index ["name"], name: "index_topics_on_name"
+    t.index ["ontology"], name: "index_topics_on_ontology"
+    t.index ["ontology_parent_id"], name: "index_topics_on_ontology_parent_id"
     t.index ["parent_id"], name: "index_topics_on_parent_id"
+    t.index ["thematic"], name: "index_topics_on_thematic"
+    t.index ["thematic_parent_id"], name: "index_topics_on_thematic_parent_id"
   end
 
   create_table "translated_names", id: :serial, force: :cascade do |t|
@@ -1304,6 +1340,16 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_23_001532) do
     t.string "text_clean"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
+  end
+
+  create_table "verse_topics", force: :cascade do |t|
+    t.integer "topic_id"
+    t.integer "verse_id"
+    t.jsonb "topic_words", default: []
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["topic_id"], name: "index_verse_topics_on_topic_id"
+    t.index ["verse_id"], name: "index_verse_topics_on_verse_id"
   end
 
   create_table "verses", id: :serial, force: :cascade do |t|
