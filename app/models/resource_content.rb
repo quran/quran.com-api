@@ -92,4 +92,13 @@ class ResourceContent < ApplicationRecord
     stats = resource_content_stat || create_resource_content_stat
     stats.update_column :download_count, stats.download_count.to_i + 1
   end
+
+  def self.changes(updated_after)
+    if updated_after.present?
+      where("updated_at > ?", updated_after)
+    else
+      all
+    end
+  end
+
 end

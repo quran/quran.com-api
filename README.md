@@ -5,7 +5,7 @@
 #### Requirements
 - Rails 5.0.1
 - Elasticsearch 5.0.1
-- Ruby 3.0.0
+- Ruby 3.1.0
 
 #### Installations
 Gems:
@@ -33,18 +33,19 @@ PostgreSQL: clusterdb createdb createlang createuser dropdb droplang dropuser ec
 
 See: http://postgresapp.com/documentation/cli-tools.html
 
-### Database 
+### Database
 It's private, we will not share complete dump. If you need mini version for contributing to quran.com, please join our slack channel and ask one of project's collaborator for access.
 
 ### Usage
-
 ```
-http://localhost:3000/api/v3/chapters/1/verses
+http://localhost:3000/api/v4/chapters/1
 ```
 
 ### Documentation
+https://quran.api-docs.io/v4/
 
-https://quran.api-docs.io/v3
+Note that v3 is no longer being extended or fixed. For v3 -> v4 migration guide
+see: https://quran.api-docs.io/v4/getting-started/api-v3-v4-migration-guide
 
 ## Community
 Join Quran.com community here https://quran-community.herokuapp.com

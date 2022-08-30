@@ -23,6 +23,10 @@ class ApplicationController < ActionController::API
     render partial: "api/errors/404", locals: { message: error.to_s }, status: :not_found
   end
 
+  def render_422(error=nil)
+    render partial: "api/errors/422", locals: { message: error.to_s }, status: :unprocessable_entity
+  end
+
   def fetch_locale
     params[:language].presence || params[:locale].presence || 'en'
   end
@@ -52,6 +56,12 @@ class ApplicationController < ActionController::API
         )
         .or(defaults)
         .order('translated_names.language_priority DESC')
+    end
+  end
+
+  def after_timestamp
+    if time = params[:updated_after].presence
+      time !~ /\D/ ? DateTime.strptime(time, '%s') : Time.parse(time)
     end
   end
 end
