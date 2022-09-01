@@ -101,4 +101,11 @@ class ResourceContent < ApplicationRecord
     end
   end
 
+  def self.filter_subtype(type = nil)
+    if type.present?
+      where sub_type: type
+    else
+      self
+    end
+  end
 end
