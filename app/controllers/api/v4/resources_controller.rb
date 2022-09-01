@@ -112,6 +112,7 @@ module Api::V4
         @resources = ResourceContent
               .changes(time)
               .filter_subtype(params[:type])
+              .approved
          render
       else
         render_422("Pass in valid datetime")
