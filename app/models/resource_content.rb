@@ -105,7 +105,7 @@ class ResourceContent < ApplicationRecord
     if type.present?
       where sub_type: type
     else
-      all
+      self
     end
   end
 end
