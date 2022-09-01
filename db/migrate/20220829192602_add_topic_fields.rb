@@ -12,6 +12,7 @@ class AddTopicFields < ActiveRecord::Migration[7.0]
     add_column :topics, :description, :text
     add_column :topics, :ontology_parent_id, :integer
     add_column :topics, :thematic_parent_id, :integer
+    add_column :topics, :resource_content_id, :integer
 
     add_index :topics, :depth
     add_index :topics, :name
