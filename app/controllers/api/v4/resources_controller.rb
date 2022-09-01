@@ -111,7 +111,7 @@ module Api::V4
       if time = after_timestamp
         @resources = ResourceContent
               .changes(time)
-              .filter_subtype(params[:sub_type])
+              .filter_subtype(params[:type])
          render
       else
         render_422("Pass in valid datetime")
