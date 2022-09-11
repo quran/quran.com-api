@@ -36,4 +36,11 @@ class Audio::ChapterAudioFile < ApplicationRecord
   belongs_to :audio_recitation, class_name: 'Audio::Recitation'
   belongs_to :chapter
   has_many :audio_segments, class_name: 'Audio::Segment', foreign_key: 'audio_file_id'
+
+  def self.episodes
+    joins("left join reciters as r on metadata->>'artist' = r.name;")
+      .select("r.name as reciter_name, r.profile_picture as reciter_photo, r.bio,
+        audio_url, metadata->>'title' as chapter_name ")
+        
+  end
 end
