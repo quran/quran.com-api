@@ -4,6 +4,7 @@ class ApplicationController < ActionController::API
   include ActionController::Caching
   include QuranUtils::StrongMemoize
   include ActionView::Rendering
+  include ActionController::MimeResponds
 
   before_action :set_cache_headers
   before_action :set_default_response_format

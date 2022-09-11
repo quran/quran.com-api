@@ -14,8 +14,8 @@ module Api::V4
 
     def rss
       @episodes = ::Audio::ChapterAudioFile.episodes
-      
-      render
+
+      render template: 'api/v4/chapter_recitations/rss', formats: [:xml]
     end
 
     protected
