@@ -39,8 +39,7 @@ class Audio::ChapterAudioFile < ApplicationRecord
 
   def self.episodes
     joins("left join reciters as r on metadata->>'artist' = r.name;")
-      .select("r.name as reciter_name, r.profile_picture as reciter_photo, r.bio,
-        audio_url, metadata->>'title' as chapter_name ")
-        
+      .select("r.name as reciter_name, audio_url, metadata->>'title' as chapter_name ")
+
   end
 end
