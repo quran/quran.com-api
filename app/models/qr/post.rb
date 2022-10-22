@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20220411000741
+# Schema version: 20220901063308
 #
 # Table name: qr_posts
 #
@@ -12,6 +12,7 @@
 #  post_type        :integer
 #  ranking_weight   :integer
 #  referenced_ayahs :json
+#  room_post_status :integer
 #  url              :string
 #  verified         :boolean
 #  views_count      :integer          default(0)
@@ -23,11 +24,12 @@
 #
 # Indexes
 #
-#  index_qr_posts_on_author_id       (author_id)
-#  index_qr_posts_on_language_id     (language_id)
-#  index_qr_posts_on_post_type       (post_type)
-#  index_qr_posts_on_ranking_weight  (ranking_weight)
-#  index_qr_posts_on_verified        (verified)
+#  index_qr_posts_on_author_id         (author_id)
+#  index_qr_posts_on_language_id       (language_id)
+#  index_qr_posts_on_post_type         (post_type)
+#  index_qr_posts_on_ranking_weight    (ranking_weight)
+#  index_qr_posts_on_room_post_status  (room_post_status)
+#  index_qr_posts_on_verified          (verified)
 #
 class Qr::Post < QrRecord
   belongs_to :author, class_name: 'Qr::Author'

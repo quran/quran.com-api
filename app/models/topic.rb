@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # == Schema Information
-# Schema version: 20220829193210
+# Schema version: 20220901063308
 #
 # Table name: topics
 #
@@ -22,6 +22,7 @@
 #  updated_at          :datetime         not null
 #  ontology_parent_id  :integer
 #  parent_id           :integer
+#  resource_content_id :integer
 #  thematic_parent_id  :integer
 #
 # Indexes

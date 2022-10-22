@@ -109,7 +109,7 @@ module Api::V4
 
     def changes
       if time = after_timestamp
-         @resources = ResourceContent.changes(time)
+         @resources = ResourceContent.changes(after: time)
          render
       else
         render_422("Pass in valid datetime")

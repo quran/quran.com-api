@@ -72,7 +72,7 @@ class Qdc::VerseFinder < ::VerseFinder
     end
   end
 
-  def load_related_resources(language:, mushaf:, words:, tafsirs:, translations:, reciter:, filter:, verse_order: 'verses.verse_index ASC')
+  def load_related_resources(language:, mushaf:, words:, tafsirs:, translations:, reciter:, filter:, verse_order: 'verses.verse_index ASC,')
     load_translations(translations) if translations.present?
     load_words(language, mushaf) if words
     load_segments(reciter) if reciter
@@ -80,13 +80,13 @@ class Qdc::VerseFinder < ::VerseFinder
 
     # TODO: move ordering to separate method
     words_ordering = if words
-                       "#{verse_order.present? ? ',' : ''} mushaf_words.position_in_verse ASC, word_translations.priority ASC"
+                       "#{verse_order.presence.to_s} mushaf_words.position_in_verse ASC, word_translations.priority ASC,"
                      else
                        ''
                      end
 
-    translations_order = translations.present? ? "#{words_ordering.present? ? ',' : ''} translations.priority ASC" : ''
-    order_query = "#{verse_order} #{words_ordering} #{translations_order}".strip
+    translations_order = translations.present? ? "#{words_ordering.presence.to_s} translations.priority ASC" : ''
+    order_query = "#{verse_order.presence.to_s} #{words_ordering} #{translations_order}".strip
 
     if order_query.present?
       @results.order(order_query)

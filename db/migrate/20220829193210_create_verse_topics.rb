@@ -5,6 +5,9 @@ class CreateVerseTopics < ActiveRecord::Migration[7.0]
       t.integer :verse_id, index: true
       t.jsonb :topic_words, default: []
 
+      t.boolean :ontology
+      t.boolean :thematic
+
       t.timestamps
     end
   end

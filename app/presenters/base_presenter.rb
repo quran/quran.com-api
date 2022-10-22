@@ -46,6 +46,7 @@ class BasePresenter
                  Mushaf.approved.find_by(id: mushaf_id)
                end
 
+
       mushaf || Mushaf.default
     end
   end

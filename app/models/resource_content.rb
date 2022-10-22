@@ -93,12 +93,17 @@ class ResourceContent < ApplicationRecord
     stats.update_column :download_count, stats.download_count.to_i + 1
   end
 
-  def self.changes(updated_after)
-    if updated_after.present?
-      where("updated_at > ?", updated_after)
+  def self.changes(before: nil, after: nil)
+    list = approved
+
+    if before && after
+      list.where("updated_at BETWEEN ? and ?", before, after)
+    elsif before
+      list.where("updated_at < ?", before)
+    elsif after
+      list.where("updated_at >= ?", before)
     else
-      all
+      list
     end
   end
-
 end
