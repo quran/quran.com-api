@@ -94,7 +94,7 @@ class ResourceContent < ApplicationRecord
   end
 
   def self.changes(before: nil, after: nil)
-    list = approved
+    list = self
 
     if before && after
       list.where("updated_at BETWEEN ? and ?", before, after)
@@ -104,6 +104,14 @@ class ResourceContent < ApplicationRecord
       list.where("updated_at >= ?", before)
     else
       list
+    end
+  end
+
+  def self.filter_subtype(type = nil)
+    if type.present?
+      where(sub_type: type)
+    else
+      self
     end
   end
 end
