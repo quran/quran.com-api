@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 class Qdc::VerseFinder < ::VerseFinder
+  # For some apis we need to return results in a specific order
+  # those apis can define order in `verses_fixed_order`
+  attr_reader :verses_fixed_order
+
   def random_verse(filters, language_code, mushaf_id:, words: true, tafsirs: false, translations: false, reciter: false)
     mushaf = Mushaf.find(mushaf_id)
     @results = Verse.unscope(:order).where(filters).order('RANDOM()').limit(3)
@@ -35,7 +39,7 @@ class Qdc::VerseFinder < ::VerseFinder
     mushaf = Mushaf.find(mushaf_id)
     fetch_verses_range(filter, mushaf: mushaf, words: words)
 
-    load_related_resources(
+    records = load_related_resources(
       language: language_code,
       mushaf: mushaf,
       words: words,
@@ -45,6 +49,12 @@ class Qdc::VerseFinder < ::VerseFinder
       filter: filter,
       verse_order: 'filter' == filter ? '' : 'verses.verse_index ASC'
     )
+
+    if verses_fixed_order.present?
+      fix_verses_order(records)
+    else
+      records
+    end
   end
 
   def find_verses_range(filter:, mushaf:)
@@ -57,6 +67,11 @@ class Qdc::VerseFinder < ::VerseFinder
   end
 
   protected
+
+  # for verses based on specified order
+  def fix_verses_order(verses)
+    verses.sort_by { |verse| verses_fixed_order.index(verse.id) }
+  end
 
   def fetch_verses_range(filter, mushaf: nil, words: false)
     # both from and to could be ayah key or ayah ID(not ayah number)
@@ -111,6 +126,7 @@ class Qdc::VerseFinder < ::VerseFinder
   def fetch_filter
     utils = QuranUtils::VerseRanges.new
     ids = utils.get_ids_from_ranges(params[:filters])
+    @verses_fixed_order = ids
     @total_records = ids.size
 
     pagy = Pagy.new(

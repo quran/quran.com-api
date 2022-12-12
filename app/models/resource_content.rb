@@ -101,7 +101,7 @@ class ResourceContent < ApplicationRecord
     elsif before
       list.where("updated_at < ?", before)
     elsif after
-      list.where("updated_at >= ?", before)
+      list.where("updated_at >= ?", after)
     else
       list
     end
