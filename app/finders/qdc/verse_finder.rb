@@ -46,8 +46,7 @@ class Qdc::VerseFinder < ::VerseFinder
       tafsirs: tafsirs,
       translations: translations,
       reciter: reciter,
-      filter: filter,
-      verse_order: 'filter' == filter ? '' : 'verses.verse_index ASC'
+      filter: filter
     )
 
     if verses_fixed_order.present?
@@ -70,7 +69,14 @@ class Qdc::VerseFinder < ::VerseFinder
 
   # for verses based on specified order
   def fix_verses_order(verses)
-    verses.sort_by { |verse| verses_fixed_order.index(verse.id) }
+    lookup = {}
+    verses_fixed_order.each_with_index do |verse_id, index|
+      lookup[verse_id] = index
+    end
+
+    verses.sort_by do |verse|
+      lookup[verse.id]
+    end
   end
 
   def fetch_verses_range(filter, mushaf: nil, words: false)
@@ -87,7 +93,7 @@ class Qdc::VerseFinder < ::VerseFinder
     end
   end
 
-  def load_related_resources(language:, mushaf:, words:, tafsirs:, translations:, reciter:, filter:, verse_order: 'verses.verse_index ASC,')
+  def load_related_resources(language:, mushaf:, words:, tafsirs:, translations:, reciter:, filter:, verse_order: '')
     load_translations(translations) if translations.present?
     load_words(language, mushaf) if words
     load_segments(reciter) if reciter
@@ -97,14 +103,14 @@ class Qdc::VerseFinder < ::VerseFinder
     words_ordering = if words
                        "#{verse_order.presence.to_s} mushaf_words.position_in_verse ASC, word_translations.priority ASC,"
                      else
-                       ''
+                       "#{verse_order.presence.to_s}"
                      end
 
     translations_order = translations.present? ? "#{words_ordering.presence.to_s} translations.priority ASC" : ''
-    order_query = "#{verse_order.presence.to_s} #{words_ordering} #{translations_order}".strip
+    order_query = "#{words_ordering} #{translations_order}".strip
 
     if order_query.present?
-      @results.order(order_query)
+      @results.order(Arel.sql(order_query))
     else
       @results
     end
@@ -112,9 +118,7 @@ class Qdc::VerseFinder < ::VerseFinder
 
   def fetch_advance_copy
     if params[:from] && params[:to]
-      @results = Verse
-                   .unscoped
-                   .order('verses.verse_index asc')
+      @results = rescope_verses('verse_index')
                    .where('verses.verse_index >= :from AND verses.verse_index <= :to', from: params[:from], to: params[:to])
     else
       @results = Verse.none
@@ -156,7 +160,8 @@ class Qdc::VerseFinder < ::VerseFinder
   def fetch_by_page(mushaf:, words:)
     mushaf_page = find_mushaf_page(mushaf: mushaf)
     from, to = get_ayah_range_to_load(mushaf_page.first_verse_id, mushaf_page.last_verse_id)
-    @results = rescope_verses('verse_index').where('verses.verse_index >= ? AND verses.verse_index <= ?', from, to)
+    @results = rescope_verses('verse_index')
+                 .where('verses.verse_index >= ? AND verses.verse_index <= ?', from, to)
 
     only_page_words = params[:filter_page_words] == 'true'
     if words && mushaf.lines_per_page == 16 && only_page_words
