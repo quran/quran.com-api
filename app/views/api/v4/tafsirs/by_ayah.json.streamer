@@ -4,6 +4,7 @@ include_words = @presenter.render_words?
 verse_fields = @presenter.verse_fields
 word_fields = @presenter.word_fields
 verses = @presenter.load_verses(tafsir.group_verse_key_from, tafsir.group_verse_key_to)
+
 translated_name = @presenter.resource_translated_name
 
 json.object! do

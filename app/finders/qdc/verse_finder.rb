@@ -15,8 +15,7 @@ class Qdc::VerseFinder < ::VerseFinder
       words: words,
       tafsirs: tafsirs,
       translations: translations,
-      reciter: reciter,
-      filter: :random
+      reciter: reciter
     ).sample
   end
 
@@ -30,8 +29,7 @@ class Qdc::VerseFinder < ::VerseFinder
       words: words,
       tafsirs: tafsirs,
       translations: translations,
-      reciter: reciter,
-      filter: :with_key
+      reciter: reciter
     ).first
   end
 
@@ -45,8 +43,7 @@ class Qdc::VerseFinder < ::VerseFinder
       words: words,
       tafsirs: tafsirs,
       translations: translations,
-      reciter: reciter,
-      filter: filter
+      reciter: reciter
     )
 
     if verses_fixed_order.present?
@@ -93,21 +90,20 @@ class Qdc::VerseFinder < ::VerseFinder
     end
   end
 
-  def load_related_resources(language:, mushaf:, words:, tafsirs:, translations:, reciter:, filter:, verse_order: '')
+  def load_related_resources(language:, mushaf:, words:, tafsirs:, translations:, reciter:)
     load_translations(translations) if translations.present?
-    load_words(language, mushaf) if words
-    load_segments(reciter) if reciter
+    load_words(language, mushaf) if words.present?
+    load_segments(reciter) if reciter.present?
     load_tafsirs(tafsirs) if tafsirs.present?
 
     # TODO: move ordering to separate method
-    words_ordering = if words
-                       "#{verse_order.presence.to_s} mushaf_words.position_in_verse ASC, word_translations.priority ASC,"
-                     else
-                       "#{verse_order.presence.to_s}"
-                     end
+    order_clauses = []
+    if words
+      order_clauses << "mushaf_words.position_in_verse ASC, word_translations.priority ASC"
+    end
 
-    translations_order = translations.present? ? "#{words_ordering.presence.to_s} translations.priority ASC" : ''
-    order_query = "#{words_ordering} #{translations_order}".strip
+    order_clauses << 'translations.priority ASC' if translations.present?
+    order_query = order_clauses.join(',').strip
 
     if order_query.present?
       @results.order(Arel.sql(order_query))
