@@ -9,9 +9,11 @@ module Api::Qdc
 
     def translations
       load_translations
+
       render
     end
 
+    # TODO: deprecated, moved the filters to /resources/translations api
     def filter
       translation_ids = params[:translations].to_s.split(',')
       @translations = load_translations.where(id: translation_ids)
@@ -115,6 +117,10 @@ module Api::Qdc
                .translations
                .approved
                .order('priority ASC')
+
+      if params[:ids].present? || params[:name].present?
+        list = list.filter_by(ids: params[:ids], name: params[:name])
+      end
 
       @translations = eager_load_translated_name(list)
     end

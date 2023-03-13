@@ -8,9 +8,9 @@ module Api::V4
     end
 
     def show
-      @hizb = Hizb.find_by(id: params[:id])
+      @hizb = Hizb.find_by(hizb_number: params[:id])
 
-      if @juz.nil?
+      if @hizb.nil?
         render_404("Hizb not found. Please select valid hizb number from 1-60")
       else
         render

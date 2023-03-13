@@ -15,11 +15,11 @@ json.object! do
         json.extract! slug, :slug, :locale, :is_default
       end
     end
-  else
-    json.slug do
-      json.object! do
-        json.extract! chapter.default_slug, :slug, :locale
-      end
+    end
+
+  json.slug do
+    json.object! do
+      json.extract! chapter.default_slug, :slug, :locale
     end
   end
 

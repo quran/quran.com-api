@@ -19,6 +19,7 @@ namespace :qdc do
   namespace :resources do
     get :translations
     get 'translations/:translation_id/info', action: 'translation_info'
+    #TODO: deprecate this, we can add query string in /translations path for filtering
     get 'translations/filter', action: 'filter'
     get :tafsirs
     get 'tafsirs/:tafsir_id/info', action: 'tafsir_info'
@@ -42,7 +43,7 @@ namespace :qdc do
   get 'hizbs', to: 'hizbs#index'
   get 'hizbs/:id', to: 'hizbs#show'
 
-  # Rul el hizbs
+  # Rub el hizbs
   get 'rub_el_hizbs', to: 'rub_el_hizbs#index'
   get 'rub_el_hizbs/:id', to: 'rub_el_hizbs#show'
 
@@ -62,13 +63,16 @@ namespace :qdc do
   # verses routes, by juz, chapter, page
   namespace :verses do
     get 'by_page/:page_number', action: 'by_page'
-    get 'by_juz/:juz_number', action: 'by_juz'
     get 'by_chapter/:chapter_number', action: 'by_chapter'
-    get 'by_rub_el_hizb/:rub_el_hizb_number', action: 'by_rub_el_hizb'
-    get 'by_hizb/:hizb_number', action: 'by_hizb'
+    get 'by_juz/:juz_number', action: 'by_juz'
     get 'by_manzil/:manzil_number', action: 'by_manzil'
+
+    get 'by_rub_el_hizb/:rub_el_hizb_number', action: 'by_rub_el_hizb'
+    get 'by_rub/:rub_el_hizb_number', action: 'by_rub_el_hizb'
+    get 'by_hizb/:hizb_number', action: 'by_hizb'
     get 'by_ruku/:ruku_number', action: 'by_ruku'
     get 'by_key/:verse_key', action: 'by_key'
+
     get :filter
 
     get 'random', action: 'random'
@@ -77,7 +81,6 @@ namespace :qdc do
   get :search, to: 'search#search'
   get :navigate, to: 'search#navigate'
 
-  # Advance copy
   get 'verses/advanced_copy', to: 'advanced_copy#index'
 
   # Get footnote text

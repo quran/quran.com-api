@@ -88,12 +88,25 @@ class ResourceContent < ApplicationRecord
   belongs_to :data_source
   has_one :resource_content_stat
 
+  def self.filter_by(ids: nil, name: nil)
+    if name.present?
+      list = joins(:author)
+      name_query = "%#{name.strip.downcase}%"
+      by_name = list.where("LOWER(resource_contents.name) ilike ?", name_query)
+      by_author_name = list.where("LOWER(authors.name) ilike ?", name_query)
+
+      by_name.or(by_author_name)
+    elsif ids.present?
+      where(id: ids.split(',').map(&:to_i))
+    end
+  end
+
   def increment_download_count!
     stats = resource_content_stat || create_resource_content_stat
     stats.update_column :download_count, stats.download_count.to_i + 1
   end
 
-  def self.changes(before: nil, after: nil)
+  def self.change_log(before: nil, after: nil)
     list = self
 
     if before && after

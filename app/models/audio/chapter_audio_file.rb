@@ -31,7 +31,6 @@
 #  index_audio_chapter_audio_files_on_format               (format)
 #  index_audio_chapter_audio_files_on_resource_content_id  (resource_content_id)
 #
-
 class Audio::ChapterAudioFile < ApplicationRecord
   belongs_to :audio_recitation, class_name: 'Audio::Recitation'
   belongs_to :chapter

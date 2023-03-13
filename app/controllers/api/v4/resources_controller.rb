@@ -110,13 +110,13 @@ module Api::V4
     def changes
       if time = after_timestamp
         @resources = ResourceContent
-              .changes(after: time)
+              .change_log(after: time)
               .filter_subtype(params[:type])
               .approved
 
          render
       else
-        render_422("Pass in valid datetime")
+        render_422("after_timestamp is invalid or missing. Please use a valid date or unix timestamp(in seconds)")
       end
     end
   end

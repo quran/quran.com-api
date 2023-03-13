@@ -14,7 +14,7 @@ module Qdc
       'text_qpc_hafs',
       'text_qpc_nastaleeq_hafs',
       'text_qpc_nastaleeq',
-      'text_nastaleeq_indopak',
+      'text_indopak_nastaleeq',
       'verse_key',
       'location',
       'code_v1',
