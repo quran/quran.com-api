@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 # == Schema Information
+# Schema version: 20230313013539
 #
 # Table name: transliterations
 #
@@ -16,9 +17,9 @@
 #
 # Indexes
 #
-#  index_transliterations_on_language_id                    (language_id)
-#  index_transliterations_on_resource_content_id            (resource_content_id)
-#  index_transliterations_on_resource_type_and_resource_id  (resource_type,resource_id)
+#  index_transliterations_on_language_id          (language_id)
+#  index_transliterations_on_resource             (resource_type,resource_id)
+#  index_transliterations_on_resource_content_id  (resource_content_id)
 #
 
 class Transliteration < ApplicationRecord

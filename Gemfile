@@ -19,7 +19,9 @@ gem 'graphql', '= 1.11.4'
 gem 'graphql-schema_comparator'
 #gem 'graphql-playground', github: 'naveed-ahmad/graphql-playground-rails'
 
-gem 'cld3', '= 3.4.4'
+
+#gem 'cld3', '= 3.4.4'
+gem 'cld3', '= 3.4.3'
 
 # Elasticsearch
 gem 'elastic-transport'
@@ -86,3 +88,4 @@ group :test, :development do
   gem 'rubocop-rspec', '>= 2.1.0'
   gem 'json-schema-rspec'
 end
+gem "kredis", "~> 1.3"

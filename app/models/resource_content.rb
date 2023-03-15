@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 # == Schema Information
-# Schema version: 20220325102524
+# Schema version: 20230313013539
 #
 # Table name: resource_contents
 #
@@ -10,11 +10,8 @@
 #  cardinality_type       :string
 #  description            :text
 #  language_name          :string
-#  meta_data              :jsonb
 #  name                   :string
-#  priority               :integer
 #  records_count          :integer          default(0)
-#  resource_info          :text
 #  resource_type          :string
 #  resource_type_name     :string
 #  slug                   :string
@@ -27,7 +24,6 @@
 #  data_source_id         :integer
 #  language_id            :integer
 #  mobile_translation_id  :integer
-#  resource_id            :string
 #
 # Indexes
 #
@@ -36,10 +32,7 @@
 #  index_resource_contents_on_cardinality_type       (cardinality_type)
 #  index_resource_contents_on_data_source_id         (data_source_id)
 #  index_resource_contents_on_language_id            (language_id)
-#  index_resource_contents_on_meta_data              (meta_data) USING gin
 #  index_resource_contents_on_mobile_translation_id  (mobile_translation_id)
-#  index_resource_contents_on_priority               (priority)
-#  index_resource_contents_on_resource_id            (resource_id)
 #  index_resource_contents_on_resource_type_name     (resource_type_name)
 #  index_resource_contents_on_slug                   (slug)
 #  index_resource_contents_on_sub_type               (sub_type)
@@ -88,12 +81,25 @@ class ResourceContent < ApplicationRecord
   belongs_to :data_source
   has_one :resource_content_stat
 
+  def self.filter_by(ids: nil, name: nil)
+    if name.present?
+      list = joins(:author)
+      name_query = "%#{name.strip.downcase}%"
+      by_name = list.where("LOWER(resource_contents.name) ilike ?", name_query)
+      by_author_name = list.where("LOWER(authors.name) ilike ?", name_query)
+
+      by_name.or(by_author_name)
+    elsif ids.present?
+      where(id: ids.split(',').map(&:to_i))
+    end
+  end
+
   def increment_download_count!
     stats = resource_content_stat || create_resource_content_stat
     stats.update_column :download_count, stats.download_count.to_i + 1
   end
 
-  def self.changes(before: nil, after: nil)
+  def self.change_log(before: nil, after: nil)
     list = self
 
     if before && after

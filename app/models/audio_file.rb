@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 # == Schema Information
+# Schema version: 20230313013539
 #
 # Table name: audio_files
 #
@@ -13,6 +14,7 @@
 #  manzil_number      :integer
 #  mime_type          :string
 #  page_number        :integer
+#  resource_type      :string
 #  rub_el_hizb_number :integer
 #  ruku_number        :integer
 #  segments           :text
@@ -24,7 +26,7 @@
 #  updated_at         :datetime         not null
 #  chapter_id         :integer
 #  recitation_id      :integer
-#  verse_id           :integer
+#  resource_id        :integer
 #
 # Indexes
 #
@@ -36,9 +38,9 @@
 #  index_audio_files_on_manzil_number                (manzil_number)
 #  index_audio_files_on_page_number                  (page_number)
 #  index_audio_files_on_recitation_id                (recitation_id)
+#  index_audio_files_on_resource                     (resource_type,resource_id)
 #  index_audio_files_on_rub_el_hizb_number           (rub_el_hizb_number)
 #  index_audio_files_on_ruku_number                  (ruku_number)
-#  index_audio_files_on_verse_id                     (verse_id)
 #  index_audio_files_on_verse_key                    (verse_key)
 #
 

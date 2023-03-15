@@ -55,4 +55,4 @@ development:
 # We are not clearing db in test environment, its kind of safe to use dev db for test
 test:
   <<: *default
-  database: quran_testing
+  database: quran_dev

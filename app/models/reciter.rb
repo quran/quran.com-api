@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 # == Schema Information
-# Schema version: 20220123232023
+# Schema version: 20230313013539
 #
 # Table name: reciters
 #
 #  id                :integer          not null, primary key
 #  bio               :text
 #  cover_image       :string
+#  description       :text
 #  name              :string
 #  profile_picture   :string
 #  recitations_count :integer          default(0)

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 # == Schema Information
+# Schema version: 20230313013539
 #
 # Table name: word_corpuses
 #
@@ -8,7 +9,6 @@
 #  description   :text
 #  image_src     :string
 #  location      :string
-#  segments      :json
 #  segments_data :jsonb
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null

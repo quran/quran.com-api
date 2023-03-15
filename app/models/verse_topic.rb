@@ -1,9 +1,11 @@
 # == Schema Information
-# Schema version: 20220829193210
+# Schema version: 20230313013539
 #
 # Table name: verse_topics
 #
 #  id          :bigint           not null, primary key
+#  ontology    :boolean
+#  thematic    :boolean
 #  topic_words :jsonb
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
