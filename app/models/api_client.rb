@@ -19,7 +19,13 @@
 #  index_api_clients_on_api_key  (api_key)
 #
 class ApiClient < ApplicationRecord
-  kredis_hash :requests
+  def self.sync(attrs)
+    client = ApiClient.where(id: attrs[:id]).first_or_initialize
+    client.attributes = attrs
+
+    client.save(validate: false)
+    client
+  end
 
   def rate_limited?
     return false if internal_api?

@@ -1,6 +1,5 @@
 module Kalimat
   class SearchController < ApplicationController
-    #include ActionController::Base::Rendering
     include ActionController::Renderers::All
     use_renderers :json
 
