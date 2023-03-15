@@ -3,7 +3,6 @@
 class ApplicationController < ActionController::API
   include ActionController::Caching
   include QuranUtils::StrongMemoize
-  include ActionView::Rendering
 
   before_action :set_cache_headers
   before_action :set_default_response_format
@@ -23,8 +22,16 @@ class ApplicationController < ActionController::API
     render partial: "api/errors/404", locals: { message: error.to_s }, status: :not_found
   end
 
+  def render_bad_request(error=nil, status=:bad_request)
+    render partial: "api/errors/bad_request", locals: { message: error.to_s }, status: status
+  end
+
   def render_422(error=nil)
     render partial: "api/errors/422", locals: { message: error.to_s }, status: :unprocessable_entity
+  end
+
+  def render_request_error(error, status)
+    render partial: "api/errors/requst_error", locals: { message: error.to_s, status: status }, status: status
   end
 
   def fetch_locale

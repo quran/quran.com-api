@@ -11,6 +11,11 @@ Rails.application.routes.draw do
   # mount GraphQL::Playground::Engine, at: "/graphql-playground", graphql_path: "/graphql"
   post '/graphql', to: 'graphql#execute'
 
+  namespace :kalimat do
+    get '/search', to: 'search#search'
+    get '/suggest', to: 'search#suggest'
+  end
+
   namespace :v3 do
     get 'audio_files/index'
   end

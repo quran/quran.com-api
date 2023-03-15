@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 # == Schema Information
-# Schema version: 20220123232023
+# Schema version: 20230313013539
 #
 # Table name: mushafs
 #
@@ -10,16 +10,19 @@
 #  enabled             :boolean
 #  is_default          :boolean          default(FALSE)
 #  lines_per_page      :integer
-#  name                :string           not null
+#  name                :string
 #  pages_count         :integer
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
 #  qirat_type_id       :integer
-#  resource_content_id :integer
+#  resource_content_id :bigint
 #
 # Indexes
 #
-#  index_mushafs_on_enabled        (enabled)
-#  index_mushafs_on_is_default     (is_default)
-#  index_mushafs_on_qirat_type_id  (qirat_type_id)
+#  index_mushafs_on_enabled              (enabled)
+#  index_mushafs_on_is_default           (is_default)
+#  index_mushafs_on_qirat_type_id        (qirat_type_id)
+#  index_mushafs_on_resource_content_id  (resource_content_id)
 #
 
 class Mushaf < ApplicationRecord

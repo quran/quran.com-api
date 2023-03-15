@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 # == Schema Information
-# Schema version: 20220123232023
+# Schema version: 20230313013539
 #
 # Table name: qirat_types
 #
-#  id                :bigint           not null, primary key
-#  description       :text
-#  name              :string
-#  recitations_count :integer          default(0)
-#  created_at        :datetime         not null
-#  updated_at        :datetime         not null
+#  id                      :bigint           not null, primary key
+#  audio_recitations_count :integer
+#  description             :text
+#  name                    :string
+#  created_at              :datetime         not null
+#  updated_at              :datetime         not null
 #
 
 class QiratType < ApplicationRecord

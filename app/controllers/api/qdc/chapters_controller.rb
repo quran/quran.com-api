@@ -5,7 +5,6 @@ module Api::Qdc
     before_action :init_presenter
 
     def index
-      render
     end
 
     def show

@@ -1,22 +1,22 @@
 # frozen_string_literal: true
 # == Schema Information
-# Schema version: 20220123232023
+# Schema version: 20230313013539
 #
 # Table name: audio_recitations
 #
 #  id                  :bigint           not null, primary key
-#  approved            :boolean
+#  approved            :boolean          default(FALSE)
 #  arabic_name         :string
 #  description         :text
 #  files_count         :integer
 #  files_size          :float
 #  format              :string
 #  home                :integer
+#  lock_segments       :boolean          default(FALSE)
 #  name                :string
 #  priority            :integer
 #  relative_path       :string
-#  segment_locked      :boolean          default(FALSE)
-#  segments_count      :integer
+#  segment_locked      :integer
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
 #  qirat_type_id       :integer
@@ -30,6 +30,7 @@
 #  index_audio_recitations_on_approved             (approved)
 #  index_audio_recitations_on_name                 (name)
 #  index_audio_recitations_on_priority             (priority)
+#  index_audio_recitations_on_qirat_type_id        (qirat_type_id)
 #  index_audio_recitations_on_recitation_style_id  (recitation_style_id)
 #  index_audio_recitations_on_reciter_id           (reciter_id)
 #  index_audio_recitations_on_relative_path        (relative_path)
