@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20220123232023
+# Schema version: 20230313013539
 #
 # Table name: morphology_word_segments
 #
@@ -8,7 +8,7 @@
 #  grammar_term_desc_english :string
 #  grammar_term_key          :string
 #  grammar_term_name         :string
-#  hidden                    :boolean
+#  hidden                    :boolean          default(FALSE)
 #  lemma_name                :string
 #  part_of_speech_key        :string
 #  part_of_speech_name       :string

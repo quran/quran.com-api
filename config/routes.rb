@@ -10,6 +10,12 @@ Rails.application.routes.draw do
   # anyone access it to play with API is a good tool
   # mount GraphQL::Playground::Engine, at: "/graphql-playground", graphql_path: "/graphql"
   post '/graphql', to: 'graphql#execute'
+  post "/internal/sync_api_client", to: "api_clients#sync"
+
+  namespace :kalimat do
+    get '/search', to: 'search#search'
+    get '/suggest', to: 'search#suggest'
+  end
 
   namespace :v3 do
     get 'audio_files/index'

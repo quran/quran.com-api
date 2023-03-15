@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 # == Schema Information
-# Schema version: 20220123232023
+# Schema version: 20230313013539
 #
 # Table name: mushaf_words
 #
@@ -13,7 +13,7 @@
 #  position_in_line  :integer
 #  position_in_page  :integer
 #  position_in_verse :integer
-#  text              :text
+#  text              :string
 #  char_type_id      :integer
 #  mushaf_id         :integer
 #  verse_id          :integer
@@ -22,7 +22,6 @@
 # Indexes
 #
 #  index_mushaf_words_on_mushaf_id_and_word_id  (mushaf_id,word_id)
-#  index_on_mushad_word_position                (mushaf_id,verse_id,position_in_verse)
 #  index_on_mushaf_word_position                (mushaf_id,verse_id,position_in_page)
 #
 

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # == Schema Information
-# Schema version: 20220901063308
+# Schema version: 20230313013539
 #
 # Table name: topics
 #
@@ -11,8 +11,6 @@
 #  childen_count       :integer          default(0)
 #  depth               :integer          default(0)
 #  description         :text
-#  descrition          :text
-#  is_ontological      :boolean
 #  name                :string
 #  ontology            :boolean
 #  relatd_topics_count :integer          default(0)

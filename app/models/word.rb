@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 # == Schema Information
+# Schema version: 20230313013539
 #
 # Table name: words
 #
@@ -14,25 +15,18 @@
 #  code_hex_v3             :string
 #  code_v1                 :string
 #  code_v2                 :string
-#  en_transliteration      :string
-#  image_blob              :text
-#  image_url               :string
 #  line_number             :integer
-#  line_v2                 :integer
 #  location                :string
 #  page_number             :integer
 #  pause_name              :string
 #  position                :integer
 #  text_imlaei             :string
-#  text_imlaei_simple      :string
 #  text_indopak            :string
 #  text_indopak_nastaleeq  :string
-#  text_qpc_hafs           :string
+#  text_madani             :string
 #  text_qpc_nastaleeq      :string
 #  text_qpc_nastaleeq_hafs :string
-#  text_uthmani            :string
-#  text_uthmani_simple     :string
-#  text_uthmani_tajweed    :string
+#  text_simple             :string
 #  v2_page                 :integer
 #  verse_key               :string
 #  created_at              :datetime         not null

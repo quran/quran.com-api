@@ -88,3 +88,4 @@ group :test, :development do
   gem 'rubocop-rspec', '>= 2.1.0'
   gem 'json-schema-rspec'
 end
+gem "kredis", "~> 1.3"

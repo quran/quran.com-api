@@ -1,12 +1,11 @@
 # frozen_string_literal: true
 # == Schema Information
-# Schema version: 20220123232023
+# Schema version: 20230313013539
 #
 # Table name: audio_segments
 #
 #  id                       :bigint           not null, primary key
 #  duration                 :integer
-#  duration_ms              :integer
 #  percentile               :float
 #  relative_segments        :jsonb
 #  relative_silent_duration :integer

@@ -1,0 +1,4 @@
+json.object! do
+  json.status status || 400
+  json.error message
+end

@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20220311202850
+# Schema version: 20230313013539
 #
 # Table name: qr_authors
 #
@@ -7,8 +7,8 @@
 #  avatar_url       :string
 #  bio              :text
 #  comments_count   :integer          default(0)
-#  followers_count  :integer
-#  followings_count :integer
+#  followers_count  :integer          default(0)
+#  followings_count :integer          default(0)
 #  name             :string
 #  posts_count      :integer          default(0)
 #  user_type        :integer

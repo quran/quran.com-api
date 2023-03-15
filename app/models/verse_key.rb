@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20220829193210
+# Schema version: 20230313013539
 #
 # Table name: verses
 #
@@ -17,18 +17,17 @@
 #  pause_words_count       :integer          default(0)
 #  rub_el_hizb_number      :integer
 #  ruku_number             :integer
+#  sajdah                  :string
 #  sajdah_number           :integer
-#  sajdah_type             :string
 #  surah_ruku_number       :integer
-#  text_imlaei             :string
-#  text_imlaei_simple      :string
-#  text_indopak            :string
+#  text_imlaei             :text
+#  text_indopak            :text
 #  text_indopak_nastaleeq  :string
-#  text_qpc_hafs           :string
+#  text_madani             :text
 #  text_qpc_nastaleeq      :string
 #  text_qpc_nastaleeq_hafs :string
-#  text_uthmani            :string
-#  text_uthmani_simple     :string
+#  text_simple             :text
+#  text_uthmani_simple     :text
 #  text_uthmani_tajweed    :text
 #  v2_page                 :integer
 #  verse_index             :integer
