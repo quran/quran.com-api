@@ -5,7 +5,7 @@ ruby '3.1.0'
 
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-gem 'rails', '~> 7.0.2', '>= 7.0.2.3'
+gem 'rails', '~> 7.0.4', '>= 7.0.4.3'
 
 # Use postgresql as the database for Active Record
 gem 'pg', '>= 0.18', '< 2.0'
@@ -88,4 +88,4 @@ group :test, :development do
   gem 'rubocop-rspec', '>= 2.1.0'
   gem 'json-schema-rspec'
 end
-gem "kredis", "~> 1.3"
+gem "kredis", "~> 1.3", ">= 1.3.0.1"
