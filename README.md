@@ -48,7 +48,7 @@ Note that v3 is no longer being extended or fixed. For v3 -> v4 migration guide
 see: https://quran.api-docs.io/v4/getting-started/api-v3-v4-migration-guide
 
 ## Community
-Join Quran.com community here https://quran-community.herokuapp.com
+Join Quran.com community here https://discord.com/invite/FxRWSBfWxn
 
 
 Tests
