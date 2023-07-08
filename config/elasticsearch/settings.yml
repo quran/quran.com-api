@@ -64,7 +64,7 @@ index:
       quran_arabic_word_synonym:
         type: synonym
         expand: true
-        synonyms_path: analysis/quran_arabic_word_synonym.txt
+        synonyms_path: analysis/quran_word_synonym.txt
       noun_synonym:
         type: synonym
         expand: true
