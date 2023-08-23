@@ -5,7 +5,7 @@ ruby '3.1.0'
 
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-gem 'rails', '~> 7.0.2', '>= 7.0.2.3'
+gem 'rails', '~> 7.0.7', '>= 7.0.7.1'
 
 # Use postgresql as the database for Active Record
 gem 'pg', '>= 0.18', '< 2.0'
@@ -13,7 +13,7 @@ gem 'pg', '>= 0.18', '< 2.0'
 # For rendering json,
 # TODO: turbostreamer replace this with https://github.com/thoughtbot/props_template
 # pros_template has simple syntax and slightly faster than turbostreamer
-gem 'turbostreamer', '= 1.9'
+gem 'turbostreamer', '= 1.10.0'
 
 gem 'graphql', '= 1.11.4'
 gem 'graphql-schema_comparator'
@@ -29,7 +29,7 @@ gem 'elasticsearch-model'#, '~> 7.2.0'
 gem 'typhoeus'
 
 # Paging the results
-gem 'pagy'
+gem 'pagy', '>= 6.0.0'
 
 gem 'oj'
 gem 'oj_mimic_json'
@@ -64,7 +64,7 @@ group :development do
   gem 'byebug', platform: :mri
   gem 'ruby-progressbar'
   gem 'benchmark-ips', require: false
-  gem 'bullet'
+  gem 'bullet', '>= 7.0.2'
   gem 'derailed_benchmarks'
 
   # run some pre commit hooks
@@ -80,12 +80,12 @@ group :development do
 end
 
 group :test, :development do
-  gem 'rspec-rails', '= 5.0.2'
-  gem 'shoulda-matchers', '~> 5.1.0'
+  gem 'rspec-rails', '= 5.0.3'
+  gem 'shoulda-matchers', '~> 5.2.0'
   gem 'simplecov', require: false
   gem 'factory_bot_rails', '>= 6.2.0'
-  gem 'rubocop-rails_config', '>= 1.9.1'
+  gem 'rubocop-rails_config', '>= 1.9.2'
   gem 'rubocop-rspec', '>= 2.1.0'
   gem 'json-schema-rspec'
 end
-gem "kredis", "~> 1.3"
+gem "kredis", "~> 1.4", ">= 1.4.0"
