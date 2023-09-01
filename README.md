@@ -42,7 +42,7 @@ http://localhost:3000/api/v4/chapters/1
 ```
 
 ### Documentation
-V4 docs: https://api-docs.quran.com/quran.com/v4/
+V4 docs: https://api-docs.quran.com/docs/category/quran.com-api
 deprecated V4 docs: https://quran.api-docs.io/v4/
 
 Note that v3 is no longer being extended or fixed. For v3 -> v4 migration guide
