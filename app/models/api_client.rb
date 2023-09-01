@@ -8,7 +8,10 @@
 #  api_key                       :string           not null
 #  current_period_ends_at        :datetime
 #  current_period_requests_count :integer
+#  internal_api                  :boolean          default(FALSE)
+#  kalimat_api_key               :string
 #  name                          :string
+#  request_quota                 :integer
 #  requests_count                :integer
 #  created_at                    :datetime         not null
 #  updated_at                    :datetime         not null
