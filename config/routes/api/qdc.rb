@@ -72,6 +72,7 @@ namespace :qdc do
     get 'by_hizb/:hizb_number', action: 'by_hizb'
     get 'by_ruku/:ruku_number', action: 'by_ruku'
     get 'by_key/:verse_key', action: 'by_key'
+    get 'by_range', action: 'by_range'
 
     get :filter
 

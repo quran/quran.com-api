@@ -96,6 +96,8 @@ module Qdc
           'by_hizb'
         elsif params[:ruku_number].present?
           'ruku_number'
+        elsif params[:from].present? && params[:to].present?
+          'by_range'
         else
           raise_404 "Look up filter is invalid, please provide a valid filter(chapter_number, juz_number, page_number, manzil_number, rub_el_hizb_number, hizb_number, ruku_number)"
         end

@@ -77,16 +77,21 @@ class Qdc::VerseFinder < ::VerseFinder
   end
 
   def fetch_verses_range(filter, mushaf: nil, words: false)
-    # both from and to could be ayah key or ayah ID(not ayah number)
-    params[:from] = get_ayah_id(params[:from])
-    params[:to] = get_ayah_id(params[:to])
-
-    if 'by_page' == filter
-      @results = fetch_by_page(mushaf: mushaf, words: words)
-    elsif 'by_juz' == filter
-      @results = fetch_by_juz(mushaf: mushaf)
+    if 'by_range' == filter
+      @results = fetch_by_range
     else
-      @results = send("fetch_#{filter}")
+      # TODO: we need to validate from and to before passing it to get_ayah_id. Currently "from"=>"testFrom:1", "to"=>"testTo:5" gets converted to "from"=>6231, "to"=>6235. {@see fetch_by_range}
+      # both from and to could be ayah key or ayah ID(not ayah number)
+      params[:from] = get_ayah_id(params[:from])
+      params[:to] = get_ayah_id(params[:to])
+
+      if 'by_page' == filter
+        @results = fetch_by_page(mushaf: mushaf, words: words)
+      elsif 'by_juz' == filter
+        @results = fetch_by_juz(mushaf: mushaf)
+      else
+        @results = send("fetch_#{filter}")
+      end
     end
   end
 
@@ -210,10 +215,24 @@ class Qdc::VerseFinder < ::VerseFinder
   end
 
   def fetch_by_range
+    # 1. make sure both from and to are present
+    raise(RestApi::RecordNotFound.new("From and to must be present.")) unless params[:from] && params[:to]
+    from_range = QuranUtils::VerseKey.new(params[:from])
+    from_verse_key_data = from_range.process_verse_key
+    to_range = QuranUtils::VerseKey.new(params[:to])
+    to_verse_key_data = to_range.process_verse_key
+    # 2. make sure from and to are in the format of 'chapter:verse' e.g. don't accept from=test&to=anotherTest
+    raise(RestApi::RecordNotFound.new("Verse key contains invalid data")) if from_verse_key_data.empty? || to_verse_key_data.empty?
+    # 3. make sure from and to have both chapter and verse. e.g. don't allow testFrom:1&to=testTo:5
+    raise(RestApi::RecordNotFound.new("Verse key contains invalid data")) unless from_verse_key_data.all? && to_verse_key_data.all?
+    params[:from] = get_ayah_id(params[:from])
+    params[:to] = get_ayah_id(params[:to])
+    # 4. make sure from and to Ids are not nil. Either can be nil if the verse key contains out of range values e.g. 1:8 or 500:1
+    raise(RestApi::RecordNotFound.new("Verse key contains out of range values")) if params[:from].nil? || params[:to].nil?
+    # 5. make sure from is smaller than to. An invalid range e.g. from=1:7&to=1:4
+    raise(RestApi::RecordNotFound.new("From should be smaller than to")) if params[:from] > params[:to]
     from, to = get_ayah_range_to_load(params[:from], params[:to])
-
-    @results = rescope_verses('verse_index')
-                 .where('verses.verse_index >= ? AND verses.verse_index <= ?', from, to)
+    @results = rescope_verses('verse_index').where('verses.verse_index >= ? AND verses.verse_index <= ?', from, to)
   end
 
   def load_words(word_translation_lang, mushaf)
