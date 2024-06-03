@@ -1,4 +1,4 @@
-# Quran.com API [Join Quran.com community](https://quran-community.herokuapp.com)
+# Quran.com API [Join Quran.com community](https://discord.com/invite/FxRWSBfWxn)
 
 [![Code Climate](https://codeclimate.com/github/quran/quran.com-api.png)](https://codeclimate.com/github/quran/quran.com-api)
 
