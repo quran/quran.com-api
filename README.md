@@ -42,10 +42,9 @@ http://localhost:3000/api/v4/chapters/1
 ```
 
 ### Documentation
-https://quran.api-docs.io/v4/
+https://api-docs.quran.com/docs/category/quran.com-api
 
-Note that v3 is no longer being extended or fixed. For v3 -> v4 migration guide
-see: https://quran.api-docs.io/v4/getting-started/api-v3-v4-migration-guide
+Note that v3 is no longer being extended or fixed.
 
 ## Community
 Join Quran.com community here https://discord.com/invite/FxRWSBfWxn
