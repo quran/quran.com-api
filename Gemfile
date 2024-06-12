@@ -41,7 +41,7 @@ gem 'rails-html-sanitizer', '>= 1.4.4'
 gem 'parallel', require: false
 
 # use puma server
-gem 'puma', '~> 4.3', '>= 4.3.12'
+gem 'puma', '~> 5.6', '>= 5.6.8'
 
 # enable cors
 gem 'rack-cors'
