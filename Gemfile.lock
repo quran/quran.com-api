@@ -86,7 +86,7 @@ GEM
     cld3 (3.4.3)
       ffi (>= 1.1.0, < 1.16.0)
     coderay (1.1.3)
-    concurrent-ruby (1.1.10)
+    concurrent-ruby (1.2.2)
     connection_pool (2.3.0)
     crass (1.0.6)
     dead_end (3.1.1)
@@ -121,13 +121,13 @@ GEM
     elasticsearch-transport (7.17.1)
       faraday (~> 1)
       multi_json
-    erubi (1.10.0)
+    erubi (1.12.0)
     ethon (0.15.0)
       ffi (>= 1.15.0)
-    factory_bot (6.2.1)
+    factory_bot (6.4.0)
       activesupport (>= 5.0.0)
-    factory_bot_rails (6.2.0)
-      factory_bot (~> 6.2.0)
+    factory_bot_rails (6.4.0)
+      factory_bot (~> 6.4)
       railties (>= 5.0.0)
     faraday (1.10.0)
       faraday-em_http (~> 1.0)
@@ -165,7 +165,7 @@ GEM
     hashie (5.0.0)
     heapy (0.2.0)
       thor
-    i18n (1.10.0)
+    i18n (1.14.1)
       concurrent-ruby (~> 1.0)
     jaro_winkler (1.5.4)
     json-schema (2.8.1)
@@ -180,9 +180,9 @@ GEM
     kredis (1.3.0.1)
       activesupport (>= 6.0.0)
       redis (>= 4.2, < 6)
-    loofah (2.19.1)
+    loofah (2.22.0)
       crass (~> 1.0.2)
-      nokogiri (>= 1.5.9)
+      nokogiri (>= 1.12.0)
     mail (2.7.1)
       mini_mime (>= 0.1.1)
     marcel (1.0.2)
@@ -190,8 +190,8 @@ GEM
     method_source (1.0.0)
     mini_histogram (0.3.1)
     mini_mime (1.1.2)
-    mini_portile2 (2.8.0)
-    minitest (5.15.0)
+    mini_portile2 (2.8.5)
+    minitest (5.20.0)
     multi_json (1.15.0)
     multipart-post (2.1.1)
     net-imap (0.2.3)
@@ -209,8 +209,8 @@ GEM
       net-protocol
       timeout
     nio4r (2.5.8)
-    nokogiri (1.13.10)
-      mini_portile2 (~> 2.8.0)
+    nokogiri (1.15.5)
+      mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     oj (3.13.11)
     oj_mimic_json (1.0.1)
@@ -231,15 +231,15 @@ GEM
     public_suffix (4.0.6)
     puma (4.3.12)
       nio4r (~> 2.0)
-    racc (1.6.1)
-    rack (2.2.3)
+    racc (1.7.3)
+    rack (2.2.8)
     rack-brotli (1.2.0)
       brotli (>= 0.1.7)
       rack (>= 1.4)
     rack-cors (1.1.1)
       rack (>= 2.0.0)
-    rack-test (1.1.0)
-      rack (>= 1.0, < 3)
+    rack-test (2.1.0)
+      rack (>= 1.3)
     rails (7.0.2.3)
       actioncable (= 7.0.2.3)
       actionmailbox (= 7.0.2.3)
@@ -254,11 +254,13 @@ GEM
       activesupport (= 7.0.2.3)
       bundler (>= 1.15.0)
       railties (= 7.0.2.3)
-    rails-dom-testing (2.0.3)
-      activesupport (>= 4.2.0)
+    rails-dom-testing (2.2.0)
+      activesupport (>= 5.0.0)
+      minitest
       nokogiri (>= 1.6)
-    rails-html-sanitizer (1.4.4)
-      loofah (~> 2.19, >= 2.19.1)
+    rails-html-sanitizer (1.6.0)
+      loofah (~> 2.21)
+      nokogiri (~> 1.14)
     railties (7.0.2.3)
       actionpack (= 7.0.2.3)
       activesupport (= 7.0.2.3)
@@ -267,7 +269,7 @@ GEM
       thor (~> 1.0)
       zeitwerk (~> 2.5)
     rainbow (3.1.1)
-    rake (13.0.6)
+    rake (13.1.0)
     redis (5.0.6)
       redis-client (>= 0.9.0)
     redis-client (0.14.0)
@@ -359,14 +361,14 @@ GEM
       yard (~> 0.9, >= 0.9.24)
     stackprof (0.2.19)
     strscan (3.0.1)
-    thor (1.2.1)
+    thor (1.3.0)
     tilt (2.0.10)
     timeout (0.2.0)
     turbostreamer (1.9.0)
       activesupport (>= 5.0.0)
     typhoeus (1.4.0)
       ethon (>= 0.9.0)
-    tzinfo (2.0.4)
+    tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     tzinfo-data (1.2022.1)
       tzinfo (>= 1.0.0)
@@ -378,7 +380,7 @@ GEM
     websocket-extensions (0.1.5)
     yard (0.9.27)
       webrick (~> 1.7.0)
-    zeitwerk (2.5.4)
+    zeitwerk (2.6.12)
 
 PLATFORMS
   ruby
@@ -393,7 +395,7 @@ DEPENDENCIES
   derailed_benchmarks
   elastic-transport
   elasticsearch-model
-  factory_bot_rails (>= 6.2.0)
+  factory_bot_rails (>= 6.3.0)
   graphql (= 1.11.4)
   graphql-schema_comparator
   json-schema-rspec
@@ -428,4 +430,4 @@ RUBY VERSION
    ruby 3.1.0p0
 
 BUNDLED WITH
-   2.3.3
+   2.3.26
