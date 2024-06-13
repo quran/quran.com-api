@@ -40,6 +40,14 @@ module Api::Qdc
       render
     end
 
+    def word_by_word_translations
+      list = ResourceContent.eager_load(:translated_name).approved.one_word.translations.order('priority ASC')
+
+      @word_by_word_translations = eager_load_translated_name(list)
+
+      render
+    end
+
     def tafsir_info
       if @tafsir = fetch_tafsir_resource
         render
