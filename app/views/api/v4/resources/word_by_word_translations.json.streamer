@@ -1,0 +1,22 @@
+json.object! do
+  json.word_by_word_translations do
+    json.array! @word_by_word_translations do |word_by_word_translation|
+      json.object! do
+        json.extract! word_by_word_translation,
+                      :id,
+                      :name,
+                      :author_name,
+                      :slug,
+                      :language_name
+        json.iso_code word_by_word_translation.language.iso_code
+
+        json.translated_name do
+          translated_name = word_by_word_translation.translated_name
+          json.object! do
+            json.extract! translated_name, :name, :language_name
+          end
+        end
+      end
+    end
+  end
+end

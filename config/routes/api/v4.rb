@@ -78,6 +78,7 @@ namespace :v4 do
     get :verse_media
     get :chapter_reciters
     get :changes
+    get :word_by_word_translations
   end
 
   # routes for fetching all records of one resource.
