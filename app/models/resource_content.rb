@@ -44,10 +44,12 @@ class ResourceContent < ApplicationRecord
 
   scope :translations, -> { where sub_type: [SubType::Translation, SubType::Transliteration] }
   scope :media, -> { where sub_type: SubType::Video }
+  scope :translations, -> { where sub_type: SubType::Translation }
   scope :tafsirs, -> { where sub_type: SubType::Tafsir }
   scope :chapter_info, -> { where sub_type: SubType::Info }
   scope :one_verse, -> { where cardinality_type: CardinalityType::OneVerse }
   scope :one_chapter, -> { where cardinality_type: CardinalityType::OneChapter }
+  scope :one_word, -> { where cardinality_type: CardinalityType::OneWord }
   scope :approved, -> { where approved: true }
   scope :recitations, -> { where sub_type: SubType::Audio }
 
