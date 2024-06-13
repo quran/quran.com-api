@@ -30,6 +30,14 @@ module Api::V4
       end
     end
 
+    def word_by_word_translations
+      list = ResourceContent.eager_load(:translated_name).approved.one_word.translations.order('priority ASC')
+
+      @word_by_word_translations = eager_load_translated_name(list)
+
+      render
+    end
+
     def tafsirs
       list = ResourceContent
                .eager_load(:translated_name)

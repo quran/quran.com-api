@@ -27,6 +27,7 @@ namespace :qdc do
     get :languages
     get :chapter_infos
     get :verse_media
+    get :word_by_word_translations
   end
 
   get :chapters, to: 'chapters#index'
