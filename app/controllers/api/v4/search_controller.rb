@@ -74,10 +74,12 @@ module Api::V4
         @presenter.add_search_results(content_client.search)
       rescue Faraday::ConnectionFailed => e
         @error = e
+        Rails.logger.error "Faraday::ConnectionFailed: #{e.message}"
         false
       rescue Elasticsearch::Transport::Transport::ServerError => e
         # Index not ready yet? or other ES server errors
         @error = e
+        Rails.logger.error "Elasticsearch::Transport::Transport::ServerError: #{e.message}"
         false
       end
     end
