@@ -185,11 +185,12 @@ class V4::VerseFinder < ::VerseFinder
   def load_words(word_translation_lang)
     language = Language.find_with_id_or_iso_code(word_translation_lang)
 
+    approved_word_by_word_translations = ResourceContent.approved.one_word.translations
     words_with_default_translation = @results.where(word_translations: { language_id: Language.default.id })
 
     if language
       @results = @results
-                   .where(word_translations: { language_id: language.id })
+                   .where(word_translations: { language_id: language.id, resource_content_id: approved_word_by_word_translations })
                    .or(words_with_default_translation)
                    .eager_load(words: eager_load_words)
     else

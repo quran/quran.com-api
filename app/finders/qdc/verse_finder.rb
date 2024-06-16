@@ -239,13 +239,14 @@ class Qdc::VerseFinder < ::VerseFinder
     language = Language.find_with_id_or_iso_code(word_translation_lang)
 
     @results = @results.where(mushaf_words: { mushaf_id: mushaf.id })
-    words_with_default_translation = @results.where(word_translations: { language_id: Language.default.id })
+    approved_word_by_word_translations = ResourceContent.approved.one_word.translations
+    words_with_default_translation = @results.where(word_translations: { language_id: Language.default.id, resource_content_id: approved_word_by_word_translations })
 
     if language.nil? || language.default?
       @results = words_with_default_translation.eager_load(mushaf_words: eager_load_words)
     else
       @results = @results
-                   .where(word_translations: { language_id: language.id })
+                   .where(word_translations: { language_id: language.id, resource_content_id: approved_word_by_word_translations })
                    .or(words_with_default_translation)
                    .eager_load(mushaf_words: eager_load_words)
     end
