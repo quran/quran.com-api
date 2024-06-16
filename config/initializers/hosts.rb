@@ -2,7 +2,8 @@
 
 Rails.application.config.hosts += [
   '.quran.com',
-  '.qurancdn.com'
+  '.qurancdn.com',
+  '.quran.foundation'
 ]
 
 if Rails.env.development?
