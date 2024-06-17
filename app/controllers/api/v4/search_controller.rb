@@ -5,7 +5,7 @@ module Api::V4
     QUERY_SANITIZER = Rails::Html::WhiteListSanitizer.new
 
     def search
-      render
+      do_search
     end
 
     protected
@@ -57,7 +57,6 @@ module Api::V4
 
     def do_search
       @presenter = SearchPresenter.new(params, query)
-
       content_client = Search::QuranSearchClient.new(
         query,
         page: page,
@@ -65,7 +64,6 @@ module Api::V4
         language: language,
         translations: translations
       )
-
       @presenter.add_search_results(content_client.search)
     end
   end
