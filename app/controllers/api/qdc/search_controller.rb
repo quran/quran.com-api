@@ -8,7 +8,7 @@ module Api::Qdc
       if do_search
         render
       else
-        render partial: 'error', status: 500
+        render_request_error("Something went wrong", 500)
       end
     end
 

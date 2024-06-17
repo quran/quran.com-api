@@ -5,7 +5,11 @@ module Api::V4
     QUERY_SANITIZER = Rails::Html::WhiteListSanitizer.new
 
     def search
-      do_search
+      if do_search
+        render
+      else
+        render_request_error("Something went wrong", 500)
+      end
     end
 
     protected
