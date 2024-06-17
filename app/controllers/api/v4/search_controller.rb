@@ -5,11 +5,7 @@ module Api::V4
     QUERY_SANITIZER = Rails::Html::WhiteListSanitizer.new
 
     def search
-      if do_search
-        render
-      else
-        # TODO: render error
-      end
+      render
     end
 
     protected
@@ -70,18 +66,7 @@ module Api::V4
         translations: translations
       )
 
-      begin
-        @presenter.add_search_results(content_client.search)
-      rescue Faraday::ConnectionFailed => e
-        @error = e
-        puts "Faraday::ConnectionFailed: #{e.message}"
-        false
-      rescue Elasticsearch::Transport::Transport::ServerError => e
-        # Index not ready yet? or other ES server errors
-        @error = e
-        puts "Elasticsearch::Transport::Transport::ServerError: #{e.message}"
-        false
-      end
+      @presenter.add_search_results(content_client.search)
     end
   end
 end
