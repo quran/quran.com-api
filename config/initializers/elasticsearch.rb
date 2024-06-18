@@ -7,10 +7,14 @@ options = if ENV['ELASTICSEARCH_PORT_9200_TCP_ADDR']
             {host: ENV['ELASTICSEARCH_PORT_9200_TCP_ADDR']}
           else
             {
-                host: ENV['ELASTICSEARCH_HOST'],
-                port: ENV['ELASTICSEARCH_PORT'],
+                url: ENV['ELASTICSEARCH_URL'],
                 password: ENV['ELASTICSEARCH_PASSWORD'],
-                user: ENV['ELASTICSEARCH_USERNAME']
+                user: ENV['ELASTICSEARCH_USERNAME'],
+                transport_options: {
+                  ssl: {
+                    verify: false
+                  }
+                },
             }
           end
 
