@@ -80,15 +80,8 @@ module Api::Qdc
     def do_navigation_search
       navigational_client = Qdc::Search::NavigationClient.new(query)
 
-      begin
-        results = navigational_client.search
-        @presenter.add_navigational_results(results)
-      rescue Faraday::ConnectionFailed => e
-        false
-      rescue Elasticsearch::Transport::Transport::ServerError => e
-        # Index not ready yet? or other ES server errors
-        false
-      end
+      results = navigational_client.search
+      @presenter.add_navigational_results(results)
     end
 
     def do_text_search
@@ -99,17 +92,7 @@ module Api::Qdc
         filter_languages: filter_languages,
         filter_translations: filter_translations
       )
-
-      begin
-        @presenter.add_search_results(content_client.search)
-      rescue Faraday::ConnectionFailed => e
-        @error = e
-        false
-      rescue Elasticsearch::Transport::Transport::ServerError => e
-        # Index not ready yet? or other ES server errors
-        @error = e
-        false
-      end
+      @presenter.add_search_results(content_client.search)
     end
   end
 end
