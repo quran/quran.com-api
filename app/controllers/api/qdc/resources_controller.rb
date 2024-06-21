@@ -41,7 +41,7 @@ module Api::Qdc
     end
 
     def word_by_word_translations
-      list = ResourceContent.eager_load(:translated_name).approved.one_word.translations.order('priority ASC')
+      list = ResourceContent.eager_load(:translated_name).approved.one_word.translations_only.order('priority ASC')
 
       @word_by_word_translations = eager_load_translated_name(list)
 
