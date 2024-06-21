@@ -239,7 +239,7 @@ class Qdc::VerseFinder < ::VerseFinder
     language = Language.find_with_id_or_iso_code(word_translation_lang)
 
     @results = @results.where(mushaf_words: { mushaf_id: mushaf.id })
-    approved_word_by_word_translations = ResourceContent.approved.one_word.translations
+    approved_word_by_word_translations = ResourceContent.approved.one_word.translations_only
     words_with_default_translation = @results.where(word_translations: { language_id: Language.default.id, resource_content_id: approved_word_by_word_translations })
 
     if language.nil? || language.default?

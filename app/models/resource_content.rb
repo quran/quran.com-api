@@ -44,7 +44,7 @@ class ResourceContent < ApplicationRecord
 
   scope :translations, -> { where sub_type: [SubType::Translation, SubType::Transliteration] }
   scope :media, -> { where sub_type: SubType::Video }
-  scope :translations, -> { where sub_type: SubType::Translation }
+  scope :translations_only, -> { where sub_type: SubType::Translation }
   scope :tafsirs, -> { where sub_type: SubType::Tafsir }
   scope :chapter_info, -> { where sub_type: SubType::Info }
   scope :one_verse, -> { where cardinality_type: CardinalityType::OneVerse }
