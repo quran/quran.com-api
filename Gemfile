@@ -47,7 +47,7 @@ gem 'puma', '~> 4.3', '>= 4.3.12'
 gem 'rack-cors'
 
 # compresses Rack responses using Google's Brotli compression algorithm
-gem 'rack-brotli'
+gem 'rack-brotli', '>= 2.0.0'
 
 gem 'tzinfo-data'
 
