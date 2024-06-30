@@ -4,6 +4,7 @@ Rails.application.config.hosts += [
   '.quran.com',
   '.qurancdn.com',
   '.quran.foundation',
+  '.staging.quran.foundation',
   '.ondigitalocean.app'
 ]
 
