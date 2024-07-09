@@ -66,7 +66,7 @@ RSpec.describe Api::V3::VersesController, type: :controller do
 
       it { is_expected.to be_successful }
 
-      it 'returns Bangla wbw translation' do
+      it 'returns Urdu wbw translation' do
         results = Oj.load(subject.body)
         translation = results['verses'][0]['words'][0]['translation']
 
