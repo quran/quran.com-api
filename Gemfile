@@ -57,7 +57,7 @@ gem 'sentry-raven', group: [:production]
 group :development, :test do
   gem 'pry-rails'
   gem 'apollo-tracing'
-  gem 'solargraph'
+  gem 'solargraph', '>= 0.45.0'
 end
 
 group :development do
@@ -69,7 +69,7 @@ group :development do
 
   # run some pre commit hooks
   gem 'pre-commit', require: false
-  gem 'rubocop', '>= 1.7.0', require: false
+  gem 'rubocop', '>= 1.27.0', require: false
 
   # https://github.com/tmm1/stackprof
   # sampling call-stack profiler for ruby
@@ -84,8 +84,8 @@ group :test, :development do
   gem 'shoulda-matchers', '~> 5.1.0'
   gem 'simplecov', require: false
   gem 'factory_bot_rails', '>= 6.2.0'
-  gem 'rubocop-rails_config', '>= 1.9.1'
-  gem 'rubocop-rspec', '>= 2.1.0'
+  gem 'rubocop-rails_config', '>= 1.9.2'
+  gem 'rubocop-rspec', '>= 2.10.0'
   gem 'json-schema-rspec'
 end
 gem "kredis", "~> 1.3"
