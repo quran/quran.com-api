@@ -121,14 +121,15 @@ module Api::Qdc
       country = request.query_parameters[:country]
     
       if user_device_language.blank?
-        render json: { error: 'user_device_language is required' }, status: :bad_request
-        return
+        return render_bad_request('user_device_language is required')
       end
     
-      preferences = CountryLanguagePreference.where(user_device_language: user_device_language)
-      preferences = preferences.where(country: [country, nil]) if country.present?
+      if country.blank?
+        return render_bad_request('country is required')
+      end
     
-      @preference = preferences.first
+      preferences = CountryLanguagePreference.where(user_device_language: user_device_language, country: country)
+      @preference = preferences.first || CountryLanguagePreference.find_by(user_device_language: user_device_language, country: nil)
     
       if @preference
         load_default_resources

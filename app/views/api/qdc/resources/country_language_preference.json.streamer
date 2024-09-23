@@ -3,61 +3,55 @@ json.object! do
 
   json.default_mushaf do
     json.object! do
-      json.extract! @data[:default_mushaf], :id, :name if @data[:default_mushaf]
+      json.extract! @data[:default_mushaf], :id, :name
     end
   end
 
   json.default_translations do
-    json.array! do
-      json.array! @data[:default_translations] do |translation|
-        json.object! do
-          json.extract! translation, :id, :name, :author_name, :slug, :language_name
-          json.translated_name do
-            translated_name = translation.translated_name
-            json.object! do
-              json.extract! translated_name, :name, :language_name
-            end
+    json.array! @data[:default_translations] do |translation|
+      json.object! do
+        json.extract! translation, :id, :name, :author_name, :slug, :language_name
+        json.translated_name do
+          translated_name = translation.translated_name
+          json.object! do
+            json.extract! translated_name, :name, :language_name
           end
         end
       end
-    end 
-  end if @data[:default_translations].present?
+    end
+  end
 
   json.default_tafsir do
     json.object! do
-      json.extract! @data[:default_tafsir], :id, :name, :author_name if @data[:default_tafsir]
+      json.extract! @data[:default_tafsir], :id, :name, :author_name
     end
   end
 
   json.default_wbw_language do
     json.object! do
-      json.extract! @data[:default_wbw_language], :id, :name, :iso_code if @data[:default_wbw_language]
+      json.extract! @data[:default_wbw_language], :id, :name, :iso_code
     end
   end
 
   json.default_reciter do
     json.object! do
-      json.extract! @data[:default_reciter], :id, :name if @data[:default_reciter]
+      json.extract! @data[:default_reciter], :id, :name
     end
   end
 
   json.ayah_reflections_languages do
-    json.array! do
-      json.array! @data[:ayah_reflections_languages] do |language|
-        json.object! do
-          json.extract! language, :id, :name, :iso_code
-        end
+    json.array! @data[:ayah_reflections_languages] do |language|
+      json.object! do
+        json.extract! language, :id, :name, :iso_code
       end
     end
-  end if @data[:ayah_reflections_languages].present?
+  end
 
   json.learning_plan_languages do
-    json.array! do
-      json.array! @data[:learning_plan_languages] do |language|
-        json.object! do
-          json.extract! language, :id, :name, :iso_code
-        end
+    json.array! @data[:learning_plan_languages] do |language|
+      json.object! do
+        json.extract! language, :id, :name, :iso_code
       end
     end
-  end if @data[:learning_plan_languages].present?
+  end
 end
