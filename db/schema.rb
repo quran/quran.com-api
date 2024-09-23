@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_13_013539) do
+ActiveRecord::Schema[7.0].define(version: 2024_09_18_072240) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -277,6 +277,20 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_13_013539) do
     t.datetime "updated_at", null: false
     t.index ["word_id", "position"], name: "index_corpus_word_grammars_on_word_id_and_position"
     t.index ["word_id"], name: "index_corpus_word_grammars_on_word_id"
+  end
+
+  create_table "country_language_preferences", force: :cascade do |t|
+    t.string "country"
+    t.string "user_device_language", null: false
+    t.integer "default_mushaf_id"
+    t.string "default_translation_ids"
+    t.integer "default_tafsir_ids"
+    t.string "default_wbw_language"
+    t.integer "default_reciter"
+    t.string "ayah_reflections_languages"
+    t.string "learning_plan_languages"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "data_sources", id: :serial, force: :cascade do |t|
