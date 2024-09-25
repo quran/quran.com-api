@@ -118,7 +118,7 @@ module Api::Qdc
 
     def country_language_preference
       user_device_language = request.query_parameters[:user_device_language]
-      country = request.query_parameters[:country]
+      country = request.query_parameters[:country]&.upcase
     
       if user_device_language.blank?
         return render_bad_request('user_device_language is required')
@@ -127,36 +127,36 @@ module Api::Qdc
       if country.blank?
         return render_bad_request('country is required')
       end
+
+      unless Language.exists?(iso_code: user_device_language)
+        return render_bad_request('Invalid user_device_language')
+      end
+
+      valid_countries = ISO3166::Country.all.map(&:alpha2)
+      unless valid_countries.include?(country)
+        return render_bad_request('Invalid country code')
+      end
     
-      preferences = CountryLanguagePreference.where(user_device_language: user_device_language, country: country)
-      @preference = preferences.first || CountryLanguagePreference.find_by(user_device_language: user_device_language, country: nil)
+      preferences = CountryLanguagePreference.with_includes
+                      .where(user_device_language: user_device_language, country: country)
+      @preference = preferences.first || CountryLanguagePreference.with_includes
+                                      .find_by(user_device_language: user_device_language, country: nil)
     
       if @preference
-        load_default_resources
         @data = {
           preference: @preference,
-          default_mushaf: @default_mushaf,
-          default_translations: @default_translations,
-          default_tafsir: @default_tafsir,
-          default_wbw_language: @default_wbw_language,
-          default_reciter: @default_reciter,
-          ayah_reflections_languages: @ayah_reflections_languages,
-          learning_plan_languages: @learning_plan_languages
+          default_mushaf: @preference.mushaf,
+          default_translations: @preference.default_translation_ids.present? ? ResourceContent.where(id: @preference.default_translation_ids.split(',')) : [],
+          default_tafsir: @preference.tafsir,
+          default_wbw_language: @preference.wbw_language,
+          default_reciter: @preference.reciter,
+          ayah_reflections_languages: Language.where(iso_code: @preference.ayah_reflections_languages&.split(',') || []),
+          learning_plan_languages: Language.where(iso_code: @preference.learning_plan_languages&.split(',') || [])
         }
         render
       else
         render_404("No matching country language preference found")
       end
-    end
-    
-    def load_default_resources
-      @default_mushaf = @preference.default_mushaf_id ? Mushaf.find(@preference.default_mushaf_id) : nil
-      @default_translations = @preference.default_translation_ids.present? ? ResourceContent.where(id: @preference.default_translation_ids.split(',')) : []
-      @default_tafsir = @preference.default_tafsir_id ? ResourceContent.find(@preference.default_tafsir_id) : nil
-      @default_wbw_language = @preference.default_wbw_language ? Language.find_by(iso_code: @preference.default_wbw_language) : nil
-      @default_reciter = @preference.default_reciter ? Reciter.find(@preference.default_reciter) : nil
-      @ayah_reflections_languages = @preference.ayah_reflections_languages.present? ? Language.where(iso_code: @preference.ayah_reflections_languages.split(',')) : []
-      @learning_plan_languages = @preference.learning_plan_languages.present? ? Language.where(iso_code: @preference.learning_plan_languages.split(',')) : []
     end
 
     protected

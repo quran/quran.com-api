@@ -284,7 +284,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_09_18_072240) do
     t.string "user_device_language", null: false
     t.integer "default_mushaf_id"
     t.string "default_translation_ids"
-    t.integer "default_tafsir_ids"
+    t.integer "default_tafsir_id"
     t.string "default_wbw_language"
     t.integer "default_reciter"
     t.string "ayah_reflections_languages"
@@ -391,7 +391,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_09_18_072240) do
     t.string "es_analyzer_default"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
-    t.index ["iso_code"], name: "index_languages_on_iso_code"
+    t.index ["iso_code"], name: "index_languages_on_iso_code", unique: true
+    t.index ["translations_count"], name: "index_languages_on_translations_count"
   end
 
   create_table "lemmas", id: :serial, force: :cascade do |t|
@@ -1282,6 +1283,11 @@ ActiveRecord::Schema[7.0].define(version: 2024_09_18_072240) do
     t.index ["verse_key"], name: "index_words_on_verse_key"
   end
 
+  add_foreign_key "country_language_preferences", "languages", column: "default_wbw_language", primary_key: "iso_code", on_delete: :cascade
+  add_foreign_key "country_language_preferences", "languages", column: "user_device_language", primary_key: "iso_code", on_delete: :cascade
+  add_foreign_key "country_language_preferences", "mushafs", column: "default_mushaf_id", on_delete: :cascade
+  add_foreign_key "country_language_preferences", "reciters", column: "default_reciter", on_delete: :cascade
+  add_foreign_key "country_language_preferences", "resource_contents", column: "default_tafsir_id", on_delete: :cascade
   add_foreign_key "morphology_derived_words", "verses"
   add_foreign_key "morphology_derived_words", "words"
   add_foreign_key "morphology_word_grammar_concepts", "words"

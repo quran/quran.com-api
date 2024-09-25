@@ -14,6 +14,10 @@ class CreateCountryLanguagePreferences < ActiveRecord::Migration[7.0]
       t.timestamps
     end
 
-    add_foreign_key :country_language_preferences, :reciters, column: :default_reciter
+    add_foreign_key :country_language_preferences, :languages, column: :user_device_language, primary_key: :iso_code, on_delete: :cascade
+    add_foreign_key :country_language_preferences, :mushafs, column: :default_mushaf_id, on_delete: :cascade
+    add_foreign_key :country_language_preferences, :resource_contents, column: :default_tafsir_id, on_delete: :cascade
+    add_foreign_key :country_language_preferences, :languages, column: :default_wbw_language, primary_key: :iso_code, on_delete: :cascade
+    add_foreign_key :country_language_preferences, :reciters, column: :default_reciter, on_delete: :cascade
   end
 end
