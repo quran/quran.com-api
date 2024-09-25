@@ -146,7 +146,7 @@ module Api::Qdc
         @data = {
           preference: @preference,
           default_mushaf: @preference.mushaf,
-          default_translations: @preference.default_translation_ids.present? ? ResourceContent.where(id: @preference.default_translation_ids.split(',')) : [],
+          default_translations: @preference.default_translation_ids.present? ? ResourceContent.where(id: @preference.default_translation_ids.split(',')).approved : [],
           default_tafsir: @preference.tafsir,
           default_wbw_language: @preference.wbw_language,
           default_reciter: @preference.reciter,
