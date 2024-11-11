@@ -25,6 +25,10 @@
 require 'rails_helper'
 
 RSpec.describe ChapterInfo do
+  describe 'modules' do
+    it { is_expected.to include_module(ActionView::Helpers::NumberHelper) }
+  end
+
   context 'with associations' do
     it { is_expected.to belong_to :language }
     it { is_expected.to belong_to :chapter }
