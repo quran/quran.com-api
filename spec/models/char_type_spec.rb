@@ -20,14 +20,9 @@ require 'rails_helper'
 
 RSpec.describe CharType do
   context 'with associations' do
-    it { expect(subject).to belong_to(:parent)
-                          .class_name('CharType')
-    }
+    it { is_expected.to belong_to(:parent).class_name('CharType') }
 
-    it { expect(subject).to have_many(:children)
-                          .class_name('CharType')
-                          .with_foreign_key('parent_id')
-    }
+    it { is_expected.to have_many(:children).class_name('CharType').with_foreign_key('parent_id') }
   end
 
   context 'with columns and indexes' do
