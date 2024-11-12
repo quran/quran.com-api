@@ -29,10 +29,13 @@ require 'rails_helper'
 
 RSpec.describe Chapter do
   context 'with associations and scopes' do
-    it { is_expected.to have_many :verses }
-    it { is_expected.to have_many :translated_names }
     it { is_expected.to have_many :chapter_infos }
+    it { is_expected.to have_many :navigation_search_records }
     it { is_expected.to have_many :slugs }
+    it { is_expected.to have_many :translated_names }
+    it { is_expected.to have_many :verses }
+
+    it { is_expected.to have_one(:default_slug).class_name('Slug') }
     it { is_expected.to have_one :translated_name }
 
     it { is_expected.to serialize :pages }
@@ -58,5 +61,11 @@ RSpec.describe Chapter do
 
     it_behaves_like 'modal with column', columns
     it_behaves_like 'modal have indexes on column', ['chapter_number']
+  end
+
+  context 'with modules' do
+    [NameTranslateable, QuranNavigationSearchable, Slugable].each do |module_name|
+      it { is_expected.to include_module module_name }
+    end
   end
 end

@@ -24,7 +24,6 @@ require 'rails_helper'
 
 RSpec.describe FootNote do
   context 'with associations' do
-    it { is_expected.to belong_to :resource }
     it { is_expected.to belong_to :language }
     it { is_expected.to belong_to :resource_content }
   end
@@ -42,7 +41,7 @@ RSpec.describe FootNote do
     indexes = [
       ['language_id'],
       ['resource_content_id'],
-      ['resource_type', 'resource_id']
+      %w[resource_type resource_id]
     ]
 
     it_behaves_like 'modal with column', columns

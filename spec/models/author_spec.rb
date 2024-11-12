@@ -18,9 +18,15 @@ RSpec.describe Author do
   context 'with associations' do
     it { is_expected.to have_many(:translated_names) }
     it { is_expected.to have_many(:resource_contents) }
+
+    it { is_expected.to have_one(:translated_name) }
   end
 
   context 'with columns and indexes' do
     it_behaves_like 'modal with column', name: :string, url: :string
+  end
+
+  context 'with modules' do
+    it { is_expected.to include_module(NameTranslateable) }
   end
 end
