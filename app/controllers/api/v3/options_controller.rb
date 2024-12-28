@@ -22,6 +22,7 @@ module Api::V3
                .one_verse
                .translations
                .approved
+               .allowed_to_share
                .order('priority ASC')
 
       @translations = eager_load_translated_name(list)
@@ -47,6 +48,7 @@ module Api::V3
                .chapter_info
                .one_chapter
                .approved
+               .allowed_to_share
 
       @chapter_infos = eager_load_translated_name(list)
       render
@@ -58,6 +60,7 @@ module Api::V3
                .eager_load(:translated_name)
                .tafsirs
                .approved
+               .allowed_to_share
                .order('priority ASC')
 
       @tafsirs = eager_load_translated_name(list)

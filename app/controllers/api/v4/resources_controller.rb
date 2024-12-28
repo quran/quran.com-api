@@ -13,6 +13,7 @@ module Api::V4
                .eager_load(:translated_name)
                .one_verse
                .translations
+               .allowed_to_share
                .approved
                .order('priority ASC')
 
@@ -43,6 +44,7 @@ module Api::V4
                .eager_load(:translated_name)
                .tafsirs
                .approved
+               .allowed_to_share
                .order('priority ASC')
 
       @presenter = ResourcePresenter.new(params)
@@ -93,6 +95,7 @@ module Api::V4
                .chapter_info
                .one_chapter
                .approved
+               .allowed_to_share
 
       @chapter_infos = eager_load_translated_name(list)
 
@@ -103,8 +106,9 @@ module Api::V4
       @media = ResourceContent
                  .includes(:language)
                  .media
-                 .one_verse.approved
-
+                 .one_verse
+                 .approved
+                 .allowed_to_share
       render
     end
 
@@ -121,6 +125,7 @@ module Api::V4
               .change_log(after: time)
               .filter_subtype(params[:type])
               .approved
+              .allowed_to_share
 
          render
       else

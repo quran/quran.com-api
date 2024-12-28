@@ -10,6 +10,7 @@ module Api::V4
                    .translations
                    .one_verse
                    .approved
+                   .allowed_to_share
 
       find_resource(approved, params[:translation_id], true)
     end
@@ -20,6 +21,7 @@ module Api::V4
                    .tafsirs
                    .one_verse
                    .approved
+                   .allowed_to_share
 
       find_resource(approved, params[:tafsir_id], true)
     end

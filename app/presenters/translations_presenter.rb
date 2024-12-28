@@ -53,7 +53,7 @@ class TranslationsPresenter < BasePresenter
                                     .approved
                                     .translations
                                     .one_verse
-
+                                    .allowed_to_share
         params[:resource_id] = approved_translations
                                     .where(id: translations)
                                     .or(approved_translations.where(slug: translations))

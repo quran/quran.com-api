@@ -20,7 +20,10 @@ module Api::V3
     end
 
     def tafisr_id
-      approved_tafsir = ResourceContent.tafsirs.approved
+      approved_tafsir = ResourceContent
+                        .tafsirs
+                        .approved
+                        .allowed_to_share
 
       tafsir = approved_tafsir.where(id: params[:tafsir])
                               .or(approved_tafsir.where(slug: params[:tafsir]))
