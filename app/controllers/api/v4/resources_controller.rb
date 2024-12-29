@@ -32,7 +32,7 @@ module Api::V4
     end
 
     def word_by_word_translations
-      list = ResourceContent.eager_load(:translated_name).approved.one_word.translations_only.order('priority ASC')
+      list = ResourceContent.eager_load(:translated_name).approved.allowed_to_share.one_word.translations_only.order('priority ASC')
 
       @word_by_word_translations = eager_load_translated_name(list)
 
@@ -64,6 +64,8 @@ module Api::V4
     def recitations
       list = Recitation
                .eager_load(reciter: :translated_name)
+               .joins(:resource_content)
+               .where.not(resource_contents: { permission_to_share: :rejected })
                .approved
                .order('translated_names.language_priority desc')
 
