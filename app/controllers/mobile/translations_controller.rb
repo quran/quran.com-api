@@ -3,7 +3,7 @@
 module Mobile
   class TranslationsController < ApplicationController
     def index
-      resources = ResourceContent.includes(:language).translations.one_verse.approved
+      resources = ResourceContent.includes(:language).translations.one_verse.approved.allowed_to_share
 
       render json: resources, root: :data, each_serializer: Mobile::TranslationSerializer
     end

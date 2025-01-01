@@ -74,6 +74,7 @@ class TafsirsPresenter < VersesPresenter
         approved_Tafsirs = ResourceContent
                              .approved
                              .tafsirs
+                             .allowed_to_share
 
         approved_tafsir = approved_Tafsirs
                             .where(id: id_or_slug)

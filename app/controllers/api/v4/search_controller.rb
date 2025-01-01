@@ -29,6 +29,7 @@ module Api::V4
                                   .approved
                                   .translations
                                   .one_verse
+                                  .allowed_to_share
 
         params[:translations] = approved_translations
                                   .where(id: translation)
