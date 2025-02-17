@@ -84,8 +84,8 @@ group :test, :development do
   gem 'shoulda-matchers', '~> 5.1.0'
   gem 'simplecov', require: false
   gem 'factory_bot_rails', '>= 6.2.0'
-  gem 'rubocop-rails_config', '>= 1.9.1'
-  gem 'rubocop-rspec', '>= 2.1.0'
+  gem 'rubocop-rails_config', '>= 1.15.0'
+  gem 'rubocop-rspec', '>= 3.5.0'
   gem 'json-schema-rspec'
 end
 gem "kredis", "~> 1.3"
