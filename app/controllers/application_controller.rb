@@ -39,12 +39,14 @@ class ApplicationController < ActionController::API
   end
 
   def set_cache_headers
-    if action_name != 'random'
-      expires_in 7.day, public: true
-      # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security
-      headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains; preload'
-    end
+    headers['Cache-Control'] = 'no-store, no-cache, max-age=0, private, must-revalidate'
+    headers['Pragma'] = 'no-cache'
+    headers['Expires'] = '0'
 
+    # Keep HSTS header
+    headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains; preload'
+
+    # Keep CORS header
     headers['Access-Control-Allow-Origin'] = '*'
   end
 
