@@ -44,7 +44,7 @@ gem 'parallel', require: false
 gem 'puma', '~> 4.3', '>= 4.3.12'
 
 # enable cors
-gem 'rack-cors'
+gem 'rack-cors', '>= 3.0.0'
 
 # compresses Rack responses using Google's Brotli compression algorithm
 gem 'rack-brotli'
