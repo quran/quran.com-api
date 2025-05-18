@@ -51,7 +51,9 @@ class RecitationsPresenter < BasePresenter
         recitation = params[:recitation_id].to_s.strip
 
         approved = Recitation
-                     .approved
+                    .joins(:resource_content)
+                    .where.not(resource_contents: { permission_to_share: :rejected })
+                    .approved
 
         params[:recitation_id] = approved.where(id: recitation).first&.id
       end

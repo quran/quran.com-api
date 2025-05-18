@@ -123,6 +123,43 @@ module Qdc
       end
     end
 
+    def fetch_tafsirs
+      strong_memoize :approved_tafsirs do
+        if params[:tafsirs]
+          tafsirs = params[:tafsirs].to_s.split(',')
+          approved_tafsirs = ResourceContent
+                               .approved
+                               .tafsirs
+                               .one_verse
+
+          params[:tafsirs] = approved_tafsirs
+                               .where(id: tafsirs)
+                               .pluck(:id)
+
+          params[:tafsirs]
+        end
+      end
+    end
+
+    def fetch_translations
+      strong_memoize :approved_translations do
+        if params[:translations]
+          translations = params[:translations].to_s.split(',')
+
+          approved_translations = ResourceContent
+                                    .approved
+                                    .translations
+                                    .one_verse
+
+          params[:translations] = approved_translations
+                                    .where(id: translations)
+                                    .or(approved_translations.where(slug: translations))
+                                    .pluck(:id)
+          params[:translations]
+        end
+      end
+    end
+
     protected
 
     def chapter_ids

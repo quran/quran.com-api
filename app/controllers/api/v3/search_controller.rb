@@ -27,6 +27,7 @@ module Api::V3
 
         approved_translations = ResourceContent
                                   .approved
+                                  .allowed_to_share
                                   .translations
                                   .one_verse
 

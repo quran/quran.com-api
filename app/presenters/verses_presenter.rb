@@ -262,6 +262,7 @@ class VersesPresenter < BasePresenter
                              .approved
                              .tafsirs
                              .one_verse
+                             .allowed_to_share
 
         params[:tafsirs] = approved_tafsirs
                              .where(id: tafsirs)
@@ -281,6 +282,7 @@ class VersesPresenter < BasePresenter
                                   .approved
                                   .translations
                                   .one_verse
+                                  .allowed_to_share
 
         params[:translations] = approved_translations
                                   .where(id: translations)

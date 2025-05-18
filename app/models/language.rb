@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # == Schema Information
-# Schema version: 20230313013539
+# Schema version: 20240918072240
 #
 # Table name: languages
 #
@@ -16,7 +16,7 @@
 #
 # Indexes
 #
-#  index_languages_on_iso_code  (iso_code)
+#  index_languages_on_iso_code  (iso_code) UNIQUE
 #
 
 class Language < ApplicationRecord

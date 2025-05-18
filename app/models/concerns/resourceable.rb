@@ -13,7 +13,7 @@ module Resourceable
 
   def get_resource_content
     if respond_to? :resource_content_id
-      ResourceContent.find(resource_content_id)
+      ResourceContent.allowed_to_share.find(resource_content_id)
     else
       resource_content
     end

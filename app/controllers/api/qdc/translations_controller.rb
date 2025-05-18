@@ -7,7 +7,7 @@ module Api::Qdc
 
     protected
     def init_presenter
-      @presenter = TranslationsPresenter.new(params)
+      @presenter = Qdc::TranslationsPresenter.new(params)
     end
 
     def load_translations

@@ -53,6 +53,7 @@ gem 'tzinfo-data'
 
 # Exception tracking
 gem 'sentry-raven', group: [:production]
+gem 'countries', '= 6.0.1'
 
 group :development, :test do
   gem 'pry-rails'

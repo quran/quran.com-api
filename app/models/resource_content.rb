@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 # == Schema Information
-# Schema version: 20230313013539
+# Schema version: 20241228151537
 #
 # Table name: resource_contents
 #
@@ -10,8 +10,13 @@
 #  cardinality_type       :string
 #  description            :text
 #  language_name          :string
+#  meta_data              :jsonb
 #  name                   :string
+#  permission_to_host     :integer          default("unknown")
+#  permission_to_share    :integer          default("unknown")
+#  priority               :integer
 #  records_count          :integer          default(0)
+#  resource_info          :text
 #  resource_type          :string
 #  resource_type_name     :string
 #  slug                   :string
@@ -24,6 +29,7 @@
 #  data_source_id         :integer
 #  language_id            :integer
 #  mobile_translation_id  :integer
+#  resource_id            :string
 #
 # Indexes
 #
@@ -32,7 +38,10 @@
 #  index_resource_contents_on_cardinality_type       (cardinality_type)
 #  index_resource_contents_on_data_source_id         (data_source_id)
 #  index_resource_contents_on_language_id            (language_id)
+#  index_resource_contents_on_meta_data              (meta_data) USING gin
 #  index_resource_contents_on_mobile_translation_id  (mobile_translation_id)
+#  index_resource_contents_on_priority               (priority)
+#  index_resource_contents_on_resource_id            (resource_id)
 #  index_resource_contents_on_resource_type_name     (resource_type_name)
 #  index_resource_contents_on_slug                   (slug)
 #  index_resource_contents_on_sub_type               (sub_type)
@@ -41,6 +50,20 @@
 class ResourceContent < ApplicationRecord
   include LanguageFilterable
   include NameTranslateable
+
+  enum permission_to_host: {
+    unknown: 0,
+    requested: 1,
+    granted: 2,
+    rejected: 3
+  }, _prefix: :host_permission_is
+
+  enum permission_to_share: {
+    unknown: 0,
+    requested: 1,
+    granted: 2,
+    rejected: 3
+  }, _prefix: :share_permission_is
 
   scope :translations, -> { where sub_type: [SubType::Translation, SubType::Transliteration] }
   scope :media, -> { where sub_type: SubType::Video }
@@ -52,6 +75,7 @@ class ResourceContent < ApplicationRecord
   scope :one_word, -> { where cardinality_type: CardinalityType::OneWord }
   scope :approved, -> { where approved: true }
   scope :recitations, -> { where sub_type: SubType::Audio }
+  scope :allowed_to_share, -> { where.not(permission_to_share: :rejected) }
 
   module CardinalityType
     OneVerse = '1_ayah'
@@ -82,6 +106,7 @@ class ResourceContent < ApplicationRecord
   belongs_to :author
   belongs_to :data_source
   has_one :resource_content_stat
+  has_one :resource_permission
 
   def self.filter_by(ids: nil, name: nil)
     if name.present?
